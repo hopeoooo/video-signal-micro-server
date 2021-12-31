@@ -1,0 +1,12 @@
+server:
+  port: 7400
+
+spring:
+  application:
+    name: activity-center
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${zlt.mynaocs.namespace}
+#        metadata:
+#          version: zlt

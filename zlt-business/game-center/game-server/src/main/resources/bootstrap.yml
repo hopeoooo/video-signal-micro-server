@@ -1,0 +1,12 @@
+server:
+  port: 7100
+
+spring:
+  application:
+    name: game-center
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${zlt.mynaocs.namespace}
+#        metadata:
+#          version: zlt

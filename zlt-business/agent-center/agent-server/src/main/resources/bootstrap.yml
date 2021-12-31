@@ -1,0 +1,12 @@
+server:
+  port: 7500
+
+spring:
+  application:
+    name: agent-center
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${zlt.mynaocs.namespace}
+#        metadata:
+#          version: zlt

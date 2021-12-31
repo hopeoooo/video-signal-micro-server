@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.zlt</groupId>
+        <artifactId>central-platform</artifactId>
+        <version>5.1.0</version>
+    </parent>
+    <artifactId>zlt-business</artifactId>
+    <description>业务中心</description>
+    <packaging>pom</packaging>
+    <modules>
+        <!-- 平台后端管理系统服 -->
+        <module>platform-backend-server</module>
+        <!-- 用户中心 -->
+        <module>user-center</module>
+        <!-- 文件中心 -->
+        <module>file-center</module>
+        <!-- 代码生成器 -->
+        <module>code-generator</module>
+        <!-- 搜索中心 -->
+        <module>search-center</module>
+        <!-- 游戏中心 -->
+        <module>game-center</module>
+        <!-- 订单中心 -->
+        <module>order-center</module>
+        <!-- 支付中心 -->
+        <module>pay-center</module>
+        <!-- 风控中心 -->
+        <module>risk-management-center</module>
+        <!-- 活动中心 -->
+        <module>activity-center</module>
+    </modules>
+</project>

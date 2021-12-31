@@ -1,0 +1,12 @@
+server:
+  port: 7300
+
+spring:
+  application:
+    name: order-center
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${zlt.mynaocs.namespace}
+#        metadata:
+#          version: zlt
