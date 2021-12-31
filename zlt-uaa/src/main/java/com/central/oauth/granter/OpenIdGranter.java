@@ -12,13 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * openId授权模式
- *
- * @author zlt
- * @date 2020/7/11
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * openId 授权模式
  */
 public class OpenIdGranter extends AbstractTokenGranter {
     private static final String GRANT_TYPE = "openId";

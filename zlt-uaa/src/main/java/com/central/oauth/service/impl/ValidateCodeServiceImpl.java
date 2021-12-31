@@ -115,6 +115,15 @@ public class ValidateCodeServiceImpl implements IValidateCodeService {
         this.remove(deviceId);
     }
 
+    @Override
+    public void validateGoogleCode(String googleCode) {
+        if (StrUtil.isBlank(googleCode)) {
+            throw new ValidateCodeException("请在请求参数中携带googleCode参数");
+        }
+        // TODO 验证google验证码
+
+    }
+
     private String buildKey(String deviceId) {
         return SecurityConstants.DEFAULT_CODE_KEY + ":" + deviceId;
     }

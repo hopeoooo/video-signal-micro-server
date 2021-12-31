@@ -2,8 +2,6 @@ package com.central.oauth.service;
 
 import com.central.common.model.Result;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @author zlt
  * @date 2018/12/10
@@ -37,4 +35,9 @@ public interface IValidateCodeService {
      * 验证验证码
      */
     void validate(String deviceId, String validCode);
+
+    /**
+     * 验证google身份验证码
+     */
+    void validateGoogleCode(String googleCode);
 }

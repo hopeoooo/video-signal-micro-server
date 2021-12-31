@@ -2,6 +2,7 @@ package com.central.oauth.config;
 
 import com.central.oauth.granter.MobilePwdGranter;
 import com.central.oauth.granter.OpenIdGranter;
+import com.central.oauth.granter.PwdGoogleGranter;
 import com.central.oauth.granter.PwdImgCodeGranter;
 import com.central.oauth.service.IValidateCodeService;
 import com.central.oauth.service.impl.CustomTokenServices;
@@ -114,6 +115,8 @@ public class TokenGranterConfig {
             tokenGranters.add(new OpenIdGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
             // 添加手机号加密码授权模式
             tokenGranters.add(new MobilePwdGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
+            // 添加密码+Google身份验证码
+            tokenGranters.add(new PwdGoogleGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory, validateCodeService));
         }
         return tokenGranters;
     }
