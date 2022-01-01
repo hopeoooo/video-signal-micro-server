@@ -1,16 +1,15 @@
 package com.central.oauth.config;
 
+import com.central.common.config.DefaultPasswordConfig;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.properties.TenantProperties;
 import com.central.oauth.filter.LoginProcessSetTenantFilter;
-import com.central.oauth.handler.OauthLogoutSuccessHandler;
+import com.central.oauth.mobile.MobileAuthenticationSecurityConfig;
+import com.central.oauth.openid.OpenIdAuthenticationSecurityConfig;
 import com.central.oauth.password.PasswordAuthenticationProvider;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth.tenant.TenantAuthenticationSecurityConfig;
 import com.central.oauth.tenant.TenantUsernamePasswordAuthenticationFilter;
-import com.central.oauth.mobile.MobileAuthenticationSecurityConfig;
-import com.central.oauth.openid.OpenIdAuthenticationSecurityConfig;
-import com.central.common.config.DefaultPasswordConfig;
 import com.central.oauth2.common.token.CustomWebAuthenticationDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,11 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * spring security配置
  * 在WebSecurityConfigurerAdapter不拦截oauth要开放的资源
- * 
- * @author zlt
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
  */
 @Configuration
 @Import(DefaultPasswordConfig.class)

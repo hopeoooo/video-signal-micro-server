@@ -6,12 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * 密码加密配置类
- *
- * @author zlt
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * 密码加密配置类，默认使用 bcrypt 加解密
+ * 使用：继承 DefaultPasswordConfig， @Autowired public PasswordEncoder passwordEncoder
  */
 public class DefaultPasswordConfig {
 	@Bean
