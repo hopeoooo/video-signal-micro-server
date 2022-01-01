@@ -131,4 +131,14 @@ public interface CommonConstant {
      * 文件分隔符
      */
     String PATH_SPLIT = "/";
+
+    /**
+     * 后台管理用户
+     */
+    String USER_TYPE_BACKEND = "BACKEND";
+
+    /**
+     * 前端APP用户
+     */
+    String USER_TYPE_APP = "APP";
 }

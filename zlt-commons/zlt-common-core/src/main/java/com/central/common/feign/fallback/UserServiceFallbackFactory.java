@@ -2,9 +2,12 @@ package com.central.common.feign.fallback;
 
 import com.central.common.feign.UserService;
 import com.central.common.model.LoginAppUser;
+import com.central.common.model.PageResult;
 import com.central.common.model.SysUser;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
 
 /**
  * userService降级工场
@@ -39,6 +42,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public LoginAppUser findByOpenId(String openId) {
                 log.error("通过openId查询用户异常:{}", openId, throwable);
                 return new LoginAppUser();
+            }
+
+            @Override
+            public PageResult<SysUser> findSysUserList(Map<String, Object> params) {
+                log.error("findSysUserList查询用户异常:{}", params, throwable);
+                return new PageResult();
             }
         };
     }
