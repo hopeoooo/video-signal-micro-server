@@ -20,6 +20,6 @@ public class OrderController {
     @ApiOperation(value = "查询订单列表")
     @GetMapping("/list")
     public String list(){
-        return "test.order";
+        return "test.order1";
     }
 }
