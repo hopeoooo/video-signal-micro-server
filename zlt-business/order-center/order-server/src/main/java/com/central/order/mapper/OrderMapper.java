@@ -1,6 +1,6 @@
 package com.central.order.mapper;
 
-import com.central.order.model.Orders;
+import com.central.order.model.Order;
 import com.central.common.model.SuperPage;
 import com.central.db.mapper.SuperMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,12 +16,12 @@ import java.util.List;
  * @date 2022-01-03 18:27:12
  */
 @Mapper
-public interface OrdersMapper extends SuperMapper<Orders> {
+public interface OrderMapper extends SuperMapper<Order> {
     /**
      * 分页查询用户列表
      * @param page
      * @param superPage
      * @return
      */
-    List<Orders> findList(Page<Orders> page, @Param("sp")SuperPage superPage);
+    List<Order> findList(Page<Order> page, @Param("sp")SuperPage superPage);
 }

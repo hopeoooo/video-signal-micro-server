@@ -21,9 +21,9 @@ import io.swagger.annotations.ApiModelProperty;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-@TableName("orders")
+@TableName("`order`")
 @ApiModel("订单表")
-public class Orders extends SuperEntity {
+public class Order extends SuperEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "订单编号")

@@ -1,6 +1,6 @@
 package com.central.order.service;
 
-import com.central.order.model.Orders;
+import com.central.order.model.Order;
 import com.central.common.model.PageResult;
 import com.central.common.model.SuperPage;
 import com.central.common.service.ISuperService;
@@ -11,12 +11,12 @@ import com.central.common.service.ISuperService;
  * @author zlt
  * @date 2022-01-03 18:27:12
  */
-public interface IOrdersService extends ISuperService<Orders> {
+public interface IOrderService extends ISuperService<Order> {
     /**
      * 列表
      * @param superPage
      * @return
      */
-    PageResult<Orders> findList(SuperPage superPage);
+    PageResult<Order> findList(SuperPage superPage);
 }
 

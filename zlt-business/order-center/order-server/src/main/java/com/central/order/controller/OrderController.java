@@ -6,8 +6,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
-import com.central.order.model.Orders;
-import com.central.order.service.IOrdersService;
+import com.central.order.model.Order;
+import com.central.order.service.IOrderService;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SuperPage;
@@ -22,26 +22,26 @@ import com.central.common.model.SuperPage;
 @RestController
 @RequestMapping("/orders")
 @Api(tags = "订单表")
-public class OrdersController {
+public class OrderController {
     @Autowired
-    private IOrdersService orderService;
+    private IOrderService orderService;
 
     @ApiOperation(value = "查询列表")
     @GetMapping("/list")
-    public PageResult<Orders> list(@ModelAttribute SuperPage superPage) {
+    public PageResult<Order> list(@ModelAttribute SuperPage superPage) {
         return orderService.findList(superPage);
     }
 
     @ApiOperation(value = "根据ID查询")
     @GetMapping("/findById/{id}")
-    public Result<Orders> findById(@PathVariable Long id) {
-        Orders model = orderService.getById(id);
+    public Result<Order> findById(@PathVariable Long id) {
+        Order model = orderService.getById(id);
         return Result.succeed(model);
     }
 
     @ApiOperation(value = "保存")
     @PostMapping("/save")
-    public Result save(@RequestBody Orders order) {
+    public Result save(@RequestBody Order order) {
         orderService.saveOrUpdate(order);
         return Result.succeed();
     }

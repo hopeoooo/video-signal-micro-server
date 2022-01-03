@@ -2,7 +2,7 @@ package com.central.order.feign.callback;
 
 import com.central.common.model.Result;
 import com.central.order.feign.OrderService;
-import com.central.order.model.Orders;
+import com.central.order.model.Order;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
@@ -16,15 +16,15 @@ public class OrderServiceFallbackFactory implements FallbackFactory<OrderService
     public OrderService create(Throwable throwable) {
         return new OrderService() {
             @Override
-            public Result save(Orders order) {
+            public Result save(Order order) {
                 log.error("订单保存失败:{}", order, throwable);
                 return Result.failed("订单保存失败");
             }
 
             @Override
-            public Result<Orders> findById(Long id) {
-                log.error("根据ID订单查询失败:{}", id, throwable);
-                return Result.failed("根据ID订单查询失败");
+            public Result<Order> findById(Long id) {
+                log.error("根据ID查询订单失败:{}", id, throwable);
+                return Result.failed("根据ID查询订单失败");
             }
         };
     }
