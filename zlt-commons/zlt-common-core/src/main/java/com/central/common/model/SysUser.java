@@ -42,6 +42,9 @@ public class SysUser extends SuperEntity {
 	@ApiModelProperty(value = "逻辑删除 0：未删除，1：已删除")
 	private boolean isDel;
 
+	@ApiModelProperty(value = "备注")
+	private String remark;
+
 	@TableField(exist = false)
 	private List<SysRole> roles;
 	@TableField(exist = false)
