@@ -38,7 +38,7 @@ public class SysPlatformConfigServiceImpl extends SuperServiceImpl<SysPlatformCo
         }
         touristAmountInfo.setTouristAmount(touristAmount);
         touristAmountInfo.setTouristSingleMaxBet(touristSingleMaxBet);
-        boolean i = platformConfigService.save(touristAmountInfo);
+        boolean i =platformConfigService.saveOrUpdate(touristAmountInfo);
         return i  ? Result.succeed("更新成功") : Result.failed("更新失败");
     }
 }

@@ -1,4 +1,4 @@
-package com.central.platform.backend.controller;
+package com.central.platform.backend.system.controller;
 
 import com.central.common.constant.CommonConstant;
 import com.central.common.feign.UserService;
