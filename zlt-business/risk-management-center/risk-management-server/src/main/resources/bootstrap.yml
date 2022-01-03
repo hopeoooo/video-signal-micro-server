@@ -7,6 +7,6 @@ spring:
   cloud:
     nacos:
       discovery:
-        namespace: ${zlt.mynaocs.namespace}
+        namespace: ${zlt.naocs.server.namespace}
 #        metadata:
 #          version: zlt

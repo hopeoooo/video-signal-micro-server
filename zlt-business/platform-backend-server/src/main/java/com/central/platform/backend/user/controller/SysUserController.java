@@ -2,7 +2,6 @@ package com.central.platform.backend.user.controller;
 
 import com.central.common.constant.CommonConstant;
 import com.central.common.feign.UserService;
-import com.central.common.model.LoginAppUser;
 import com.central.common.model.PageResult;
 import com.central.common.model.SysUser;
 import io.swagger.annotations.Api;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.yaml.snakeyaml.scanner.Constant;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -26,7 +24,7 @@ import java.util.Map;
 public class SysUserController {
 
     @Resource
-    UserService userService;
+    private UserService userService;
 
     /**
      * 用户列表查询。查询APP用户数据
