@@ -1,6 +1,7 @@
 package com.central.common.feign;
 
 import com.central.common.constant.ServiceNameConstants;
+import com.central.common.dto.LoginLogPageDto;
 import com.central.common.feign.fallback.UserServiceFallbackFactory;
 import com.central.common.model.*;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -66,7 +66,7 @@ public interface UserService {
      * 查询游客管理配置
      * @return
      */
-    @GetMapping(value = "/findTouristAmount")
+    @GetMapping(value = "/system/findTouristAmount")
     SysPlatformConfig findTouristAmount();
 
 
@@ -75,6 +75,16 @@ public interface UserService {
      * 编辑游客管理配置
      * @return
      */
-    @PostMapping(value = "/saveTourist", params = "params")
+    @PostMapping(value = "/system/saveTourist", params = "params")
     Result saveTourist(@RequestParam  Map<String, String> params);
+
+
+    /**
+     * 查询会员日志列表
+     * @return
+     */
+    @GetMapping(value = "/loginLog/findUserLoginLogList", params = "params")
+    PageResult<LoginLogPageDto> findUserLoginLogList(@RequestParam Map<String, Object> params) ;
+
+
 }

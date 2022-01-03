@@ -41,7 +41,7 @@ public class PlatformBackendController {
      * 全局参数:游客管理查询
      */
     @ApiOperation(value = "全局参数:游客管理查询")
-    @GetMapping("/findTouristAmount")
+    @GetMapping("/system/findTouristAmount")
     public SysPlatformConfig findTouristAmount() {
         return  userService.findTouristAmount();
     }
@@ -53,7 +53,7 @@ public class PlatformBackendController {
      * @return
      */
     @ApiOperation(value = "全局参数:游客管理编辑")
-    @PostMapping("/saveTourist")
+    @PostMapping("/system/saveTourist")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "touristAmount", value = "游客携带金额", required = false),
             @ApiImplicitParam(name = "touristSingleMaxBet", value = "游客单笔最大投注", required = false)

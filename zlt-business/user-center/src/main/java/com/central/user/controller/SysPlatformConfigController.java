@@ -19,6 +19,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @Api(tags = "系统配置")
+@RequestMapping("/system")
 public class SysPlatformConfigController {
     @Autowired
     private ISysPlatformConfigService sysPlatformConfigService;
