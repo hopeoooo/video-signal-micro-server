@@ -38,16 +38,21 @@ public class PlatformBackendController {
 
 
     /**
-     * 用户列表查询。查询APP用户数据
+     * 全局参数:游客管理查询
      */
-    @ApiOperation(value = "用户列表查询")
+    @ApiOperation(value = "全局参数:游客管理查询")
     @GetMapping("/findTouristAmount")
     public SysPlatformConfig findTouristAmount() {
         return  userService.findTouristAmount();
     }
 
 
-    @ApiOperation(value = "保存")
+    /**
+     * 全局参数:游客管理编辑
+     * @param params
+     * @return
+     */
+    @ApiOperation(value = "全局参数:游客管理编辑")
     @PostMapping("/saveTourist")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "touristAmount", value = "游客携带金额", required = false),

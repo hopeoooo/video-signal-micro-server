@@ -4,7 +4,4 @@
 <mapper namespace="com.central.user.mapper.SysPlatformConfigMapper">
 
 
-	<select id="findTouristAmount" resultType="com.central.common.model.SysPlatformConfig">
-		select * from sys_platform_config t
-	</select>
 </mapper>

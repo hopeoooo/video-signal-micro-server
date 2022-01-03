@@ -1,5 +1,6 @@
 package com.central.user.service.impl;
 
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.central.common.model.Result;
 import com.central.common.model.SysPlatformConfig;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 @Slf4j
@@ -27,15 +29,13 @@ public class SysPlatformConfigServiceImpl extends SuperServiceImpl<SysPlatformCo
 
     @Override
     public SysPlatformConfig findTouristAmount() {
-        return baseMapper.findTouristAmount();
+        List<SysPlatformConfig> list = platformConfigService.list();
+        return list!=null && list.size()>0?list.get(0):new SysPlatformConfig();
     }
 
     @Override
     public Result saveCache(BigDecimal touristAmount, BigDecimal touristSingleMaxBet) {
-        SysPlatformConfig touristAmountInfo = baseMapper.findTouristAmount();
-        if (touristAmountInfo==null){
-            touristAmountInfo=new SysPlatformConfig();
-        }
+        SysPlatformConfig touristAmountInfo = findTouristAmount();
         touristAmountInfo.setTouristAmount(touristAmount);
         touristAmountInfo.setTouristSingleMaxBet(touristSingleMaxBet);
         boolean i =platformConfigService.saveOrUpdate(touristAmountInfo);
