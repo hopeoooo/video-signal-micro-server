@@ -1,20 +1,24 @@
 package com.central.order.feign;
 
 import com.central.common.constant.ServiceNameConstants;
+import com.central.common.model.Result;
 import com.central.order.feign.callback.OrderServiceFallbackFactory;
+import com.central.order.model.Orders;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 ;
 
 /**
  * @author zlt
  */
-@FeignClient(name = ServiceNameConstants.GAME_SERVICE, fallbackFactory = OrderServiceFallbackFactory.class, decode404 = true)
+@FeignClient(name = ServiceNameConstants.ORDER_SERVICE, fallbackFactory = OrderServiceFallbackFactory.class, decode404 = true)
 public interface OrderService {
-    /**
-     * 查询游戏列表
-     */
-    @PostMapping(value = "/game/list")
-    String list();
+
+    @PostMapping("/orders/save")
+    Result save(@RequestBody Orders order);
+
+    @GetMapping("/orders/findById/{id}")
+    Result<Orders> findById(@PathVariable("id") Long id);
+
 }

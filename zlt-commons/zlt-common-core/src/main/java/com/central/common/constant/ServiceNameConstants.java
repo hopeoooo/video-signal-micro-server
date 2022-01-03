@@ -36,4 +36,8 @@ public interface ServiceNameConstants {
      * 代理中心服务
      */
     String AGENT_SERVICE = "agent-center";
+    /**
+     * 订单中心服务
+     */
+    String ORDER_SERVICE = "order-center";
 }
