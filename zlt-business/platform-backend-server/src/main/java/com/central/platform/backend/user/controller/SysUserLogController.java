@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api(tags = "会员中心日志")
 @Slf4j
-@RequestMapping("/sysUserLog")
+@RequestMapping("/platform/backend")
 public class SysUserLogController {
 }

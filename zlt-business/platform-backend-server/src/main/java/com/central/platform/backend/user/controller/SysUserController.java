@@ -20,7 +20,7 @@ import java.util.Map;
 @RestController
 @Api(tags = "会员中心")
 @Slf4j
-@RequestMapping("/sysUser")
+@RequestMapping("/platform/backend")
 public class SysUserController {
 
     @Resource
@@ -36,7 +36,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "username", value = "会员账号", required = false, dataType = "String"),
             @ApiImplicitParam(name = "enabled", value = "状态：0.禁用，1.启用", required = false, dataType = "Boolean")
     })
-    @GetMapping("/list")
+    @GetMapping("/SysUser/list")
     public PageResult<SysUser> list(@RequestParam Map<String, Object> params) {
         params.put("type", CommonConstant.USER_TYPE_APP);//APP用户数据
         PageResult<SysUser> sysUserList = userService.findSysUserList(params);
