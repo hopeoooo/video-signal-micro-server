@@ -242,7 +242,11 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
             if (StringUtils.isBlank(sysUser.getType())) {
                 sysUser.setType(UserType.BACKEND.name());
             }
-            sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
+            if(StringUtils.isBlank(sysUser.getPassword())){
+                sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
+            }else{
+                sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
+            }
             sysUser.setEnabled(Boolean.TRUE);
         }
         String username = sysUser.getUsername();
