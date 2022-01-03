@@ -1,12 +1,11 @@
 package com.central.common.feign.fallback;
 
 import com.central.common.feign.UserService;
-import com.central.common.model.LoginAppUser;
-import com.central.common.model.PageResult;
-import com.central.common.model.SysUser;
+import com.central.common.model.*;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -48,6 +47,17 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public PageResult<SysUser> findSysUserList(Map<String, Object> params) {
                 log.error("findSysUserList查询用户异常:{}", params, throwable);
                 return new PageResult();
+            }
+
+            @Override
+            public SysPlatformConfig findTouristAmount() {
+                log.error("findTouristAmount查询游客管理配置异常:{}", throwable);
+                return new SysPlatformConfig();
+            }
+            @Override
+            public Result saveTourist(Map<String, String> params) {
+                log.error("saveTourist编辑游客管理配置异常:{}", params, throwable);
+                return Result.failed("更新失败");
             }
         };
     }

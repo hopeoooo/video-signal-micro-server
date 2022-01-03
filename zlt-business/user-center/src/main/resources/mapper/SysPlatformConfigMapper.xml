@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.central.user.mapper.SysPlatformConfigMapper">
+
+
+	<select id="findTouristAmount" resultType="com.central.common.model.SysPlatformConfig">
+		select * from sys_platform_config t
+	</select>
+</mapper>
