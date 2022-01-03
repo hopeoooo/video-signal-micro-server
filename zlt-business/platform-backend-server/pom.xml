@@ -74,12 +74,6 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
-        <!--  引入user-center jar包  -->
-        <dependency>
-            <groupId>com.zlt</groupId>
-            <artifactId>user-center</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
