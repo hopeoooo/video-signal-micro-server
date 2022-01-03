@@ -1,51 +1,33 @@
-package com.central.platform.backend.controller;
+package com.central.user.controller;
 
-import com.central.common.constant.CommonConstant;
-import com.central.common.feign.UserService;
-import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysPlatformConfig;
-import com.central.common.model.SysUser;
+import com.central.user.service.ISysPlatformConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Map;
 
-/**
- * 平台后端管理系统服
- */
+
 @Slf4j
 @RestController
-@Api(tags = "平台后端管理系统服api")
-@RequestMapping("/platform/backend")
-public class PlatformBackendController {
+@Api(tags = "系统配置")
+public class SysPlatformConfigController {
+    @Autowired
+    private ISysPlatformConfigService sysPlatformConfigService;
 
-    @Resource
-    private UserService userService;
-
-    @ApiOperation(value = "查询列表")
-    @GetMapping("/list")
-    public String list(){
-        return "test.game";
-    }
-
-
-
-    /**
-     * 用户列表查询。查询APP用户数据
-     */
-    @ApiOperation(value = "用户列表查询")
+    @ApiOperation(value = "查询游客管理")
     @GetMapping("/findTouristAmount")
     public SysPlatformConfig findTouristAmount() {
-        return  userService.findTouristAmount();
+        return sysPlatformConfigService.findTouristAmount();
     }
-
 
     @ApiOperation(value = "保存")
     @PostMapping("/saveTourist")
@@ -54,6 +36,8 @@ public class PlatformBackendController {
             @ApiImplicitParam(name = "touristSingleMaxBet", value = "游客单笔最大投注", required = false)
     })
     public Result saveTourist(@RequestParam Map<String, String> params) {
-        return userService.saveTourist(params);
+        BigDecimal touristAmount =new BigDecimal( params.get("touristAmount"));
+        BigDecimal touristSingleMaxBet =new BigDecimal(  params.get("touristSingleMaxBet"));
+        return sysPlatformConfigService.saveCache(touristAmount,touristSingleMaxBet);
     }
 }

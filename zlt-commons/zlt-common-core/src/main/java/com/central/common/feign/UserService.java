@@ -2,14 +2,14 @@ package com.central.common.feign;
 
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.feign.fallback.UserServiceFallbackFactory;
-import com.central.common.model.LoginAppUser;
-import com.central.common.model.PageResult;
-import com.central.common.model.SysUser;
+import com.central.common.model.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -60,4 +60,21 @@ public interface UserService {
      */
     @GetMapping(value = "/users", params = "params")
     PageResult<SysUser> findSysUserList(@RequestParam Map<String, Object> params);
+
+
+    /**
+     * 查询游客管理配置
+     * @return
+     */
+    @GetMapping(value = "/findTouristAmount")
+    SysPlatformConfig findTouristAmount();
+
+
+
+    /**
+     * 编辑游客管理配置
+     * @return
+     */
+    @PostMapping(value = "/saveTourist", params = "params")
+    Result saveTourist(@RequestParam  Map<String, String> params);
 }
