@@ -1,6 +1,8 @@
 package com.central.oauth.granter;
 
 import com.central.oauth.service.IValidateCodeService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.*;
 import org.springframework.security.oauth2.provider.*;
 import org.springframework.security.oauth2.provider.password.ResourceOwnerPasswordTokenGranter;
@@ -12,6 +14,7 @@ import java.util.Map;
 /**
  * password + 图像验证码 授权模式
  */
+@Slf4j
 public class PwdImgCodeGranter extends ResourceOwnerPasswordTokenGranter {
     private static final String GRANT_TYPE = "password_code";
 
@@ -28,9 +31,15 @@ public class PwdImgCodeGranter extends ResourceOwnerPasswordTokenGranter {
         Map<String, String> parameters = new LinkedHashMap<>(tokenRequest.getRequestParameters());
         String deviceId = parameters.get("deviceId");
         String validCode = parameters.get("validCode");
-        //校验图形验证码
-        validateCodeService.validate(deviceId, validCode);
-
+        String player = parameters.get("player");
+        log.info("++++++++++++++   parameters: {}",parameters);
+        if(StringUtils.isBlank(player)){
+            //校验图形验证码
+//            validateCodeService.validate(deviceId, validCode);
+        }else{
+            parameters.put("username","player");
+            tokenRequest.setRequestParameters(parameters);
+        }
         return super.getOAuth2Authentication(client, tokenRequest);
     }
 }

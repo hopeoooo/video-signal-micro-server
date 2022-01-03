@@ -15,4 +15,9 @@ public interface ITokensService {
      * @param clientId 应用id
      */
     PageResult<TokenVo> listTokens(Map<String, Object> params, String clientId);
+
+    /**
+     * 查看是否存在用户的key
+     */
+    Boolean exist(String username,String clientId);
 }

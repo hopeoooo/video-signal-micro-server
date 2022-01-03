@@ -292,6 +292,12 @@ public class SysUserController {
         return queryService.strQuery("sys_user", searchDto, SEARCH_LOGIC_DEL_DTO);
     }
 
+    @GetMapping("/users/players")
+    public List<SysUser> queryPlayerList(){
+        List<SysUser> playList = appUserService.lambdaQuery().eq(SysUser::getType,"APP_GUEST").list();
+        return playList;
+    }
+
     /**
      * 清除缓存
      */

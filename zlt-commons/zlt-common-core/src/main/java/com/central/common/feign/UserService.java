@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
+import java.util.List;
+
 /**
  * @author zlt
  */
@@ -87,4 +89,10 @@ public interface UserService {
     PageResult<LoginLogPageDto> findUserLoginLogList(@RequestParam Map<String, Object> params) ;
 
 
+
+    /**
+     * 查询游客列表
+     */
+    @GetMapping(value = "/users/players")
+    List<SysUser> queryPlayerList();
 }

@@ -88,4 +88,9 @@ public class RedisTokensServiceImpl implements ITokensService {
         }
         return result;
     }
+
+    public Boolean exist(String username,String clientId){
+        String key = SecurityConstants.REDIS_UNAME_TO_ACCESS + clientId + ":" + username;
+        return redisRepository.exists(key);
+    }
 }

@@ -1,8 +1,11 @@
 package com.central.oauth.password;
 
+import com.alibaba.fastjson.JSON;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanMap;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +19,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 
+import java.util.Map;
+
 /**
  * 扩展用户名密码provider
  *
@@ -26,6 +31,7 @@ import org.springframework.util.Assert;
  * Blog: https://zlt2000.gitee.io
  * Github: https://github.com/zlt2000
  */
+@Slf4j
 @Setter
 @Getter
 public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
@@ -65,16 +71,27 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
                     "AbstractUserDetailsAuthenticationProvider.badCredentials",
                     "Bad credentials"));
         }
-
         String presentedPassword = authentication.getCredentials().toString();
 
-        if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
-            logger.debug("Authentication failed: password does not match stored value");
+        if(!isPlayer(authentication)){
+            if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
+                logger.debug("Authentication failed: password does not match stored value");
 
-            throw new BadCredentialsException(messages.getMessage(
-                    "AbstractUserDetailsAuthenticationProvider.badCredentials",
-                    "Bad credentials"));
+                throw new BadCredentialsException(messages.getMessage(
+                        "AbstractUserDetailsAuthenticationProvider.badCredentials",
+                        "Bad credentials"));
+            }
         }
+    }
+
+    private Boolean isPlayer(UsernamePasswordAuthenticationToken authentication){
+        // Details={account_type=admin, grant_type=password_code, deviceId=C5ACEFA0-13A1-423A-BC05-58D708C3D218, username=test, player=player}
+        log.info("{}",authentication.getDetails());
+        String jsonString = JSON.toJSONString(authentication.getDetails());
+        Map<String,Object> detailMap = JSON.parseObject(jsonString,Map.class);
+        String player = detailMap.get("player")==null?authentication.getName():detailMap.get("player").toString();
+        log.info("++++++++++++ player {}",player);
+        return "player".equals(player);
     }
 
     @Override

@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * userService降级工场
  *
@@ -63,6 +66,11 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public PageResult<LoginLogPageDto> findUserLoginLogList(Map<String, Object> params) {
                 log.error("findUserLoginLogList查询会员日志异常:{}", params, throwable);
                 return new PageResult();
+            }
+
+            @Override
+            public List<SysUser> queryPlayerList() {
+                return new ArrayList<>();
             }
         };
     }
