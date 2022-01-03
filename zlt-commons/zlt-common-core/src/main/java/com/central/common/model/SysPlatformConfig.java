@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 @ApiModel("系统配置实体")
 public class SysPlatformConfig {
 	//private static final long serialVersionUID = -5886012896705137070L;
+	@ApiModelProperty(value = "id")
+	private Long id;
 
 	@ApiModelProperty(value = "游客携带金额")
 	private BigDecimal touristAmount;
