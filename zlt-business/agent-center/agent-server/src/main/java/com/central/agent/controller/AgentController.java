@@ -1,6 +1,5 @@
 package com.central.agent.controller;
 
-import com.central.agent.feign.AgentService;
 import com.central.common.feign.UserService;
 import com.central.search.client.feign.SearchService;
 import io.swagger.annotations.Api;
@@ -20,9 +19,6 @@ import javax.annotation.Resource;
 @Api(tags = "代理模块api")
 @RequestMapping("/agent")
 public class AgentController {
-
-    @Resource
-    private AgentService agentService;
 
     @Resource
     private SearchService searchService;

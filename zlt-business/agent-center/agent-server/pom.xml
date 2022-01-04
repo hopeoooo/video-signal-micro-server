@@ -26,6 +26,7 @@
             <artifactId>search-client</artifactId>
         </dependency>
 
+        <!-- @FeiginClients的负载均衡，不使用UserService不需要引用 -->
         <dependency>
             <groupId>com.zlt</groupId>
             <artifactId>zlt-loadbalancer-spring-boot-starter</artifactId>

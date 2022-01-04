@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableDiscoveryClient
 @EnableFeignInterceptor
-@EnableFeignClients(basePackages = "com.central.game")
+@EnableFeignClients(basePackages = "com.central")
 @SpringBootApplication
 public class GameCenterApp {
     public static void main(String[] args) {

@@ -5,15 +5,17 @@ import com.central.search.annotation.EnableSearchClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * @author 作者 owen E-mail: 624191343@qq.com
+ * 用户中心
  */
 @EnableDiscoveryClient
+@EnableFeignInterceptor
+@EnableFeignClients(basePackages = "com.central")
 @EnableSearchClient
 @EnableTransactionManagement
-@EnableFeignInterceptor
 @SpringBootApplication
 public class UserCenterApp {
     public static void main(String[] args) {

@@ -1,6 +1,6 @@
-package com.central.agent.annotation;
+package com.central.pay.annotation;
 
-import com.central.agent.feign.callback.AgentServiceFallbackFactory;
+import com.central.pay.feign.callback.PayServiceFallbackFactory;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 
@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Import({PayServiceFallbackFactory.class})
 @EnableFeignClients(basePackages = "com.central")
-@Import({AgentServiceFallbackFactory.class})
-public @interface EnableAgentClient {
+public @interface EnablePayClient {
 
 }

@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableDiscoveryClient
 @EnableFeignInterceptor
-@EnableFeignClients(basePackages = "com.central.order")
+@EnableFeignClients(basePackages = "com.central")
 @SpringBootApplication
 public class OrderCenterApp {
     public static void main(String[] args) {

@@ -1,6 +1,6 @@
-package com.central.agent.annotation;
+package com.central.risk.management.annotation;
 
-import com.central.agent.feign.callback.AgentServiceFallbackFactory;
+import com.central.risk.management.feign.callback.RiskManagementServiceFallbackFactory;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 
@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @EnableFeignClients(basePackages = "com.central")
-@Import({AgentServiceFallbackFactory.class})
-public @interface EnableAgentClient {
+@Import({RiskManagementServiceFallbackFactory.class})
+public @interface EnableRiskManagementClient {
 
 }

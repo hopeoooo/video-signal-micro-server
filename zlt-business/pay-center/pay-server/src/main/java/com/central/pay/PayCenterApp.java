@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableDiscoveryClient
 @EnableFeignInterceptor
-@EnableFeignClients(basePackages = "com.central.pay")
+@EnableFeignClients(basePackages = "com.central")
 @SpringBootApplication
 public class PayCenterApp {
     public static void main(String[] args) {

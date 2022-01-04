@@ -1,6 +1,6 @@
-package com.central.agent.annotation;
+package com.central.game.annotation;
 
-import com.central.agent.feign.callback.AgentServiceFallbackFactory;
+import com.central.game.feign.callback.GameServiceFallbackFactory;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 
@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @EnableFeignClients(basePackages = "com.central")
-@Import({AgentServiceFallbackFactory.class})
-public @interface EnableAgentClient {
+@Import({GameServiceFallbackFactory.class})
+public @interface EnableGameClient {
 
 }

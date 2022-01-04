@@ -22,6 +22,12 @@
             <artifactId>pay-client</artifactId>
         </dependency>
 
+        <!-- @FeiginClients的负载均衡，不使用UserService不需要引用 -->
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>zlt-loadbalancer-spring-boot-starter</artifactId>
+        </dependency>
+
         <!-- 统一配置 -->
         <dependency>
             <groupId>com.zlt</groupId>

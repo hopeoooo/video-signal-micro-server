@@ -1,6 +1,7 @@
 package com.central;
 
 import com.central.admin.properties.IndexProperties;
+import com.central.common.lb.annotation.EnableFeignInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,7 +13,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @date 2019/5/1
  */
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignInterceptor
+@EnableFeignClients(basePackages = "com.central")
 @SpringBootApplication
 @EnableConfigurationProperties(IndexProperties.class)
 public class SearchCenterApp {

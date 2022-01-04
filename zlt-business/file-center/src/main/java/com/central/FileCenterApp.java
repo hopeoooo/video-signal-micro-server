@@ -8,11 +8,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * 文件中心
- * @author 作者 owen E-mail: 624191343@qq.com
  */
 @EnableDiscoveryClient
-@EnableFeignClients
 @EnableFeignInterceptor
+@EnableFeignClients
 @SpringBootApplication
 public class FileCenterApp {
     public static void main(String[] args) {
