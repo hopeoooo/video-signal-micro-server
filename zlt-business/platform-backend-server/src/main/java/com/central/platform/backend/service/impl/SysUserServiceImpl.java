@@ -39,8 +39,25 @@ public class SysUserServiceImpl implements SysUserService {
         return userService.findSysUserList(params);
     }
 
+    /**
+     * 物理删除用户
+     *
+     * @param id
+     * @return
+     */
     @Override
     public Result delete(Long id) {
         return userService.delete(id);
+    }
+
+    /**
+     * 修改用户密码
+     *
+     * @param sysUser
+     * @return
+     */
+    @Override
+    public Result resetPassword(SysUser sysUser) {
+        return userService.resetPassword(sysUser);
     }
 }

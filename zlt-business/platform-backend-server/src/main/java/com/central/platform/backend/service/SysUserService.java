@@ -13,4 +13,6 @@ public interface SysUserService {
         PageResult<SysUser> findSysUserList(Map<String, Object> params);
 
         Result delete(Long id);
+
+        Result resetPassword(SysUser sysUser);
 }

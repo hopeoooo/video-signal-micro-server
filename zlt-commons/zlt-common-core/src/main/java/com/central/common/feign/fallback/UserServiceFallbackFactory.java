@@ -81,8 +81,14 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
 
             @Override
             public Result delete(Long openId) {
-                log.error("delete删除用户失败:{}", openId, throwable);
+                log.error("delete删除用户异常:{}", openId, throwable);
                 return Result.failed("删除用户失败");
+            }
+
+            @Override
+            public Result resetPassword(SysUser sysUser) {
+                log.error("resetPassword修改密码异常:{}", sysUser, throwable);
+                return Result.failed("修改密码失败");
             }
         };
     }

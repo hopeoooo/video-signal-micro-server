@@ -107,4 +107,7 @@ public interface UserService {
      */
     @GetMapping(value = "/users/{id}", params = "id")
     Result delete(@RequestParam("id") Long openId);
+
+    @GetMapping(value = "/users/password", params = "SysUser")
+    Result resetPassword(@RequestParam("SysUser") SysUser sysUser);
 }

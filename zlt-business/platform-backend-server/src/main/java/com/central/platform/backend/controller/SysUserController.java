@@ -76,5 +76,18 @@ public class SysUserController {
         return sysUserService.delete(id);
     }
 
+    /**
+     * 用户自己修改密码
+     */
+    @PutMapping(value = "/users/password")
+    public Result resetPassword(@RequestBody SysUser sysUser) {
+        if(sysUser.getId() == null){
+            return Result.failed("会员不存在");
+        }
+        if(StringUtils.isBlank(sysUser.getPassword()) || !sysUser.getPassword().matches(RegexEnum.PASSWORDAPP.getRegex())){
+            return Result.failed(RegexEnum.PASSWORDAPP.getName() + RegexEnum.PASSWORDAPP.getDesc());
+        }
+        return sysUserService.resetPassword(sysUser);
+    }
 
 }
