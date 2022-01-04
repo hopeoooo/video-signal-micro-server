@@ -42,8 +42,9 @@ public class PlatformBackendController {
      */
     @ApiOperation(value = "全局参数:游客管理查询")
     @GetMapping("/system/findTouristAmount")
-    public SysPlatformConfig findTouristAmount() {
-        return  userService.findTouristAmount();
+    public Result findTouristAmount() {
+        SysPlatformConfig touristAmount = userService.findTouristAmount();
+        return Result.succeed(touristAmount, "查询成功");
     }
 
 
