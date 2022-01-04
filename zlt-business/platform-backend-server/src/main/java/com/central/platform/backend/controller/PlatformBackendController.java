@@ -56,8 +56,8 @@ public class PlatformBackendController {
     @ApiOperation(value = "全局参数:游客管理编辑")
     @PostMapping("/system/saveTourist")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "touristAmount", value = "游客携带金额", required = false),
-            @ApiImplicitParam(name = "touristSingleMaxBet", value = "游客单笔最大投注", required = false)
+            @ApiImplicitParam(name = "touristAmount", value = "游客携带金额", required = true),
+            @ApiImplicitParam(name = "touristSingleMaxBet", value = "游客单笔最大投注", required = true)
     })
     public Result saveTourist(@RequestParam Map<String, String> params) {
         return userService.saveTourist(params);
