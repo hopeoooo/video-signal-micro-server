@@ -1,8 +1,5 @@
 package com.central.common.utils;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 import javax.crypto.Cipher;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -10,12 +7,10 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 /**
  * RSA加解密工具类
- *
- * @author zlt
- * @date 2019/7/16
  */
 public class RsaUtils {
     /**
@@ -33,8 +28,8 @@ public class RsaUtils {
             Cipher cipher = Cipher.getInstance(CIPHER_INSTANCE);
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             byte[] output = cipher.doFinal(content.getBytes());
-            BASE64Encoder encoder = new BASE64Encoder();
-            return encoder.encode(output);
+            Base64.Encoder encoder = Base64.getEncoder();
+            return encoder.encodeToString(output);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -83,8 +78,8 @@ public class RsaUtils {
             Cipher cipher = Cipher.getInstance(CIPHER_INSTANCE);
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte [] b = cipher.doFinal(content.getBytes());
-            BASE64Encoder encoder = new BASE64Encoder();
-            return encoder.encode(b);
+            Base64.Encoder encoder = Base64.getEncoder();
+            return encoder.encodeToString(b);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -97,7 +92,8 @@ public class RsaUtils {
      */
     public static RSAPublicKey getPublicKey(String key) throws Exception {
         byte[] keyBytes;
-        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        Base64.Decoder decoder = Base64.getDecoder();
+        keyBytes = decoder.decode(key);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return (RSAPublicKey)keyFactory.generatePublic(keySpec);
@@ -109,7 +105,8 @@ public class RsaUtils {
      */
     public static PrivateKey getPrivateKey(String key) throws Exception {
         byte[] keyBytes;
-        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        Base64.Decoder decoder = Base64.getDecoder();
+        keyBytes = decoder.decode(key);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePrivate(keySpec);

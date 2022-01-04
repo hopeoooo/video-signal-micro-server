@@ -14,18 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
- * @author zlt
- * @date 2020/3/10
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * Api
  */
 @Slf4j
 @RestController
@@ -73,8 +68,9 @@ public class ApiController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         byte[] authorization = (clientId + ":" + clientSecret).getBytes("UTF-8");
-        BASE64Encoder encoder = new BASE64Encoder();
-        String base64Auth = encoder.encode(authorization);
+        Base64.Encoder encoder = Base64.getEncoder();
+        String base64Auth = encoder.encodeToString(authorization);
+
         headers.add("Authorization", "Basic " + base64Auth);
 
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
