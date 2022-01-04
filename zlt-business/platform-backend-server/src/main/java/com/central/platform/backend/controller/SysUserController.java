@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +76,23 @@ public class SysUserController {
     public Result delete(@PathVariable Long id) {
         return sysUserService.delete(id);
     }
+
+    /**
+     * 修改用户状态
+     *
+     * @param params
+     * @return
+     */
+    @ApiOperation(value = "修改用户状态")
+    @GetMapping("/users/updateEnabled")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "enabled", value = "是否启用(状态：0.禁用，1.启用)", required = true, dataType = "Boolean")
+    })
+    public Result updateEnabled(@RequestParam Map<String, Object> params) {
+        return sysUserService.updateEnabled(params);
+    }
+
 
     /**
      * 用户自己修改密码

@@ -50,6 +50,11 @@ public class SysUserServiceImpl implements SysUserService {
         return userService.delete(id);
     }
 
+    @Override
+    public Result updateEnabled(Map<String, Object> params) {
+        return userService.updateEnabled(params);
+    }
+
     /**
      * 修改用户密码
      *

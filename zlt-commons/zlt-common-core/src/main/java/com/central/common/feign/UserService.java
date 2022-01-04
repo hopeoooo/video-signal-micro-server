@@ -110,4 +110,10 @@ public interface UserService {
 
     @GetMapping(value = "/users/password", params = "SysUser")
     Result resetPassword(@RequestParam("SysUser") SysUser sysUser);
+
+
+    @GetMapping(value ="/users/updateEnabled", params = "SysUser")
+    Result updateEnabled(@RequestParam Map<String, Object> params);
+
+
 }
