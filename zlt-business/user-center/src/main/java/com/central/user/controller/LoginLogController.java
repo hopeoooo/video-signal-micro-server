@@ -31,8 +31,9 @@ public class LoginLogController {
             @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "userName", value = "用户帐号", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "loginIp", value = "登录IP", required = false, dataType = "String"),
             @ApiImplicitParam(name = "isOpen", value = "是否模糊查询(0:不勾选 1:勾选)", required = false, dataType = "Integer"),
-            @ApiImplicitParam(name = "enabled", value = "状态：0.冻结，1.正常", required = false, dataType = "Integer")
+            @ApiImplicitParam(name = "enabled", value = "状态：0.禁用，1.启用", required = false, dataType = "Integer")
     })
     public PageResult<LoginLogPageDto> findUserLoginLogList(@RequestParam Map<String, Object> params) {
         return ILoginLogService.queryList(params);

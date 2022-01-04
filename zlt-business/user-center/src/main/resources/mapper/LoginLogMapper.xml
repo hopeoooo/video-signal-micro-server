@@ -25,6 +25,16 @@
             <if test="p.enabled!=null">
                 and  u.enabled = #{p.enabled}
             </if>
+
+            <if test="p.loginIp != null and p.loginIp.trim() != ''">
+                <if test="p.isOpen==1">
+                    and  l.login_ip like concat('%', #{p.loginIp}, '%')
+                </if>
+                <if test="p.isOpen!=1">
+                    and  l.login_ip = #{p.loginIp}
+                </if>
+            </if>
+
         </where>
     </select>
 
