@@ -2,6 +2,8 @@ package com.central.oauth.service.impl;
 
 import com.central.common.constant.SecurityConstants;
 import com.central.common.feign.UserService;
+import com.central.common.model.SysUser;
+import com.central.oauth.service.ITokensService;
 import com.central.oauth.service.ZltUserDetailsService;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -14,6 +16,7 @@ import com.central.common.model.LoginAppUser;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author zlt
@@ -29,6 +32,9 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
     @Resource
     private UserService userService;
 
+    @Resource
+    private ITokensService tokensService;
+
     @Override
     public boolean supports(String accountType) {
         return ACCOUNT_TYPE.equals(accountType);
@@ -36,10 +42,16 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
+        log.info("+++++++++++++username:{}",username);
+//        username = username.equals("player")?"play1":username;
+
+        username = username.equals("player")?getUserNameFrom():username;
+        log.info("+++++++++++++username:{}",username);
         LoginAppUser loginAppUser = userService.findByUsername(username);
         if (loginAppUser == null) {
             throw new InternalAuthenticationServiceException("用户名或密码错误");
         }
+        log.info("+++++++++++++++++++登录校验密码结束");
         return checkUser(loginAppUser);
     }
 
@@ -53,6 +65,16 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
     public UserDetails loadUserByMobile(String mobile) {
         LoginAppUser loginAppUser = userService.findByMobile(mobile);
         return checkUser(loginAppUser);
+    }
+
+    private String getUserNameFrom(){
+        List<SysUser> sysUsers = userService.queryPlayerList();
+        for (SysUser sysUser:sysUsers) {
+            if(!tokensService.exist(sysUser.getUsername(),"webApp")){
+                return sysUser.getUsername();
+            }
+        }
+        throw new InternalAuthenticationServiceException("游客已满");
     }
 
     private LoginAppUser checkUser(LoginAppUser loginAppUser) {

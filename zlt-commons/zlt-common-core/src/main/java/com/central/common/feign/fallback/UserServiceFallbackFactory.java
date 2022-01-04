@@ -1,12 +1,15 @@
 package com.central.common.feign.fallback;
 
+import com.central.common.dto.LoginLogPageDto;
 import com.central.common.feign.UserService;
 import com.central.common.model.*;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 
-import java.math.BigDecimal;
 import java.util.Map;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * userService降级工场
@@ -58,6 +61,16 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public Result saveTourist(Map<String, String> params) {
                 log.error("saveTourist编辑游客管理配置异常:{}", params, throwable);
                 return Result.failed("更新失败");
+            }
+            @Override
+            public PageResult<LoginLogPageDto> findUserLoginLogList(Map<String, Object> params) {
+                log.error("findUserLoginLogList查询会员日志异常:{}", params, throwable);
+                return new PageResult();
+            }
+
+            @Override
+            public List<SysUser> queryPlayerList() {
+                return new ArrayList<>();
             }
 
             @Override

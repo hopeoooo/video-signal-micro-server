@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.central.user.mapper.LoginLogMapper">
+
+
+    <select id="findAllLoginLog"  resultType="com.central.common.dto.LoginLogPageDto">
+        SELECT
+            u.username as userName,
+            u.enabled as enabled,
+            l.login_time as loginTime,
+            l.login_ip as loginIp
+        FROM
+            login_log l
+                LEFT JOIN sys_user u ON u.id = l.user_id
+        <where>
+            <if test="p.userName != null and p.userName.trim() != ''">
+                <if test="p.isOpen==1">
+                    and  u.username like concat('%', #{p.userName}, '%')
+                </if>
+                <if test="p.isOpen!=1">
+                    and  u.username = #{p.userName}
+                </if>
+            </if>
+            <if test="p.enabled!=null">
+                and  u.enabled = #{p.enabled}
+            </if>
+        </where>
+    </select>
+
+</mapper>
