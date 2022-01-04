@@ -61,7 +61,7 @@ public interface UserService {
      * @return
      */
     @GetMapping(value = "/users", params = "params")
-    PageResult<SysUser> findSysUserList(@RequestParam Map<String, Object> params);
+    PageResult<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
 
     /**
      * 查询游客管理配置
@@ -75,7 +75,7 @@ public interface UserService {
      * @return
      */
     @PostMapping(value = "/system/saveTourist", params = "params")
-    Result saveTourist(@RequestParam  Map<String, String> params);
+    Result saveTourist(@RequestParam("params") Map<String, String> params);
 
 
     /**
@@ -83,7 +83,7 @@ public interface UserService {
      * @return
      */
     @GetMapping(value = "/loginLog/findUserLoginLogList", params = "params")
-    PageResult<LoginLogPageDto> findUserLoginLogList(@RequestParam Map<String, Object> params) ;
+    PageResult<LoginLogPageDto> findUserLoginLogList(@RequestParam("params") Map<String, Object> params) ;
 
 
 
@@ -98,7 +98,7 @@ public interface UserService {
      * @return
      */
     @PostMapping(value = "/users/saveOrUpdate", params = "sysUser")
-    Result saveOrUpdate(@RequestParam  SysUser sysUser);
+    Result saveOrUpdate(@RequestParam("sysUser") SysUser sysUser);
 
     /**
      * 根据ID物理删除用户
