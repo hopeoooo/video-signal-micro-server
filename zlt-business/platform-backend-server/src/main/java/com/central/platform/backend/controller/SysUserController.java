@@ -54,6 +54,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/users/saveOrUpdate")
+    @ApiOperation(value = "新增or更新")
     @AuditLog(operation = "'新增或更新用户:' + #sysUser.username")
     public Result saveOrUpdate(@RequestBody SysUser sysUser) throws Exception {
         if(StringUtils.isBlank(sysUser.getUsername()) || !sysUser.getUsername().matches(RegexEnum.ACCOUNT.getRegex())){
@@ -71,6 +72,7 @@ public class SysUserController {
      *
      * @param id
      */
+    @ApiOperation(value = "删除用户")
     @DeleteMapping(value = "/users/{id}")
     @AuditLog(operation = "'删除用户:' + #id")
     public Result delete(@PathVariable Long id) {
@@ -97,6 +99,7 @@ public class SysUserController {
     /**
      * 用户自己修改密码
      */
+    @ApiOperation(value = "修改密码")
     @PutMapping(value = "/users/password")
     public Result resetPassword(@RequestBody SysUser sysUser) {
         if(sysUser.getId() == null){

@@ -6,6 +6,7 @@ import com.central.common.model.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class SysUserLogController {
      * 查询会员登录日志列表
      */
     @ResponseBody
+    @ApiOperation(value = "查询会员登录日志列表")
     @GetMapping("/loginLog/findUserLoginLogList")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
