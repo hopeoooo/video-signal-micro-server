@@ -59,6 +59,18 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("saveTourist编辑游客管理配置异常:{}", params, throwable);
                 return Result.failed("更新失败");
             }
+
+            @Override
+            public Result saveOrUpdate(SysUser sysUser) {
+                log.error("saveOrUpdate新增或修改用户数据异常:{}", sysUser, throwable);
+                return Result.failed("更新失败");
+            }
+
+            @Override
+            public Result delete(Long openId) {
+                log.error("delete删除用户失败:{}", openId, throwable);
+                return Result.failed("删除用户失败");
+            }
         };
     }
 }

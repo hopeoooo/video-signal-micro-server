@@ -61,7 +61,19 @@ public class SysUserController {
         if(StringUtils.isBlank(sysUser.getPassword()) || !sysUser.getPassword().matches(RegexEnum.PASSWORDAPP.getRegex())){
             return Result.failed(RegexEnum.PASSWORDAPP.getName() + RegexEnum.PASSWORDAPP.getDesc());
         }
+        sysUser.setType(CommonConstant.USER_TYPE_APP);
         return sysUserService.saveOrUpdate(sysUser);
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param id
+     */
+    @DeleteMapping(value = "/users/{id}")
+    @AuditLog(operation = "'删除用户:' + #id")
+    public Result delete(@PathVariable Long id) {
+        return sysUserService.delete(id);
     }
 
 
