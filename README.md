@@ -14,9 +14,6 @@
   </a>
 </p>
 
-
-
-## 如果您觉得有帮助，请点右上角 "Star" 支持一下谢谢
 &nbsp;
 ## 1. 总体架构图
 ![mark](https://gitee.com/zlt2000/images/raw/master/springcloud%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg)
@@ -27,16 +24,6 @@
 
 &nbsp;
 ## 3. 项目介绍
-* **技术交流群** 
-<table>
-    <tr>
-        <td><center><strong><a href="https://qm.qq.com/cgi-bin/qm/qr?k=HntAHTirZwCEjF8PQpjDYkw37Zx5rJg8&jump_from=webapi" target="_blank">交流三群</a></strong></center></td>
-	</tr>
-	<tr>
-        <td><a href="https://qm.qq.com/cgi-bin/qm/qr?k=HntAHTirZwCEjF8PQpjDYkw37Zx5rJg8&jump_from=webapi" target="_blank"><img width=250px height=300px alt="交流三群" src="http://qiniu.zlt2000.cn/blog/20210616/htVdgkFMohAm.png?imageslim"/></a></td>
-    </tr>
-</table>
-
 
 * **详细在线文档** ：https://www.kancloud.cn/zlt2000/microservices-platform/919418
   * **[项目更新日志](https://www.kancloud.cn/zlt2000/microservices-platform/936235)**
@@ -107,28 +94,8 @@ central-platform -- 父项目，公共依赖
 │  │  ├─sso-demo -- 单点登录demo
 ```
 
-<table>
-    <tr>
-        <td><a target="_blank" href="https://www.aliyun.com/minisite/goods?userCode=dickv1kw&share_source=copy_link"><img width="460px" height="177px" alt="阿里云" src="https://gitee.com/zlt2000/images/raw/master/aly.jpg"/></a></td>
-        <td><a target="_blank" href="https://cloud.tencent.com/act/cps/redirect?redirect=1074&cps_key=5516bbd5876cd224d90bd41d53d3f7fe&from=console"><img width="460px" height="177px"  alt="腾讯云" src="https://gitee.com/zlt2000/images/raw/master/txy.jpg"/></a></td>
-    </tr>
-</table>
-
-
-## 5. 交流反馈
-* 有问题先看看 [F&Q](https://www.kancloud.cn/zlt2000/microservices-platform/981382) 中有没有相关的回答
-* 欢迎提交`ISSUS`，请写清楚问题的具体原因，重现步骤和环境(上下文)
-* 项目/微服务交流请进群：
-  * 一群：[250883130(已满)](https://shang.qq.com/wpa/qunwpa?idkey=17544199255998bda0d938fb72b08d076c40c52c9904520b76eb5eb0585da71e)
-  * 二群：[1041797659(已满)](https://shang.qq.com/wpa/qunwpa?idkey=41988facbc02f678942a7ee7ae03122f2ef0a10c948b3d07319f070bfb0d3a98)
-  * 三群：[512637767](https://qm.qq.com/cgi-bin/qm/qr?k=HntAHTirZwCEjF8PQpjDYkw37Zx5rJg8&jump_from=webapi)
-* 个人博客：[https://zlt2000.gitee.io](https://zlt2000.gitee.io)
-* 个人邮箱：zltdiablo@163.com
-* 个人公众号：[陶陶技术笔记](http://qiniu.zlt2000.cn/blog/20190902/M56cWjw7uNsc.png?imageslim)
-* GitChat：[https://gitbook.cn/gitchat/author/5b2362320398d50d7b7ab29e](https://gitbook.cn/gitchat/author/5b2362320398d50d7b7ab29e)
-
 &nbsp;
-## 6. 截图（点击可大图预览）
+## 5. 截图（点击可大图预览）
 <table>
     <tr>
         <td><img alt="首页" src="https://gitee.com/zlt2000/images/raw/master/%E9%A6%96%E9%A1%B5.png"/></td>

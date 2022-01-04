@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 /**
  * app后端管理系统服
  */
-@EnableFeignClients(basePackages = "com.central.common")
+@EnableFeignClients(basePackages = "com.central")
 @EnableDiscoveryClient
 @SpringBootApplication
 public class PlatformBackendApp {
