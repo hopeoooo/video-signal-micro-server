@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @RestController
-@Api(tags = "会员中心日志")
+@Api(tags = "会员中心")
 @Slf4j
 @RequestMapping("/userLoginLog/backend")
 public class SysUserLogController {
