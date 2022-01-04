@@ -1,7 +1,5 @@
 package com.central.common.model;
 
-import java.util.List;
-
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -9,6 +7,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 /**
  * @author zlt
@@ -35,7 +35,7 @@ public class SysUser extends SuperEntity {
 	private Integer sex;
 	@ApiModelProperty(value = "状态：0.禁用，1.启用")
 	private Boolean enabled;
-	@ApiModelProperty(value = "账号类型：APP：前端app用户，BACKEND：后端管理用户")
+	@ApiModelProperty(value = "账号类型：APP：前端app用户，APP_GUEST：前端app游客用户，BACKEND：后端管理用户")
 	private String type;
 	private String openId;
 	@TableLogic
