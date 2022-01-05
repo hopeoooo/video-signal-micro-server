@@ -28,7 +28,7 @@ public class PlatformBackendController {
     @ApiOperation(value = "查询列表")
     @GetMapping("/list")
     public String list(){
-        return "test.game-dev";
+        return "test.game-dev1";
     }
 
 
