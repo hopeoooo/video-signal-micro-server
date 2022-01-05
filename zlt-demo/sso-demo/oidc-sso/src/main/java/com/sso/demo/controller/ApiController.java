@@ -21,19 +21,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPublicKey;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * @author zlt
- * @date 2020/5/22
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * Api
  */
 @Slf4j
 @RestController
@@ -217,8 +214,8 @@ public class ApiController {
      */
     private String getBase64ClientParam() {
         byte[] authorization = (clientId + ":" + clientSecret).getBytes(StandardCharsets.UTF_8);
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(authorization);
+        Base64.Encoder encoder = Base64.getEncoder();
+        return encoder.encodeToString(authorization);
     }
 
     @Data

@@ -5,10 +5,7 @@ import com.central.common.dto.LoginLogPageDto;
 import com.central.common.feign.fallback.UserServiceFallbackFactory;
 import com.central.common.model.*;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -98,16 +95,22 @@ public interface UserService {
      * @return
      */
     @PostMapping(value = "/users/saveOrUpdate", params = "sysUser")
-    Result saveOrUpdate(@RequestParam("sysUser") SysUser sysUser);
+    Result saveOrUpdate(@RequestBody SysUser sysUser);
 
     /**
      * 根据ID物理删除用户
      *
      * @param openId openId
      */
-    @GetMapping(value = "/users/{id}", params = "id")
-    Result delete(@RequestParam("id") Long openId);
+    @DeleteMapping(value = "/users/{id}", params = "id")
+    Result delete(@PathVariable("id") Long openId);
 
-    @GetMapping(value = "/users/password", params = "SysUser")
-    Result resetPassword(@RequestParam("SysUser") SysUser sysUser);
+    @PutMapping(value = "/users/password", params = "SysUser")
+    Result resetPassword(@RequestBody SysUser sysUser);
+
+
+    @GetMapping(value ="/users/updateEnabled", params = "SysUser")
+    Result updateEnabled(@RequestParam Map<String, Object> params);
+
+
 }

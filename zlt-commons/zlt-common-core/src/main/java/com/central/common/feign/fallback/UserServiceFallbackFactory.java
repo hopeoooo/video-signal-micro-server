@@ -90,6 +90,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("resetPassword修改密码异常:{}", sysUser, throwable);
                 return Result.failed("修改密码失败");
             }
+
+            @Override
+            public Result updateEnabled(Map<String, Object> params) {
+                log.error("updateEnabled修改状态异常:{}", params, throwable);
+                return Result.failed("修改状态失败");
+            }
         };
     }
 }
