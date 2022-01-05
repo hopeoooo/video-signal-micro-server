@@ -6,6 +6,7 @@
 
     <select id="findAllLoginLog"  resultType="com.central.common.dto.LoginLogPageDto">
         SELECT
+        l.user_id AS userId,
             u.username as userName,
             u.enabled as enabled,
             l.login_time as loginTime,

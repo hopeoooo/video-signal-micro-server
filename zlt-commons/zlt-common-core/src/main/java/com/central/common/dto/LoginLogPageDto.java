@@ -1,15 +1,12 @@
 package com.central.common.dto;
 
-import com.central.common.model.SuperPage;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 @ApiModel("用户日志查询")
-public class LoginLogPageDto extends SuperPage {
+public class LoginLogPageDto{
     @ApiModelProperty(value = "用户id")
     private String userId;
     @ApiModelProperty(value = "用户名")
