@@ -19,6 +19,16 @@
     </properties>
 
     <dependencies>
+        <!-- swagger -->
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>zlt-swagger2-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- 数据库通用组件 -->
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>zlt-db-spring-boot-starter</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.zlt</groupId>
             <artifactId>zlt-loadbalancer-spring-boot-starter</artifactId>

@@ -41,12 +41,6 @@
             <artifactId>zlt-common-spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- swagger -->
-        <dependency>
-            <groupId>com.zlt</groupId>
-            <artifactId>zlt-swagger2-spring-boot-starter</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -63,11 +57,6 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
-        <!-- 数据库通用组件 -->
-        <dependency>
-            <groupId>com.zlt</groupId>
-            <artifactId>zlt-db-spring-boot-starter</artifactId>
-        </dependency>
         <!-- mysql驱动 -->
         <dependency>
             <groupId>mysql</groupId>
