@@ -3,6 +3,7 @@ package com.central.game.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.central.common.model.PageResult2;
 import com.central.game.model.GameList;
 import com.central.game.service.IGameListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class GameListController {
 
     @ApiOperation(value = "分页查询列表")
     @GetMapping("/list")
-    public PageResult<GameList> list(@ModelAttribute SuperPage superPage) {
-        return gameListService.findList(superPage);
+    public Result<PageResult2<GameList>> list(@ModelAttribute SuperPage superPage) {
+        return Result.succeed(gameListService.findList(superPage));
     }
 
     @ApiOperation(value = "根据ID查询")
