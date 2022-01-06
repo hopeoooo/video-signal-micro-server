@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.lock.DistributedLock;
+import com.central.common.model.PageResult2;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.constant.SecurityConstants;
-import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.oauth.mapper.ClientMapper;
@@ -53,7 +53,7 @@ public class ClientServiceImpl extends SuperServiceImpl<ClientMapper, Client> im
     }
 
     @Override
-    public PageResult<Client> listClient(Map<String, Object> params, boolean isPage) {
+    public PageResult2<Client> listClient(Map<String, Object> params, boolean isPage) {
         Page<Client> page;
         if (isPage) {
             page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
@@ -62,7 +62,7 @@ public class ClientServiceImpl extends SuperServiceImpl<ClientMapper, Client> im
         }
         List<Client> list = baseMapper.findList(page, params);
         page.setRecords(list);
-        return PageResult.<Client>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult2.<Client>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override

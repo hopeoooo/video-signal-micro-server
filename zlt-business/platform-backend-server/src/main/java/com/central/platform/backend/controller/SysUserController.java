@@ -39,10 +39,10 @@ public class SysUserController {
             @ApiImplicitParam(name = "enabled", value = "状态：0.禁用，1.启用", required = false, dataType = "Boolean")
     })
     @GetMapping("/users/list")
-    public PageResult<SysUser> list(@RequestParam Map<String, Object> params) {
+    public Result<PageResult<SysUser>> list(@RequestParam Map<String, Object> params) {
         params.put("type", CommonConstant.USER_TYPE_APP);//APP用户数据
         PageResult<SysUser> sysUserList = sysUserService.findSysUserList(params);
-        return sysUserList;
+        return Result.succeed(sysUserList);
     }
 
 

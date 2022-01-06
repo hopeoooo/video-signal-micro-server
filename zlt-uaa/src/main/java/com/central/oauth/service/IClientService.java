@@ -1,6 +1,7 @@
 package com.central.oauth.service;
 
 import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.service.ISuperService;
 import com.central.oauth.model.Client;
@@ -21,7 +22,7 @@ public interface IClientService extends ISuperService<Client> {
      * @param params
      * @param isPage 是否分页
      */
-    PageResult<Client> listClient(Map<String, Object> params, boolean isPage);
+    PageResult2<Client> listClient(Map<String, Object> params, boolean isPage);
 
     void delClient(long id);
 
