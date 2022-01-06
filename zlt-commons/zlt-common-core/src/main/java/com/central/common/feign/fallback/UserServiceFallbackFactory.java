@@ -63,9 +63,9 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 return Result.failed("更新失败");
             }
             @Override
-            public PageResult<LoginLogPageDto> findUserLoginLogList(Map<String, Object> params) {
+            public PageResult2<LoginLogPageDto> findUserLoginLogList(Map<String, Object> params) {
                 log.error("findUserLoginLogList查询会员日志异常:{}", params, throwable);
-                return new PageResult();
+                return new PageResult2();
             }
 
             @Override
