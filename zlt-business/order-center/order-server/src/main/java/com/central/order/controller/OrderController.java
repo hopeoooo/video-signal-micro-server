@@ -1,5 +1,6 @@
 package com.central.order.controller;
 
+import com.central.common.model.PageResult2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
@@ -28,8 +29,8 @@ public class OrderController {
 
     @ApiOperation(value = "查询列表")
     @GetMapping("/list")
-    public PageResult<Order> list(@ModelAttribute SuperPage superPage) {
-        return orderService.findList(superPage);
+    public Result<PageResult2<Order>> list(@ModelAttribute SuperPage superPage) {
+        return Result.succeed(orderService.findList(superPage));
     }
 
     @ApiOperation(value = "根据ID查询")
