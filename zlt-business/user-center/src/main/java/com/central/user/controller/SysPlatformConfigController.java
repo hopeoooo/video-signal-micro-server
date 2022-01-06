@@ -37,8 +37,16 @@ public class SysPlatformConfigController {
             @ApiImplicitParam(name = "touristSingleMaxBet", value = "游客单笔最大投注", required = false)
     })
     public Result saveTourist(@RequestParam Map<String, String> params) {
+        //校验数字
+         String regex = "^[0-9]*$";
+        if (!params.get("touristAmount").matches(regex) || !params.get("touristSingleMaxBet").matches(regex)) {
+            return Result.failed("金额只能输入数字");
+        }
         BigDecimal touristAmount =new BigDecimal( params.get("touristAmount"));
         BigDecimal touristSingleMaxBet =new BigDecimal(  params.get("touristSingleMaxBet"));
+        if(touristAmount.compareTo(BigDecimal.ZERO)==-1 || touristSingleMaxBet.compareTo(BigDecimal.ZERO)==-1){
+            return Result.failed("金额不能小于0");
+        }
         return sysPlatformConfigService.saveCache(touristAmount,touristSingleMaxBet);
     }
 }
