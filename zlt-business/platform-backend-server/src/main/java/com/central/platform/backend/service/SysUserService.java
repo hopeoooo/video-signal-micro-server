@@ -1,6 +1,7 @@
 package com.central.platform.backend.service;
 
 import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,7 +12,7 @@ public interface SysUserService {
 
         Result saveOrUpdate(SysUser sysUser);
 
-        PageResult<SysUser> findSysUserList(Map<String, Object> params);
+        PageResult2<SysUser> findSysUserList(Map<String, Object> params);
 
         Result delete(Long id);
 

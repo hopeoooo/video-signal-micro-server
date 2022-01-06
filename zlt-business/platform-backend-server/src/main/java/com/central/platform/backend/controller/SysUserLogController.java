@@ -3,6 +3,7 @@ package com.central.platform.backend.controller;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.feign.UserService;
 import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -37,8 +38,8 @@ public class SysUserLogController {
             @ApiImplicitParam(name = "isOpen", value = "是否模糊查询(0:不勾选 1:勾选)", required = false, dataType = "Integer"),
             @ApiImplicitParam(name = "enabled", value = "状态：0.禁用，1.启用", required = false, dataType = "Integer")
     })
-    public Result<PageResult<LoginLogPageDto>> findUserLoginLogList(@RequestParam Map<String, Object> params) {
-        PageResult<LoginLogPageDto> userLoginLogList = userService.findUserLoginLogList(params);
+    public Result<PageResult2<LoginLogPageDto>> findUserLoginLogList(@RequestParam Map<String, Object> params) {
+        PageResult2<LoginLogPageDto> userLoginLogList = userService.findUserLoginLogList(params);
         return Result.succeed(userLoginLogList);
     }
 }
