@@ -47,9 +47,9 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public PageResult<SysUser> findSysUserList(Map<String, Object> params) {
+            public PageResult2<SysUser> findSysUserList(Map<String, Object> params) {
                 log.error("findSysUserList查询用户异常:{}", params, throwable);
-                return new PageResult();
+                return new PageResult2();
             }
 
             @Override
