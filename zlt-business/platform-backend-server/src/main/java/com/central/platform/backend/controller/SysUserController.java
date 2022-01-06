@@ -1,10 +1,7 @@
 package com.central.platform.backend.controller;
 
 import com.central.common.constant.CommonConstant;
-import com.central.common.model.PageResult;
-import com.central.common.model.RegexEnum;
-import com.central.common.model.Result;
-import com.central.common.model.SysUser;
+import com.central.common.model.*;
 import com.central.log.annotation.AuditLog;
 import com.central.platform.backend.service.SysUserService;
 import io.swagger.annotations.Api;
@@ -39,9 +36,9 @@ public class SysUserController {
             @ApiImplicitParam(name = "enabled", value = "状态：0.禁用，1.启用", required = false, dataType = "Boolean")
     })
     @GetMapping("/users/list")
-    public Result<PageResult<SysUser>> list(@RequestParam Map<String, Object> params) {
+    public Result<PageResult2<SysUser>> list(@RequestParam Map<String, Object> params) {
         params.put("type", CommonConstant.USER_TYPE_APP);//APP用户数据
-        PageResult<SysUser> sysUserList = sysUserService.findSysUserList(params);
+        PageResult2<SysUser> sysUserList = sysUserService.findSysUserList(params);
         return Result.succeed(sysUserList);
     }
 

@@ -80,7 +80,7 @@ public interface UserService {
      * @return
      */
     @GetMapping(value = "/loginLog/findUserLoginLogList", params = "params")
-    PageResult<LoginLogPageDto> findUserLoginLogList(@RequestParam("params") Map<String, Object> params) ;
+    PageResult2<LoginLogPageDto> findUserLoginLogList(@RequestParam("params") Map<String, Object> params) ;
 
 
 
