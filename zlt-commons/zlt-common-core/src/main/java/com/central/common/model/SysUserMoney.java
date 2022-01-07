@@ -2,6 +2,8 @@ package com.central.common.model;
 
 import com.central.common.model.SuperEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.central.common.utils.Decimal2Serializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -27,8 +29,12 @@ public class SysUserMoney extends SuperEntity {
 
     @ApiModelProperty(value = "用户ID")
     private Long userId;
+
     @ApiModelProperty(value = "余额")
+    @JsonSerialize(using = Decimal2Serializer.class, nullsUsing = Decimal2Serializer.class)
     private BigDecimal money;
+
     @ApiModelProperty(value = "未完成打码量")
+    @JsonSerialize(using = Decimal2Serializer.class, nullsUsing = Decimal2Serializer.class)
     private BigDecimal unfinishedCode;
 }

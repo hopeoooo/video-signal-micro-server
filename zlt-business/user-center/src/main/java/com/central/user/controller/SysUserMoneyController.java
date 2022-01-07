@@ -28,6 +28,9 @@ public class SysUserMoneyController {
     @GetMapping("/findByUserId/{userId}")
     public Result<SysUserMoney> findByUserId(@PathVariable Long userId) {
         SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
+        if (sysUserMoney == null) {
+            sysUserMoney = new SysUserMoney();
+        }
         return Result.succeed(sysUserMoney);
     }
 
