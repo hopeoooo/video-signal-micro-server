@@ -28,7 +28,7 @@ public class SysUserMoneyController {
 
     @ApiOperation(value = "查询当前登录用户的钱包")
     @GetMapping("/getMoney")
-    public Result<SysUserMoney> findByUserId(@LoginUser SysUser user) {
+    public Result<SysUserMoney> getMoney(@LoginUser SysUser user) {
         SysUserMoney sysUserMoney = userMoneyService.findByUserId(user.getId());
         if (sysUserMoney == null) {
             sysUserMoney = new SysUserMoney();
