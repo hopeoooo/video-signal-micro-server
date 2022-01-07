@@ -125,8 +125,7 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
         try {
             UserDetails loadedUser = userDetailsServiceFactory.getService(authentication).loadUserByUsername(username);
             if (loadedUser == null) {
-                throw new InternalAuthenticationServiceException(
-                        "UserDetailsService returned null, which is an interface contract violation");
+                throw new InternalAuthenticationServiceException("UserDetailsService returned null, which is an interface contract violation");
             }
             return loadedUser;
         }
