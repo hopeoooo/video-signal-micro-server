@@ -7,9 +7,6 @@ import com.central.oauth.utils.IpUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanMap;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -95,11 +92,6 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
         String logInIp = getLoginIp();
         log.info("+++++++ logInIp is {}",logInIp);
         processLoginInfoService.processLoginInfo(userDetails,getLoginIp());
-    }
-
-    private void recordLoginInfo(){
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
     }
 
     public  String getLoginIp(){
