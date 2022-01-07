@@ -5,6 +5,7 @@ import com.central.common.feign.UserService;
 import com.central.common.model.*;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Map;
 
@@ -51,17 +52,6 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("findSysUserList查询用户异常:{}", params, throwable);
                 return new PageResult2();
             }
-
-            @Override
-            public SysPlatformConfig findTouristAmount() {
-                log.error("findTouristAmount查询游客管理配置异常:{}", throwable);
-                return new SysPlatformConfig();
-            }
-            @Override
-            public Result saveTourist(Map<String, String> params) {
-                log.error("saveTourist编辑游客管理配置异常:{}", params, throwable);
-                return Result.failed("更新失败");
-            }
             @Override
             public PageResult2<LoginLogPageDto> findUserLoginLogList(Map<String, Object> params) {
                 log.error("findUserLoginLogList查询会员日志异常:{}", params, throwable);
@@ -86,8 +76,8 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result resetPassword(SysUser sysUser) {
-                log.error("resetPassword修改密码异常:{}", sysUser, throwable);
+            public  Result resetPassword(Long id) {
+                log.error("resetPassword修改密码异常:{}", id, throwable);
                 return Result.failed("修改密码失败");
             }
 

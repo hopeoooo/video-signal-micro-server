@@ -26,7 +26,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
 import java.util.Map;
 
 /**
@@ -96,6 +95,11 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
         String logInIp = getLoginIp();
         log.info("+++++++ logInIp is {}",logInIp);
         processLoginInfoService.processLoginInfo(userDetails,getLoginIp());
+    }
+
+    private void recordLoginInfo(){
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = servletRequestAttributes.getRequest();
     }
 
     public  String getLoginIp(){

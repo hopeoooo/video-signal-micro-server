@@ -57,9 +57,6 @@ public class SysUserController {
         if(StringUtils.isBlank(sysUser.getUsername()) || !sysUser.getUsername().matches(RegexEnum.ACCOUNT.getRegex())){
             return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
         }
-        if(StringUtils.isBlank(sysUser.getPassword()) || !sysUser.getPassword().matches(RegexEnum.PASSWORDAPP.getRegex())){
-            return Result.failed(RegexEnum.PASSWORDAPP.getName() + RegexEnum.PASSWORDAPP.getDesc());
-        }
         sysUser.setType(CommonConstant.USER_TYPE_APP);
         return sysUserService.saveOrUpdate(sysUser);
     }
@@ -94,18 +91,12 @@ public class SysUserController {
 
 
     /**
-     * 用户自己修改密码
+     * 重置密码
      */
-    @ApiOperation(value = "修改密码")
-    @PutMapping(value = "/users/password")
-    public Result resetPassword(@RequestBody SysUser sysUser) {
-        if(sysUser.getId() == null){
-            return Result.failed("会员不存在");
-        }
-        if(StringUtils.isBlank(sysUser.getPassword()) || !sysUser.getPassword().matches(RegexEnum.PASSWORDAPP.getRegex())){
-            return Result.failed(RegexEnum.PASSWORDAPP.getName() + RegexEnum.PASSWORDAPP.getDesc());
-        }
-        return sysUserService.resetPassword(sysUser);
+    @ApiOperation(value = "重置密码")
+    @PutMapping(value = "/users/{id}/password")
+    public Result resetPasswords(@PathVariable Long id) {
+        return sysUserService.resetPassword(id);
     }
 
 }

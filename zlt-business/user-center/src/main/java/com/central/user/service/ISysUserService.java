@@ -116,4 +116,6 @@ public interface ISysUserService extends ISuperService<SysUser> {
 	 * @param sysUser
 	 */
 	void cacheEvictUser(SysUser sysUser);
+
+	 String resetUpdatePassword(Long id) ;
 }
