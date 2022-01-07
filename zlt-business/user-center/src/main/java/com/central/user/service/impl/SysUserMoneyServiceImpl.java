@@ -1,6 +1,8 @@
 package com.central.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.SysUserMoney;
 import com.central.user.mapper.SysUserMoneyMapper;
 import com.central.user.service.ISysUserMoneyService;
@@ -43,9 +45,9 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     @Override
     @Cacheable(key = "#userId")
     public SysUserMoney findByUserId(Long userId) {
-        QueryWrapper<SysUserMoney> qw = new QueryWrapper<>();
-        qw.eq("user_id", userId);
-        return baseMapper.selectOne(qw);
+        LambdaQueryWrapper<SysUserMoney> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysUserMoney::getUserId, userId);
+        return baseMapper.selectOne(lqw);
     }
 
     @Override

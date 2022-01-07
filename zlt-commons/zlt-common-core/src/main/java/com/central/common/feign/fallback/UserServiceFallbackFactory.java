@@ -96,6 +96,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("updateEnabled修改状态异常:{}", params, throwable);
                 return Result.failed("修改状态失败");
             }
+
+            @Override
+            public Result<SysUserMoney> save(SysUserMoney sysUserMoney) {
+                log.error("新增用户钱包失败:{}", sysUserMoney, throwable);
+                return Result.failed("新增用户钱包失败");
+            }
         };
     }
 }

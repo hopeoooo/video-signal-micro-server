@@ -25,15 +25,14 @@ public class SysUserMoneyController {
     private ISysUserMoneyService userMoneyService;
 
     @ApiOperation(value = "根据userId查询用户钱包")
-    @GetMapping("/findByUserId")
-    @ApiImplicitParam(name = "userId", value = "用户ID", required = true)
-    public Result<SysUserMoney> findByUserId(@RequestParam(name = "userId") Long userId) {
+    @GetMapping("/findByUserId/{userId}")
+    public Result<SysUserMoney> findByUserId(@PathVariable Long userId) {
         SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
         return Result.succeed(sysUserMoney);
     }
 
     @ApiOperation(value = "保存")
-    @PostMapping
+    @PostMapping("/save")
     public Result<SysUserMoney> save(@RequestBody SysUserMoney sysUserMoney) {
         SysUserMoney saveSysUserMoney = userMoneyService.saveCache(sysUserMoney);
         return Result.succeed(saveSysUserMoney);
