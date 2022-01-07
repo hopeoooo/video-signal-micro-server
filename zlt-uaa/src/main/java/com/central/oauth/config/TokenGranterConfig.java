@@ -8,6 +8,7 @@ import com.central.oauth.service.IValidateCodeService;
 import com.central.oauth.service.impl.CustomTokenServices;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth.service.impl.UserDetailsByNameServiceFactoryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -43,6 +44,7 @@ import java.util.List;
  * Blog: https://zlt2000.gitee.io
  * Github: https://github.com/zlt2000
  */
+@Slf4j
 @Configuration
 public class TokenGranterConfig {
     @Autowired

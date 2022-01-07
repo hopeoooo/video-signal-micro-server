@@ -50,6 +50,14 @@ public class TokensController {
         return tokensService.listTokens(params, tenantId);
     }
 
+    @GetMapping("/players")
+    @ApiOperation(value = "游客人数")
+    public Result<Integer> queryPlayerNums(){
+        Integer player_num = tokensService.playerNums("webApp");
+        log.info("++++++++++++++ {}",player_num);
+        return Result.succeed(player_num);
+    }
+
     @GetMapping("/key")
     @ApiOperation(value = "获取jwt密钥")
     public Result<String> key(HttpServletRequest request) {
