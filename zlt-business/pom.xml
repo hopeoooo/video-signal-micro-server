@@ -30,5 +30,7 @@
         <module>risk-management-center</module>
         <!-- 活动中心 -->
         <module>activity-center</module>
+        <!-- 配置中心 -->
+        <module>config-center</module>
     </modules>
 </project>
