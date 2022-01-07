@@ -18,7 +18,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -82,6 +85,13 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
                         "Bad credentials"));
             }
         }
+
+
+    }
+
+    private void recordLoginInfo(){
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = servletRequestAttributes.getRequest();
     }
 
     private Boolean isPlayer(UsernamePasswordAuthenticationToken authentication){

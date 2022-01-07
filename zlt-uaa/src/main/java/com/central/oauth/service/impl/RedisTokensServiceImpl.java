@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * token管理服务(redis token)
@@ -73,6 +74,15 @@ public class RedisTokensServiceImpl implements ITokensService {
             }
         }
         return PageResult.<TokenVo>builder().data(result).code(0).count(size).build();
+    }
+
+    @Override
+    public Integer playerNums(String clientId) {
+        String redisKey = SecurityConstants.REDIS_UNAME_TO_ACCESS+clientId;
+        log.info("redisKey is {}",redisKey);
+        Set<String> keySet = redisRepository.keys(redisKey+"*");
+        log.info("size: =++++= {}",keySet);
+        return keySet.size();
     }
 
     /**
