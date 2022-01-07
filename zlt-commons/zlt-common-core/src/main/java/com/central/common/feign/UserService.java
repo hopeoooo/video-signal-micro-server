@@ -61,21 +61,6 @@ public interface UserService {
     PageResult2<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
 
     /**
-     * 查询游客管理配置
-     * @return
-     */
-    @GetMapping(value = "/system/findTouristAmount")
-    SysPlatformConfig findTouristAmount();
-
-    /**
-     * 编辑游客管理配置
-     * @return
-     */
-    @PostMapping(value = "/system/saveTourist", params = "params")
-    Result saveTourist(@RequestParam("params") Map<String, String> params);
-
-
-    /**
      * 查询会员日志列表
      * @return
      */
