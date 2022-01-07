@@ -58,7 +58,7 @@ public interface UserService {
      * @return
      */
     @GetMapping(value = "/users", params = "params")
-    PageResult<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
+    PageResult2<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
 
     /**
      * 查询游客管理配置

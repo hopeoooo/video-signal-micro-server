@@ -2,6 +2,7 @@ package com.central.platform.backend.service.impl;
 
 import com.central.common.feign.UserService;
 import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.platform.backend.service.SysUserService;
@@ -35,7 +36,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public PageResult<SysUser> findSysUserList(Map<String, Object> params) {
+    public PageResult2<SysUser> findSysUserList(Map<String, Object> params) {
         return userService.findSysUserList(params);
     }
 
