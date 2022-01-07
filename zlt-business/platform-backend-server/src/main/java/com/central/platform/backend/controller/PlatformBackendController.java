@@ -1,5 +1,6 @@
 package com.central.platform.backend.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.central.common.model.Result;
 import com.central.common.model.SysPlatformConfig;
 import com.central.platform.backend.dto.TouristDto;
@@ -71,4 +72,44 @@ public class PlatformBackendController {
         }
         return platformConfigService.saveCache(touristAmount,touristSingleMaxBet);
     }
+
+    /**
+     * 金钱符号查询
+     * @return
+     */
+    @ApiOperation("金钱符号查询")
+    @GetMapping("/findMoneySymbol")
+    public Result findMoneySymbol(){
+        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
+        String moneySymbol = touristAmount.getMoneySymbol() == null ? "￥" : touristAmount.getMoneySymbol();
+        return Result.succeed(moneySymbol, "查询成功");
+    }
+
+
+    /**
+     * 修改金钱符号
+     * @return
+     */
+    @ApiOperation("编辑金钱符号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "moneySymbol", value = "金钱符号", required = true),
+    })
+    @PostMapping("/updateMoneySymbol")
+    public Result updateMoneySymbol(String moneySymbol){
+        if (StrUtil.isBlank(moneySymbol)){
+            return Result.failed("参数错误");
+        }
+        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
+        if (touristAmount==null){
+            return Result.failed("更新失败");
+        }
+        touristAmount.setMoneySymbol(moneySymbol);
+        boolean save = platformConfigService.saveOrUpdate(touristAmount);
+        return save  ? Result.succeed("更新成功") : Result.failed("更新失败");
+    }
+
+
+
+
+
 }

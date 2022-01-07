@@ -105,5 +105,6 @@ public interface UserService {
     @PostMapping("/userMoney/save")
     Result<SysUserMoney> save(@RequestBody SysUserMoney sysUserMoney);
 
-
+    @PostMapping(value = "/loginLog/addLog", params = "LoginLog")
+    Result<Boolean> addLoginlog(@RequestBody LoginLog loginLog);
 }

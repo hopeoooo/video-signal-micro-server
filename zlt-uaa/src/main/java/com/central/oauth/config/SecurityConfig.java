@@ -7,6 +7,7 @@ import com.central.oauth.filter.LoginProcessSetTenantFilter;
 import com.central.oauth.mobile.MobileAuthenticationSecurityConfig;
 import com.central.oauth.openid.OpenIdAuthenticationSecurityConfig;
 import com.central.oauth.password.PasswordAuthenticationProvider;
+import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth.tenant.TenantAuthenticationSecurityConfig;
 import com.central.oauth.tenant.TenantUsernamePasswordAuthenticationFilter;
@@ -75,6 +76,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AuthenticationDetailsSource<HttpServletRequest, CustomWebAuthenticationDetails> authenticationDetailsSource;
+
+	@Autowired
+	private ProcessLoginInfoService processLoginInfoService;
 
 	/**
 	 * 这一步的配置是必不可少的，否则SpringBoot会自动配置一个AuthenticationManager,覆盖掉内存中的用户
@@ -153,6 +157,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		PasswordAuthenticationProvider provider = new PasswordAuthenticationProvider();
 		provider.setPasswordEncoder(passwordEncoder);
 		provider.setUserDetailsServiceFactory(userDetailsServiceFactory);
+		provider.setProcessLoginInfoService(processLoginInfoService);
 		auth.authenticationProvider(provider);
 	}
 	/*public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {

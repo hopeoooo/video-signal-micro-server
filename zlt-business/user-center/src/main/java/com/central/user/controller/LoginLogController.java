@@ -1,13 +1,16 @@
 package com.central.user.controller;
 
 import com.central.common.dto.LoginLogPageDto;
+import com.central.common.model.LoginLog;
 import com.central.common.model.PageResult;
+import com.central.common.model.Result;
 import com.central.user.service.ILoginLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -37,6 +40,12 @@ public class LoginLogController {
     })
     public PageResult<LoginLogPageDto> findUserLoginLogList(@RequestParam Map<String, Object> params) {
         return ILoginLogService.queryList(params);
+    }
+
+    @PostMapping("/addLog")
+    public Result<Boolean> addLoginlog(@RequestBody LoginLog loginLog){
+        Boolean result = ILoginLogService.save(loginLog);
+        return result? Result.succeed(Boolean.TRUE):Result.succeed(Boolean.FALSE);
     }
 
 }

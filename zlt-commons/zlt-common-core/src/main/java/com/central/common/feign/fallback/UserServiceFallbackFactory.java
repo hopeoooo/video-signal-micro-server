@@ -92,6 +92,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("新增用户钱包失败:{}", sysUserMoney, throwable);
                 return Result.failed("新增用户钱包失败");
             }
+
+            @Override
+            public Result<Boolean> addLoginlog(LoginLog loginLog) {
+                log.error("新增登录日志失败:{}",loginLog,throwable);
+                return Result.failed("新增登录日志失败");
+            }
         };
     }
 }

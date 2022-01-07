@@ -1,11 +1,12 @@
 package com.central.oauth.password;
 
 import com.alibaba.fastjson.JSON;
+import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
+import com.central.oauth.utils.IpUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanMap;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,6 +45,7 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
 
     private PasswordEncoder passwordEncoder;
 
+    private ProcessLoginInfoService processLoginInfoService;
     /**
      * The password used to perform
      * {@link PasswordEncoder#matches(CharSequence, String)} on when the user is
@@ -86,13 +88,19 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
             }
         }
 
-
+        log.info("++++++++++  userDetails {}",userDetails);
+        String logInIp = getLoginIp();
+        log.info("+++++++ logInIp is {}",logInIp);
+        processLoginInfoService.processLoginInfo(userDetails,getLoginIp());
     }
 
-    private void recordLoginInfo(){
+    public  String getLoginIp(){
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
+
+        return IpUtil.getIpAddr(request);
     }
+
 
     private Boolean isPlayer(UsernamePasswordAuthenticationToken authentication){
         // Details={account_type=admin, grant_type=password_code, deviceId=C5ACEFA0-13A1-423A-BC05-58D708C3D218, username=test, player=player}
