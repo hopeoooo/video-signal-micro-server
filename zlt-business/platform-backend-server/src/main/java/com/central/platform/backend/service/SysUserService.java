@@ -18,5 +18,5 @@ public interface SysUserService {
 
          Result updateEnabled(@RequestParam Map<String, Object> params) ;
 
-        Result resetPassword(SysUser sysUser);
+        Result resetPassword(Long id);
 }

@@ -5,6 +5,7 @@ import com.central.common.feign.UserService;
 import com.central.common.model.*;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Map;
 
@@ -75,8 +76,8 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result resetPassword(SysUser sysUser) {
-                log.error("resetPassword修改密码异常:{}", sysUser, throwable);
+            public  Result resetPassword(Long id) {
+                log.error("resetPassword修改密码异常:{}", id, throwable);
                 return Result.failed("修改密码失败");
             }
 

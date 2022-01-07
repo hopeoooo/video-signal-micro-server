@@ -90,8 +90,8 @@ public interface UserService {
     @DeleteMapping(value = "/users/{id}", params = "id")
     Result delete(@PathVariable("id") Long openId);
 
-    @PutMapping(value = "/users/password", params = "SysUser")
-    Result resetPassword(@RequestBody SysUser sysUser);
+    @PutMapping(value = "/users/{id}/password", params = "SysUser")
+     Result resetPassword(@PathVariable("id") Long id) ;
 
 
     @GetMapping(value ="/users/updateEnabled", params = "SysUser")

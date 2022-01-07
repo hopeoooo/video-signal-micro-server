@@ -25,7 +25,7 @@ public class LoginLog extends SuperEntity {
 	@ApiModelProperty(value = "用户名")
 	private String platName;
 	@ApiModelProperty(value = "用户id")
-	private String userId;
+	private Long userId;
 	@ApiModelProperty(value = "登录时间")
 	private Date loginTime;
 	@ApiModelProperty(value = "登录ip")

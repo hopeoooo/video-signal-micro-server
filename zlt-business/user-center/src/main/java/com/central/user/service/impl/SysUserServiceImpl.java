@@ -16,6 +16,7 @@ import com.central.user.model.SysRoleUser;
 import com.central.user.model.SysUserExcel;
 import com.central.user.mapper.SysUserMapper;
 import com.central.user.service.ISysRoleUserService;
+import com.central.user.util.PasswordUtil;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -197,6 +198,19 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
         return Result.succeed("修改成功");
     }
 
+    @Transactional
+    @Override
+    public String resetUpdatePassword(Long id) {
+        SysUser sysUser = baseMapper.selectById(id);
+        SysUser user = new SysUser();
+        user.setId(id);
+        //随机生成
+        String password = PasswordUtil.getRandomPwd();
+        user.setPassword(passwordEncoder.encode(password));
+        baseMapper.updateById(user);
+        return password;
+    }
+
     @Override
     public PageResult<SysUser> findUsers(Map<String, Object> params) {
         Page<SysUser> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
@@ -242,21 +256,9 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
             if (StringUtils.isBlank(sysUser.getType())) {
                 sysUser.setType(UserType.BACKEND.name());
             }
-            if(StringUtils.isBlank(sysUser.getPassword())){
-                sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
-            }else{
-                sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
-            }
+            sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
             sysUser.setEnabled(Boolean.TRUE);
-        }else {
-            if(StringUtils.isNotBlank(sysUser.getPassword())){
-                if(!sysUser.getPassword().matches(RegexEnum.PASSWORDAPP.getRegex())){
-                    return Result.failed(RegexEnum.PASSWORDAPP.getName() + RegexEnum.PASSWORDAPP.getDesc());
-                }
-                sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
-            }
         }
-
         String username = sysUser.getUsername();
         boolean result = super.saveOrUpdateIdempotency(sysUser, lock
                 , LOCK_KEY_USERNAME+username, new QueryWrapper<SysUser>().eq("username", username)
