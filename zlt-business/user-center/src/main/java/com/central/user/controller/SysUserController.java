@@ -113,10 +113,10 @@ public class SysUserController {
         return appUserService.selectById(id);
     }
 
-    @GetMapping("/users/info/{id}")
-    @ApiOperation(value = "根据Id查询用户基本信息")
-    public Result<UserInfoVo> findUserInfoById(@PathVariable Long id) {
-        SysUser sysUser = appUserService.selectById(id);
+    @GetMapping("/users/info")
+    @ApiOperation(value = "查询登录用户基本信息")
+    public Result<UserInfoVo> findUserInfoById(@LoginUser SysUser user) {
+        SysUser sysUser = appUserService.selectById(user.getId());
         UserInfoVo vo = new UserInfoVo();
         BeanUtil.copyProperties(sysUser, vo);
         return Result.succeed(vo);

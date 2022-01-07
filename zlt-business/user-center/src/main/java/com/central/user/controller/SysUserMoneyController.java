@@ -1,6 +1,8 @@
 package com.central.user.controller;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.common.model.SysUserMoney;
 import com.central.user.service.ISysUserMoneyService;
 import io.swagger.annotations.Api;
@@ -24,10 +26,10 @@ public class SysUserMoneyController {
     @Autowired
     private ISysUserMoneyService userMoneyService;
 
-    @ApiOperation(value = "根据userId查询用户钱包")
-    @GetMapping("/findByUserId/{userId}")
-    public Result<SysUserMoney> findByUserId(@PathVariable Long userId) {
-        SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
+    @ApiOperation(value = "查询当前登录用户的钱包")
+    @GetMapping("/getMoney")
+    public Result<SysUserMoney> findByUserId(@LoginUser SysUser user) {
+        SysUserMoney sysUserMoney = userMoneyService.findByUserId(user.getId());
         if (sysUserMoney == null) {
             sysUserMoney = new SysUserMoney();
         }
