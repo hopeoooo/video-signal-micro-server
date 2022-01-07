@@ -1,6 +1,8 @@
 package com.central.user.controller;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.common.model.SysUserMoney;
 import com.central.user.service.ISysUserMoneyService;
 import io.swagger.annotations.Api;
@@ -24,16 +26,18 @@ public class SysUserMoneyController {
     @Autowired
     private ISysUserMoneyService userMoneyService;
 
-    @ApiOperation(value = "根据userId查询用户钱包")
-    @GetMapping("/findByUserId")
-    @ApiImplicitParam(name = "userId", value = "用户ID", required = true)
-    public Result<SysUserMoney> findByUserId(@RequestParam(name = "userId") Long userId) {
-        SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
+    @ApiOperation(value = "查询当前登录用户的钱包")
+    @GetMapping("/getMoney")
+    public Result<SysUserMoney> getMoney(@LoginUser SysUser user) {
+        SysUserMoney sysUserMoney = userMoneyService.findByUserId(user.getId());
+        if (sysUserMoney == null) {
+            sysUserMoney = new SysUserMoney();
+        }
         return Result.succeed(sysUserMoney);
     }
 
     @ApiOperation(value = "保存")
-    @PostMapping
+    @PostMapping("/save")
     public Result<SysUserMoney> save(@RequestBody SysUserMoney sysUserMoney) {
         SysUserMoney saveSysUserMoney = userMoneyService.saveCache(sysUserMoney);
         return Result.succeed(saveSysUserMoney);

@@ -58,7 +58,7 @@ public interface UserService {
      * @return
      */
     @GetMapping(value = "/users", params = "params")
-    PageResult<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
+    PageResult2<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
 
     /**
      * 查询游客管理配置
@@ -111,6 +111,14 @@ public interface UserService {
 
     @GetMapping(value ="/users/updateEnabled", params = "SysUser")
     Result updateEnabled(@RequestParam Map<String, Object> params);
+
+    /**
+     * 新增用户钱包
+     * @param sysUserMoney
+     * @return
+     */
+    @PostMapping("/userMoney/save")
+    Result<SysUserMoney> save(@RequestBody SysUserMoney sysUserMoney);
 
 
 }

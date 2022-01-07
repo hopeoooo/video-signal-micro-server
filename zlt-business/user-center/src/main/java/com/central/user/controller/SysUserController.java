@@ -18,6 +18,7 @@ import com.central.search.model.LogicDelDto;
 import com.central.search.model.SearchDto;
 import com.central.user.dto.SysUserPageDto;
 import com.central.user.model.SysUserExcel;
+import com.central.user.vo.UserInfoVo;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +111,15 @@ public class SysUserController {
     @GetMapping("/users/{id}")
     public SysUser findUserById(@PathVariable Long id) {
         return appUserService.selectById(id);
+    }
+
+    @GetMapping("/users/info")
+    @ApiOperation(value = "查询登录用户基本信息")
+    public Result<UserInfoVo> findUserInfoById(@LoginUser SysUser user) {
+        SysUser sysUser = appUserService.selectById(user.getId());
+        UserInfoVo vo = new UserInfoVo();
+        BeanUtil.copyProperties(sysUser, vo);
+        return Result.succeed(vo);
     }
 
     /**
