@@ -3,6 +3,7 @@ package com.central.oauth2.common.util;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -23,4 +24,6 @@ public class JwtUtilsTest {
         //是否有效
         System.out.println(isValid);
     }
+
+
 }

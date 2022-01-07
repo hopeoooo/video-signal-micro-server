@@ -28,6 +28,7 @@ public class PwdImgCodeGranter extends ResourceOwnerPasswordTokenGranter {
 
     @Override
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
+        log.info("++++++++++ PwdImgCodeGranter start");
         Map<String, String> parameters = new LinkedHashMap<>(tokenRequest.getRequestParameters());
         String deviceId = parameters.get("deviceId");
         String validCode = parameters.get("validCode");
@@ -40,6 +41,7 @@ public class PwdImgCodeGranter extends ResourceOwnerPasswordTokenGranter {
             parameters.put("username","player");
             tokenRequest.setRequestParameters(parameters);
         }
+        log.info("++++++++++ PwdImgCodeGranter end");
         return super.getOAuth2Authentication(client, tokenRequest);
     }
 }
