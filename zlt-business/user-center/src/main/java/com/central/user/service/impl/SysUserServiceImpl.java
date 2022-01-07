@@ -242,13 +242,21 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
             if (StringUtils.isBlank(sysUser.getType())) {
                 sysUser.setType(UserType.BACKEND.name());
             }
+            if(StringUtils.isBlank(sysUser.getPassword())){
+                sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
+            }else{
+                sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
+            }
             sysUser.setEnabled(Boolean.TRUE);
+        }else {
+            if(StringUtils.isNotBlank(sysUser.getPassword())){
+                if(!sysUser.getPassword().matches(RegexEnum.PASSWORDAPP.getRegex())){
+                    return Result.failed(RegexEnum.PASSWORDAPP.getName() + RegexEnum.PASSWORDAPP.getDesc());
+                }
+                sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
+            }
         }
-        if(StringUtils.isBlank(sysUser.getPassword())){
-            sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
-        }else{
-            sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
-        }
+
         String username = sysUser.getUsername();
         boolean result = super.saveOrUpdateIdempotency(sysUser, lock
                 , LOCK_KEY_USERNAME+username, new QueryWrapper<SysUser>().eq("username", username)
