@@ -56,14 +56,10 @@ public class SysUserServiceImpl implements SysUserService {
         return userService.updateEnabled(params);
     }
 
-    /**
-     * 修改用户密码
-     *
-     * @param sysUser
-     * @return
-     */
+
+
     @Override
-    public Result resetPassword(SysUser sysUser) {
-        return userService.resetPassword(sysUser);
+    public Result resetPassword(Long id) {
+        return userService.resetPassword(id);
     }
 }

@@ -26,4 +26,8 @@ public class SysPlatformConfig {
 	@ApiModelProperty(value = "游客单笔最大投注")
 	private BigDecimal touristSingleMaxBet;
 
+	@ApiModelProperty("金钱符号")
+	private String moneySymbol;
+
+
 }

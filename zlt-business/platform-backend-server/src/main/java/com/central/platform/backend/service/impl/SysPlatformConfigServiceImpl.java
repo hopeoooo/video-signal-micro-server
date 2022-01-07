@@ -1,19 +1,16 @@
-package com.central.user.service.impl;
+package com.central.platform.backend.service.impl;
 
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.central.common.model.Result;
 import com.central.common.model.SysPlatformConfig;
 import com.central.common.service.impl.SuperServiceImpl;
-import com.central.user.mapper.SysPlatformConfigMapper;
-import com.central.user.service.ISysPlatformConfigService;
-import com.central.user.service.ISysRoleMenuService;
+import com.central.platform.backend.mapper.SysPlatformConfigMapper;
+import com.central.platform.backend.service.ISysPlatformConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 

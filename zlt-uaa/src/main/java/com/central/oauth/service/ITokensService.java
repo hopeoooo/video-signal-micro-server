@@ -16,6 +16,9 @@ public interface ITokensService {
      */
     PageResult<TokenVo> listTokens(Map<String, Object> params, String clientId);
 
+
+    Integer playerNums(String clientId);
+
     /**
      * 查看是否存在用户的key
      */

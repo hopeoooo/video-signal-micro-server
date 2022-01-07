@@ -195,8 +195,8 @@ public class SysUserController {
             return Result.failed(ADMIN_CHANGE_MSG);
         }
         cacheEvictUser(id);
-        appUserService.updatePassword(id, null, null);
-        return Result.succeed("重置成功");
+        String password = appUserService.resetUpdatePassword(id);
+        return Result.succeed(password,"重置成功");
     }
 
     /**

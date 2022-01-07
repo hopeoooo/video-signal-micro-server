@@ -61,21 +61,6 @@ public interface UserService {
     PageResult2<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
 
     /**
-     * 查询游客管理配置
-     * @return
-     */
-    @GetMapping(value = "/system/findTouristAmount")
-    SysPlatformConfig findTouristAmount();
-
-    /**
-     * 编辑游客管理配置
-     * @return
-     */
-    @PostMapping(value = "/system/saveTourist", params = "params")
-    Result saveTourist(@RequestParam("params") Map<String, String> params);
-
-
-    /**
      * 查询会员日志列表
      * @return
      */
@@ -105,8 +90,8 @@ public interface UserService {
     @DeleteMapping(value = "/users/{id}", params = "id")
     Result delete(@PathVariable("id") Long openId);
 
-    @PutMapping(value = "/users/password", params = "SysUser")
-    Result resetPassword(@RequestBody SysUser sysUser);
+    @PutMapping(value = "/users/{id}/password", params = "SysUser")
+     Result resetPassword(@PathVariable("id") Long id) ;
 
 
     @GetMapping(value ="/users/updateEnabled", params = "SysUser")
