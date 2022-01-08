@@ -20,8 +20,6 @@ import java.util.List;
 
 /**
  * 异常通用处理
- *
- * @author zlt
  */
 @ResponseBody
 @Slf4j
@@ -30,7 +28,7 @@ public class DefaultExceptionAdvice {
      * IllegalArgumentException异常处理返回json
      * 返回状态码:400
      */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK) // HttpStatus.BAD_REQUEST
     @ExceptionHandler({IllegalArgumentException.class})
     public Result badRequestException(IllegalArgumentException e) {
         return defHandler("参数解析失败", e);
@@ -40,7 +38,7 @@ public class DefaultExceptionAdvice {
      * AccessDeniedException异常处理返回json
      * 返回状态码:403
      */
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.OK) // HttpStatus.FORBIDDEN
     @ExceptionHandler({AccessDeniedException.class})
     public Result badMethodExpressException(AccessDeniedException e) {
         return defHandler("没有权限请求当前方法", e);
@@ -49,7 +47,7 @@ public class DefaultExceptionAdvice {
     /**
      * 返回状态码:405
      */
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ResponseStatus(HttpStatus.OK) // HttpStatus.METHOD_NOT_ALLOWED
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
     public Result handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return defHandler("不支持当前请求方法", e);
@@ -58,7 +56,7 @@ public class DefaultExceptionAdvice {
     /**
      * 返回状态码:415
      */
-    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    @ResponseStatus(HttpStatus.OK) // HttpStatus.UNSUPPORTED_MEDIA_TYPE
     @ExceptionHandler({HttpMediaTypeNotSupportedException.class})
     public Result handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         return defHandler("不支持当前媒体类型", e);
@@ -68,7 +66,7 @@ public class DefaultExceptionAdvice {
      * SQLException sql异常处理
      * 返回状态码:500
      */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.OK) // HttpStatus.INTERNAL_SERVER_ERROR
     @ExceptionHandler({SQLException.class})
     public Result handleSQLException(SQLException e) {
         return defHandler("服务运行SQLException异常", e);
@@ -78,7 +76,7 @@ public class DefaultExceptionAdvice {
      * BusinessException 业务异常处理
      * 返回状态码:500
      */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.OK) // HttpStatus.INTERNAL_SERVER_ERROR
     @ExceptionHandler(BusinessException.class)
     public Result handleException(BusinessException e) {
         return defHandler("业务异常", e);
@@ -98,7 +96,7 @@ public class DefaultExceptionAdvice {
      * 所有异常统一处理
      * 返回状态码:500
      */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.OK)  // HttpStatus.INTERNAL_SERVER_ERROR
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e) {
         return defHandler("未知异常", e);

@@ -82,5 +82,16 @@ public class PlatformBackendController {
     }
 
 
+    /**
+     * logo查询
+     * @return
+     */
+    @ApiOperation("logo查询")
+    @GetMapping("/system/findLogoUrlInfo")
+    public Result findLogoUrlInfo(){
+        return configService.findLogoUrlInfo();
+    }
+
+
 
 }
