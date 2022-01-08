@@ -1,5 +1,6 @@
 package com.central.user.service.impl;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,7 @@ import com.central.user.model.SysRoleUser;
 import com.central.user.model.SysUserExcel;
 import com.central.user.mapper.SysUserMapper;
 import com.central.user.service.ISysRoleUserService;
+import com.central.user.service.ISysUserMoneyService;
 import com.central.user.util.PasswordUtil;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -51,6 +53,8 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
 
     @Resource
     private ISysRoleUserService roleUserService;
+    @Resource
+    private ISysUserMoneyService userMoneyService;
 
     @Resource
     private SysRoleMenuMapper roleMenuMapper;
@@ -252,7 +256,9 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Result saveOrUpdateUser(SysUser sysUser) throws Exception {
+        Boolean saveMark=false;
         if (sysUser.getId() == null) {
+            saveMark=true;
             if (StringUtils.isBlank(sysUser.getType())) {
                 sysUser.setType(UserType.BACKEND.name());
             }
@@ -272,6 +278,12 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
                 roleIds.forEach(roleId -> roleUsers.add(new SysRoleUser(sysUser.getId(), Long.parseLong(roleId.toString()))));
                 roleUserService.saveBatch(roleUsers);
             }
+        }
+        if(saveMark && sysUser.getType().equals("APP") && result){
+          //调用用户钱包接口
+            SysUserMoney userMoney=new SysUserMoney();
+            userMoney.setUserId(sysUser.getId());
+            userMoneyService.saveCache(userMoney);
         }
         return result ? Result.succeed(sysUser, "操作成功") : Result.failed("操作失败");
     }

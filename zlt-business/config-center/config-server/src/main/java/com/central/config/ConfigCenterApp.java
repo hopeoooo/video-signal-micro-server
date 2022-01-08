@@ -1,22 +1,20 @@
-package com.central.platform.backend;
+package com.central.config;
 
 import com.central.common.lb.annotation.EnableFeignInterceptor;
-import com.central.config.annotation.EnableConfigClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * app后端管理系统服
+ * 配置服
  */
-@EnableConfigClient
+@EnableDiscoveryClient
 @EnableFeignInterceptor
 @EnableFeignClients(basePackages = "com.central")
-@EnableDiscoveryClient
 @SpringBootApplication
-public class PlatformBackendApp {
+public class ConfigCenterApp {
     public static void main(String[] args) {
-        SpringApplication.run(PlatformBackendApp.class, args);
+        SpringApplication.run(ConfigCenterApp.class, args);
     }
 }

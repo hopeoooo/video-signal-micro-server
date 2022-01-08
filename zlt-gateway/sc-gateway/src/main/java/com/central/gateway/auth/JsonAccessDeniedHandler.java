@@ -11,16 +11,13 @@ import reactor.core.publisher.Mono;
 /**
  * 403拒绝访问异常处理，转换为JSON
  *
- * @author zlt
- * @date 2019/10/7
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * 备注：返回403修改为返回200
  */
 @Slf4j
 public class JsonAccessDeniedHandler implements ServerAccessDeniedHandler {
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException e) {
-        return WebfluxResponseUtil.responseFailed(exchange, HttpStatus.FORBIDDEN.value(), e.getMessage());
+        //HttpStatus.FORBIDDEN.value()
+        return WebfluxResponseUtil.responseFailed(exchange, HttpStatus.OK.value(), e.getMessage());
     }
 }

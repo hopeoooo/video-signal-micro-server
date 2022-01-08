@@ -3,25 +3,37 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>zlt-business</artifactId>
+        <artifactId>config-center</artifactId>
         <groupId>com.zlt</groupId>
         <version>5.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>platform-backend-server</artifactId>
-    <description>平台后端管理系统服</description>
+    <artifactId>config-server</artifactId>
+    <description>配置服</description>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>pay-client</artifactId>
+        </dependency>
+
+        <!-- @FeiginClients的负载均衡，不使用UserService不需要引用 -->
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>zlt-loadbalancer-spring-boot-starter</artifactId>
+        </dependency>
+
         <!-- 统一配置 -->
         <dependency>
             <groupId>com.zlt</groupId>
             <artifactId>zlt-config</artifactId>
         </dependency>
+
 
         <!-- 公共通用组件 -->
         <dependency>
@@ -73,12 +85,6 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
-
-        <!-- @FeiginClients的负载均衡，不使用UserService不需要引用 -->
-        <dependency>
-            <groupId>com.zlt</groupId>
-            <artifactId>zlt-loadbalancer-spring-boot-starter</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.zlt</groupId>
             <artifactId>config-client</artifactId>
@@ -127,5 +133,4 @@
         </plugins>
         <finalName>${project.artifactId}</finalName>
     </build>
-
 </project>

@@ -11,16 +11,13 @@ import reactor.core.publisher.Mono;
 /**
  * 401未授权异常处理，转换为JSON
  *
- * @author zlt
- * @date 2019/10/7
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * 备注：返回401修改为返回200
  */
 @Slf4j
 public class JsonAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
     @Override
     public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException e) {
-        return WebfluxResponseUtil.responseFailed(exchange, HttpStatus.UNAUTHORIZED.value(), e.getMessage());
+        //HttpStatus.UNAUTHORIZED.value()
+        return WebfluxResponseUtil.responseFailed(exchange, HttpStatus.OK.value(), e.getMessage());
     }
 }

@@ -1,4 +1,4 @@
-package com.central.platform.backend.dto;
+package com.central.config.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

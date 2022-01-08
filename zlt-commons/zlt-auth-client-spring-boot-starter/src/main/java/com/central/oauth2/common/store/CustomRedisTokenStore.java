@@ -1,7 +1,9 @@
 package com.central.oauth2.common.store;
 
 import com.central.common.constant.SecurityConstants;
+import com.central.common.model.SysUser;
 import com.central.oauth2.common.properties.SecurityProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -22,6 +24,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,6 +40,7 @@ import java.util.List;
  * @author zlt
  * @date 2019/7/7
  */
+@Slf4j
 public class CustomRedisTokenStore implements TokenStore {
     private static final String ACCESS = "access:";
     private static final String AUTH_TO_ACCESS = "auth_to_access:";
@@ -254,11 +258,26 @@ public class CustomRedisTokenStore implements TokenStore {
         storeAccessToken(token, authentication, false);
     }
 
+    private String getOnlineKey(OAuth2AccessToken token, OAuth2Authentication authentication){
+        log.info("+++++++ token is {}",token);
+        log.info("+++++++ getExpiresIn is {}",token.getExpiresIn());
+        log.info("+++++++ authentication is {}",authentication);
+        String returnKey = "";
+        SysUser sysUser = (SysUser) authentication.getPrincipal();
+        if(sysUser.getType().equals("APP_GUEST"))
+            returnKey= SecurityConstants.REDIS_UNAME_TO_ACCESS+"APP_GUEST:"+sysUser.getUsername();
+        else
+            returnKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + "online:"+sysUser.getUsername();
+        log.info("return Key is {}",returnKey);
+        return returnKey;
+    }
+
     /**
      * 存储token
      * @param isRenew 是否续签
      */
     private void storeAccessToken(OAuth2AccessToken token, OAuth2Authentication authentication, boolean isRenew) {
+
         byte[] serializedAccessToken = serialize(token);
         byte[] serializedAuth = serialize(authentication);
         byte[] accessKey = serializeKey(ACCESS + token.getValue());
@@ -266,6 +285,7 @@ public class CustomRedisTokenStore implements TokenStore {
         byte[] authToAccessKey = serializeKey(AUTH_TO_ACCESS + authenticationKeyGenerator.extractKey(authentication));
         byte[] approvalKey = serializeKey(SecurityConstants.REDIS_UNAME_TO_ACCESS + getApprovalKey(authentication));
         byte[] clientId = serializeKey(SecurityConstants.REDIS_CLIENT_ID_TO_ACCESS + authentication.getOAuth2Request().getClientId());
+        byte[] onlineKey = serializeKey(getOnlineKey(token, authentication));
 
         RedisConnection conn = getConnection();
         try {
@@ -289,6 +309,7 @@ public class CustomRedisTokenStore implements TokenStore {
                 conn.set(authKey, serializedAuth);
                 conn.set(authToAccessKey, serializedAccessToken);
             }
+
             //如果是续签token，需要先删除集合里旧的值
             if (oldAccessToken != null) {
                 if (!authentication.isClientOnly()) {
@@ -327,6 +348,13 @@ public class CustomRedisTokenStore implements TokenStore {
                 }
                 expireRefreshToken(refreshToken, conn, refreshToAccessKey, accessToRefreshKey);
             }
+
+            //写入注册online用户
+            conn.set(onlineKey,"user".getBytes(StandardCharsets.UTF_8));
+            if (token.getExpiration() != null){
+                conn.expire(onlineKey,token.getExpiresIn());
+            }
+
             conn.closePipeline();
         } finally {
             conn.close();

@@ -1,19 +1,16 @@
 package com.central.platform.backend.controller;
 
-import cn.hutool.core.util.StrUtil;
+import com.central.config.dto.TouristDto;
+import com.central.config.feign.ConfigService;
 import com.central.common.model.Result;
-import com.central.common.model.SysPlatformConfig;
-import com.central.platform.backend.dto.TouristDto;
-import com.central.platform.backend.service.ISysPlatformConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -24,8 +21,8 @@ import java.util.Map;
 @Api(tags = "平台后端管理系统服api")
 @RequestMapping("/platform/backend")
 public class PlatformBackendController {
-    @Autowired
-    private ISysPlatformConfigService platformConfigService;
+    @Resource
+    private ConfigService configService;
 
     @ApiOperation(value = "查询列表")
     @GetMapping("/list")
@@ -40,11 +37,7 @@ public class PlatformBackendController {
     @ApiOperation(value = "全局参数:游客管理查询")
     @GetMapping("/system/findTouristAmount")
     public Result<TouristDto> findTouristAmount() {
-        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
-        TouristDto platformConfigDto=new TouristDto();
-        platformConfigDto.setTouristAmount(touristAmount.getTouristAmount());
-        platformConfigDto.setTouristSingleMaxBet(touristAmount.getTouristSingleMaxBet());
-        return Result.succeed(platformConfigDto, "查询成功");
+        return configService.findTouristAmount();
     }
 
 
@@ -60,17 +53,7 @@ public class PlatformBackendController {
             @ApiImplicitParam(name = "touristSingleMaxBet", value = "游客单笔最大投注", required = true)
     })
     public Result saveTourist(@RequestParam Map<String, String> params) {
-        //校验数字
-        String regex = "^[0-9]*$";
-        if (!params.get("touristAmount").matches(regex) || !params.get("touristSingleMaxBet").matches(regex)) {
-            return Result.failed("金额只能输入数字");
-        }
-        BigDecimal touristAmount =new BigDecimal( params.get("touristAmount"));
-        BigDecimal touristSingleMaxBet =new BigDecimal(  params.get("touristSingleMaxBet"));
-        if(touristAmount.compareTo(BigDecimal.ZERO)==-1 || touristSingleMaxBet.compareTo(BigDecimal.ZERO)==-1){
-            return Result.failed("金额不能小于0");
-        }
-        return platformConfigService.saveCache(touristAmount,touristSingleMaxBet);
+        return configService.saveTourist(params);
     }
 
     /**
@@ -78,11 +61,9 @@ public class PlatformBackendController {
      * @return
      */
     @ApiOperation("金钱符号查询")
-    @GetMapping("/findMoneySymbol")
+    @GetMapping("/system/findMoneySymbol")
     public Result findMoneySymbol(){
-        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
-        String moneySymbol = touristAmount.getMoneySymbol() == null ? "￥" : touristAmount.getMoneySymbol();
-        return Result.succeed(moneySymbol, "查询成功");
+        return Result.succeed(configService.findMoneySymbol(), "查询成功");
     }
 
 
@@ -90,25 +71,15 @@ public class PlatformBackendController {
      * 修改金钱符号
      * @return
      */
+
     @ApiOperation("编辑金钱符号")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "moneySymbol", value = "金钱符号", required = true),
     })
-    @PostMapping("/updateMoneySymbol")
-    public Result updateMoneySymbol(String moneySymbol){
-        if (StrUtil.isBlank(moneySymbol)){
-            return Result.failed("参数错误");
-        }
-        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
-        if (touristAmount==null){
-            return Result.failed("更新失败");
-        }
-        touristAmount.setMoneySymbol(moneySymbol);
-        boolean save = platformConfigService.saveOrUpdate(touristAmount);
-        return save  ? Result.succeed("更新成功") : Result.failed("更新失败");
+    @PostMapping("/system/updateMoneySymbol")
+    public Result updateMoneySymbol(@RequestParam("moneySymbol")String moneySymbol){
+        return configService.updateMoneySymbol(moneySymbol);
     }
-
-
 
 
 

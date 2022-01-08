@@ -1,5 +1,6 @@
 package com.central.common.utils;
 
+import com.central.common.model.CodeEnum;
 import com.central.common.model.Result;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -13,28 +14,19 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.Charset;
 
 /**
- * @author zlt
- * @date 2020/5/5
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * 网关webflux的response返回工具类
  */
 public class WebfluxResponseUtil {
     /**
      * webflux的response返回json对象
      */
-    public static Mono<Void> responseWriter(ServerWebExchange exchange, int httpStatus, String msg) {
-        Result result = Result.of(null, httpStatus, msg);
-        return responseWrite(exchange, httpStatus, result);
-    }
-
     public static Mono<Void> responseFailed(ServerWebExchange exchange, String msg) {
         Result result = Result.failed(msg);
         return responseWrite(exchange, HttpStatus.INTERNAL_SERVER_ERROR.value(), result);
     }
 
     public static Mono<Void> responseFailed(ServerWebExchange exchange, int httpStatus, String msg) {
-        Result result = Result.failed(msg);
+        Result result = Result.failed(CodeEnum.ERROR_AUTH_SECURITY.getCode(), "请求地址或参数异常", msg);
         return responseWrite(exchange, httpStatus, result);
     }
 

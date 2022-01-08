@@ -10,6 +10,9 @@ import com.central.oauth.service.ITokensService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -81,7 +84,7 @@ public class RedisTokensServiceImpl implements ITokensService {
         String redisKey = SecurityConstants.REDIS_UNAME_TO_ACCESS+clientId;
         log.info("redisKey is {}",redisKey);
         Set<String> keySet = redisRepository.keys(redisKey+"*");
-        log.info("size: =++++= {}",keySet);
+//        log.info("size: =++++= {}",keySet);
         return keySet.size();
     }
 
