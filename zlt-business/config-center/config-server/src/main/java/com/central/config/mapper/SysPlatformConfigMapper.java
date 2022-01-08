@@ -1,4 +1,4 @@
-package com.central.platform.backend.mapper;
+package com.central.config.mapper;
 
 import com.central.common.model.SysPlatformConfig;
 import com.central.db.mapper.SuperMapper;

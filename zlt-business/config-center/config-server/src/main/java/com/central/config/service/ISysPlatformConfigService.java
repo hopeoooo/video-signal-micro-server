@@ -1,4 +1,4 @@
-package com.central.platform.backend.service;
+package com.central.config.service;
 
 import com.central.common.model.Result;
 import com.central.common.model.SysPlatformConfig;

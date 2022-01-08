@@ -1,10 +1,10 @@
-package com.central.platform.backend.service.impl;
+package com.central.config.service.impl;
 
 import com.central.common.model.Result;
 import com.central.common.model.SysPlatformConfig;
 import com.central.common.service.impl.SuperServiceImpl;
-import com.central.platform.backend.mapper.SysPlatformConfigMapper;
-import com.central.platform.backend.service.ISysPlatformConfigService;
+import com.central.config.mapper.SysPlatformConfigMapper;
+import com.central.config.service.ISysPlatformConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
