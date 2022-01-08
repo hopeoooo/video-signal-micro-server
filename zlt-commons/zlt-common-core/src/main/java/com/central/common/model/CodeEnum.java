@@ -1,11 +1,14 @@
 package com.central.common.model;
 
 /**
- * @Author: zlt
+ * 消息错误码
  */
 public enum CodeEnum {
     SUCCESS(0),
-    ERROR(1);
+    ERROR(1),
+    /** 授权相关错误 */
+    ERROR_AUTH(100);
+
 
     private Integer code;
     CodeEnum(Integer code){

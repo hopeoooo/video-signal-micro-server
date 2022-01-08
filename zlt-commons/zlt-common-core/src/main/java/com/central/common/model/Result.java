@@ -42,6 +42,10 @@ public class Result<T> implements Serializable {
         return of(null, CodeEnum.ERROR.getCode(), msg);
     }
 
+    public static <T> Result<T> failed(int codeEnum, String msg, T datas) {
+        return of(datas, codeEnum, msg);
+    }
+
     public static <T> Result<T> failed(T model, String msg) {
         return of(model, CodeEnum.ERROR.getCode(), msg);
     }

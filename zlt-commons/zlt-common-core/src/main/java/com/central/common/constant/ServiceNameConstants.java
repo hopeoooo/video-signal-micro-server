@@ -40,4 +40,8 @@ public interface ServiceNameConstants {
      * 订单中心服务
      */
     String ORDER_SERVICE = "order-center";
+    /**
+     * 订单中心服务
+     */
+    String CONFIG_SERVICE = "config-center";
 }

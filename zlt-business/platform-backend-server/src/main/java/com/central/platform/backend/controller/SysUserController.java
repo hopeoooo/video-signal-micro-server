@@ -57,6 +57,9 @@ public class SysUserController {
         if(StringUtils.isBlank(sysUser.getUsername()) || !sysUser.getUsername().matches(RegexEnum.ACCOUNT.getRegex())){
             return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
         }
+        if(StringUtils.isBlank(sysUser.getPassword()) || !sysUser.getPassword().matches(RegexEnum.PASSWORDAPP.getRegex())){
+            return Result.failed(RegexEnum.PASSWORDAPP.getName() + RegexEnum.PASSWORDAPP.getDesc());
+        }
         sysUser.setType(CommonConstant.USER_TYPE_APP);
         return sysUserService.saveOrUpdate(sysUser);
     }
