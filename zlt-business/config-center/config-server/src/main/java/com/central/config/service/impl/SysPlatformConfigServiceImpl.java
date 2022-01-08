@@ -3,7 +3,7 @@ package com.central.config.service.impl;
 import com.central.common.model.Result;
 import com.central.common.model.SysPlatformConfig;
 import com.central.common.service.impl.SuperServiceImpl;
-import com.central.config.mapper.SysPlatformConfigMapper;
+import com.central.config.mapper.SysPlatformMapper;
 import com.central.config.service.ISysPlatformConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Service
 @CacheConfig(cacheNames = {"sysPlatformConfig"})
-public class SysPlatformConfigServiceImpl extends SuperServiceImpl<SysPlatformConfigMapper, SysPlatformConfig> implements ISysPlatformConfigService {
+public class SysPlatformConfigServiceImpl extends SuperServiceImpl<SysPlatformMapper, SysPlatformConfig> implements ISysPlatformConfigService {
 
 
     @Resource

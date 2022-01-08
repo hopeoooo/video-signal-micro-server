@@ -1,5 +1,6 @@
 package com.central.platform.backend.controller;
 
+import com.central.common.model.SysBanner;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.common.model.Result;
@@ -82,5 +83,13 @@ public class PlatformBackendController {
     }
 
 
-
+    /**
+     * logo查询
+     * @return
+     */
+    @ApiOperation("logo查询")
+    @GetMapping("/system/findLogoUrlInfo")
+    public Result findLogoUrlInfo(){
+        return configService.findLogoUrlInfo();
+    }
 }

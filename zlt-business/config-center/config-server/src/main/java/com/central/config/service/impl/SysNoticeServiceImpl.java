@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.central.common.model.Result;
 import com.central.common.model.SysNotice;
 import com.central.common.service.impl.SuperServiceImpl;
-import com.central.config.mapper.SysNoticeConfigMapper;
+import com.central.config.mapper.SysNoticeMapper;
 import com.central.config.service.ISysNoticeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @CacheConfig(cacheNames = {"sysNotice"})
-public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeConfigMapper, SysNotice> implements ISysNoticeService {
+public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysNotice> implements ISysNoticeService {
 
     @Override
     public List<SysNotice> findNoticeList(Map<String, Object> params) {
