@@ -2,13 +2,10 @@ package com.central.config.feign;
 
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.Result;
+import com.central.common.model.SysBanner;
 import com.central.common.model.SysNotice;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
-import com.central.log.annotation.AuditLog;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,5 +51,20 @@ public interface ConfigService {
 
     @PostMapping("/notice/saveOrUpdate")
     Result saveOrUpdate(@RequestBody SysNotice sysNotice);
+
+
+    @GetMapping("/banner/findBannerList")
+    Result findBannerList() ;
+
+    @DeleteMapping(value = "/banner/delBannerId/{id}")
+    Result delBannerId(@PathVariable("id") Long id) ;
+
+    @GetMapping("/banner/updateState")
+    Result updateState(@RequestParam("params") Map<String, Object> params) ;
+
+    @PostMapping("/banner/saveOrUpdate")
+    Result saveOrUpdate(@RequestBody SysBanner sysBanner);
+
+
 
 }

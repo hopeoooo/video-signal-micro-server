@@ -1,10 +1,7 @@
 package com.central.config.feign.callback;
 
 import com.central.common.feign.UserService;
-import com.central.common.model.PageResult2;
-import com.central.common.model.Result;
-import com.central.common.model.SysNotice;
-import com.central.common.model.SysUser;
+import com.central.common.model.*;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +75,29 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             @Override
             public Result saveOrUpdate(SysNotice sysNotice) {
                 log.error("saveOrUpdate更新公告异常:{}", sysNotice, cause);
+                return Result.failed("更新失败");
+            }
+            @Override
+            public Result findBannerList() {
+                log.error("findBannerList查询banner异常" ,cause);
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result delBannerId(Long id) {
+                log.error("delBannerId删除公告异常:{}", id, cause);
+                return Result.failed("删除失败");
+            }
+
+            @Override
+            public Result updateState(Map<String, Object> params) {
+                log.error("updateState更新banner状态异常:{}", params, cause);
+                return Result.failed("更新失败");
+            }
+
+            @Override
+            public Result saveOrUpdate(SysBanner sysBanner) {
+                log.error("saveOrUpdate更新公告异常:{}", sysBanner, cause);
                 return Result.failed("更新失败");
             }
         };
