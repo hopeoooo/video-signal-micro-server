@@ -1,21 +1,23 @@
 package com.central.file.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.central.oss.model.ObjectInfo;
-import org.apache.commons.collections4.MapUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.central.common.model.PageResult;
 import com.central.file.mapper.FileMapper;
 import com.central.file.model.FileInfo;
 import com.central.file.service.IFileService;
 import com.central.file.utils.FileUtil;
-
+import com.central.oss.model.ObjectInfo;
+import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AbstractIFileService 抽取类
@@ -63,7 +65,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileI
      * @param id 文件id
      */
     @Override
-    public void delete(String id) {
+    public void delete(String id) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         FileInfo fileInfo = baseMapper.selectById(id);
         if (fileInfo != null) {
             baseMapper.deleteById(fileInfo.getId());
@@ -76,7 +78,7 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileI
      *
      * @param objectPath 文件路径
      */
-    protected abstract void deleteFile(String objectPath);
+    protected abstract void deleteFile(String objectPath) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
 
     @Override
     public PageResult<FileInfo> findList(Map<String, Object> params) {

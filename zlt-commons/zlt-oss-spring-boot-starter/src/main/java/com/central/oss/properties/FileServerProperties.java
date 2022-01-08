@@ -18,6 +18,7 @@ public class FileServerProperties {
     public static final String PREFIX = "zlt.file-server";
     public static final String TYPE_FDFS = "fastdfs";
     public static final String TYPE_S3 = "s3";
+    public static final String TYPE_MINIO = "minio";
 
     /**
      * 为以下2个值，指定不同的自动化配置
@@ -35,4 +36,10 @@ public class FileServerProperties {
      * fastDFS配置
      */
     FdfsProperties fdfs = new FdfsProperties();
+
+
+    /**
+     * aws s3配置
+     */
+    MinioProperties minio = new MinioProperties();
 }
