@@ -78,7 +78,7 @@ public class ConfigController {
      */
     @ApiOperation("金钱符号查询")
     @GetMapping("/findMoneySymbol")
-    public Result findMoneySymbol(){
+    public Result<String> findMoneySymbol(){
         SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
         String moneySymbol = touristAmount.getMoneySymbol() == null ? "￥" : touristAmount.getMoneySymbol();
         return Result.succeed(moneySymbol, "查询成功");
@@ -115,7 +115,7 @@ public class ConfigController {
      */
     @ApiOperation("logo查询")
     @GetMapping("/findLogoUrlInfo")
-    public Result findLogoUrlInfo(){
+    public Result<logoUrlDto> findLogoUrlInfo(){
         SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
         if (touristAmount==null){
             return Result.succeed( "查询失败");
