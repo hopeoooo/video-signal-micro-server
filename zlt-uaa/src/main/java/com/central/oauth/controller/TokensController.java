@@ -53,7 +53,7 @@ public class TokensController {
     @GetMapping("/players")
     @ApiOperation(value = "游客人数")
     public Result<Integer> queryPlayerNums(){
-        Integer player_num = tokensService.playerNums("webApp");
+        Integer player_num = tokensService.playerNums("online");
         log.info("++++++++++++++ {}",player_num);
         return Result.succeed(player_num);
     }
