@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.central.common.model.Result;
 import com.central.common.model.SysPlatformConfig;
 import com.central.config.dto.TouristDto;
+import com.central.config.dto.logoUrlDto;
 import com.central.config.service.ISysPlatformConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -108,4 +109,27 @@ public class ConfigController {
         boolean save = platformConfigService.saveOrUpdate(touristAmount);
         return save  ? Result.succeed("更新成功") : Result.failed("更新失败");
     }
+
+
+
+    /**
+     * logo查询
+     * @return
+     */
+    @ApiOperation("logo查询")
+    @GetMapping("/findLogoUrlInfo")
+    public Result findLogoUrlInfo(){
+        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
+        if (touristAmount==null){
+            return Result.succeed( "查询失败");
+        }
+        logoUrlDto logoUrlDto=new logoUrlDto();
+        logoUrlDto.setLogImageUrlApp(touristAmount.getLogImageUrlApp());
+        logoUrlDto.setLogImageUrlPc(touristAmount.getLogImageUrlPc());
+        logoUrlDto.setLoginRegisterLogImageUrlApp(touristAmount.getLoginRegisterLogImageUrlApp());
+        logoUrlDto.setWebsiteIcon(touristAmount.getWebsiteIcon());
+        return Result.succeed(logoUrlDto, "查询成功");
+    }
+
+
 }

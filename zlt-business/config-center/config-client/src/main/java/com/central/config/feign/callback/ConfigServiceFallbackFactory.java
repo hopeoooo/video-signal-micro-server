@@ -52,6 +52,12 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
+            public Result findLogoUrlInfo() {
+                log.error("findLogoUrlInfo查询金额符号异常", cause);
+                return Result.failed("查询失败");
+            }
+
+            @Override
             public Result findNoticeList(Map<String, Object> params) {
                 log.error("findNoticeList查询公告异常:{}", params, cause);
                 return Result.failed("查询失败");

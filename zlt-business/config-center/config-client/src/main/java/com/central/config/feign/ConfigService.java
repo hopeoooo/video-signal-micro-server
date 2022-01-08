@@ -37,6 +37,9 @@ public interface ConfigService {
     @PostMapping("/system/updateMoneySymbol")
     Result updateMoneySymbol( @RequestParam("moneySymbol")String moneySymbol);
 
+    @GetMapping("/system/findLogoUrlInfo")
+     Result findLogoUrlInfo();
+
 
 
     @GetMapping("/notice/findNoticeList")
