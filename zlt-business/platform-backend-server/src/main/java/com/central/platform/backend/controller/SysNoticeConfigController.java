@@ -31,7 +31,7 @@ public class SysNoticeConfigController {
     /**
      * 查询公告管理列表
      */
-
+    @ApiOperation(value = "查询公告管理列表")
     @ResponseBody
     @GetMapping("/notice/findNoticeList")
     @ApiImplicitParams({
@@ -44,11 +44,11 @@ public class SysNoticeConfigController {
 
 
     /**
-     * 删除用户
+     * 删除
      *
      * @param id
      */
-
+    @ApiOperation(value = "删除公告")
     @DeleteMapping(value = "/notice/deleteNoticeId/{id}")
     public Result deleteNoticeId(@PathVariable Long id) {
         return  configService.deleteNoticeId(id);
@@ -79,7 +79,7 @@ public class SysNoticeConfigController {
      * @param sysNotice
      * @return
      */
-
+    @ApiOperation(value = "新增或更新")
     @PostMapping("/notice/saveOrUpdate")
     @AuditLog(operation = "'新增或更新公告:' + #sysNotice.content")
     public Result saveOrUpdate(@RequestBody SysNotice sysNotice) throws Exception {

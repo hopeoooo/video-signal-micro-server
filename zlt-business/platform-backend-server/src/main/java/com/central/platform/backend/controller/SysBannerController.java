@@ -1,8 +1,8 @@
-
 package com.central.platform.backend.controller;
 
 import com.central.common.model.Result;
 import com.central.common.model.SysBanner;
+import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,18 +14,20 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
-
+/**
+ * 轮播图
+ */
 @Slf4j
 @RestController
-@Api(tags = "公告管理")
-@RequestMapping("/banner/backend")
+@Api(tags = "轮播图")
+@RequestMapping("/platform/backend")
 public class SysBannerController {
     @Resource
     private ConfigService configService;
 
 
     /**
-     * 查询公告管理列表
+     * 查询banner列表
      */
     @ApiOperation("查询banner列表")
     @ResponseBody
@@ -74,6 +76,4 @@ public class SysBannerController {
         return configService.saveOrUpdate(sysBanner);
     }
 
-
 }
-
