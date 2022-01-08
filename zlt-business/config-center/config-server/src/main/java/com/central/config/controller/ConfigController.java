@@ -33,8 +33,6 @@ public class ConfigController {
         return "test.game";
     }
 
-
-
     /**
      * 全局参数:游客管理查询
      */
@@ -47,7 +45,6 @@ public class ConfigController {
         platformConfigDto.setTouristSingleMaxBet(touristAmount.getTouristSingleMaxBet());
         return Result.succeed(platformConfigDto, "查询成功");
     }
-
 
     /**
      * 全局参数:游客管理编辑
