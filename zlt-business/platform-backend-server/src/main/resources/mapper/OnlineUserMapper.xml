@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.central.platform.backend.mapper.OnlineUserMapper">
+	<sql id="where">
+		<where>
+			<if test="p.startTime != null">
+				and t.create_time >= #{p.startTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="p.endTime != null">
+				and t.create_time&lt;= #{p.endTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</sql>
+
+	<select id="findOnlineUserList" resultType="com.central.platform.backend.model.OnlineUser">
+		select * from online_user t
+		<include refid="where" />
+		order by t.id desc
+	</select>
+	<select id="findPageList" resultType="com.central.platform.backend.model.OnlineUser">
+		select t.statics_day AS staticsDay,
+		MAX(t.online_num) AS MaxOnlineNum,
+		SUM(t.online_num)/count(0) AS onlineNum
+		 from online_user t
+		<include refid="where" />
+		GROUP BY t.statics_day
+		order by t.id desc
+	</select>
+
+	<insert id="saveOnlineUser" parameterType="com.central.platform.backend.model.OnlineUser">
+    insert into online_user (statics_day, statics_times,
+    online_num,create_time,update_time )
+    values (#{o.staticsDay,jdbcType=VARCHAR},#{o.staticsTimes,jdbcType=VARCHAR},#{o.onlineNum,jdbcType=INTEGER}, sysdate(),
+    sysdate())
+  </insert>
+
+</mapper>
