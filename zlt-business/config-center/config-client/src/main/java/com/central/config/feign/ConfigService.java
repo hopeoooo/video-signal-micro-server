@@ -65,6 +65,8 @@ public interface ConfigService {
     @PostMapping("/banner/saveOrUpdate")
     Result saveOrUpdate(@RequestBody SysBanner sysBanner);
 
+    @GetMapping("/system/findAvatarPictureList")
+     Result findAvatarPictureList() ;
 
 
 }

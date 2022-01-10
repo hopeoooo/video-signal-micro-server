@@ -100,6 +100,12 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 log.error("saveOrUpdate更新公告异常:{}", sysBanner, cause);
                 return Result.failed("更新失败");
             }
+
+            @Override
+            public Result findAvatarPictureList() {
+                log.error("findAvatarPictureList查询头像异常" ,cause);
+                return Result.failed("查询失败");
+            }
         };
     }
 }

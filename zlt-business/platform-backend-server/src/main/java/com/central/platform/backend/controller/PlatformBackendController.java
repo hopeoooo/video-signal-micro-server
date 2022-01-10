@@ -92,4 +92,15 @@ public class PlatformBackendController {
     public Result findLogoUrlInfo(){
         return configService.findLogoUrlInfo();
     }
+
+
+    /**
+     * 查询头像列表
+     * @return
+     */
+    @ApiOperation("查询头像列表")
+    @GetMapping("/system/findAvatarPictureList")
+    public Result findAvatarPictureList(){
+        return configService.findAvatarPictureList();
+    }
 }

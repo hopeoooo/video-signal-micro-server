@@ -10,4 +10,6 @@ public class UserInfoVo {
 
     @ApiModelProperty(value = "用户名")
     private String username;
+    @ApiModelProperty(value = "头像地址")
+    private String headImgUrl;
 }

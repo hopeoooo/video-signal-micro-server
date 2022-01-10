@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
 import com.central.common.model.*;
@@ -306,6 +307,19 @@ public class SysUserController {
     public List<SysUser> queryPlayerList(){
         List<SysUser> playList = appUserService.lambdaQuery().eq(SysUser::getType,"APP_GUEST").list();
         return playList;
+    }
+
+    @ApiOperation(value = "登录用户修改头像")
+    @GetMapping("/users/updateHeadImg")
+    @ApiImplicitParam(name = "headImg", value = "头像地址,只需要传这一个参数，其他参数为框架多余展示的不用理会", required = true, dataType = "String")
+    public Result updateHeadImgUrl(@LoginUser SysUser user,String headImg) {
+        Long id = user.getId();
+        cacheEvictUser(id);
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId,id);
+        updateWrapper.set(SysUser::getHeadImgUrl,headImg);
+        appUserService.update(updateWrapper);
+        return Result.succeed();
     }
 
     /**

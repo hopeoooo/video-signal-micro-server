@@ -1,10 +1,12 @@
 package com.central.config.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 
 @Data
+@ApiModel("logo地址")
 public class logoUrlDto {
 
 

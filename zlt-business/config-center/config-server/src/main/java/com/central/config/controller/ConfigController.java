@@ -2,9 +2,12 @@ package com.central.config.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.central.common.model.Result;
+import com.central.common.model.SysAvatarPicture;
+import com.central.common.model.SysBanner;
 import com.central.common.model.SysPlatformConfig;
 import com.central.config.dto.TouristDto;
 import com.central.config.dto.logoUrlDto;
+import com.central.config.service.ISysAvatarPictureService;
 import com.central.config.service.ISysPlatformConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,13 +32,14 @@ public class ConfigController {
     @Autowired
     private ISysPlatformConfigService platformConfigService;
 
+    @Autowired
+    private ISysAvatarPictureService avatarPictureService;
+
     @ApiOperation(value = "查询配置列表")
     @GetMapping("/list")
     public String list(){
         return "test.game";
     }
-
-
 
     /**
      * 全局参数:游客管理查询
@@ -48,7 +53,6 @@ public class ConfigController {
         platformConfigDto.setTouristSingleMaxBet(touristAmount.getTouristSingleMaxBet());
         return Result.succeed(platformConfigDto, "查询成功");
     }
-
 
     /**
      * 全局参数:游客管理编辑
@@ -81,7 +85,7 @@ public class ConfigController {
      */
     @ApiOperation("金钱符号查询")
     @GetMapping("/findMoneySymbol")
-    public Result findMoneySymbol(){
+    public Result<String> findMoneySymbol(){
         SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
         String moneySymbol = touristAmount.getMoneySymbol() == null ? "￥" : touristAmount.getMoneySymbol();
         return Result.succeed(moneySymbol, "查询成功");
@@ -118,7 +122,7 @@ public class ConfigController {
      */
     @ApiOperation("logo查询")
     @GetMapping("/findLogoUrlInfo")
-    public Result findLogoUrlInfo(){
+    public Result<logoUrlDto> findLogoUrlInfo(){
         SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
         if (touristAmount==null){
             return Result.succeed( "查询失败");
@@ -129,6 +133,18 @@ public class ConfigController {
         logoUrlDto.setLoginRegisterLogImageUrlApp(touristAmount.getLoginRegisterLogImageUrlApp());
         logoUrlDto.setWebsiteIcon(touristAmount.getWebsiteIcon());
         return Result.succeed(logoUrlDto, "查询成功");
+    }
+
+
+    /**
+     * 查询头像列表
+     */
+    @ApiOperation("查询头像列表")
+    @ResponseBody
+    @GetMapping("/findAvatarPictureList")
+    public Result findAvatarPictureList() {
+        List<SysAvatarPicture> avatarPictureList = avatarPictureService.findAvatarPictureList();
+        return Result.succeed(avatarPictureList,"查询成功");
     }
 
 
