@@ -3,8 +3,6 @@ package com.central.common.constant;
 /**
  * 服务名称常量
  *
- * @author zlt
- * @date 2018/7/27 13:50
  */
 public interface ServiceNameConstants {
 
@@ -44,4 +42,8 @@ public interface ServiceNameConstants {
      * 订单中心服务
      */
     String CONFIG_SERVICE = "config-center";
+    /**
+     * 文件中心服务
+     */
+    String CONFIG_FLIE = "file-center";
 }
