@@ -1,27 +1,23 @@
 package com.central.file.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.central.oss.model.ObjectInfo;
-import org.apache.commons.collections4.MapUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.central.common.model.PageResult;
 import com.central.file.mapper.FileMapper;
 import com.central.file.model.FileInfo;
 import com.central.file.service.IFileService;
 import com.central.file.utils.FileUtil;
-
+import com.central.oss.model.ObjectInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * AbstractIFileService 抽取类
  * 根据zlt.file-server.type 实例化具体对象
- *
- * @author 作者 owen E-mail: 624191343@qq.com
  */
 @Slf4j
 public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileInfo> implements IFileService {

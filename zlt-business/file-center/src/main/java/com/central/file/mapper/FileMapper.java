@@ -1,19 +1,16 @@
 package com.central.file.mapper;
 
-import java.util.List;
-import java.util.Map;
-
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.db.mapper.SuperMapper;
-
 import com.central.file.model.FileInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 上传存储db
- *
- * @author zlt
  */
 @Mapper
 public interface FileMapper extends SuperMapper<FileInfo> {

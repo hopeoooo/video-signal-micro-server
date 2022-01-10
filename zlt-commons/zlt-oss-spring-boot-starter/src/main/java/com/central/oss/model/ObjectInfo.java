@@ -4,11 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @author zlt
- * @date 2021/2/11
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * 对象信息
  */
 @Setter
 @Getter

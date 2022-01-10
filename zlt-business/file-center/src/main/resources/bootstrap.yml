@@ -4,3 +4,7 @@ server:
 spring:
   application:
     name: file-center
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${zlt.naocs.server.namespace}

@@ -1,26 +1,17 @@
 package com.central.file.controller;
 
-import java.util.Map;
-
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.file.model.FileInfo;
 import com.central.file.service.IFileService;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.central.common.model.PageResult;
-import com.central.file.model.FileInfo;
-
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * 文件上传
- *
- * @author 作者 owen E-mail: 624191343@qq.com
  */
 @RestController
 public class FileController {

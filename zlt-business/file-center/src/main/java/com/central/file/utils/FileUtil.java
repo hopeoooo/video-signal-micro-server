@@ -1,20 +1,18 @@
 package com.central.file.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-
 import cn.hutool.core.util.IdUtil;
 import com.central.file.model.FileInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+
 /**
  * 文件工具类
- *
- * @author 作者 owen E-mail: 624191343@qq.com
  */
 @Slf4j
 public class FileUtil {

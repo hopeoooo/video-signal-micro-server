@@ -9,6 +9,28 @@
     <artifactId>file-center</artifactId>
     <description>文件中心</description>
     <dependencies>
+        <!-- 目前文件存储系统支持三种：minio、AWS S3、fastDFS，使用哪一种打开对应的引用包 Start-->
+        <!-- 支持minio搭建的私服分布式文件系统 -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+        </dependency>
+        <!-- 支持FastDFS搭建的私服分布式文件系统 -->
+        <!--
+        <dependency>
+          <groupId>com.github.tobato</groupId>
+          <artifactId>fastdfs-client</artifactId>
+        </dependency>
+        -->
+        <!-- 支持AWS S3的OSS -->
+        <!--
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+        </dependency>
+        -->
+        <!-- 目前文件存储系统支持三种：minio、AWS S3、fastDFS，使用哪一种打开对应的引用包 End-->
+
         <!-- 公共实体类模块 -->
         <dependency>
             <groupId>com.zlt</groupId>
@@ -68,17 +90,6 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-
-        <!-- fastDFS -->
-        <!--<dependency>
-            <groupId>com.github.tobato</groupId>
-            <artifactId>fastdfs-client</artifactId>
-        </dependency>-->
-        <!-- aws s3 -->
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
         </dependency>
 
         <dependency>

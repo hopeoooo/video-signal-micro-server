@@ -1,7 +1,7 @@
 package com.central.file.service.impl;
 
 import com.central.oss.model.ObjectInfo;
-import com.central.oss.properties.FileServerProperties;
+import com.central.oss.config.FileServerProperties;
 import com.central.oss.template.FdfsTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -11,14 +11,10 @@ import javax.annotation.Resource;
 import java.io.OutputStream;
 
 /**
- * @author zlt
- * @date 2021/2/13
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * Fdfs分布文件服务
  */
 @Service
-@ConditionalOnProperty(prefix = com.central.oss.properties.FileServerProperties.PREFIX, name = "type", havingValue = FileServerProperties.TYPE_FDFS)
+@ConditionalOnProperty(prefix = FileServerProperties.PREFIX, name = "type", havingValue = FileServerProperties.TYPE_FDFS)
 public class FastdfsService extends AbstractIFileService {
     @Resource
     private FdfsTemplate fdfsTemplate;
