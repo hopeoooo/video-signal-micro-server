@@ -89,6 +89,10 @@
             <groupId>com.zlt</groupId>
             <artifactId>config-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>file-client</artifactId>
+        </dependency>
 
     </dependencies>
 

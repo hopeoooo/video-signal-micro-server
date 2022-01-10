@@ -6,6 +6,8 @@ import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -105,6 +107,11 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             public Result findAvatarPictureList() {
                 log.error("findAvatarPictureList查询头像异常" ,cause);
                 return Result.failed("查询失败");
+            }
+            @Override
+            public Result saveLogoPicturePc(MultipartFile file, Integer type) throws Exception {
+                log.error("upload上传异常", cause);
+                return Result.failed("编辑失败");
             }
         };
     }

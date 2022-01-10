@@ -4,6 +4,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.file.model.FileInfo;
 import com.central.file.service.IFileService;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,8 @@ import java.util.Map;
  * 文件上传
  */
 @RestController
+@Api(tags = "文件上传Api")
+@RequestMapping("/files")
 public class FileController {
     @Resource
     private IFileService fileService;
@@ -27,8 +30,9 @@ public class FileController {
      * @throws Exception
      */
     @PostMapping("/files-anon")
-    public FileInfo upload(@RequestParam("file") MultipartFile file) throws Exception {
-        return fileService.upload(file);
+    public Result upload(@RequestParam("file") MultipartFile file) throws Exception {
+        FileInfo upload = fileService.upload(file);
+        return Result.succeed(upload,"操作成功");
     }
 
     /**

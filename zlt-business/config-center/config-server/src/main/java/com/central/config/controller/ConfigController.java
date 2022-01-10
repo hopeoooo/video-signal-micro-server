@@ -1,22 +1,25 @@
 package com.central.config.controller;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import com.central.common.model.Result;
 import com.central.common.model.SysAvatarPicture;
 import com.central.common.model.SysBanner;
 import com.central.common.model.SysPlatformConfig;
+import com.central.config.constants.ConfigConstants;
 import com.central.config.dto.TouristDto;
 import com.central.config.dto.logoUrlDto;
 import com.central.config.service.ISysAvatarPictureService;
 import com.central.config.service.ISysPlatformConfigService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import com.central.file.feign.FileService;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +37,10 @@ public class ConfigController {
 
     @Autowired
     private ISysAvatarPictureService avatarPictureService;
+
+    @Resource
+    private FileService fileService;
+
 
     @ApiOperation(value = "查询配置列表")
     @GetMapping("/list")
@@ -135,6 +142,45 @@ public class ConfigController {
         return Result.succeed(logoUrlDto, "查询成功");
     }
 
+
+    /**
+     * 编辑logo图(Pc)
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation("编辑logo图")
+    @PostMapping(value = "/saveLogoPicturePc",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result saveLogoPicturePc(@RequestPart("file") MultipartFile file,@RequestParam("type") Integer type) throws Exception {
+        Result upload = fileService.upload(file);
+        Boolean saveLogo=false;
+        if (upload.getResp_code()==0){
+            saveLogo = saveLogo(upload.getDatas(), type);
+        }
+        return saveLogo ?  Result.succeed("编辑成功") : Result.succeed( "编辑失败");
+    }
+
+    public Boolean saveLogo(Object datas,Integer type){
+        JSONObject JSONObject=new JSONObject(datas);
+        String url= String.valueOf(JSONObject.get("url"));
+        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
+        if (touristAmount==null){
+            return false;
+        }
+        if (type== ConfigConstants.icon){
+            touristAmount.setWebsiteIcon(url);
+        }
+        if (type==ConfigConstants.pc){
+            touristAmount.setLogImageUrlPc(url);
+        }
+        if (type==ConfigConstants.app){
+            touristAmount.setLogImageUrlApp(url);
+        }
+        if (type==ConfigConstants.appLoginRegistration){
+            touristAmount.setLoginRegisterLogImageUrlApp(url);
+        }
+        return platformConfigService.saveOrUpdate(touristAmount);
+    }
 
     /**
      * 查询头像列表

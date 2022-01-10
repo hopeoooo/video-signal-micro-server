@@ -1,6 +1,5 @@
 package com.central.platform.backend.controller;
 
-import com.central.common.model.SysBanner;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.common.model.Result;
@@ -9,7 +8,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class PlatformBackendController {
     @Resource
     private ConfigService configService;
+
 
     @ApiOperation(value = "查询列表")
     @GetMapping("/list")
@@ -93,6 +95,20 @@ public class PlatformBackendController {
         return configService.findLogoUrlInfo();
     }
 
+    /**
+     * 编辑logo图
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation("编辑logo图(PC)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "logo标识(0:网站icon,1:pc,2:app,3:app登录注册页)", required = true),
+    })
+    @PostMapping(value = "/saveLogoPicturePc",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result saveLogoPicturePc(@RequestPart("file") MultipartFile file,@RequestParam("type") Integer type) throws Exception {
+      return  configService.saveLogoPicturePc(file,type);
+    }
 
     /**
      * 查询头像列表
@@ -103,4 +119,6 @@ public class PlatformBackendController {
     public Result findAvatarPictureList(){
         return configService.findAvatarPictureList();
     }
+
+
 }

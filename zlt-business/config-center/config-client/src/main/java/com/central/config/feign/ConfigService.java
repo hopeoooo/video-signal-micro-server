@@ -6,8 +6,11 @@ import com.central.common.model.SysBanner;
 import com.central.common.model.SysNotice;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 ;import java.util.List;
 import java.util.Map;
@@ -68,5 +71,14 @@ public interface ConfigService {
     @GetMapping("/system/findAvatarPictureList")
      Result findAvatarPictureList() ;
 
+
+    /**
+     * 编辑logo图
+     * @param file
+     * @return
+     * @throws Exception
+     */
+   @PostMapping(value = "/system/saveLogoPicturePc",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   Result saveLogoPicturePc(@RequestPart("file") MultipartFile file,@RequestParam("type") Integer type) throws Exception ;
 
 }

@@ -1,8 +1,10 @@
 package com.central.file.feign.callback;
 
+import com.central.common.model.Result;
 import com.central.file.feign.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 降级工场
@@ -16,6 +18,11 @@ public class FileServiceFallbackFactory implements FallbackFactory<FileService> 
             @Override
             public String list() {
                 return null;
+            }
+            @Override
+            public Result upload(MultipartFile file) throws Exception {
+                log.error("upload上传异常", cause);
+                return Result.failed("编辑失败");
             }
         };
     }
