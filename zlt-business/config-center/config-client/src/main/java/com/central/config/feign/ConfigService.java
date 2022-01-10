@@ -79,6 +79,17 @@ public interface ConfigService {
      * @throws Exception
      */
    @PostMapping(value = "/system/saveLogoPicturePc",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-   Result saveLogoPicturePc(@RequestPart("file") MultipartFile file,@RequestParam("type") Integer type) throws Exception ;
+   Result saveLogoPicturePc(@RequestPart(value = "file", required = true) MultipartFile file,@RequestParam("type") Integer type) throws Exception ;
 
+
+    /**
+     * 上传头像
+     * @param file
+     * @return
+     */
+    @RequestMapping(value = "/system/saveAvatarPicture",method = {RequestMethod.POST},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Result saveAvatarPicture(@RequestPart(value = "file", required = true) MultipartFile[] file) ;
+
+    @DeleteMapping(value = "/system/delAvatarPictureId/{id}")
+     Result delAvatarPictureId(@PathVariable("id") Long id) ;
 }

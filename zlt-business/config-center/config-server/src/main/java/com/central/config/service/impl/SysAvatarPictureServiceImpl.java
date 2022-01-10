@@ -24,4 +24,19 @@ public class SysAvatarPictureServiceImpl extends SuperServiceImpl<SysAvatarPictu
     public List<SysAvatarPicture> findAvatarPictureList() {
         return  baseMapper.selectList( new QueryWrapper<SysAvatarPicture>().orderByAsc("create_time"));
     }
+
+    @Override
+    public boolean saveAvatarPicture(List<SysAvatarPicture> list) {
+        return super.saveBatch(list);
+    }
+
+    @Override
+    public SysAvatarPicture selectById(Long id) {
+        return baseMapper.selectById(id);
+    }
+
+    @Override
+    public boolean delAvatarPictureId(Long id) {
+        return baseMapper.deleteById(id) > 0;
+    }
 }

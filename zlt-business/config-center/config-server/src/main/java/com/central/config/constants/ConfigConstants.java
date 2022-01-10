@@ -11,4 +11,10 @@ public class ConfigConstants {
     public final static Integer pc = 1;
     public final static Integer app = 2;
     public final static Integer appLoginRegistration = 3;
+
+    public final static String bmp = ".bmp";
+    public final static String jpeg = ".jpeg";
+    public final static String jpg = ".jpg";
+    public final static String gif = ".gif";
+
 }

@@ -23,4 +23,8 @@ public class SysAvatarPicture extends SuperEntity {
 	private String url;
 
 
+	@ApiModelProperty(value = "图片关联id")
+	private String fileId;
+
+
 }

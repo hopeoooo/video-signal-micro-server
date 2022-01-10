@@ -101,12 +101,12 @@ public class PlatformBackendController {
      * @return
      * @throws Exception
      */
-    @ApiOperation("编辑logo图(PC)")
+    @ApiOperation("编辑logo图")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "logo标识(0:网站icon,1:pc,2:app,3:app登录注册页)", required = true),
     })
     @PostMapping(value = "/saveLogoPicturePc",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result saveLogoPicturePc(@RequestPart("file") MultipartFile file,@RequestParam("type") Integer type) throws Exception {
+    public Result saveLogoPicturePc(@RequestPart(value = "file", required = true) MultipartFile file,@RequestParam("type") Integer type) throws Exception {
       return  configService.saveLogoPicturePc(file,type);
     }
 
@@ -120,5 +120,28 @@ public class PlatformBackendController {
         return configService.findAvatarPictureList();
     }
 
+    /**
+     * 上传头像
+     * @param file
+     * @return
+     */
+    @ApiOperation("上传头像")
+    @ResponseBody
+    @RequestMapping(value = "/system/saveAvatarPicture",method = {RequestMethod.POST})
+    public Result saveAvatarPicture(@RequestPart(value = "file", required = true) MultipartFile[] file) {
+        return  configService.saveAvatarPicture(file);
+    }
 
+
+
+    /**
+     * 删除
+     *
+     * @param id
+     */
+    @ApiOperation("删除头像")
+    @DeleteMapping(value = "/delAvatarPictureId/{id}")
+    public Result delAvatarPictureId(@PathVariable Long id) {
+        return  configService.delAvatarPictureId(id);
+    }
 }

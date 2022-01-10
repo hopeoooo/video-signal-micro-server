@@ -24,6 +24,12 @@ public class FileServiceFallbackFactory implements FallbackFactory<FileService> 
                 log.error("upload上传异常", cause);
                 return Result.failed("编辑失败");
             }
+
+            @Override
+            public Result delete(String id) {
+                log.error("delete删除异常:{}", id, cause);
+                return Result.failed("删除失败");
+            }
         };
     }
 }

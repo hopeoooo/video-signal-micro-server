@@ -16,7 +16,6 @@ import java.util.Map;
  */
 @RestController
 @Api(tags = "文件上传Api")
-@RequestMapping("/files")
 public class FileController {
     @Resource
     private IFileService fileService;

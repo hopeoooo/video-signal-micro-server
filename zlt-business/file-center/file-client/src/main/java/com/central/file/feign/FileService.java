@@ -5,9 +5,7 @@ import com.central.common.model.Result;
 import com.central.file.feign.callback.FileServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 ;
@@ -30,7 +28,16 @@ public interface FileService {
      * @return
      * @throws Exception
      */
-    @PostMapping(value = "/files/files-anon",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/files-anon",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Result upload(@RequestPart("file") MultipartFile file) throws Exception ;
 
+
+
+    /**
+     * 文件删除
+     *
+     * @param id
+     */
+    @DeleteMapping("/files/{id}")
+    Result delete(@PathVariable("id") String id) ;
 }
