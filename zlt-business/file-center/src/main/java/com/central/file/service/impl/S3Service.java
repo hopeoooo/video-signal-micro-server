@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.central.common.constant.CommonConstant;
 import com.central.file.model.FileInfo;
 import com.central.oss.model.ObjectInfo;
-import com.central.oss.properties.FileServerProperties;
+import com.central.oss.config.FileServerProperties;
 import com.central.oss.template.S3Template;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,14 +16,10 @@ import javax.annotation.Resource;
 import java.io.OutputStream;
 
 /**
- * @author zlt
- * @date 2021/2/13
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * 亚马逊s3
  */
 @Service
-@ConditionalOnProperty(prefix = com.central.oss.properties.FileServerProperties.PREFIX, name = "type", havingValue = FileServerProperties.TYPE_S3)
+@ConditionalOnProperty(prefix = FileServerProperties.PREFIX, name = "type", havingValue = FileServerProperties.TYPE_S3)
 public class S3Service extends AbstractIFileService {
     @Resource
     private S3Template s3Template;

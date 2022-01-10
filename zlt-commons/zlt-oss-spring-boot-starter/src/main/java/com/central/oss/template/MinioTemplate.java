@@ -1,9 +1,11 @@
 package com.central.oss.template;
 
+import com.central.oss.config.FileServerProperties;
 import com.central.oss.model.ObjectInfo;
-import com.central.oss.properties.FileServerProperties;
-import io.minio.*;
-import io.minio.errors.*;
+import io.minio.DeleteObjectTagsArgs;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 
 /**
@@ -64,7 +63,8 @@ public class MinioTemplate implements InitializingBean {
      * @param size 大小
      * @param contentType 类型
      */
-    private ObjectInfo upload(String bucketName, String objectName, InputStream is, int size, String contentType) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    @SneakyThrows
+    private ObjectInfo upload(String bucketName, String objectName, InputStream is, int size, String contentType) {
         minioClient.putObject(
                 PutObjectArgs.builder().bucket(bucketName).object(objectName)
                         .stream(is, size, -1)
@@ -76,11 +76,12 @@ public class MinioTemplate implements InitializingBean {
         return obj;
     }
 
-    public void delete(String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public void delete(String objectName) {
         delete(fileProperties.getMinio().getBucketName(), objectName);
     }
 
-    public void delete(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    @SneakyThrows
+    public void delete(String bucketName, String objectName) {
         minioClient.deleteObjectTags(DeleteObjectTagsArgs.builder().bucket(bucketName).object(objectName).build());
     }
 
@@ -91,11 +92,13 @@ public class MinioTemplate implements InitializingBean {
      * @param expires 有效时间(分钟)，最大7天有效
      * @return
      */
-    public String getViewUrl(String bucketName, String objectName, int expires) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    @SneakyThrows
+    public String getViewUrl(String bucketName, String objectName, int expires) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MINUTE, expires);
         String url =  minioClient.getPresignedObjectUrl(
-                GetPresignedObjectUrlArgs.builder().bucket(bucketName).object(objectName).expiry(expires).build());
+                GetPresignedObjectUrlArgs.builder().bucket(bucketName).object(objectName).expiry(expires).build()
+        );
         return url;
     }
 

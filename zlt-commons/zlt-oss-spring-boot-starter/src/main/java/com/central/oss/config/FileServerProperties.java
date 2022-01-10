@@ -1,15 +1,14 @@
-package com.central.oss.properties;
+package com.central.oss.config;
 
+import com.central.oss.config.properties.FdfsProperties;
+import com.central.oss.config.properties.MinioProperties;
+import com.central.oss.config.properties.S3Properties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author zlt
- * @date 2021/2/11
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * 自定义文件服务配置
  */
 @Setter
 @Getter
@@ -24,6 +23,7 @@ public class FileServerProperties {
      * 为以下2个值，指定不同的自动化配置
      * s3：aws s3协议的存储（七牛oss、阿里云oss、minio等）
      * fastdfs：本地部署的fastDFS
+     * minio: minIO私服分布式文件服务
      */
     private String type;
 

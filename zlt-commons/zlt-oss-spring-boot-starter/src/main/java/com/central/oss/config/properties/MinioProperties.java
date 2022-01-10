@@ -1,11 +1,10 @@
-package com.central.oss.properties;
+package com.central.oss.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * MinIO 协议配置
- *
  */
 @Setter
 @Getter
@@ -26,8 +25,4 @@ public class MinioProperties {
      * bucket名称
      */
     private String bucketName;
-    /**
-     * 区域
-     */
-    private String region;
 }

@@ -14,7 +14,6 @@ import java.util.Date;
 /**
  * file实体类
  *
- * @author 作者 owen E-mail: 624191343@qq.com
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

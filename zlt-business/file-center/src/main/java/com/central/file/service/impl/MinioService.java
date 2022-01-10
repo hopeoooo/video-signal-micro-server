@@ -3,24 +3,21 @@ package com.central.file.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.constant.CommonConstant;
 import com.central.file.model.FileInfo;
+import com.central.oss.config.FileServerProperties;
 import com.central.oss.model.ObjectInfo;
-import com.central.oss.properties.FileServerProperties;
 import com.central.oss.template.MinioTemplate;
-import io.minio.errors.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
 /**
- * 新增Minio SDK
+ * Minio分布文件服务
  */
 @Service
 @ConditionalOnProperty(prefix = FileServerProperties.PREFIX, name = "type", havingValue = FileServerProperties.TYPE_MINIO)
@@ -39,7 +36,7 @@ public class MinioService extends AbstractIFileService {
     }
 
     @Override
-    protected void deleteFile(String objectPath) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    protected void deleteFile(String objectPath) {
         S3Object s3Object = parsePath(objectPath);
         minioTemplate.delete(s3Object.bucketName, s3Object.objectName);
     }
