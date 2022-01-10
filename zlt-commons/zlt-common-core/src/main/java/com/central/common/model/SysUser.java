@@ -63,4 +63,11 @@ public class SysUser extends SuperEntity {
 	private String oldPassword;
 	@TableField(exist = false)
 	private String newPassword;
+
+
+
+	@ApiModelProperty(value = "当前余额")
+	@TableField(exist = false)
+	private String currentBalance;
+
 }

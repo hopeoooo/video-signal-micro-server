@@ -59,6 +59,7 @@
         <aws-java-sdk-s3.version>1.12.40</aws-java-sdk-s3.version>
         <spring-cloud-starter-oauth2.version>2.2.5.RELEASE</spring-cloud-starter-oauth2.version>
         <docker-maven-plugin.version>1.2.2</docker-maven-plugin.version>
+        <minio.version>8.2.1</minio.version>
         <sonar.exclusions>zlt-job/**/*, zlt-register/**/*, zlt-web/**/*</sonar.exclusions>
         <docker.baseImage>openjdk:8-jre-alpine</docker.baseImage>
         <docker.volumes>/tmp</docker.volumes>
@@ -328,6 +329,11 @@
                 <artifactId>config-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>file-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- 项目业务逻辑模块-OpenFeign客户端模块 版本管理 End -->
 
             <dependency>
@@ -338,6 +344,11 @@
             <dependency>
                 <groupId>com.zlt</groupId>
                 <artifactId>user-center</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>file-center</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -482,6 +493,11 @@
                 <version>${spring-cloud-alibaba-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
