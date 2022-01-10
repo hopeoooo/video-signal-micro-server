@@ -1,4 +1,4 @@
-package com.central;
+package com.central.file;
 
 import com.central.common.lb.annotation.EnableFeignInterceptor;
 import org.springframework.boot.SpringApplication;
@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @EnableDiscoveryClient
 @EnableFeignInterceptor
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.central")
 @SpringBootApplication
 public class FileCenterApp {
     public static void main(String[] args) {

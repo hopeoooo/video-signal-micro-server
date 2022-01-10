@@ -8,7 +8,6 @@ import com.central.oss.model.ObjectInfo;
 import com.central.oss.template.MinioTemplate;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

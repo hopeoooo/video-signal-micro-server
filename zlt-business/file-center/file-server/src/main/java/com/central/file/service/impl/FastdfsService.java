@@ -1,7 +1,7 @@
 package com.central.file.service.impl;
 
-import com.central.oss.model.ObjectInfo;
 import com.central.oss.config.FileServerProperties;
+import com.central.oss.model.ObjectInfo;
 import com.central.oss.template.FdfsTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;

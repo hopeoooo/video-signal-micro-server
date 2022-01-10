@@ -329,6 +329,11 @@
                 <artifactId>config-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>file-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- 项目业务逻辑模块-OpenFeign客户端模块 版本管理 End -->
 
             <dependency>
@@ -339,6 +344,11 @@
             <dependency>
                 <groupId>com.zlt</groupId>
                 <artifactId>user-center</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>file-center</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
