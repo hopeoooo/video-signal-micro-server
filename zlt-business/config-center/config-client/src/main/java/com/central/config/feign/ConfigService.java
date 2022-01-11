@@ -2,17 +2,14 @@ package com.central.config.feign;
 
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.Result;
-import com.central.common.model.SysBanner;
 import com.central.common.model.SysNotice;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-;import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,8 +62,18 @@ public interface ConfigService {
     @GetMapping("/banner/updateState")
     Result updateState(@RequestParam("params") Map<String, Object> params) ;
 
-    @PostMapping("/banner/saveOrUpdate")
-    Result saveOrUpdate(@RequestBody SysBanner sysBanner);
+    @PostMapping(value = "/banner/saveOrUpdate",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Result saveOrUpdate(
+            @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
+            @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,
+            @RequestParam(value = "sort",required = false) Integer sort,
+            @RequestParam(value ="linkUrl",required = false) String linkUrl,
+            @RequestParam(value = "startTime",required = false) String startTime,
+            @RequestParam(value = "endTime",required = false)  String endTime,
+            @RequestParam(value = "startMode",required = false)  Integer startMode,
+            @RequestParam(value = "endMode",required = false) Integer endMode,
+            @RequestParam(value = "id",required = false) Long id
+    ) throws Exception ;
 
     @GetMapping("/system/findAvatarPictureList")
      Result findAvatarPictureList() ;

@@ -10,6 +10,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -54,9 +55,16 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
         boolean insert =false;
         //新增
         if (sysBanner.getId() == null) {
+            //即时
+            if(sysBanner.getStartMode()==0){
+                sysBanner.setStartTime(new Date());
+            }
             insert = super.save(sysBanner);
         }else {
             SysBanner banner = baseMapper.selectById(sysBanner.getId());
+            if(sysBanner.getStartMode()==0 && banner.getStartMode()!=0){
+                sysBanner.setStartTime(new Date());
+            }
             if (banner == null) {
                 return insert;
             }
