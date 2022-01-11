@@ -1,7 +1,9 @@
 package com.central.platform.backend.controller;
 
+import cn.hutool.json.JSONObject;
 import com.central.common.constant.CommonConstant;
 import com.central.common.model.*;
+import com.central.config.feign.ConfigService;
 import com.central.log.annotation.AuditLog;
 import com.central.platform.backend.service.SysUserService;
 import io.swagger.annotations.Api;
@@ -14,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 @RestController
@@ -24,6 +27,9 @@ public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
+    @Resource
+    private ConfigService configService;
+
 
     /**
      * 用户列表查询。查询APP用户数据
@@ -33,6 +39,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "username", value = "会员账号", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "isOpen", value = "是否模糊查询(0:不勾选 1:勾选)", required = false, dataType = "Integer"),
             @ApiImplicitParam(name = "enabled", value = "状态：0.禁用，1.启用", required = false, dataType = "Boolean")
     })
     @GetMapping("/users/list")
@@ -57,9 +64,10 @@ public class SysUserController {
         if(StringUtils.isBlank(sysUser.getUsername()) || !sysUser.getUsername().matches(RegexEnum.ACCOUNT.getRegex())){
             return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
         }
-/*        if(StringUtils.isBlank(sysUser.getPassword()) || !sysUser.getPassword().matches(RegexEnum.PASSWORDAPP.getRegex())){
-            return Result.failed(RegexEnum.PASSWORDAPP.getName() + RegexEnum.PASSWORDAPP.getDesc());
-        }*/
+        //设置默认头像
+        if (sysUser.getId()==null){
+            sysUser.setHeadImgUrl(configService.avatarPictureInfo());
+        }
         sysUser.setType(CommonConstant.USER_TYPE_APP);
         return sysUserService.saveOrUpdate(sysUser);
     }

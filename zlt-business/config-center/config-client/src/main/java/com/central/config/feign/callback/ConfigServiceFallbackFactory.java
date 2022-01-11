@@ -137,6 +137,12 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 log.error("upload上传异常", cause);
                 return Result.failed("编辑失败");
             }
+
+            @Override
+            public String avatarPictureInfo() {
+                log.error("avatarPictureInfo查询默认头像异常" ,cause);
+                return null;
+            }
         };
     }
 }

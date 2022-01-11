@@ -8,4 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SysAvatarPictureMapper extends SuperMapper<SysAvatarPicture> {
 
+    String avatarPictureInfo();
 }

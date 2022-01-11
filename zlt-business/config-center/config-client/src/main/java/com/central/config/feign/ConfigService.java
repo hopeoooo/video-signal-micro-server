@@ -5,6 +5,7 @@ import com.central.common.model.Result;
 import com.central.common.model.SysNotice;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -104,5 +105,11 @@ public interface ConfigService {
     @PostMapping(value = "/banner/files-anon",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Result upload(@RequestPart("file") MultipartFile file) throws Exception ;
 
+
+    /**
+     * 查询默认头像
+     */
+    @GetMapping("/system/avatarPictureInfo")
+     String avatarPictureInfo() ;
 
 }
