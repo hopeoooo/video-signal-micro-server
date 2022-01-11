@@ -6,6 +6,7 @@ import com.central.common.utils.Decimal2Serializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
@@ -19,8 +20,7 @@ import java.util.Date;
  * @author zlt
  * @date 2021-12-03 19:31:47
  */
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_user_money")
 @ApiModel("用户钱包")
