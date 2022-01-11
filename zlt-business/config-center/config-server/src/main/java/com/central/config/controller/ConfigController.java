@@ -59,7 +59,7 @@ public class ConfigController {
     @ApiOperation(value = "查询版本号")
     @GetMapping("/getVersion")
     public Result<String> getVersion(){
-        return Result.succeed(version);
+        return Result.succeed(version,"查询成功");
     }
 
     /**
