@@ -45,6 +45,8 @@ public class SysBannerController {
     @ResponseBody
     @GetMapping("/findBannerList")
     public Result findBannerList() {
+        //修改已过期的公告状态
+        bannerService.updateEndTimeState();
         List<SysBanner> bannerList = bannerService.findBannerList();
         return Result.succeed(bannerList,"查询成功");
 
@@ -101,10 +103,10 @@ public class SysBannerController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startTime", value = "起始时间查询", required = false),
             @ApiImplicitParam(name = "endTime", value = "结束时间查询", required = false),
-            @ApiImplicitParam(name = "startMode", value = "开始方式(0:即时,1:定时)", required = false),
-            @ApiImplicitParam(name = "endMode", value = "结束方式(0:长期,1:到期)", required = false),
+            @ApiImplicitParam(name = "startMode", value = "开始方式(0:即时,1:定时)", required = true),
+            @ApiImplicitParam(name = "endMode", value = "结束方式(0:长期,1:到期)", required = true),
             @ApiImplicitParam(name = "linkUrl", value = "链接url", required = false),
-            @ApiImplicitParam(name = "sort", value = "排序", required = false),
+            @ApiImplicitParam(name = "sort", value = "排序", required = true),
             @ApiImplicitParam(name = "id", value = "id", required = false),
     })
     public Result saveOrUpdate(
