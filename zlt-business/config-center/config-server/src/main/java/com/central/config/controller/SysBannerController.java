@@ -1,16 +1,21 @@
 package com.central.config.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.central.common.model.Result;
 import com.central.common.model.SysBanner;
 import com.central.config.service.ISysBannerService;
+import com.central.file.feign.FileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +28,9 @@ public class SysBannerController {
 
     @Autowired
     private ISysBannerService bannerService;
+
+    @Resource
+    private FileService fileService;
 
     /**
      * 查询公告管理列表
@@ -50,9 +58,26 @@ public class SysBannerController {
             return Result.failed("banner不存在");
         }
         boolean b = bannerService.delBannerId(id);
+        //删除对应的图片库数据
+        if (StrUtil.isNotEmpty(banner.getH5FileId())){
+            fileService.delete(banner.getH5FileId());
+        }
+        if (StrUtil.isNotEmpty(banner.getWebFileId())){
+            fileService.delete(banner.getWebFileId());
+        }
         return b ? Result.succeed("删除成功") : Result.failed("删除失败");
     }
 
+    /**
+     * 上传图片
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @PostMapping(value = "/files-anon",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result upload(@RequestPart("file") MultipartFile file) throws Exception {
+      return fileService.upload(file);
+    }
     /**
      * 修改banner状态
      *
