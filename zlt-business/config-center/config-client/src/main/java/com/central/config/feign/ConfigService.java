@@ -67,12 +67,12 @@ public interface ConfigService {
     Result saveOrUpdate(
             @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,
-            @RequestParam(value = "sort",required = false) Integer sort,
+            @RequestParam(value = "sort",required = true) Integer sort,
             @RequestParam(value ="linkUrl",required = false) String linkUrl,
             @RequestParam(value = "startTime",required = false) String startTime,
             @RequestParam(value = "endTime",required = false)  String endTime,
-            @RequestParam(value = "startMode",required = false)  Integer startMode,
-            @RequestParam(value = "endMode",required = false) Integer endMode,
+            @RequestParam(value = "startMode",required = true)  Integer startMode,
+            @RequestParam(value = "endMode",required = true) Integer endMode,
             @RequestParam(value = "id",required = false) Long id
     ) throws Exception ;
 

@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -77,11 +78,18 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
         boolean insert =false;
         //新增
         if (notice.getId() == null) {
+            //即时
+            if(!notice.getSendingMode()){
+                notice.setSendingTime(new Date());
+            }
             insert = super.save(notice);
         }else {
             SysNotice sysNotice = baseMapper.selectById(notice.getId());
             if (sysNotice == null) {
                 return Result.failed("此公告不存在");
+            }
+            if(!notice.getSendingMode() && sysNotice.getSendingMode()){
+                notice.setSendingTime(new Date());
             }
             //修改
             insert = super.updateById(notice);

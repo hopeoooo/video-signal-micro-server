@@ -1,5 +1,6 @@
 package com.central.config.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.central.common.model.SysBanner;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -23,6 +24,14 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     @Override
     public List<SysBanner> findBannerList() {
         return  baseMapper.selectList( new QueryWrapper<SysBanner>().orderByAsc("sort"));
+    }
+    @Override
+    public int updateEndTimeState() {
+        LambdaQueryWrapper<SysBanner> wrapper = new LambdaQueryWrapper<>();
+        wrapper.lt(SysBanner::getEndTime, new Date());
+        SysBanner banner = new SysBanner();
+        banner.setState(false);
+        return baseMapper.update(banner, wrapper);
     }
 
     @Override
