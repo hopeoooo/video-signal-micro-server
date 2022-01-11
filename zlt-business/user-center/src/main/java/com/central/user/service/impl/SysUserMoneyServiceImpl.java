@@ -43,7 +43,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     }
 
     @Override
-//    @Cacheable(key = "#userId")
+    @Cacheable(key = "#userId")
     public SysUserMoney findByUserId(Long userId) {
         LambdaQueryWrapper<SysUserMoney> lqw = Wrappers.lambdaQuery();
         lqw.eq(SysUserMoney::getUserId, userId);
