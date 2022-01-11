@@ -1,6 +1,7 @@
 ########################## 统一变量配置 ##########################
 ##### 数据库配置
 zlt.datasource.ip=8.214.118.39
+zlt.datasource.port=
 zlt.datasource.username=root
 zlt.datasource.password=Zd(lu7(]yrdtjsmj0qnN>tz2WYVnnrJb
 ##### redis配置
