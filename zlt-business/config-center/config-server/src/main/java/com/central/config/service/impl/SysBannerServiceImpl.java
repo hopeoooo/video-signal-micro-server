@@ -20,7 +20,6 @@ import java.util.Map;
 @CacheConfig(cacheNames = {"sysBanner"})
 public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysBanner> implements ISysBannerService {
 
-
     @Override
     public List<SysBanner> findBannerList() {
         return  baseMapper.selectList( new QueryWrapper<SysBanner>().orderByAsc("sort"));
@@ -72,5 +71,10 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
             insert = super.updateById(sysBanner);
         }
         return insert ;
+    }
+
+    @Override
+    public Integer queryTotal(Integer sort) {
+        return baseMapper.queryTotal(sort);
     }
 }

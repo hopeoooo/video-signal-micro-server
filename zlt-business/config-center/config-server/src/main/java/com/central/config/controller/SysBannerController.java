@@ -116,11 +116,16 @@ public class SysBannerController {
     ) throws Exception {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SysBanner sysBanner=new SysBanner();
+        if (sort!=null){
+            Integer  queryTotal= bannerService.queryTotal(sort);
+            if (queryTotal>0){
+              return   Result.failed("排序位置已经存在");
+            }
+            sysBanner.setSort(sort);
+        }
+
         if (id!=null){
             sysBanner.setId(id);
-        }
-        if (sort!=null) {
-            sysBanner.setSort(sort);
         }
         if (StrUtil.isNotEmpty(linkUrl)) {
             sysBanner.setLinkUrl(linkUrl);
