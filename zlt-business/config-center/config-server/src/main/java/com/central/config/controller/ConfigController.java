@@ -156,15 +156,6 @@ public class ConfigController {
     @ApiOperation("编辑logo图")
     @PostMapping(value = "/saveLogoPicturePc",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result saveLogoPicturePc(@RequestPart(value = "file", required = true) MultipartFile file,@RequestParam("type") Integer type) {
-        Boolean aBoolean = verifyFormat(file.getOriginalFilename());
-        if (!aBoolean){
-            return Result.failed("格式错误");
-        }
-        //校验大小
-        Result result = verifySize(file);
-        if (result.getResp_code()!=0){
-            return result;
-        }
         //调用上传
         Map<String, String> upload = upload(file);
         String url= upload.get("url");

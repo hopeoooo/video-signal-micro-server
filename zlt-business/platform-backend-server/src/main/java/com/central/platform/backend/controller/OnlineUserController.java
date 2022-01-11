@@ -133,8 +133,8 @@ public class OnlineUserController {
             @ApiImplicitParam(name = "endDate", value = "注册结束时间查询", required = true),
     })
     @GetMapping("/online/findPageList")
-    public PageResult2<OnlineUser> findPageList(@RequestParam Map<String, Object> params) {
+    public Result<PageResult2<OnlineUser>> findPageList(@RequestParam Map<String, Object> params) {
         PageResult2<OnlineUser> pageList = iOnlineUserService.findPageList(params);
-        return pageList;
+        return Result.succeed(pageList);
     }
 }

@@ -9,7 +9,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -74,6 +76,18 @@ public class SysBannerController {
     @PostMapping("/banner/saveOrUpdate")
     public Result saveOrUpdate(@RequestBody SysBanner sysBanner) throws Exception {
         return configService.saveOrUpdate(sysBanner);
+    }
+
+    /**
+     * 上传图片
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "上传图片")
+    @PostMapping(value = "/banner/files-anon",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result upload(@RequestPart("file") MultipartFile file) throws Exception {
+        return configService.upload(file);
     }
 
 }

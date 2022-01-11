@@ -125,6 +125,12 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 log.error("delAvatarPictureId删除头像异常:{}", id, cause);
                 return Result.failed("删除失败");
             }
+
+            @Override
+            public Result upload(MultipartFile file) throws Exception {
+                log.error("upload上传异常", cause);
+                return Result.failed("编辑失败");
+            }
         };
     }
 }

@@ -92,4 +92,10 @@ public interface ConfigService {
 
     @DeleteMapping(value = "/system/delAvatarPictureId/{id}")
      Result delAvatarPictureId(@PathVariable("id") Long id) ;
+
+
+    @PostMapping(value = "/banner/files-anon",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Result upload(@RequestPart("file") MultipartFile file) throws Exception ;
+
+
 }
