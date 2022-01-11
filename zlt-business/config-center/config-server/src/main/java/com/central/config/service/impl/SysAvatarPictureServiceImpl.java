@@ -26,6 +26,11 @@ public class SysAvatarPictureServiceImpl extends SuperServiceImpl<SysAvatarPictu
     }
 
     @Override
+    public String avatarPictureInfo() {
+       return baseMapper.avatarPictureInfo();
+    }
+
+    @Override
     public boolean saveAvatarPicture(List<SysAvatarPicture> list) {
         return super.saveBatch(list);
     }

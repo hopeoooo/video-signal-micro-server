@@ -6,10 +6,8 @@ import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,7 +85,7 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
 
             @Override
             public Result delBannerId(Long id) {
-                log.error("delBannerId删除公告异常:{}", id, cause);
+                log.error("delBannerId删除banner异常:{}", id, cause);
                 return Result.failed("删除失败");
             }
 
@@ -98,8 +96,16 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
-            public Result saveOrUpdate(SysBanner sysBanner) {
-                log.error("saveOrUpdate更新公告异常:{}", sysBanner, cause);
+            public Result saveOrUpdate(MultipartFile fileH5,
+                                       MultipartFile fileWeb,
+                                       Integer sort,
+                                       String linkUrl,
+                                       String startTime,
+                                       String endTime,
+                                       Integer startMode,
+                                       Integer endMode,
+                                       Long id) {
+                log.error("saveOrUpdate更新banner异常", cause);
                 return Result.failed("更新失败");
             }
 
@@ -130,6 +136,12 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             public Result upload(MultipartFile file) throws Exception {
                 log.error("upload上传异常", cause);
                 return Result.failed("编辑失败");
+            }
+
+            @Override
+            public String avatarPictureInfo() {
+                log.error("avatarPictureInfo查询默认头像异常" ,cause);
+                return null;
             }
         };
     }

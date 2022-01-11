@@ -207,6 +207,16 @@ public class ConfigController {
 
 
     /**
+     * 查询默认头像
+     */
+    @ApiOperation("查询默认头像地址")
+    @ResponseBody
+    @GetMapping("/avatarPictureInfo")
+    public String avatarPictureInfo() {
+        return avatarPictureService.avatarPictureInfo();
+    }
+
+    /**
      * 上传头像
      * @param file
      * @return

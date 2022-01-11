@@ -16,7 +16,7 @@
 	<select id="findOnlineUserList" resultType="com.central.platform.backend.model.OnlineUser">
 		select * from online_user t
 		<include refid="where" />
-		order by t.id desc
+		order by t.id asc
 	</select>
 	<select id="findPageList" resultType="com.central.platform.backend.model.OnlineUser">
 		select t.statics_day AS staticsDay,

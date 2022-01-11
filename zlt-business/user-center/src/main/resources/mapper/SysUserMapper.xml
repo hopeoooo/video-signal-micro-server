@@ -9,7 +9,12 @@
 				and t.id like concat('%', #{u.id}, '%')
 			</if>
 			<if test="u.username != null and u.username != ''">
-				and t.username like concat('%', #{u.username}, '%')
+				<if test="u.isOpen==1">
+					and t.username like concat('%', #{u.username}, '%')
+				</if>
+				<if test="u.isOpen!=1">
+					and t.username = #{u.username}
+				</if>
 			</if>
 			<if test="u.nickname != null and u.nickname != ''">
 				and t.nickname like concat('%', #{u.nickname}, '%')

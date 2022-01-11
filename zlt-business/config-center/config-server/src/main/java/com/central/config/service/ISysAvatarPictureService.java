@@ -14,10 +14,14 @@ public interface ISysAvatarPictureService extends ISuperService<SysAvatarPicture
      */
     List<SysAvatarPicture> findAvatarPictureList() ;
 
-   boolean saveAvatarPicture( List<SysAvatarPicture> list);
+    boolean saveAvatarPicture( List<SysAvatarPicture> list);
 
 
-
+    /**
+     * 查询单个头像
+     * @return
+     */
+    String avatarPictureInfo() ;
     /**
      * 根据id查询
      * @param id
