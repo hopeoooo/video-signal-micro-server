@@ -133,12 +133,6 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
-            public Result upload(MultipartFile file) throws Exception {
-                log.error("upload上传异常", cause);
-                return Result.failed("编辑失败");
-            }
-
-            @Override
             public String avatarPictureInfo() {
                 log.error("avatarPictureInfo查询默认头像异常" ,cause);
                 return null;
