@@ -25,14 +25,6 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     public List<SysBanner> findBannerList() {
         return  baseMapper.selectList( new QueryWrapper<SysBanner>().orderByAsc("sort"));
     }
-    @Override
-    public int updateEndTimeState() {
-        LambdaQueryWrapper<SysBanner> wrapper = new LambdaQueryWrapper<>();
-        wrapper.lt(SysBanner::getEndTime, new Date());
-        SysBanner banner = new SysBanner();
-        banner.setState(false);
-        return baseMapper.update(banner, wrapper);
-    }
 
     @Override
     public boolean delBannerId(Long id) {
@@ -63,16 +55,9 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
         boolean insert =false;
         //新增
         if (sysBanner.getId() == null) {
-            //即时
-            if(sysBanner.getStartMode()==0){
-                sysBanner.setStartTime(new Date());
-            }
             insert = super.save(sysBanner);
         }else {
             SysBanner banner = baseMapper.selectById(sysBanner.getId());
-            if(sysBanner.getStartMode()==0 && banner.getStartMode()!=0){
-                sysBanner.setStartTime(new Date());
-            }
             if (banner == null) {
                 return insert;
             }

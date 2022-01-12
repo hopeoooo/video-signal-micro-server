@@ -44,8 +44,6 @@ public class SysBannerController {
     @ResponseBody
     @GetMapping("/findBannerList")
     public Result findBannerList() {
-        //修改已过期的公告状态
-        bannerService.updateEndTimeState();
         List<SysBanner> bannerList = bannerService.findBannerList();
         return Result.succeed(bannerList,"查询成功");
 
@@ -131,15 +129,6 @@ public class SysBannerController {
         if (StrUtil.isNotEmpty(linkUrl)) {
             sysBanner.setLinkUrl(linkUrl);
         }
-        sysBanner.setStartMode(startMode);
-        if (StrUtil.isNotEmpty(startTime)){
-            sysBanner.setStartTime(simpleDateFormat.parse(startTime));
-        }
-        if (StrUtil.isNotEmpty(endTime)){
-            sysBanner.setEndTime(simpleDateFormat.parse(endTime));
-        }
-
-        sysBanner.setEndMode(endMode);
         if (fileH5!=null && fileH5.getSize()>0){
             //校验格式
             Boolean aBoolean = verifyFormat(fileH5.getOriginalFilename());
