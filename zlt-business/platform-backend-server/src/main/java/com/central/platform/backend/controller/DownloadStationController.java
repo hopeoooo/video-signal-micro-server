@@ -32,7 +32,7 @@ public class DownloadStationController {
      */
     @ApiOperation("查询app升级管理列表")
     @ResponseBody
-    @GetMapping("/findBannerList")
+    @GetMapping("/download/findBannerList")
     public Result findDownloadStationList() {
        return configService.findDownloadStationList();
     }
@@ -45,7 +45,7 @@ public class DownloadStationController {
      * @return
      */
     @ApiOperation(value = "新增or更新App升级管理")
-    @PostMapping("/saveOrUpdateDownloadStation")
+    @PostMapping("/download/saveOrUpdateDownloadStation")
     public Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation) throws Exception {
         return configService.saveOrUpdateDownloadStation(downloadStation);
     }
