@@ -5,6 +5,7 @@ import com.central.common.model.Result;
 import com.central.common.model.SysNotice;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
+import com.central.config.model.DownloadStation;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -156,20 +157,19 @@ public interface ConfigService {
      */
     @GetMapping("/system/avatarPictureInfo")
     String avatarPictureInfo() ;
-
-
     /**
-     * 查询app下载地址
+     * 查询app升级管理列表
      * @return
      */
-    @GetMapping("/system/findAppDownloadAddress")
-    Result<String> findAppDownloadAddress();
+    @GetMapping("/download/findBannerList")
+     Result findDownloadStationList() ;
 
     /**
-     * 编辑app下载地址
-     * @param appDownloadAddress
+     * 新增or更新App升级管理
+     *
+     * @param downloadStation
      * @return
      */
-    @PostMapping("/system/updateAppDownloadAddress")
-     Result updateAppDownloadAddress(@RequestParam("appDownloadAddress") String appDownloadAddress);
+    @PostMapping("/download/saveOrUpdateDownloadStation")
+     Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation) throws Exception ;
 }

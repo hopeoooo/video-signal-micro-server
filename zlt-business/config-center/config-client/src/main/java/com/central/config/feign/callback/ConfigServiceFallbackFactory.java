@@ -4,6 +4,7 @@ import com.central.common.feign.UserService;
 import com.central.common.model.*;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
+import com.central.config.model.DownloadStation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -137,16 +138,15 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 log.error("avatarPictureInfo查询默认头像异常" ,cause);
                 return null;
             }
-
             @Override
-            public Result<String> findAppDownloadAddress() {
-                log.error("findAppDownloadAddress查询app下载地址异常" ,cause);
-                return null;
+            public Result findDownloadStationList() {
+                log.error("findDownloadStationList查询异常" ,cause);
+                return Result.failed("查询失败");
             }
 
             @Override
-            public Result updateAppDownloadAddress(String appDownloadAddress) {
-                log.error("updateAppDownloadAddress编辑app下载地址异常:{}", appDownloadAddress, cause);
+            public Result saveOrUpdateDownloadStation(DownloadStation downloadStation) throws Exception {
+                log.error("saveOrUpdateDownloadStation编辑异常:{}", downloadStation, cause);
                 return Result.failed("编辑失败");
             }
         };

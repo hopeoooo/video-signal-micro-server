@@ -86,31 +86,6 @@ public class PlatformBackendController {
 
 
     /**
-     * 查询app下载地址
-     * @return
-     */
-    @ApiOperation("查询app下载地址")
-    @GetMapping("/findAppDownloadAddress")
-    public Result<String> findAppDownloadAddress(){
-        return configService.findAppDownloadAddress();
-    }
-
-    /**
-     * 编辑app下载地址
-     * @param appDownloadAddress
-     * @return
-     */
-    @ApiOperation("编辑app下载地址")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "appDownloadAddress", value = "app下载地址", required = true),
-    })
-    @PostMapping("/updateAppDownloadAddress")
-    public Result updateAppDownloadAddress(@RequestParam("appDownloadAddress") String appDownloadAddress){
-        return configService.updateAppDownloadAddress(appDownloadAddress);
-    }
-
-
-    /**
      * logo查询
      * @return
      */
