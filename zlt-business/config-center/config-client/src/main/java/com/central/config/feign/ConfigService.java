@@ -157,4 +157,19 @@ public interface ConfigService {
     @GetMapping("/system/avatarPictureInfo")
     String avatarPictureInfo() ;
 
+
+    /**
+     * 查询app下载地址
+     * @return
+     */
+    @GetMapping("/system/findAppDownloadAddress")
+    Result<String> findAppDownloadAddress();
+
+    /**
+     * 编辑app下载地址
+     * @param appDownloadAddress
+     * @return
+     */
+    @PostMapping("/system/updateAppDownloadAddress")
+     Result updateAppDownloadAddress(@RequestParam("appDownloadAddress") String appDownloadAddress);
 }

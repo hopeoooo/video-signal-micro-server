@@ -42,4 +42,8 @@ public class SysPlatformConfig {
 	@ApiModelProperty("(APP)登录注册页log图片地址")
 	private String loginRegisterLogImageUrlApp;
 
+	@ApiModelProperty("app下载地址")
+	private String appDownloadAddress;
+
+
 }
