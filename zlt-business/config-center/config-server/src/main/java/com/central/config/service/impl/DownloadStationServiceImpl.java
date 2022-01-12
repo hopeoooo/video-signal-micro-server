@@ -3,7 +3,6 @@ package com.central.config.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.central.common.model.Result;
-import com.central.common.model.SysBanner;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.config.mapper.DownloadStationMapper;
 import com.central.config.model.DownloadStation;

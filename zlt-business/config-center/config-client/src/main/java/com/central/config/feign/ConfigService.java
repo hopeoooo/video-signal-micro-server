@@ -2,11 +2,10 @@ package com.central.config.feign;
 
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.Result;
-import com.central.common.model.SysNotice;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
 import com.central.config.model.DownloadStation;
-import io.swagger.annotations.ApiOperation;
+import com.central.config.model.SysNotice;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

@@ -1,8 +1,6 @@
 package com.central.platform.backend.controller;
 
 import com.central.common.model.Result;
-import com.central.common.model.SysBanner;
-import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.Map;
 
 /**

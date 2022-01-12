@@ -1,6 +1,7 @@
-package com.central.common.model;
+package com.central.config.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.central.common.model.SuperEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

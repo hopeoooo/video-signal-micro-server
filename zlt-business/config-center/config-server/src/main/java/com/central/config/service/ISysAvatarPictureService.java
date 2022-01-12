@@ -1,10 +1,9 @@
 package com.central.config.service;
 
-import com.central.common.model.SysAvatarPicture;
 import com.central.common.service.ISuperService;
+import com.central.config.model.SysAvatarPicture;
 
 import java.util.List;
-import java.util.Map;
 
 
 public interface ISysAvatarPictureService extends ISuperService<SysAvatarPicture> {

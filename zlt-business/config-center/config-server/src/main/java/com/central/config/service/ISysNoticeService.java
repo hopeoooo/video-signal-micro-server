@@ -1,8 +1,8 @@
 package com.central.config.service;
 
 import com.central.common.model.Result;
-import com.central.common.model.SysNotice;
 import com.central.common.service.ISuperService;
+import com.central.config.model.SysNotice;
 
 import java.util.List;
 import java.util.Map;

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-@TableName("`download_station`")
+@TableName("download_station")
 @ApiModel("下载站")
 public class DownloadStation extends SuperEntity {
 

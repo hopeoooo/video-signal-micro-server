@@ -1,4 +1,4 @@
-package com.central.common.model;
+package com.central.config.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
