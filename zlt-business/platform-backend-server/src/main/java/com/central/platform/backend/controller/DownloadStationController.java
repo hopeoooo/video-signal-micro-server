@@ -32,7 +32,7 @@ public class DownloadStationController {
      */
     @ApiOperation("查询app升级管理列表")
     @ResponseBody
-    @GetMapping("/download/findBannerList")
+    @GetMapping("/download/findDownloadStationList")
     public Result findDownloadStationList() {
        return configService.findDownloadStationList();
     }

@@ -160,7 +160,7 @@ public interface ConfigService {
      * 查询app升级管理列表
      * @return
      */
-    @GetMapping("/download/findBannerList")
+    @GetMapping("/download/findDownloadStationList")
      Result findDownloadStationList() ;
 
     /**
