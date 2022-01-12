@@ -45,10 +45,4 @@ public interface ISysBannerService extends ISuperService<SysBanner> {
     boolean saveOrUpdateUser(SysBanner sysBanner) throws Exception;
 
     Integer queryTotal(Integer sort);
-
-    /**
-     * 修改已过期数据状态
-     * @return
-     */
-     int updateEndTimeState() ;
 }

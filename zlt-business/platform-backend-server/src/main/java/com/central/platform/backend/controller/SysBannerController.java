@@ -2,6 +2,7 @@ package com.central.platform.backend.controller;
 
 import com.central.common.model.Result;
 import com.central.config.feign.ConfigService;
+import com.central.config.model.SysBanner;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,7 +35,7 @@ public class SysBannerController {
     @ApiOperation("查询banner列表")
     @ResponseBody
     @GetMapping("/banner/findBannerList")
-    public Result findBannerList() {
+    public Result<List<SysBanner>> findBannerList() {
         return configService.findBannerList();
 
     }

@@ -27,7 +27,7 @@ public class DownloadStationController {
      */
     @ApiOperation("查询app升级管理列表")
     @ResponseBody
-    @GetMapping("/findBannerList")
+    @GetMapping("/findDownloadStationList")
     public Result findDownloadStationList() {
         List<DownloadStation> downloadStationList = downloadStationService.findDownloadStationList();
         return Result.succeed(downloadStationList,"查询成功");

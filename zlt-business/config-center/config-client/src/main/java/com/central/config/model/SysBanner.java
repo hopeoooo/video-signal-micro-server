@@ -38,19 +38,4 @@ public class SysBanner extends SuperEntity {
 	@ApiModelProperty(value = "链接url")
 	private String linkUrl;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-	@ApiModelProperty(value = "开始时间")
-	private Date startTime;
-
-	@ApiModelProperty(value = "开始方式(0:即时,1:定时)")
-	private Integer startMode;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-	@ApiModelProperty(value = "结束时间")
-	private Date endTime;
-
-	@ApiModelProperty(value = "结束方式(0:长期,1:到期)")
-	private Integer endMode;
-
-
 }

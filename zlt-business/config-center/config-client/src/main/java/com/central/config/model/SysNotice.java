@@ -27,14 +27,6 @@ public class SysNotice extends SuperEntity {
 	private String remarks;
 	@ApiModelProperty(value = "类型(1:一般,2:维护,3:系统)")
 	private Integer type;
-
-	@ApiModelProperty(value = "发送方式(0:即时,1:定时)")
-	private Boolean sendingMode;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-	@ApiModelProperty(value = "发送时间")
-	private Date sendingTime;
-
 	@ApiModelProperty(value = "状态(0:停用,1:启用)")
 	private Boolean state;
 }
