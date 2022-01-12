@@ -138,6 +138,40 @@ public class ConfigController {
 
 
     /**
+     * 查询app下载地址
+     * @return
+     */
+    @ApiOperation("查询app下载地址")
+    @GetMapping("/findAppDownloadAddress")
+    public Result<String> findAppDownloadAddress(){
+        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
+        return Result.succeed(touristAmount.getAppDownloadAddress(), "查询成功");
+    }
+
+    /**
+     * 编辑app下载地址
+     * @param appDownloadAddress
+     * @return
+     */
+    @ApiOperation("编辑app下载地址")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "appDownloadAddress", value = "app下载地址", required = true),
+    })
+    @PostMapping("/updateAppDownloadAddress")
+    public Result updateAppDownloadAddress(@RequestParam("appDownloadAddress") String appDownloadAddress){
+        if (StrUtil.isBlank(appDownloadAddress)){
+            return Result.failed("参数错误");
+        }
+        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
+        if (touristAmount==null){
+            return Result.failed("更新失败");
+        }
+        touristAmount.setAppDownloadAddress(appDownloadAddress);
+        boolean save = platformConfigService.saveOrUpdate(touristAmount);
+        return save  ? Result.succeed("更新成功") : Result.failed("更新失败");
+    }
+
+    /**
      * logo查询
      * @return
      */
