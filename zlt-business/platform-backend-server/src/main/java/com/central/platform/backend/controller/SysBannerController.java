@@ -75,21 +75,14 @@ public class SysBannerController {
     @ApiOperation(value = "新增or更新banner")
     @PostMapping(value = "/banner/saveOrUpdate",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startTime", value = "起始时间查询", required = false),
-            @ApiImplicitParam(name = "endTime", value = "结束时间查询", required = false),
-            @ApiImplicitParam(name = "startMode", value = "开始方式(0:即时,1:定时)", required = true),
-            @ApiImplicitParam(name = "endMode", value = "结束方式(0:长期,1:到期)", required = true),
             @ApiImplicitParam(name = "linkUrl", value = "链接url", required = false),
             @ApiImplicitParam(name = "sort", value = "排序", required = true),
             @ApiImplicitParam(name = "id", value = "id", required = false),
     })
     public Result saveOrUpdate(
             @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
-            @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,Integer sort,String linkUrl,
-            @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") String startTime,
-            @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") String endTime,
-            Integer startMode,Integer endMode, Long id
+            @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,Integer sort,String linkUrl,Long id
     ) throws Exception {
-        return configService.saveOrUpdate(fileH5,fileWeb,sort,linkUrl,startTime,endTime,startMode,endMode,id);
+        return configService.saveOrUpdate(fileH5,fileWeb,sort,linkUrl,id);
     }
 }

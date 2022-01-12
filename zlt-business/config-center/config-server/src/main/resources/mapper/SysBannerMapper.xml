@@ -4,7 +4,11 @@
 <mapper namespace="com.central.config.mapper.SysBannerMapper">
     <select id="queryTotal" resultType="int">
         select COUNT(1)  from sys_banner b
-        WHERE b.sort=#{sort}
+        <where>
+            <if test="sort!=null">
+                b.sort=#{sort}
+            </if>
+        </where>
     </select>
 
 </mapper>
