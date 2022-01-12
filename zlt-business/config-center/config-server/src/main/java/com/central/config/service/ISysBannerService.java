@@ -1,7 +1,7 @@
 package com.central.config.service;
 
-import com.central.common.model.SysBanner;
 import com.central.common.service.ISuperService;
+import com.central.config.model.SysBanner;
 
 import java.util.List;
 import java.util.Map;

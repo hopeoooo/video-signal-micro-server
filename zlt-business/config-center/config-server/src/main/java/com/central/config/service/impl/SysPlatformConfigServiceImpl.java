@@ -1,9 +1,9 @@
 package com.central.config.service.impl;
 
 import com.central.common.model.Result;
-import com.central.common.model.SysPlatformConfig;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.config.mapper.SysPlatformMapper;
+import com.central.config.model.SysPlatformConfig;
 import com.central.config.service.ISysPlatformConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;

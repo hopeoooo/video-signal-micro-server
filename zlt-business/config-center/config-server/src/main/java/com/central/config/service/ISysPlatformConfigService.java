@@ -1,8 +1,8 @@
 package com.central.config.service;
 
 import com.central.common.model.Result;
-import com.central.common.model.SysPlatformConfig;
 import com.central.common.service.ISuperService;
+import com.central.config.model.SysPlatformConfig;
 
 import java.math.BigDecimal;
 

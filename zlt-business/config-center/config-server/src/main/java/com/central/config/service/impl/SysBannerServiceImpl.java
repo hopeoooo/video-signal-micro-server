@@ -2,9 +2,9 @@ package com.central.config.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.central.common.model.SysBanner;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.config.mapper.SysBannerMapper;
+import com.central.config.model.SysBanner;
 import com.central.config.service.ISysBannerService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;

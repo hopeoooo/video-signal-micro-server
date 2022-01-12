@@ -1,7 +1,7 @@
 package com.central.config.controller;
 
 import com.central.common.model.Result;
-import com.central.common.model.SysNotice;
+import com.central.config.model.SysNotice;
 import com.central.config.service.ISysNoticeService;
 import com.central.log.annotation.AuditLog;
 import io.swagger.annotations.Api;

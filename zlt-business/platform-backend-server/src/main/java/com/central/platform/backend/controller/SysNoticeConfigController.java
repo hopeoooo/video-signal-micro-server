@@ -2,20 +2,17 @@
 package com.central.platform.backend.controller;
 
 import com.central.common.model.Result;
-import com.central.common.model.SysNotice;
 import com.central.config.feign.ConfigService;
+import com.central.config.model.SysNotice;
 import com.central.log.annotation.AuditLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 

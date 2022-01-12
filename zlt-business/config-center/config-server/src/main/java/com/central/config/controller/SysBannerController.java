@@ -3,8 +3,8 @@ package com.central.config.controller;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.central.common.model.Result;
-import com.central.common.model.SysBanner;
 import com.central.config.constants.ConfigConstants;
+import com.central.config.model.SysBanner;
 import com.central.config.service.ISysBannerService;
 import com.central.file.feign.FileService;
 import io.swagger.annotations.Api;
@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

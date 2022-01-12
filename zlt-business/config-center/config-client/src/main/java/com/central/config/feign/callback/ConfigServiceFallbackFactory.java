@@ -5,6 +5,7 @@ import com.central.common.model.*;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.config.model.DownloadStation;
+import com.central.config.model.SysNotice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.web.multipart.MultipartFile;

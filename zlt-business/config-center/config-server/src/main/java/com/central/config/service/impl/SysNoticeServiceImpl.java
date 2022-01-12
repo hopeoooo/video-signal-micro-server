@@ -2,9 +2,9 @@ package com.central.config.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.central.common.model.Result;
-import com.central.common.model.SysNotice;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.config.mapper.SysNoticeMapper;
+import com.central.config.model.SysNotice;
 import com.central.config.service.ISysNoticeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
