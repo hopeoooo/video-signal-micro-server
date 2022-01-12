@@ -19,7 +19,9 @@ import java.util.List;
 public class DownloadStationServiceImpl extends SuperServiceImpl<DownloadStationMapper, DownloadStation> implements IDownloadStationService {
     @Override
     public List<DownloadStation> findDownloadStationList() {
-        return  baseMapper.selectList( new QueryWrapper<DownloadStation>().orderByAsc("update_time"));
+        LambdaQueryWrapper<DownloadStation> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByAsc(DownloadStation::getUpdateTime);
+        return   baseMapper.selectList(wrapper);
     }
 
     @Override
