@@ -54,6 +54,9 @@ public class SysUser extends SuperEntity {
 	@ApiModelProperty(value = "逻辑删除 0：未删除，1：已删除")
 	private String loginIp;
 
+	@ApiModelProperty(value = "投注自动提交 是：true,否：false")
+	private Boolean isAutoBet;
+
 
 	@TableField(exist = false)
 	private List<SysRole> roles;

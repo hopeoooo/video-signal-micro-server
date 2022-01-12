@@ -322,6 +322,18 @@ public class SysUserController {
         return Result.succeed();
     }
 
+    @ApiOperation(value = "登录用户开启/关闭投注自动提交")
+    @GetMapping("/users/updateIsAutoBet")
+    @ApiImplicitParam(name = "isAutoBet", value = "投注自动提交 false：否，true：是,只需要传这一个参数，其他参数为框架多余展示的不用理会", required = true, dataType = "boolean")
+    public Result updateIsAutoBet(@LoginUser SysUser user, boolean isAutoBet) {
+        Long id = user.getId();
+        cacheEvictUser(id);
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId,id);
+        updateWrapper.set(SysUser::getIsAutoBet,isAutoBet);
+        appUserService.update(updateWrapper);
+        return Result.succeed();
+    }
     /**
      * 清除缓存
      */
