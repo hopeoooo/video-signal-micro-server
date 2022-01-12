@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.central.user.service.ISysUserService;
@@ -36,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author 作者 owen E-mail: 624191343@qq.com
@@ -44,6 +46,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @RestController
 @Api(tags = "用户模块api")
+@Validated
 public class SysUserController {
     private static final String ADMIN_CHANGE_MSG = "超级管理员不给予修改";
 
@@ -313,7 +316,7 @@ public class SysUserController {
     @ApiOperation(value = "登录用户修改头像")
     @GetMapping("/users/updateHeadImg")
     @ApiImplicitParam(name = "headImg", value = "头像地址,只需要传这一个参数，其他参数为框架多余展示的不用理会", required = true, dataType = "String")
-    public Result updateHeadImgUrl(@LoginUser SysUser user,String headImg) {
+    public Result updateHeadImgUrl(@LoginUser SysUser user,@NotBlank(message = "headImg不允许为空") String headImg) {
         Long id = user.getId();
         cacheEvictUser(id);
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
@@ -333,7 +336,7 @@ public class SysUserController {
         updateWrapper.eq(SysUser::getId,id);
         updateWrapper.set(SysUser::getIsAutoBet,isAutoBet);
         appUserService.update(updateWrapper);
-        return Result.succeed();
+        return isAutoBet == true ? Result.succeed("投注自动提交已开启") : Result.succeed("投注自动提交已关闭");
     }
     /**
      * 清除缓存
