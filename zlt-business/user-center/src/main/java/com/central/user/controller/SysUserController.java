@@ -120,6 +120,7 @@ public class SysUserController {
         SysUser sysUser = appUserService.selectById(user.getId());
         UserInfoVo vo = new UserInfoVo();
         BeanUtil.copyProperties(sysUser, vo);
+        vo.setIsAutoBet(vo.getIsAutoBet() == null ? false : vo.getIsAutoBet());
         return Result.succeed(vo);
     }
 
