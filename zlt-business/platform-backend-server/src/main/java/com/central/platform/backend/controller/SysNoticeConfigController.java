@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 
@@ -35,7 +36,7 @@ public class SysNoticeConfigController {
             @ApiImplicitParam(name = "type", value = "类型(1:一般,2:维护,3:系统)", required = false, dataType = "Integer"),
             @ApiImplicitParam(name = "state", value = "状态(0:停用,1:启用)", required = false, dataType = "Integer")
     })
-    public Result findNoticeList(@RequestParam Map<String, Object> params) {
+    public Result<List<SysNotice>> findNoticeList(@RequestParam Map<String, Object> params) {
         return configService.findNoticeList(params);
     }
 

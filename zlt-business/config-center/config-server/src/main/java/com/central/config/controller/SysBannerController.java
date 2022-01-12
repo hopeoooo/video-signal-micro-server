@@ -43,9 +43,9 @@ public class SysBannerController {
     @ApiOperation("查询banner列表")
     @ResponseBody
     @GetMapping("/findBannerList")
-    public Result findBannerList() {
+    public Result<List<SysBanner>> findBannerList() {
         List<SysBanner> bannerList = bannerService.findBannerList();
-        return Result.succeed(bannerList,"查询成功");
+        return Result.succeed(bannerList);
 
     }
 
