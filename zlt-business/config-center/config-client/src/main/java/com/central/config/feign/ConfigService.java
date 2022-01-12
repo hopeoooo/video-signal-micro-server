@@ -36,33 +36,71 @@ public interface ConfigService {
     Result updateMoneySymbol( @RequestParam("moneySymbol")String moneySymbol);
 
     @GetMapping("/system/findLogoUrlInfo")
-     Result findLogoUrlInfo();
+    Result findLogoUrlInfo();
 
 
-
+    /**
+     * 查询公告列表
+     * @param params
+     * @return
+     */
     @GetMapping("/notice/findNoticeList")
     Result findNoticeList(@RequestParam("params") Map<String, Object> params) ;
 
+    /**
+     * 删除公告
+     * @param id
+     * @return
+     */
     @DeleteMapping(value = "/notice/deleteNoticeId/{id}")
-     Result deleteNoticeId(@PathVariable("id") Long id);
+    Result deleteNoticeId(@PathVariable("id") Long id);
 
 
+    /**
+     * 修改公告状态
+     * @param params
+     * @return
+     */
     @GetMapping("/notice/updateEnabled")
     Result updateEnabled(@RequestParam("params") Map<String, Object> params) ;
 
+    /**
+     * 公告新增or修改
+     * @param sysNotice
+     * @return
+     */
     @PostMapping("/notice/saveOrUpdate")
     Result saveOrUpdate(@RequestBody SysNotice sysNotice);
 
 
+    /**
+     * 查询banner列表
+     * @return
+     */
     @GetMapping("/banner/findBannerList")
     Result findBannerList() ;
 
+    /**
+     * 删除banner
+     * @param id
+     * @return
+     */
     @DeleteMapping(value = "/banner/delBannerId/{id}")
     Result delBannerId(@PathVariable("id") Long id) ;
 
+    /**
+     * 修改banner状态
+     * @param params
+     * @return
+     */
     @GetMapping("/banner/updateState")
     Result updateState(@RequestParam("params") Map<String, Object> params) ;
 
+    /**
+     * banner新增or修改
+     * @return
+     * @throws Exception
+     */
     @PostMapping(value = "/banner/saveOrUpdate",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Result saveOrUpdate(
             @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
@@ -76,9 +114,6 @@ public interface ConfigService {
             @RequestParam(value = "id",required = false) Long id
     ) throws Exception ;
 
-    @GetMapping("/system/findAvatarPictureList")
-     Result findAvatarPictureList() ;
-
 
     /**
      * 编辑logo图
@@ -86,8 +121,8 @@ public interface ConfigService {
      * @return
      * @throws Exception
      */
-   @PostMapping(value = "/system/saveLogoPicturePc",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-   Result saveLogoPicturePc(@RequestPart(value = "file", required = true) MultipartFile file,@RequestParam("type") Integer type) throws Exception ;
+    @PostMapping(value = "/system/saveLogoPicturePc",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Result saveLogoPicturePc(@RequestPart(value = "file", required = true) MultipartFile file,@RequestParam("type") Integer type) throws Exception ;
 
 
     /**
@@ -98,18 +133,28 @@ public interface ConfigService {
     @RequestMapping(value = "/system/saveAvatarPicture",method = {RequestMethod.POST},consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Result saveAvatarPicture(@RequestPart(value = "file", required = true) MultipartFile[] file) ;
 
+
+    /**
+     * 查询头像列表
+     * @return
+     */
+    @GetMapping("/system/findAvatarPictureList")
+    Result findAvatarPictureList() ;
+
+
+    /**
+     * 删除头像
+     * @param id
+     * @return
+     */
     @DeleteMapping(value = "/system/delAvatarPictureId/{id}")
-     Result delAvatarPictureId(@PathVariable("id") Long id) ;
-
-
-    @PostMapping(value = "/banner/files-anon",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    Result upload(@RequestPart("file") MultipartFile file) throws Exception ;
+    Result delAvatarPictureId(@PathVariable("id") Long id) ;
 
 
     /**
      * 查询默认头像
      */
     @GetMapping("/system/avatarPictureInfo")
-     String avatarPictureInfo() ;
+    String avatarPictureInfo() ;
 
 }
