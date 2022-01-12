@@ -137,6 +137,18 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 log.error("avatarPictureInfo查询默认头像异常" ,cause);
                 return null;
             }
+
+            @Override
+            public Result<String> findAppDownloadAddress() {
+                log.error("findAppDownloadAddress查询app下载地址异常" ,cause);
+                return null;
+            }
+
+            @Override
+            public Result updateAppDownloadAddress(String appDownloadAddress) {
+                log.error("updateAppDownloadAddress编辑app下载地址异常:{}", appDownloadAddress, cause);
+                return Result.failed("编辑失败");
+            }
         };
     }
 }
