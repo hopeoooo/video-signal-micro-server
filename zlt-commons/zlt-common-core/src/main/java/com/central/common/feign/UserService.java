@@ -7,6 +7,7 @@ import com.central.common.model.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import java.util.List;
@@ -97,6 +98,12 @@ public interface UserService {
     @GetMapping(value ="/users/updateEnabled", params = "SysUser")
     Result updateEnabled(@RequestParam Map<String, Object> params);
 
+    @GetMapping(value ="/users/updateGaKey", params = "SysUser")
+    Result updateGaKey(@RequestParam Map<String, Object> params);
+
+    @GetMapping(value ="/users/updateGaBind", params = "SysUser")
+    Result updateGaBind(@RequestParam Map<String, Object> params);
+
     /**
      * 新增用户钱包
      * @param sysUserMoney
@@ -107,4 +114,9 @@ public interface UserService {
 
     @PostMapping(value = "/loginLog/addLog", params = "LoginLog")
     Result<Boolean> addLoginlog(@RequestBody LoginLog loginLog);
+
+    @PostMapping(value = "/userMoney/transterMoney")
+    Result<SysUserMoney> transterMoney(@RequestParam("userId") Long userId, @RequestParam("money") BigDecimal money,
+                                       @RequestParam("remark") String remark, @RequestParam("transterType") Boolean transterType);
+
 }

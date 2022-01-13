@@ -1,15 +1,13 @@
 package com.central.platform.backend.service.impl;
 
 import com.central.common.feign.UserService;
-import com.central.common.model.PageResult;
-import com.central.common.model.PageResult2;
-import com.central.common.model.Result;
-import com.central.common.model.SysUser;
+import com.central.common.model.*;
 import com.central.platform.backend.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Service
@@ -61,5 +59,10 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Result resetPassword(Long id) {
         return userService.resetPassword(id);
+    }
+
+    @Override
+    public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) {
+        return  userService.transterMoney(userId, money, remark, transterType);
     }
 }

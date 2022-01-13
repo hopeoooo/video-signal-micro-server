@@ -39,5 +39,5 @@ public interface IValidateCodeService {
     /**
      * 验证google身份验证码
      */
-    void validateGoogleCode(String googleCode);
+    void validateGoogleCode(String googleCode,String username);
 }
