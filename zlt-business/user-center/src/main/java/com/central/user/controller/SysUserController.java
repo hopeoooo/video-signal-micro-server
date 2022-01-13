@@ -199,6 +199,42 @@ public class SysUserController {
     }
 
     /**
+     * 二维码code变更
+     *
+     * @param params
+     * @return
+     */
+    @ApiOperation(value = "二维码code变更")
+    @GetMapping("/users/updateGaKey")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "gaKey", value = "谷歌验证码KEY", required = true, dataType = "String")
+    })
+    public Result updateGaKey(@RequestParam Map<String, Object> params) {
+        Long id = MapUtils.getLong(params, "id");
+        cacheEvictUser(id);
+        return appUserService.updateGaKey(params);
+    }
+
+    /**
+     * 二维码绑定状态变更
+     *
+     * @param params
+     * @return
+     */
+    @ApiOperation(value = "二维码绑定状态变更")
+    @GetMapping("/users/updateGaBind")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "gaBind", value = "谷歌验证码是否绑定1 1：已绑定，其他：未绑定", required = true, dataType = "Integer")
+    })
+    public Result updateGaBind(@RequestParam Map<String, Object> params) {
+        Long id = MapUtils.getLong(params, "id");
+        cacheEvictUser(id);
+        return appUserService.updateGaBind(params);
+    }
+
+    /**
      * 管理后台，给用户重置密码
      *
      * @param id

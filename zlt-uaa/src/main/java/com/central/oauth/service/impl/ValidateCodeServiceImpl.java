@@ -3,14 +3,17 @@ package com.central.oauth.service.impl;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.feign.UserService;
+import com.central.common.model.LoginAppUser;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.oauth.exception.ValidateCodeException;
 import com.central.oauth.service.IValidateCodeService;
+import com.central.common.utils.GoogleAuthUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -116,12 +119,31 @@ public class ValidateCodeServiceImpl implements IValidateCodeService {
     }
 
     @Override
-    public void validateGoogleCode(String googleCode) {
+    public void validateGoogleCode(String googleCode,String username) {
         if (StrUtil.isBlank(googleCode)) {
             throw new ValidateCodeException("请在请求参数中携带googleCode参数");
         }
-        // TODO 验证google验证码
-
+        try {
+            Integer code = Integer.parseInt(googleCode);
+            if (StrUtil.isBlank(username)) {
+                throw new ValidateCodeException("请在请求参数中携带username参数");
+            }
+            // TODO 验证google验证码
+            LoginAppUser loginAppUser = userService.findByUsername(username);
+            if (loginAppUser == null || !loginAppUser.getType().equals("BACKEND")) {
+                throw new InternalAuthenticationServiceException("用户名或密码错误");
+            }
+            String secret = loginAppUser.getGaKey();
+            if (StrUtil.isBlank(secret) || loginAppUser.getGaBind() == null || loginAppUser.getGaBind() != 1) {
+                throw new ValidateCodeException("请先绑定谷歌身份验证器");
+            }
+            boolean checkCode = GoogleAuthUtil.check_code(secret, code);
+            if (!checkCode) {
+                throw new ValidateCodeException("谷歌身份验证失败");
+            }
+        }catch (Exception ex){
+            throw new ValidateCodeException("谷歌身份验证失败");
+        }
     }
 
     private String buildKey(String deviceId) {

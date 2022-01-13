@@ -118,4 +118,18 @@ public interface ISysUserService extends ISuperService<SysUser> {
 	void cacheEvictUser(SysUser sysUser);
 
 	 String resetUpdatePassword(Long id) ;
+
+	/**
+	 * 二维码code变更
+	 * @param params
+	 * @return
+	 */
+	Result updateGaKey(Map<String, Object> params);
+
+	/**
+	 * 二维码绑定状态变更
+	 * @param params
+	 * @return
+	 */
+	Result updateGaBind(Map<String, Object> params);
 }

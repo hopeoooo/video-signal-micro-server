@@ -57,6 +57,12 @@ public class SysUser extends SuperEntity {
 	@ApiModelProperty(value = "投注自动提交 开启：true,关闭：false")
 	private Boolean isAutoBet;
 
+	@ApiModelProperty(value = "谷歌验证码KEY")
+	private String gaKey;
+
+	@ApiModelProperty(value = "谷歌验证码是否绑定1 1：已绑定，其他：未绑定")
+	private Integer gaBind;
+
 
 	@TableField(exist = false)
 	private List<SysRole> roles;
