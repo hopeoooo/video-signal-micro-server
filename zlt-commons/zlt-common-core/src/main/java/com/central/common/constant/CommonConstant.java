@@ -141,4 +141,9 @@ public interface CommonConstant {
      * 前端APP用户
      */
     String USER_TYPE_APP = "APP";
+
+    interface redisKet{
+        String REDIS_TRANSTER_USER_KEY = "redis_transter_user_key";
+        Integer WAIT_TIME = 120;
+    }
 }
