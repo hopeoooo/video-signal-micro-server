@@ -334,6 +334,11 @@
                 <artifactId>file-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>push-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- 项目业务逻辑模块-OpenFeign客户端模块 版本管理 End -->
 
             <dependency>

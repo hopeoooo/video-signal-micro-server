@@ -1,0 +1,8 @@
+zlt:
+  swagger:
+    enabled: true
+    title: 消息推送中心
+    description: 消息推送中心接口文档
+    version: 1.0
+    base-package: com.central.push.controller
+  #cache-manager: configs: - key: menu second: 300
