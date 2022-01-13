@@ -20,7 +20,7 @@ public class DownloadStationServiceImpl extends SuperServiceImpl<DownloadStation
     @Override
     public List<DownloadStation> findDownloadStationList() {
         LambdaQueryWrapper<DownloadStation> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByAsc(DownloadStation::getUpdateTime);
+        wrapper.orderByDesc(DownloadStation::getUpdateTime);
         return   baseMapper.selectList(wrapper);
     }
 

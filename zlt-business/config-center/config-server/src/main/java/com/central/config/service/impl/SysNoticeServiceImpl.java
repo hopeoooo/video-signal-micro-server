@@ -78,6 +78,10 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
         boolean insert =false;
         //新增
         if (notice.getId() == null) {
+            int i = selectCount();
+            if (i==20){
+                return Result.failed("最多添加20条数据");
+            }
             insert = super.save(notice);
         }else {
             SysNotice sysNotice = baseMapper.selectById(notice.getId());
@@ -88,5 +92,11 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
             insert = super.updateById(notice);
         }
         return insert ? Result.succeed(notice, "操作成功") : Result.failed("操作失败");
+    }
+
+
+    public int selectCount(){
+        LambdaQueryWrapper<SysNotice> wrapper=new LambdaQueryWrapper<>();
+       return baseMapper.selectCount(wrapper);
     }
 }
