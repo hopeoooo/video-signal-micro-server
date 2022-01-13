@@ -1,6 +1,9 @@
 package com.central.config.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.Result;
+import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
 import com.central.config.service.ISysNoticeService;
 import com.central.log.annotation.AuditLog;
@@ -41,6 +44,16 @@ public class SysNoticeConfigController {
 
     }
 
+    @ApiOperation("查询公告列表(前台用)")
+    @ResponseBody
+    @GetMapping("/getNoticeList")
+    public Result<List<SysNotice>> getBannerList() {
+        LambdaQueryWrapper<SysNotice> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysNotice::getState, Boolean.TRUE);
+        lqw.orderByDesc(SysNotice::getCreateTime);
+        List<SysNotice> noticeList = noticeService.list(lqw);
+        return Result.succeed(noticeList);
+    }
     /**
      * 删除
      *
