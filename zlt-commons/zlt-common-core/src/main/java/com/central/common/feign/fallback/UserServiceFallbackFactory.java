@@ -89,6 +89,18 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
+            public Result updateGaKey(Map<String, Object> params) {
+                log.error("updateGaKey修改二维码key异常:{}", params, throwable);
+                return Result.failed("修改二维码key失败");
+            }
+
+            @Override
+            public Result updateGaBind(Map<String, Object> params) {
+                log.error("updateGaBind修改绑定二维码状态异常:{}", params, throwable);
+                return Result.failed("修改绑定二维码状态失败");
+            }
+
+            @Override
             public Result<SysUserMoney> save(SysUserMoney sysUserMoney) {
                 log.error("新增用户钱包失败:{}", sysUserMoney, throwable);
                 return Result.failed("新增用户钱包失败");

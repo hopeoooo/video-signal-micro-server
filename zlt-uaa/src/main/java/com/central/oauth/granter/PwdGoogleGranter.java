@@ -27,8 +27,9 @@ public class PwdGoogleGranter extends ResourceOwnerPasswordTokenGranter {
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
         Map<String, String> parameters = new LinkedHashMap<>(tokenRequest.getRequestParameters());
         String googleCode = parameters.get("googleCode");
+        String username = parameters.get("username");
         //校验图形验证码
-        validateCodeService.validateGoogleCode(googleCode);
+        validateCodeService.validateGoogleCode(googleCode,username);
 
         return super.getOAuth2Authentication(client, tokenRequest);
     }

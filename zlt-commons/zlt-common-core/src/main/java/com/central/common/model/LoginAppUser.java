@@ -64,4 +64,19 @@ public class LoginAppUser extends SysUser implements SocialUserDetails {
     public String getUserId() {
         return getOpenId();
     }
+
+//    @Override
+//    public String getType() {
+//        return getType();
+//    }
+//
+//    @Override
+//    public String getGaKey() {
+//        return getGaKey();
+//    }
+//
+//    @Override
+//    public Integer getGaBind() {
+//        return getGaBind();
+//    }
 }
