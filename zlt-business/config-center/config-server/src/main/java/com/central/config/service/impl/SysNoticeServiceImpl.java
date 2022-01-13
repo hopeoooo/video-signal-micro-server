@@ -1,14 +1,20 @@
 package com.central.config.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.config.mapper.SysNoticeMapper;
 import com.central.config.model.SysNotice;
 import com.central.config.service.ISysNoticeService;
+import com.central.push.feign.PushService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +27,9 @@ import java.util.Map;
 @Service
 @CacheConfig(cacheNames = {"sysNotice"})
 public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysNotice> implements ISysNoticeService {
+
+    @Autowired
+    private PushService pushService;
 
     @Override
     public List<SysNotice> findNoticeList(Map<String, Object> params) {
@@ -94,6 +103,23 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
         return insert ? Result.succeed(notice, "操作成功") : Result.failed("操作失败");
     }
 
+    @Override
+    public List<SysNotice> getNoticeList() {
+        LambdaQueryWrapper<SysNotice> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysNotice::getState, Boolean.TRUE);
+        lqw.orderByDesc(SysNotice::getCreateTime);
+        List<SysNotice> noticeList = baseMapper.selectList(lqw);
+        return noticeList;
+    }
+
+    @Override
+    @Async
+    public void syncPushNoticeToWebApp() {
+        List<SysNotice> noticeList = getNoticeList();
+        PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, "notice");
+        Result<String> push = pushService.push(JSONObject.toJSONString(pushResult));
+        log.info("公告消息推送结果:{}",push);
+    }
 
     public int selectCount(){
         LambdaQueryWrapper<SysNotice> wrapper=new LambdaQueryWrapper<>();
