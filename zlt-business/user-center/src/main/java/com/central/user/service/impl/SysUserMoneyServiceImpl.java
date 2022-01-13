@@ -14,10 +14,12 @@ import com.central.common.model.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.service.impl.SuperServiceImpl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.collections4.MapUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -55,5 +57,24 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     public SysUserMoney saveCache(SysUserMoney sysUserMoney) {
         baseMapper.insert(sysUserMoney);
         return sysUserMoney;
+    }
+
+    @Override
+    @Transactional
+    @CachePut(key="#sysUserMoney.userId")
+    public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Boolean transterType, String remark) {
+        if(transterType){//上分
+            sysUserMoney.setMoney(sysUserMoney.getMoney().add(money));
+        }else{
+            sysUserMoney.setMoney(sysUserMoney.getMoney().subtract(money));
+        }
+        baseMapper.updateById(sysUserMoney);
+
+        return sysUserMoney;
+    }
+
+    public static void main(String[] args) {
+        boolean flag = true;
+
     }
 }
