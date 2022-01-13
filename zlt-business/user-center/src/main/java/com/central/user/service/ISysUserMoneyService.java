@@ -1,9 +1,11 @@
 package com.central.user.service;
 
 import com.central.common.model.PageResult;
+import com.central.common.model.SysUser;
 import com.central.common.model.SysUserMoney;
 import com.central.common.service.ISuperService;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -23,5 +25,7 @@ public interface ISysUserMoneyService extends ISuperService<SysUserMoney> {
     SysUserMoney findByUserId(Long userId);
 
     SysUserMoney saveCache(SysUserMoney sysUserMoney);
+
+    SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Boolean transterType, String remark, SysUser sysUse);
 }
 

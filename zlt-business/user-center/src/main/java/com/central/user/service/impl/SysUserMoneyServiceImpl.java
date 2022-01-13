@@ -1,23 +1,31 @@
 package com.central.user.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.central.common.model.SysUserMoney;
+import com.central.common.model.*;
 import com.central.user.mapper.SysUserMoneyMapper;
+import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
+import com.central.user.service.ISysUserService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import com.central.common.model.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.service.impl.SuperServiceImpl;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.collections4.MapUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -30,6 +38,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @CacheConfig(cacheNames = {"sysUserMoney"})
 public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper, SysUserMoney> implements ISysUserMoneyService {
+
+    @Autowired
+    private ISysTansterMoneyLogService iSysTansterMoneyLogService;
+
+
     /**
      * 列表
      * @param params
@@ -56,4 +69,42 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         baseMapper.insert(sysUserMoney);
         return sysUserMoney;
     }
+
+    @Override
+    @Transactional
+    @CachePut(key="#sysUserMoney.userId")
+    public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Boolean transterType, String remark, SysUser sysUser) {
+        BigDecimal userMoery = sysUserMoney.getMoney();
+        if(transterType){//上分
+            sysUserMoney.setMoney(sysUserMoney.getMoney().add(money));
+        }else{
+            sysUserMoney.setMoney(sysUserMoney.getMoney().subtract(money));
+        }
+        baseMapper.updateById(sysUserMoney);
+        SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, transterType, sysUserMoney.getMoney());
+        iSysTansterMoneyLogService.save(sysTansterMoneyLog);
+        return sysUserMoney;
+    }
+
+    private SysTansterMoneyLog getSysTansterMoneyLog(BigDecimal beforeMoery, BigDecimal money, SysUser sysUser,
+                                                     String remark, Boolean transterType, BigDecimal afterMoney) {
+        SysTansterMoneyLog sysTansterMoneyLog = new SysTansterMoneyLog();
+        sysTansterMoneyLog.setUserId(sysUser.getId());
+        sysTansterMoneyLog.setUserName(sysUser.getUsername());
+        sysTansterMoneyLog.setMoney(money);
+        sysTansterMoneyLog.setBeforeMoney(beforeMoery);
+        sysTansterMoneyLog.setAfterMoney(afterMoney);
+        if(transterType){
+            sysTansterMoneyLog.setOrderType(CapitalEnum.ARTIFICIALIN.getType());
+        }else{
+            sysTansterMoneyLog.setOrderType(CapitalEnum.ARTIFICIALOUT.getType());
+        }
+        if(StringUtils.isNotBlank(remark)){
+            sysTansterMoneyLog.setRemark(remark);
+        }
+        sysTansterMoneyLog.setOrderNo("SXF" + DateUtil.format(new Date(), "yyyyMMddHHmmssSSS"));
+        return sysTansterMoneyLog;
+    }
+
+
 }

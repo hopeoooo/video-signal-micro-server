@@ -8,6 +8,7 @@ import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.config.mapper.SysBannerMapper;
+import com.central.config.model.DownloadStation;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
 import com.central.config.service.ISysBannerService;
@@ -19,7 +20,6 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +34,9 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
 
     @Override
     public List<SysBanner> findBannerList() {
-        return  baseMapper.selectList( new QueryWrapper<SysBanner>().orderByAsc("sort"));
+        LambdaQueryWrapper<SysBanner> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByAsc(SysBanner::getSort);
+        return baseMapper.selectList(wrapper);
     }
 
     @Override
