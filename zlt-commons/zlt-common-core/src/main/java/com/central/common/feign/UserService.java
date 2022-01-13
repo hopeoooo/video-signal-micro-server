@@ -7,6 +7,7 @@ import com.central.common.model.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import java.util.List;
@@ -107,4 +108,9 @@ public interface UserService {
 
     @PostMapping(value = "/loginLog/addLog", params = "LoginLog")
     Result<Boolean> addLoginlog(@RequestBody LoginLog loginLog);
+
+    @PostMapping(value = "/userMoney/transterMoney")
+    Result<SysUserMoney> transterMoney(@RequestParam("userId") Long userId, @RequestParam("money") BigDecimal money,
+                                       @RequestParam("remark") String remark, @RequestParam("transterType") Boolean transterType);
+
 }
