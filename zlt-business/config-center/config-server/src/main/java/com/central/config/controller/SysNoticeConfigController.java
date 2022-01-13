@@ -1,9 +1,6 @@
 package com.central.config.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.Result;
-import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
 import com.central.config.service.ISysNoticeService;
 import com.central.log.annotation.AuditLog;
@@ -47,11 +44,8 @@ public class SysNoticeConfigController {
     @ApiOperation("查询公告列表(前台用)")
     @ResponseBody
     @GetMapping("/getNoticeList")
-    public Result<List<SysNotice>> getBannerList() {
-        LambdaQueryWrapper<SysNotice> lqw = Wrappers.lambdaQuery();
-        lqw.eq(SysNotice::getState, Boolean.TRUE);
-        lqw.orderByDesc(SysNotice::getCreateTime);
-        List<SysNotice> noticeList = noticeService.list(lqw);
+    public Result<List<SysNotice>> getNoticeList() {
+        List<SysNotice> noticeList = noticeService.getNoticeList();
         return Result.succeed(noticeList);
     }
     /**
@@ -68,6 +62,7 @@ public class SysNoticeConfigController {
             Result.failed("此公告不存在");
         }
         noticeService.delNoticeId(id);
+        noticeService.syncPushNoticeToWebApp();
         return Result.succeed("删除成功");
     }
 
@@ -84,7 +79,9 @@ public class SysNoticeConfigController {
             @ApiImplicitParam(name = "state", value = "状态", required = true, dataType = "Boolean")
     })
     public Result updateEnabled(@RequestParam Map<String, Object> params) {
-        return noticeService.updateEnabled(params);
+        Result result = noticeService.updateEnabled(params);
+        noticeService.syncPushNoticeToWebApp();
+        return result;
     }
 
 
@@ -102,8 +99,7 @@ public class SysNoticeConfigController {
             return Result.failed("必填项不允许为空");
         }
         Result result = noticeService.saveOrUpdateUser(sysNotice);
+        noticeService.syncPushNoticeToWebApp();
         return result;
     }
-
-
 }
