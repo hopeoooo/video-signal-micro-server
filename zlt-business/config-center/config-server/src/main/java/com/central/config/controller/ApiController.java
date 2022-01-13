@@ -8,6 +8,7 @@ import com.central.config.model.DownloadStation;
 import com.central.config.model.SysPlatformConfig;
 import com.central.config.service.IDownloadStationService;
 import com.central.config.service.ISysPlatformConfigService;
+import com.central.push.feign.PushService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,6 +33,8 @@ public class ApiController {
     private IDownloadStationService downloadStationService;
     @Autowired
     private ISysPlatformConfigService platformConfigService;
+    @Autowired
+    private PushService pushService;
 
     @Value("${zlt.app.version:1.0.0}")
     private String version;
@@ -40,6 +43,13 @@ public class ApiController {
     @GetMapping("/getVersion")
     public Result<String> getVersion() {
         return Result.succeed(version, "查询成功");
+    }
+
+    @ApiOperation(value = "消息推送测试")
+    @GetMapping("/push/{message}")
+    public Result<String> push(@PathVariable(name = "message") String message) {
+        pushService.push(message);
+        return Result.succeed();
     }
 
     @ApiOperation("logo查询")
