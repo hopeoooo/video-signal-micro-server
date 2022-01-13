@@ -12,4 +12,6 @@ public class UserInfoVo {
     private String username;
     @ApiModelProperty(value = "头像地址")
     private String headImgUrl;
+    @ApiModelProperty(value = "投注自动提交 开启：true,关闭：false")
+    private Boolean isAutoBet;
 }

@@ -1,6 +1,8 @@
 package com.central.platform.backend.controller;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.config.feign.ConfigService;
 import com.central.config.model.DownloadStation;
 import io.swagger.annotations.Api;
@@ -46,7 +48,13 @@ public class DownloadStationController {
      */
     @ApiOperation(value = "新增or更新App升级管理")
     @PostMapping("/download/saveOrUpdateDownloadStation")
-    public Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation) throws Exception {
+    public Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation, @LoginUser SysUser user) throws Exception {
+        if(downloadStation.getId()==null){
+            downloadStation.setCreateBy(user.getUsername());
+            downloadStation.setUpdateBy(user.getUsername());
+        }else {
+            downloadStation.setUpdateBy(user.getUsername());
+        }
         return configService.saveOrUpdateDownloadStation(downloadStation);
     }
 

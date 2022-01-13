@@ -14,6 +14,7 @@ import com.central.file.feign.FileService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,11 +45,20 @@ public class ConfigController {
     @Resource
     private FileService fileService;
 
+    @Value("${zlt.app.version:1.0.0}")
+    private String version;
+
 
     @ApiOperation(value = "查询配置列表")
     @GetMapping("/list")
     public String list(){
         return "test.game";
+    }
+
+    @ApiOperation(value = "查询版本号")
+    @GetMapping("/getVersion")
+    public Result<String> getVersion(){
+        return Result.succeed(version,"查询成功");
     }
 
     /**

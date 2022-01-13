@@ -5,12 +5,14 @@ import com.central.common.model.Result;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
 import com.central.config.model.DownloadStation;
+import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,7 +47,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/notice/findNoticeList")
-    Result findNoticeList(@RequestParam("params") Map<String, Object> params) ;
+    Result<List<SysNotice>> findNoticeList(@RequestParam("params") Map<String, Object> params) ;
 
     /**
      * 删除公告
@@ -78,7 +80,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/banner/findBannerList")
-    Result findBannerList() ;
+    Result<List<SysBanner>> findBannerList() ;
 
     /**
      * 删除banner
@@ -107,10 +109,6 @@ public interface ConfigService {
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,
             @RequestParam(value = "sort",required = true) Integer sort,
             @RequestParam(value ="linkUrl",required = false) String linkUrl,
-            @RequestParam(value = "startTime",required = false) String startTime,
-            @RequestParam(value = "endTime",required = false)  String endTime,
-            @RequestParam(value = "startMode",required = true)  Integer startMode,
-            @RequestParam(value = "endMode",required = true) Integer endMode,
             @RequestParam(value = "id",required = false) Long id
     ) throws Exception ;
 

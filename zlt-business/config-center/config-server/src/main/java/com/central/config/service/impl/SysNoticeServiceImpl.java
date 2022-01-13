@@ -78,9 +78,9 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
         boolean insert =false;
         //新增
         if (notice.getId() == null) {
-            //即时
-            if(!notice.getSendingMode()){
-                notice.setSendingTime(new Date());
+            int i = selectCount();
+            if (i==20){
+                return Result.failed("最多添加20条数据");
             }
             insert = super.save(notice);
         }else {
@@ -88,12 +88,15 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
             if (sysNotice == null) {
                 return Result.failed("此公告不存在");
             }
-            if(!notice.getSendingMode() && sysNotice.getSendingMode()){
-                notice.setSendingTime(new Date());
-            }
             //修改
             insert = super.updateById(notice);
         }
         return insert ? Result.succeed(notice, "操作成功") : Result.failed("操作失败");
+    }
+
+
+    public int selectCount(){
+        LambdaQueryWrapper<SysNotice> wrapper=new LambdaQueryWrapper<>();
+       return baseMapper.selectCount(wrapper);
     }
 }

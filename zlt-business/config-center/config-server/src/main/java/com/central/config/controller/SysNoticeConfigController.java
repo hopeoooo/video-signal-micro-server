@@ -1,6 +1,9 @@
 package com.central.config.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.Result;
+import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
 import com.central.config.service.ISysNoticeService;
 import com.central.log.annotation.AuditLog;
@@ -35,12 +38,22 @@ public class SysNoticeConfigController {
             @ApiImplicitParam(name = "type", value = "类型(1:一般,2:维护,3:系统)", required = false, dataType = "Integer"),
             @ApiImplicitParam(name = "state", value = "状态(0:停用,1:启用)", required = false, dataType = "Integer")
     })
-    public Result findNoticeList(@RequestParam Map<String, Object> params) {
+    public Result<List<SysNotice>> findNoticeList(@RequestParam Map<String, Object> params) {
         List<SysNotice> noticeList = noticeService.findNoticeList(params);
         return Result.succeed(noticeList,"查询成功");
 
     }
 
+    @ApiOperation("查询公告列表(前台用)")
+    @ResponseBody
+    @GetMapping("/getNoticeList")
+    public Result<List<SysNotice>> getBannerList() {
+        LambdaQueryWrapper<SysNotice> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysNotice::getState, Boolean.TRUE);
+        lqw.orderByDesc(SysNotice::getCreateTime);
+        List<SysNotice> noticeList = noticeService.list(lqw);
+        return Result.succeed(noticeList);
+    }
     /**
      * 删除
      *

@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.central.user.service.ISysUserService;
@@ -36,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author 作者 owen E-mail: 624191343@qq.com
@@ -44,6 +46,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @RestController
 @Api(tags = "用户模块api")
+@Validated
 public class SysUserController {
     private static final String ADMIN_CHANGE_MSG = "超级管理员不给予修改";
 
@@ -120,6 +123,7 @@ public class SysUserController {
         SysUser sysUser = appUserService.selectById(user.getId());
         UserInfoVo vo = new UserInfoVo();
         BeanUtil.copyProperties(sysUser, vo);
+        vo.setIsAutoBet(vo.getIsAutoBet() == null ? false : vo.getIsAutoBet());
         return Result.succeed(vo);
     }
 
@@ -312,7 +316,7 @@ public class SysUserController {
     @ApiOperation(value = "登录用户修改头像")
     @GetMapping("/users/updateHeadImg")
     @ApiImplicitParam(name = "headImg", value = "头像地址,只需要传这一个参数，其他参数为框架多余展示的不用理会", required = true, dataType = "String")
-    public Result updateHeadImgUrl(@LoginUser SysUser user,String headImg) {
+    public Result updateHeadImgUrl(@LoginUser SysUser user,@NotBlank(message = "headImg不允许为空") String headImg) {
         Long id = user.getId();
         cacheEvictUser(id);
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
@@ -322,6 +326,18 @@ public class SysUserController {
         return Result.succeed();
     }
 
+    @ApiOperation(value = "登录用户开启/关闭投注自动提交")
+    @GetMapping("/users/updateIsAutoBet")
+    @ApiImplicitParam(name = "isAutoBet", value = "投注自动提交 false：否，true：是,只需要传这一个参数，其他参数为框架多余展示的不用理会", required = true, dataType = "boolean")
+    public Result updateIsAutoBet(@LoginUser SysUser user, boolean isAutoBet) {
+        Long id = user.getId();
+        cacheEvictUser(id);
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId,id);
+        updateWrapper.set(SysUser::getIsAutoBet,isAutoBet);
+        appUserService.update(updateWrapper);
+        return isAutoBet == true ? Result.succeed("投注自动提交已开启") : Result.succeed("投注自动提交已关闭");
+    }
     /**
      * 清除缓存
      */

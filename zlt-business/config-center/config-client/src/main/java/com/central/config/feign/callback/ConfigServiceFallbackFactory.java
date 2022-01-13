@@ -5,11 +5,13 @@ import com.central.common.model.*;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.config.model.DownloadStation;
+import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,7 +59,7 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
-            public Result findNoticeList(Map<String, Object> params) {
+            public Result<List<SysNotice>> findNoticeList(Map<String, Object> params) {
                 log.error("findNoticeList查询公告异常:{}", params, cause);
                 return Result.failed("查询失败");
             }
@@ -80,7 +82,7 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 return Result.failed("更新失败");
             }
             @Override
-            public Result findBannerList() {
+            public Result<List<SysBanner>> findBannerList() {
                 log.error("findBannerList查询banner异常" ,cause);
                 return Result.failed("查询失败");
             }
@@ -102,10 +104,6 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                                        MultipartFile fileWeb,
                                        Integer sort,
                                        String linkUrl,
-                                       String startTime,
-                                       String endTime,
-                                       Integer startMode,
-                                       Integer endMode,
                                        Long id) {
                 log.error("saveOrUpdate更新banner异常", cause);
                 return Result.failed("更新失败");
