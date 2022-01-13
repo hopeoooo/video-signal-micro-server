@@ -67,7 +67,7 @@ public class SysUserMoneyController {
             return Result.failed("参数错误");
         }
         String redisKey = CommonConstant.redisKet.REDIS_TRANSTER_USER_KEY + "_" + userId;
-        boolean moneyLock = RedissLockUtil.tryLock(redisKey, CommonConstant.redisKet.WAIT_TIME, -1);
+        boolean moneyLock = RedissLockUtil.tryLock(redisKey, CommonConstant.redisKet.WAIT_TIME, CommonConstant.redisKet.LEASE_TIME);
         try {
             if(moneyLock){
                 SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);

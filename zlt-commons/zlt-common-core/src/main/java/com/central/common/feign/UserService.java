@@ -98,6 +98,12 @@ public interface UserService {
     @GetMapping(value ="/users/updateEnabled", params = "SysUser")
     Result updateEnabled(@RequestParam Map<String, Object> params);
 
+    @GetMapping(value ="/users/updateGaKey", params = "SysUser")
+    Result updateGaKey(@RequestParam Map<String, Object> params);
+
+    @GetMapping(value ="/users/updateGaBind", params = "SysUser")
+    Result updateGaBind(@RequestParam Map<String, Object> params);
+
     /**
      * 新增用户钱包
      * @param sysUserMoney
