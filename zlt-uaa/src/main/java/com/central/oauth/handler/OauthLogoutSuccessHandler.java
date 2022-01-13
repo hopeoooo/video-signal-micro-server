@@ -48,7 +48,7 @@ public class OauthLogoutSuccessHandler implements LogoutSuccessHandler {
 			//重定向指定的地址
 			redirectStrategy.sendRedirect(request, response, redirectUri);
 		} else {
-			Result<String> result = new Result<String>("", CodeEnum.SUCCESS.getCode(),"登出成功");
+			Result<String> result = new Result<String>("{}", CodeEnum.SUCCESS.getCode(),"登出成功");
 			response.setStatus(HttpStatus.OK.value());
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
