@@ -104,10 +104,6 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                                        MultipartFile fileWeb,
                                        Integer sort,
                                        String linkUrl,
-                                       String startTime,
-                                       String endTime,
-                                       Integer startMode,
-                                       Integer endMode,
                                        Long id) {
                 log.error("saveOrUpdate更新banner异常", cause);
                 return Result.failed("更新失败");

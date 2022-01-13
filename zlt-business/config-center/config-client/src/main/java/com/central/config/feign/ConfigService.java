@@ -109,10 +109,6 @@ public interface ConfigService {
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,
             @RequestParam(value = "sort",required = true) Integer sort,
             @RequestParam(value ="linkUrl",required = false) String linkUrl,
-            @RequestParam(value = "startTime",required = false) String startTime,
-            @RequestParam(value = "endTime",required = false)  String endTime,
-            @RequestParam(value = "startMode",required = true)  Integer startMode,
-            @RequestParam(value = "endMode",required = true) Integer endMode,
             @RequestParam(value = "id",required = false) Long id
     ) throws Exception ;
 

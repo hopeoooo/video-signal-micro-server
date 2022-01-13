@@ -32,4 +32,11 @@ public class DownloadStation extends SuperEntity {
 
     @ApiModelProperty(value = "强制更新,1：是，2：否")
     private Integer isForced;
+
+
+    private String updateBy;
+
+    private String createBy;
+
+
 }
