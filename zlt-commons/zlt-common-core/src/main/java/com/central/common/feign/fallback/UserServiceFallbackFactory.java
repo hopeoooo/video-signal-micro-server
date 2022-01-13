@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import java.util.ArrayList;
@@ -97,6 +98,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public Result<Boolean> addLoginlog(LoginLog loginLog) {
                 log.error("新增登录日志失败:{}",loginLog,throwable);
                 return Result.failed("新增登录日志失败");
+            }
+
+            @Override
+            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) {
+                log.error("人工上下分:{}",userId,throwable);
+                return Result.failed("上线分错误");
             }
         };
     }
