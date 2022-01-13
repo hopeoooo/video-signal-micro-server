@@ -93,10 +93,10 @@
             <groupId>com.zlt</groupId>
             <artifactId>file-client</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.zlt</groupId>
-            <artifactId>push-client</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.zlt</groupId>-->
+<!--            <artifactId>push-client</artifactId>-->
+<!--        </dependency>-->
 
     </dependencies>
 
