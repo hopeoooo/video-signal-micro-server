@@ -32,5 +32,7 @@
         <module>activity-center</module>
         <!-- 配置中心 -->
         <module>config-center</module>
+        <!-- 配置中心 -->
+        <module>push-center</module>
     </modules>
 </project>
