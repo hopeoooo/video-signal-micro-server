@@ -45,4 +45,12 @@ public interface ISysBannerService extends ISuperService<SysBanner> {
     boolean saveOrUpdateUser(SysBanner sysBanner) throws Exception;
 
     Integer queryTotal(Integer sort);
+
+    List<SysBanner> getBannerList();
+
+    /**
+     * 异步推送消息到前端
+     */
+    void syncPushBannerToWebApp();
+
 }
