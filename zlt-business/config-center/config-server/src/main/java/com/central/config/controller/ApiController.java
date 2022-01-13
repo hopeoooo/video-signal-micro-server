@@ -48,8 +48,7 @@ public class ApiController {
     @ApiOperation(value = "消息推送测试")
     @GetMapping("/push/{message}")
     public Result<String> push(@PathVariable(name = "message") String message) {
-        pushService.push(message);
-        return Result.succeed();
+        return pushService.push(message);
     }
 
     @ApiOperation("logo查询")
