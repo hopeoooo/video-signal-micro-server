@@ -46,4 +46,8 @@ public interface ServiceNameConstants {
      * 文件中心服务
      */
     String CONFIG_FLIE = "file-center";
+    /**
+     * 消息推送服务
+     */
+    String PUSH_SERVICE = "push-center";
 }

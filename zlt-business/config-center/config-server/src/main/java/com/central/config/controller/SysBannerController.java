@@ -2,6 +2,8 @@ package com.central.config.controller;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.Result;
 import com.central.config.constants.ConfigConstants;
 import com.central.config.model.SysBanner;
@@ -47,6 +49,17 @@ public class SysBannerController {
         List<SysBanner> bannerList = bannerService.findBannerList();
         return Result.succeed(bannerList);
 
+    }
+
+    @ApiOperation("查询banner列表(前台用)")
+    @ResponseBody
+    @GetMapping("/getBannerList")
+    public Result<List<SysBanner>> getBannerList() {
+        LambdaQueryWrapper<SysBanner> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysBanner::getState, Boolean.TRUE);
+        lqw.orderByAsc(SysBanner::getSort);
+        List<SysBanner> bannerList = bannerService.list(lqw);
+        return Result.succeed(bannerList);
     }
 
     /**
