@@ -297,6 +297,11 @@ public class ConfigController {
     })
     @PostMapping("/updateMinOnlineUserQuantity")
     public Result updateMinOnlineUserQuantity(@RequestParam("minOnlineUserQuantity") String minOnlineUserQuantity){
+        //校验数字
+        String regex = "^[0-9]*$";
+        if (!minOnlineUserQuantity.matches(regex)) {
+            return Result.failed("无效参数,请重新输入");
+        }
         if (StrUtil.isBlank(minOnlineUserQuantity)){
             return Result.failed("参数错误");
         }
