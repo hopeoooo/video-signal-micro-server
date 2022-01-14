@@ -1,6 +1,8 @@
 package com.central.push.controller;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.push.config.SseEmitterServer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +24,12 @@ public class SseController {
     @GetMapping("/connect/{userId}")
     public SseEmitter connect(@PathVariable String userId) {
         return SseEmitterServer.connect(userId);
+    }
+
+    @ApiOperation(value = "登录用户创建连接")
+    @GetMapping("/LoginConnect")
+    public SseEmitter LoginConnect(@LoginUser SysUser user) {
+        return SseEmitterServer.connect(user.getId().toString());
     }
 
     @ApiOperation(value = "群发消息")

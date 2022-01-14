@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import java.util.ArrayList;
@@ -88,6 +89,18 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
+            public Result updateGaKey(Map<String, Object> params) {
+                log.error("updateGaKey修改二维码key异常:{}", params, throwable);
+                return Result.failed("修改二维码key失败");
+            }
+
+            @Override
+            public Result updateGaBind(Map<String, Object> params) {
+                log.error("updateGaBind修改绑定二维码状态异常:{}", params, throwable);
+                return Result.failed("修改绑定二维码状态失败");
+            }
+
+            @Override
             public Result<SysUserMoney> save(SysUserMoney sysUserMoney) {
                 log.error("新增用户钱包失败:{}", sysUserMoney, throwable);
                 return Result.failed("新增用户钱包失败");
@@ -97,6 +110,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public Result<Boolean> addLoginlog(LoginLog loginLog) {
                 log.error("新增登录日志失败:{}",loginLog,throwable);
                 return Result.failed("新增登录日志失败");
+            }
+
+            @Override
+            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) {
+                log.error("人工上下分:{}",userId,throwable);
+                return Result.failed("上线分错误");
             }
         };
     }

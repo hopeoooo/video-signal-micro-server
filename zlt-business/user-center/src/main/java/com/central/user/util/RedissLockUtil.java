@@ -3,6 +3,8 @@ package com.central.user.util;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,10 +13,13 @@ import java.util.concurrent.TimeUnit;
  *
  */
 @Slf4j
+@Component
 public class RedissLockUtil {
+
 
     private static RedissonClient redissonClient;
 
+    @Autowired
     public void setRedissonClient(RedissonClient locker){
         redissonClient = locker;
     }

@@ -136,6 +136,7 @@ zlt:
       # 忽略认证的地址
       httpUrls: >
         /api-uaa/oauth/**,
+        /platform-backend/googleCode/**,
         /api-uaa/validata/**,
         /api-uaa/css/**,
         /api-uaa/images/**,

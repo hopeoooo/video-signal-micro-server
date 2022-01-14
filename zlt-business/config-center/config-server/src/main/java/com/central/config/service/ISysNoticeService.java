@@ -41,5 +41,11 @@ public interface ISysNoticeService extends ISuperService<SysNotice> {
 
     Result saveOrUpdateUser(SysNotice sysNotice) throws Exception;
 
+    /**
+     * 异步推送消息到前端
+     */
+    void syncPushNoticeToWebApp();
 
+
+    List<SysNotice> getNoticeList();
 }

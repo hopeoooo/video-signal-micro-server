@@ -6,6 +6,7 @@ import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.model.SysUserMoney;
 import com.central.user.service.ISysUserMoneyService;
+import com.central.user.service.ISysUserService;
 import com.central.user.util.RedissLockUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,6 +33,9 @@ import java.util.Map;
 public class SysUserMoneyController {
     @Autowired
     private ISysUserMoneyService userMoneyService;
+
+    @Autowired
+    private ISysUserService iSysUserService;
 
     @ApiOperation(value = "查询当前登录用户的钱包")
     @GetMapping("/getMoney")
@@ -63,14 +67,15 @@ public class SysUserMoneyController {
             return Result.failed("参数错误");
         }
         String redisKey = CommonConstant.redisKet.REDIS_TRANSTER_USER_KEY + "_" + userId;
-        boolean moneyLock = RedissLockUtil.tryLock(redisKey, CommonConstant.redisKet.WAIT_TIME, -1);
+        boolean moneyLock = RedissLockUtil.tryLock(redisKey, CommonConstant.redisKet.WAIT_TIME, CommonConstant.redisKet.LEASE_TIME);
         try {
             if(moneyLock){
                 SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
-                if (sysUserMoney == null) {
+                SysUser sysUser = iSysUserService.selectById(userId);
+                if (sysUserMoney == null || sysUser == null) {
                     return Result.failed("用户不存在或钱包错误");
                 }
-                SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark);
+                SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, sysUser);
                 return Result.succeed(saveSysUserMoney);
             }else{
                 return Result.failed("上下分请求太过频繁");

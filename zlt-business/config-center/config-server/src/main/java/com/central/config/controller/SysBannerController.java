@@ -55,10 +55,7 @@ public class SysBannerController {
     @ResponseBody
     @GetMapping("/getBannerList")
     public Result<List<SysBanner>> getBannerList() {
-        LambdaQueryWrapper<SysBanner> lqw = Wrappers.lambdaQuery();
-        lqw.eq(SysBanner::getState, Boolean.TRUE);
-        lqw.orderByAsc(SysBanner::getSort);
-        List<SysBanner> bannerList = bannerService.list(lqw);
+        List<SysBanner> bannerList = bannerService.getBannerList();
         return Result.succeed(bannerList);
     }
 
@@ -83,6 +80,9 @@ public class SysBannerController {
         if (StrUtil.isNotEmpty(banner.getWebFileId())){
             fileService.delete(banner.getWebFileId());
         }
+        if(b){
+            bannerService.syncPushBannerToWebApp();
+        }
         return b ? Result.succeed("删除成功") : Result.failed("删除失败");
     }
     /**
@@ -99,6 +99,9 @@ public class SysBannerController {
     })
     public Result updateState(@RequestParam Map<String, Object> params) {
         int i = bannerService.updateState(params);
+        if (i > 0) {
+            bannerService.syncPushBannerToWebApp();
+        }
         return i>0 ? Result.succeed("更新成功") : Result.failed("更新失败");
     }
 
@@ -164,6 +167,9 @@ public class SysBannerController {
             sysBanner.setWebFileId(fileId);
         }
         boolean result = bannerService.saveOrUpdateUser(sysBanner);
+        if(result){
+            bannerService.syncPushBannerToWebApp();
+        }
         return result ? Result.succeed( "操作成功") : Result.failed("操作失败");
     }
 
