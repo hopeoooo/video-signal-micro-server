@@ -81,8 +81,9 @@ public class SysBannerController {
     })
     public Result saveOrUpdate(
             @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
+            @RequestPart(value = "fileH5Horizontal", required = false) MultipartFile fileH5Horizontal,
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,Integer sort,String linkUrl,Long id
     ) throws Exception {
-        return configService.saveOrUpdate(fileH5,fileWeb,sort,linkUrl,id);
+        return configService.saveOrUpdate(fileH5,fileH5Horizontal,fileWeb,sort,linkUrl,id);
     }
 }

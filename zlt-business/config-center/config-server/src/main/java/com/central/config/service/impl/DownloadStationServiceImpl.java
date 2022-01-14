@@ -28,12 +28,6 @@ public class DownloadStationServiceImpl extends SuperServiceImpl<DownloadStation
     public Result saveOrUpdateDownloadStation(DownloadStation downloadStation) throws Exception {
         boolean insert =false;
         if (downloadStation.getId()==null){
-            LambdaQueryWrapper<DownloadStation> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(DownloadStation::getTerminalType,downloadStation.getTerminalType());
-            DownloadStation downloadStation1 = baseMapper.selectOne(wrapper);
-            if (downloadStation1!=null){
-                return Result.failed("不允许添加相同的终端类型");
-            }
             insert= super.save(downloadStation);
         }else {
             DownloadStation info = baseMapper.selectById(downloadStation.getId());

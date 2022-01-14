@@ -106,6 +106,7 @@ public interface ConfigService {
     @PostMapping(value = "/banner/saveOrUpdate",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Result saveOrUpdate(
             @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
+            @RequestPart(value = "fileH5Horizontal", required = false) MultipartFile fileH5Horizontal,
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,
             @RequestParam(value = "sort",required = true) Integer sort,
             @RequestParam(value ="linkUrl",required = false) String linkUrl,
