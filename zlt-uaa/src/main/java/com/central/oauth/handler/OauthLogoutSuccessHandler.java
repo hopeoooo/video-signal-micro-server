@@ -3,6 +3,7 @@ package com.central.oauth.handler;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.common.model.SysUserMoney;
 import com.central.common.utils.JsonUtil;
 import com.central.oauth.service.impl.UnifiedLogoutService;
@@ -58,5 +59,9 @@ public class OauthLogoutSuccessHandler implements LogoutSuccessHandler {
 			writer.write(jsonStr);
 			writer.flush();
 		}
+
+		log.info("authentication is {}",authentication);
+//		SysUser sysUser = (SysUser) authentication.getPrincipal();
+//		log.info("log out {}",sysUser.getUsername());
 	}
 }

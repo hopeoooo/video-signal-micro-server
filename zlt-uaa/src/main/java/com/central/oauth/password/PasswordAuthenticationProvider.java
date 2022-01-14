@@ -86,6 +86,9 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
                         "AbstractUserDetailsAuthenticationProvider.badCredentials",
                         "Bad credentials"));
             }
+        }else{
+            //给游客初始化金额
+            processLoginInfoService.initAmount(userDetails);
         }
 
         log.info("++++++++++  userDetails {}",userDetails);
