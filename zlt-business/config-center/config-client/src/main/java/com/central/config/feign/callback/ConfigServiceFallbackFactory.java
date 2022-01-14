@@ -101,6 +101,7 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
 
             @Override
             public Result saveOrUpdate(MultipartFile fileH5,
+                                       MultipartFile fileH5Horizontal,
                                        MultipartFile fileWeb,
                                        Integer sort,
                                        String linkUrl,

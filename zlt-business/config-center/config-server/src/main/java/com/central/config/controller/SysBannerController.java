@@ -80,6 +80,9 @@ public class SysBannerController {
         if (StrUtil.isNotEmpty(banner.getWebFileId())){
             fileService.delete(banner.getWebFileId());
         }
+        if (StrUtil.isNotEmpty(banner.getH5HorizontalFileId())){
+            fileService.delete(banner.getH5HorizontalFileId());
+        }
         if(b){
             bannerService.syncPushBannerToWebApp();
         }
@@ -120,6 +123,7 @@ public class SysBannerController {
     })
     public Result saveOrUpdate(
             @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
+            @RequestPart(value = "fileH5Horizontal", required = false) MultipartFile fileH5Horizontal,
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,Integer sort,String linkUrl, Long id
     ) throws Exception {
         SysBanner sysBanner=new SysBanner();
@@ -165,6 +169,20 @@ public class SysBannerController {
             String fileId= upload.get("fileId");
             sysBanner.setWebUrl(url);
             sysBanner.setWebFileId(fileId);
+        }
+        //H5竖屏
+        if (fileH5Horizontal!=null && fileH5Horizontal.getSize()>0){
+            //校验格式
+            Boolean aBoolean = verifyFormat(fileH5Horizontal.getOriginalFilename());
+            if (!aBoolean){
+                return Result.failed("格式错误");
+            }
+            //调用上传
+            Map<String, String> upload = upload(fileH5Horizontal);
+            String url= upload.get("url");
+            String fileId= upload.get("fileId");
+            sysBanner.setH5HorizontalUrl(url);
+            sysBanner.setH5HorizontalFileId(fileId);
         }
         boolean result = bannerService.saveOrUpdateUser(sysBanner);
         if(result){
