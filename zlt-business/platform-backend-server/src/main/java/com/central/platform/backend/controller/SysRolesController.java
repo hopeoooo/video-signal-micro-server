@@ -18,11 +18,9 @@ import java.util.Map;
 @Api(tags = "角色中心")
 @Slf4j
 @RequestMapping("/platform/roles")
-public class RolesController {
+public class SysRolesController {
     @Autowired
     private SysRoleService roleService;
-
-
     /**
      * 后台管理查询角色
      * @param params
@@ -45,6 +43,7 @@ public class RolesController {
      * @param sysRole
      * @return
      */
+    @ApiOperation(value = "角色新增或者更新")
     @PostMapping("/roles/saveOrUpdate")
     public Result saveOrUpdate(@RequestBody SysRole sysRole) throws Exception {
         return roleService.saveOrUpdate(sysRole);
@@ -57,6 +56,7 @@ public class RolesController {
      *
      * @param id
      */
+    @ApiOperation(value = "后台管理删除角色")
     @DeleteMapping("/roles/{id}")
     Result deleteRole(@PathVariable("id")  Long id) {
         return roleService.deleteRole(id);

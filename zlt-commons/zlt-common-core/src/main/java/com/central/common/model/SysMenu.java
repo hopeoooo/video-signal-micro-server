@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,11 +18,14 @@ import lombok.EqualsAndHashCode;
 public class SysMenu extends SuperEntity {
 	private static final long serialVersionUID = 749360940290141180L;
 
+
 	private Long parentId;
+	@ApiModelProperty(value = "菜单名称")
 	private String name;
 	private String css;
 	private String url;
 	private String path;
+	@ApiModelProperty(value = "排序")
 	private Integer sort;
 	private Integer type;
 	private Boolean hidden;
