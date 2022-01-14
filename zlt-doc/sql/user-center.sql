@@ -209,3 +209,17 @@ INSERT INTO `sys_role_menu` VALUES (4, 81);
 INSERT INTO `sys_role_menu` VALUES (4, 82);
 INSERT INTO `sys_role_menu` VALUES (4, 83);
 INSERT INTO `sys_role_menu` VALUES (5, 84);
+
+
+DROP TABLE IF EXISTS `login_log`;
+CREATE TABLE `login_log`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `plat_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL COMMENT '平台名称',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `login_time` datetime(0) NOT NULL COMMENT '登录时间',
+  `login_ip` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL COMMENT '登录ip',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 76 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_german2_ci ROW_FORMAT = Dynamic;
+SET FOREIGN_KEY_CHECKS = 1;
