@@ -169,4 +169,21 @@ public interface ConfigService {
      */
     @PostMapping("/download/saveOrUpdateDownloadStation")
      Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation) throws Exception ;
+
+
+    /**
+     * 查询最低在线人数
+     * @return
+     */
+    @GetMapping("/system/findMinOnlineUserQuantity")
+     Result<String> findMinOnlineUserQuantity();
+
+    /**
+     * 编辑最低在线人数
+     * @param minOnlineUserQuantity
+     * @return
+     */
+    @PostMapping("/system/updateMinOnlineUserQuantity")
+    Result updateMinOnlineUserQuantity(@RequestParam("minOnlineUserQuantity") String minOnlineUserQuantity);
+
 }
