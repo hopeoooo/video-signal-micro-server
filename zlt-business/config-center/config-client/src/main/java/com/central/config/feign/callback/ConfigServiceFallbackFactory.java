@@ -148,6 +148,18 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 log.error("saveOrUpdateDownloadStation编辑异常:{}", downloadStation, cause);
                 return Result.failed("编辑失败");
             }
+
+            @Override
+            public Result<String> findMinOnlineUserQuantity() {
+                log.error("findMinOnlineUserQuantity查询异常" ,cause);
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result updateMinOnlineUserQuantity(String minOnlineUserQuantity) {
+                log.error("updateMinOnlineUserQuantity编辑最低在线人数异常:{}", minOnlineUserQuantity, cause);
+                return Result.failed("编辑失败");
+            }
         };
     }
 }

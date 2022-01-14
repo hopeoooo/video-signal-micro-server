@@ -144,4 +144,33 @@ public class PlatformBackendController {
     public Result delAvatarPictureId(@PathVariable Long id) {
         return  configService.delAvatarPictureId(id);
     }
+
+
+
+    /**
+     * 查询最低在线人数
+     * @return
+     */
+    @ApiOperation("查询最低在线人数")
+    @GetMapping("/system/findMinOnlineUserQuantity")
+    public Result<String> findMinOnlineUserQuantity(){
+        return configService.findMinOnlineUserQuantity();
+    }
+
+
+
+    /**
+     * 修改最低在线人数
+     * @return
+     */
+    @ApiOperation("编辑最低在线人数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "minOnlineUserQuantity", value = "最低在线人数", required = true),
+    })
+    @PostMapping("/system/updateMinOnlineUserQuantity")
+    public Result updateMinOnlineUserQuantity(@RequestParam("minOnlineUserQuantity") String minOnlineUserQuantity){
+        return configService.updateMinOnlineUserQuantity(minOnlineUserQuantity);
+    }
+
+
 }
