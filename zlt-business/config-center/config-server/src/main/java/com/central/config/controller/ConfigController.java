@@ -270,6 +270,44 @@ public class ConfigController {
         }
         return b ? Result.succeed("删除成功") : Result.failed("删除失败");
     }
+    /**
+     * 查询最低在线人数
+     * @return
+     */
+    @ApiOperation("查询最低在线人数")
+    @GetMapping("/findMinOnlineUserQuantity")
+    public Result<String> findMinOnlineUserQuantity(){
+        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
+        if (touristAmount==null){
+            return Result.failed("查询失败");
+        }
+        String minOnlineUserQuantity = touristAmount.getMinOnlineUserQuantity() == null ? "0" : touristAmount.getMinOnlineUserQuantity();
+        return Result.succeed(minOnlineUserQuantity, "查询成功");
+    }
+
+
+
+    /**
+     * 修改最低在线人数
+     * @return
+     */
+    @ApiOperation("编辑最低在线人数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "minOnlineUserQuantity", value = "最低在线人数", required = true),
+    })
+    @PostMapping("/updateMinOnlineUserQuantity")
+    public Result updateMinOnlineUserQuantity(@RequestParam("minOnlineUserQuantity") String minOnlineUserQuantity){
+        if (StrUtil.isBlank(minOnlineUserQuantity)){
+            return Result.failed("参数错误");
+        }
+        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
+        if (touristAmount==null){
+            return Result.failed("更新失败");
+        }
+        touristAmount.setMinOnlineUserQuantity(minOnlineUserQuantity);
+        boolean save = platformConfigService.saveOrUpdate(touristAmount);
+        return save  ? Result.succeed("更新成功") : Result.failed("更新失败");
+    }
 
 
 
