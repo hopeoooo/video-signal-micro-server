@@ -1,10 +1,12 @@
 package com.central.user.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.*;
+import com.central.push.feign.PushService;
 import com.central.user.mapper.SysUserMoneyMapper;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -41,6 +44,8 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
 
     @Autowired
     private ISysTansterMoneyLogService iSysTansterMoneyLogService;
+    @Autowired
+    private PushService pushService;
 
 
     /**
@@ -84,6 +89,15 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, transterType, sysUserMoney.getMoney());
         iSysTansterMoneyLogService.save(sysTansterMoneyLog);
         return sysUserMoney;
+    }
+
+    @Override
+    @Async
+    public void syncPushMoneyToWebApp(Long userId) {
+        SysUserMoney money = findByUserId(userId);
+        PushResult<SysUserMoney> pushResult = PushResult.succeed(money, "money");
+        Result<String> push = pushService.pushOne(JSONObject.toJSONString(pushResult), userId.toString());
+        log.info("用户金额userId:{},推送结果:{}", userId, push);
     }
 
     private SysTansterMoneyLog getSysTansterMoneyLog(BigDecimal beforeMoery, BigDecimal money, SysUser sysUser,
