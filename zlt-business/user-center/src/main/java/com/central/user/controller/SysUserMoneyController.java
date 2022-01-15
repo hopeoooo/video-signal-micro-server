@@ -76,6 +76,7 @@ public class SysUserMoneyController {
                     return Result.failed("用户不存在或钱包错误");
                 }
                 SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, sysUser);
+                userMoneyService.syncPushMoneyToWebApp(userId);
                 return Result.succeed(saveSysUserMoney);
             }else{
                 return Result.failed("上下分请求太过频繁");
