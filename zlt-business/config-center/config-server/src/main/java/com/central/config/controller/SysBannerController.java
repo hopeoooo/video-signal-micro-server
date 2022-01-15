@@ -129,26 +129,51 @@ public class SysBannerController {
         SysBanner sysBanner=new SysBanner();
         if (id!=null){
             sysBanner.setId(id);
+            SysBanner banner = bannerService.selectById(sysBanner.getId());
+            if (banner == null) {
+                return  Result.failed("当前轮播图不存在");
+            }
+            if(banner.getSort()!=sort){
+                Integer  queryTotal= bannerService.queryTotal(sort);
+                if (queryTotal>0){
+                    return  Result.failed("排序位置已经存在");
+                }
+            }
         }else {
+            Integer  queryTotal= bannerService.queryTotal(sort);
+            if (queryTotal>0){
+                return   Result.failed("排序位置已经存在");
+            }
             Integer integer = bannerService.queryTotal(null);
             if (integer==20){
                 return Result.failed("最多添加20条数据");
             }
         }
-        Integer  queryTotal= bannerService.queryTotal(sort);
-        if (queryTotal>0){
-          return   Result.failed("排序位置已经存在");
-        }
         sysBanner.setSort(sort);
         if (StrUtil.isNotEmpty(linkUrl)) {
             sysBanner.setLinkUrl(linkUrl);
         }
+        //图片校验
+        boolean file = fileCheck(sysBanner, fileH5, fileWeb, fileH5Horizontal);
+        if (!file){
+            return Result.failed("格式错误");
+        }
+        boolean result = bannerService.saveOrUpdateUser(sysBanner);
+        if(result){
+            bannerService.syncPushBannerToWebApp();
+        }
+        return result ? Result.succeed( "操作成功") : Result.failed("操作失败");
+    }
+
+
+
+    public boolean fileCheck(SysBanner sysBanner,MultipartFile fileH5,MultipartFile fileWeb,MultipartFile fileH5Horizontal){
         //图片
         if (fileH5!=null && fileH5.getSize()>0){
             //校验格式
             Boolean aBoolean = verifyFormat(fileH5.getOriginalFilename());
             if (!aBoolean){
-                return Result.failed("格式错误");
+                return false;
             }
             //调用上传
             Map<String, String> upload = upload(fileH5);
@@ -161,7 +186,7 @@ public class SysBannerController {
             //校验格式
             Boolean aBoolean = verifyFormat(fileWeb.getOriginalFilename());
             if (!aBoolean){
-                return Result.failed("格式错误");
+                return false;
             }
             //调用上传
             Map<String, String> upload = upload(fileWeb);
@@ -175,7 +200,7 @@ public class SysBannerController {
             //校验格式
             Boolean aBoolean = verifyFormat(fileH5Horizontal.getOriginalFilename());
             if (!aBoolean){
-                return Result.failed("格式错误");
+                return false;
             }
             //调用上传
             Map<String, String> upload = upload(fileH5Horizontal);
@@ -184,13 +209,9 @@ public class SysBannerController {
             sysBanner.setH5HorizontalUrl(url);
             sysBanner.setH5HorizontalFileId(fileId);
         }
-        boolean result = bannerService.saveOrUpdateUser(sysBanner);
-        if(result){
-            bannerService.syncPushBannerToWebApp();
-        }
-        return result ? Result.succeed( "操作成功") : Result.failed("操作失败");
-    }
+        return true;
 
+    }
 
     /**
      * 上传
