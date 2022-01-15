@@ -1,6 +1,8 @@
 package com.central.platform.backend.controller;
 
 import com.central.common.annotation.LoginUser;
+import com.central.common.dto.LoginLogPageDto;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.config.feign.ConfigService;
@@ -35,8 +37,13 @@ public class DownloadStationController {
     @ApiOperation("查询app升级管理列表")
     @ResponseBody
     @GetMapping("/download/findDownloadStationList")
-    public Result findDownloadStationList() {
-       return configService.findDownloadStationList();
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
+    })
+    public Result<PageResult2<DownloadStation>> findDownloadStationList(@RequestParam Map<String, Object> params) {
+        PageResult2<DownloadStation> downloadStationList = configService.findDownloadStationList(params);
+        return Result.succeed(downloadStationList);
     }
 
 
