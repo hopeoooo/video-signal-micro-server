@@ -319,7 +319,7 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
                 roleUserService.saveBatch(roleUsers);
             }
         }
-        if(saveMark && sysUser.getType().equals("APP") && result){
+        if(saveMark && sysUser.getType().equals(UserType.APP.name()) && result){
           //调用用户钱包接口
             SysUserMoney userMoney=new SysUserMoney();
             userMoney.setUserId(sysUser.getId());

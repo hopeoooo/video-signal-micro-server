@@ -1,15 +1,19 @@
 package com.central.config.controller;
 
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.config.model.DownloadStation;
 import com.central.config.service.IDownloadStationService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -28,9 +32,12 @@ public class DownloadStationController {
     @ApiOperation("查询app升级管理列表")
     @ResponseBody
     @GetMapping("/findDownloadStationList")
-    public Result findDownloadStationList() {
-        List<DownloadStation> downloadStationList = downloadStationService.findDownloadStationList();
-        return Result.succeed(downloadStationList,"查询成功");
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
+    })
+    public PageResult2<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) {
+        return downloadStationService.findDownloadStationList(params);
     }
 
 
