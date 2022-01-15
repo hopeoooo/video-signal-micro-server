@@ -12,6 +12,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,5 +41,51 @@ public class DownloadStationServiceImpl extends SuperServiceImpl<DownloadStation
             insert = super.updateById(downloadStation);
         }
         return insert ? Result.succeed(downloadStation, "操作成功") : Result.failed("操作失败");
+    }
+
+
+    /**
+     * 生成版本号
+     * @param terminalType
+     * @return
+     */
+    @Override
+    public List<String> generateVersionNumber(String terminalType){
+        List<String> list=new ArrayList<>();
+        String versionNumber = baseMapper.getVersionNumber(terminalType);
+        if (versionNumber==null){
+            versionNumber="1.1.0";
+        }
+        for (int j=0;j<10;j++){
+            String[] aa =versionNumber.split("\\.");
+            Integer one=null;
+            Integer two=null;
+            Integer three=null;
+            for (int i = 0; i < aa.length; i++) {
+                if (i == 0) {
+                    one = Integer.valueOf(aa[i]);
+                }
+                if (i == 1) {
+                    two = Integer.valueOf(aa[i]);
+                }
+                if (i == 2) {
+                    three = Integer.valueOf(aa[i]);
+                }
+            }
+            if (three<9){
+                three+=1;
+            }else {
+                three=0;
+                if (two<9){
+                    two+=1;
+                }else {
+                    two=0;
+                    one+=1;
+                }
+            }
+            versionNumber=one+"."+two+"."+three;
+            list.add(versionNumber);
+        }
+        return list;
     }
 }

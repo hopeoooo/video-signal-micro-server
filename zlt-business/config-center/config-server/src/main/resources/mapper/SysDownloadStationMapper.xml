@@ -9,4 +9,10 @@
         ORDER BY d.create_time desc
     </select>
 
+
+    <select id="getVersionNumber" resultType="String">
+        SELECT d.version_number from download_station d
+        WHERE d.terminal_type=#{terminalType}
+        ORDER BY d.create_time desc LIMIT 1
+    </select>
 </mapper>
