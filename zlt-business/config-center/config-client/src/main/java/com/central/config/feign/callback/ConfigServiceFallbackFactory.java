@@ -158,6 +158,12 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
+            public Result deleteDownloadStationId(Long id) {
+                log.error("deleteDownloadStationId删除异常:{}", id, cause);
+                return Result.failed("删除失败");
+            }
+
+            @Override
             public Result<String> findMinOnlineUserQuantity() {
                 log.error("findMinOnlineUserQuantity查询异常" ,cause);
                 return Result.failed("查询失败");
