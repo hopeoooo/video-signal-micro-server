@@ -14,4 +14,6 @@ public interface IDownloadStationService extends ISuperService<DownloadStation> 
      PageResult2<DownloadStation> findDownloadStationList(Map<String, Object> map) ;
 
      Result saveOrUpdateDownloadStation(DownloadStation downloadStation) throws Exception;
+
+      List<String> generateVersionNumber(String terminalType);
 }

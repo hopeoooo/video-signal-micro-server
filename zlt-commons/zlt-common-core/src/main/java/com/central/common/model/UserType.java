@@ -2,7 +2,6 @@ package com.central.common.model;
 
 
 /**
- * @author zlt
  * 用户类型
  */
 public enum UserType {
@@ -14,5 +13,9 @@ public enum UserType {
 	/**
 	 * 后端管理用户
 	 */
-	BACKEND
+	BACKEND,
+	/**
+	 * 访客
+	 */
+	APP_GUEST
 }

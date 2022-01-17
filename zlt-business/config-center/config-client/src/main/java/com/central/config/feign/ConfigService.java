@@ -173,6 +173,8 @@ public interface ConfigService {
      Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation) throws Exception ;
 
 
+    @GetMapping("/download/generateVersionNumber")
+     Result<List<String>> generateVersionNumber( @RequestParam("terminalType")  String  terminalType) ;
     /**
      * 查询最低在线人数
      * @return

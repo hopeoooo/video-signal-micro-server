@@ -41,6 +41,17 @@ public class DownloadStationController {
     }
 
 
+    @ApiOperation("自动生成版本号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "terminalType", value = "终端类型,1：安卓，2：ios", required = true),
+    })
+    @GetMapping("/generateVersionNumber")
+    public Result<List<String>>  generateVersionNumber( @RequestParam("terminalType") String  terminalType) {
+        List<String> strings = downloadStationService.generateVersionNumber(terminalType);
+        return Result.succeed(strings,"查询成功");
+    }
+
+
     /**
      * 新增or更新
      *

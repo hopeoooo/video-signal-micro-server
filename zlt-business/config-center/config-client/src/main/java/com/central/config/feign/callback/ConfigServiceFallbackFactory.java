@@ -152,6 +152,12 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
+            public Result<List<String>> generateVersionNumber(String terminalType) {
+                log.error("generateVersionNumber自动生成版本号异常:{}", terminalType, cause);
+                return Result.failed("查询失败");
+            }
+
+            @Override
             public Result<String> findMinOnlineUserQuantity() {
                 log.error("findMinOnlineUserQuantity查询异常" ,cause);
                 return Result.failed("查询失败");
