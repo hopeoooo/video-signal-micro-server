@@ -12,7 +12,7 @@ import java.util.Map;
 public interface DownloadStationMapper extends SuperMapper<DownloadStation> {
 
 
-    List<DownloadStation> selectList(Page<DownloadStation> page);
+    List<DownloadStation> findList(Page<DownloadStation> page);
 
     String  getVersionNumber(String terminalType);
 
