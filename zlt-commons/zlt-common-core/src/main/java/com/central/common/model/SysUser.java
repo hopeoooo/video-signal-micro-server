@@ -80,8 +80,4 @@ public class SysUser extends SuperEntity {
 	@TableField(exist = false)
 	private BigDecimal currentBalance;
 
-
-	public BigDecimal getCurrentBalance(){
-		return currentBalance.setScale(2, BigDecimal.ROUND_DOWN);
-	}
 }
