@@ -1,6 +1,7 @@
 package com.central.config.feign;
 
 import com.central.common.constant.ServiceNameConstants;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
@@ -160,7 +161,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/download/findDownloadStationList")
-     Result findDownloadStationList() ;
+   PageResult2<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) ;
 
     /**
      * 新增or更新App升级管理
@@ -172,6 +173,8 @@ public interface ConfigService {
      Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation) throws Exception ;
 
 
+    @GetMapping("/download/generateVersionNumber")
+     Result<List<String>> generateVersionNumber( @RequestParam("terminalType")  String  terminalType) ;
     /**
      * 查询最低在线人数
      * @return

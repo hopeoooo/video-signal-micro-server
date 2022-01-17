@@ -9,6 +9,7 @@ import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -139,15 +140,21 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 return null;
             }
             @Override
-            public Result findDownloadStationList() {
+            public  PageResult2<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) {
                 log.error("findDownloadStationList查询异常" ,cause);
-                return Result.failed("查询失败");
+                return new PageResult2<>();
             }
 
             @Override
             public Result saveOrUpdateDownloadStation(DownloadStation downloadStation) throws Exception {
                 log.error("saveOrUpdateDownloadStation编辑异常:{}", downloadStation, cause);
                 return Result.failed("编辑失败");
+            }
+
+            @Override
+            public Result<List<String>> generateVersionNumber(String terminalType) {
+                log.error("generateVersionNumber自动生成版本号异常:{}", terminalType, cause);
+                return Result.failed("查询失败");
             }
 
             @Override
