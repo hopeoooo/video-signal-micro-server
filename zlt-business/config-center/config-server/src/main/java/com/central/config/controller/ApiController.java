@@ -72,12 +72,12 @@ public class ApiController {
     public Result<AppDown> findAppDownUrl() {
         LambdaQueryWrapper<DownloadStation> lqw = Wrappers.lambdaQuery();
         lqw.eq(DownloadStation::getTerminalType, 1);
-        lqw.orderByDesc(DownloadStation::getCreateTime);
+        lqw.orderByDesc(DownloadStation::getVersionNumber);
         DownloadStation android = downloadStationService.getOne(lqw, false);
 
         LambdaQueryWrapper<DownloadStation> lqw1 = Wrappers.lambdaQuery();
         lqw1.eq(DownloadStation::getTerminalType, 2);
-        lqw1.orderByDesc(DownloadStation::getCreateTime);
+        lqw1.orderByDesc(DownloadStation::getVersionNumber);
         DownloadStation ios = downloadStationService.getOne(lqw1, false);
 
         AppDown appDown = new AppDown();
