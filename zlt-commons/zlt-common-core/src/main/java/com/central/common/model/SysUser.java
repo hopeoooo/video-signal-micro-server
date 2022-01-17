@@ -3,6 +3,7 @@ package com.central.common.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -79,5 +80,11 @@ public class SysUser extends SuperEntity {
 	@ApiModelProperty(value = "当前余额")
 	@TableField(exist = false)
 	private BigDecimal currentBalance;
+
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
+	public BigDecimal getCurrentBalance(){
+		return currentBalance == null ? BigDecimal.ZERO.setScale(2) : currentBalance.setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
 
 }
