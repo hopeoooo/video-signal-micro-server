@@ -5,6 +5,7 @@ import com.central.common.feign.UserService;
 import com.central.common.model.LoginLog;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
+import com.central.common.vo.SysMoneyVO;
 import com.central.config.dto.TouristDto;
 import com.central.oauth.service.ProcessLoginInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
 
     @Resource
     private UserService userService;
+
+
 
     @Resource
     private ConfigService configService;
@@ -59,6 +62,10 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
         SysUser sysUser = (SysUser) userDetails;
         BigDecimal maxAmount = touristDtoResult.getDatas().getTouristAmount();
         // 游客初始化金额  持久化
+        SysMoneyVO sysMoneyVO = new SysMoneyVO();
+        sysMoneyVO.setUserMoney(maxAmount);
+        sysMoneyVO.setUid(sysUser.getId());
+        userService.updateMoney(sysMoneyVO);
     }
 
 }
