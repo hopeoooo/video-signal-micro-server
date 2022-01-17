@@ -6,6 +6,7 @@ import com.central.common.model.Result;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.config.mapper.DownloadStationMapper;
 import com.central.config.model.DownloadStation;
+import com.central.config.model.SysNotice;
 import com.central.config.service.IDownloadStationService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -43,6 +44,16 @@ public class DownloadStationServiceImpl extends SuperServiceImpl<DownloadStation
         return insert ? Result.succeed(downloadStation, "操作成功") : Result.failed("操作失败");
     }
 
+
+    /**
+     * 根据id查询公告
+     * @param id
+     * @return
+     */
+    @Override
+    public DownloadStation selectById(Long id) {
+        return baseMapper.selectById(id);
+    }
 
     /**
      * 生成版本号

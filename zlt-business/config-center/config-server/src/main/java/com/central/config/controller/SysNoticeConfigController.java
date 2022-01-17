@@ -59,7 +59,7 @@ public class SysNoticeConfigController {
         //查询公告是否存在
         SysNotice sysNotice = noticeService.selectById(id);
         if (sysNotice==null){
-            Result.failed("此公告不存在");
+            return  Result.failed("此公告不存在");
         }
         noticeService.delNoticeId(id);
         noticeService.syncPushNoticeToWebApp();

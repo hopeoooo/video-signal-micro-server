@@ -175,6 +175,16 @@ public interface ConfigService {
 
     @GetMapping("/download/generateVersionNumber")
      Result<List<String>> generateVersionNumber( @RequestParam("terminalType")  String  terminalType) ;
+
+
+    /**
+     * 删除
+     *
+     * @param id
+     */
+    @DeleteMapping(value = "/download/deleteDownloadStationId/{id}")
+    Result deleteDownloadStationId(@PathVariable("id") Long id) ;
+
     /**
      * 查询最低在线人数
      * @return
@@ -189,5 +199,7 @@ public interface ConfigService {
      */
     @PostMapping("/system/updateMinOnlineUserQuantity")
     Result updateMinOnlineUserQuantity(@RequestParam("minOnlineUserQuantity") String minOnlineUserQuantity);
+
+
 
 }
