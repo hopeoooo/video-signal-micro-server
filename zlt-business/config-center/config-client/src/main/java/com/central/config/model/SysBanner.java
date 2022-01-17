@@ -22,11 +22,15 @@ public class SysBanner extends SuperEntity {
 
 	@ApiModelProperty(value = "h5图片url")
 	private String h5Url;
+	@ApiModelProperty(value = "h5图片url(横屏)")
+	private String h5HorizontalUrl;
 	@ApiModelProperty(value = "web图片url")
 	private String webUrl;
 
 	@ApiModelProperty(value = "图片关联id")
 	private String h5FileId;
+	@ApiModelProperty(value = "图片关联id(横屏)")
+	private String h5HorizontalFileId;
 	@ApiModelProperty(value = "图片关联id")
 	private String webFileId;
 

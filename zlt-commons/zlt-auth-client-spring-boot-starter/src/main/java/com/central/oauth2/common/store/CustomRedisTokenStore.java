@@ -258,9 +258,7 @@ public class CustomRedisTokenStore implements TokenStore {
         storeAccessToken(token, authentication, false);
     }
 
-    private String getOnlineKey(OAuth2AccessToken token, OAuth2Authentication authentication){
-        log.info("+++++++ token is {}",token);
-        log.info("+++++++ getExpiresIn is {}",token.getExpiresIn());
+    private String getOnlineKey(OAuth2Authentication authentication){
         log.info("+++++++ authentication is {}",authentication);
         String returnKey = "";
         SysUser sysUser = (SysUser) authentication.getPrincipal();
@@ -285,7 +283,7 @@ public class CustomRedisTokenStore implements TokenStore {
         byte[] authToAccessKey = serializeKey(AUTH_TO_ACCESS + authenticationKeyGenerator.extractKey(authentication));
         byte[] approvalKey = serializeKey(SecurityConstants.REDIS_UNAME_TO_ACCESS + getApprovalKey(authentication));
         byte[] clientId = serializeKey(SecurityConstants.REDIS_CLIENT_ID_TO_ACCESS + authentication.getOAuth2Request().getClientId());
-        byte[] onlineKey = serializeKey(getOnlineKey(token, authentication));
+        byte[] onlineKey = serializeKey(getOnlineKey(authentication));
 
         RedisConnection conn = getConnection();
         try {
@@ -410,11 +408,13 @@ public class CustomRedisTokenStore implements TokenStore {
                 byte[] authToAccessKey = serializeKey(AUTH_TO_ACCESS + key);
                 byte[] unameKey = serializeKey(SecurityConstants.REDIS_UNAME_TO_ACCESS + getApprovalKey(authentication));
                 byte[] clientId = serializeKey(SecurityConstants.REDIS_CLIENT_ID_TO_ACCESS + authentication.getOAuth2Request().getClientId());
+                byte[] onlineKey = serializeKey(getOnlineKey(authentication));
                 conn.openPipeline();
                 conn.del(authToAccessKey);
                 conn.lRem(unameKey, 1, access);
                 conn.lRem(clientId, 1, access);
                 conn.del(serialize(ACCESS + key));
+                conn.del(onlineKey);
                 conn.closePipeline();
             }
         } finally {

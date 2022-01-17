@@ -1,6 +1,7 @@
 package com.central.config.feign;
 
 import com.central.common.constant.ServiceNameConstants;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
@@ -106,6 +107,7 @@ public interface ConfigService {
     @PostMapping(value = "/banner/saveOrUpdate",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Result saveOrUpdate(
             @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
+            @RequestPart(value = "fileH5Horizontal", required = false) MultipartFile fileH5Horizontal,
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,
             @RequestParam(value = "sort",required = true) Integer sort,
             @RequestParam(value ="linkUrl",required = false) String linkUrl,
@@ -159,7 +161,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/download/findDownloadStationList")
-     Result findDownloadStationList() ;
+   PageResult2<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) ;
 
     /**
      * 新增or更新App升级管理
@@ -169,4 +171,21 @@ public interface ConfigService {
      */
     @PostMapping("/download/saveOrUpdateDownloadStation")
      Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation) throws Exception ;
+
+
+    /**
+     * 查询最低在线人数
+     * @return
+     */
+    @GetMapping("/system/findMinOnlineUserQuantity")
+     Result<String> findMinOnlineUserQuantity();
+
+    /**
+     * 编辑最低在线人数
+     * @param minOnlineUserQuantity
+     * @return
+     */
+    @PostMapping("/system/updateMinOnlineUserQuantity")
+    Result updateMinOnlineUserQuantity(@RequestParam("minOnlineUserQuantity") String minOnlineUserQuantity);
+
 }

@@ -70,10 +70,6 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
         if (sysBanner.getId() == null) {
             insert = super.save(sysBanner);
         }else {
-            SysBanner banner = baseMapper.selectById(sysBanner.getId());
-            if (banner == null) {
-                return insert;
-            }
             //修改
             insert = super.updateById(sysBanner);
         }

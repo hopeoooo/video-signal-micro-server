@@ -3,6 +3,7 @@ package com.central.common.feign.fallback;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.feign.UserService;
 import com.central.common.model.*;
+import com.central.common.vo.SysMoneyVO;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -104,6 +105,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public Result<SysUserMoney> save(SysUserMoney sysUserMoney) {
                 log.error("新增用户钱包失败:{}", sysUserMoney, throwable);
                 return Result.failed("新增用户钱包失败");
+            }
+
+            @Override
+            public Result<Boolean> updateMoney(SysMoneyVO sysMoneyVO) {
+                log.error("初始化游客金额失败",sysMoneyVO);
+                return Result.failed("初始化游客金额失败");
             }
 
             @Override

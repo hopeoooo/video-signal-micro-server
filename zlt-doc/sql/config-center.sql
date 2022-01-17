@@ -83,6 +83,7 @@ CREATE TABLE `sys_platform_config`  (
                                         `log_image_url_pc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'logo(pc)',
                                         `login_register_log_image_url_app` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'logo(App登陆注册)',
                                         `app_download_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'app下载地址',
+                                        `min_online_user_quantity` int(10) NULL DEFAULT NULL COMMENT '最低在线人数',
                                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_german2_ci ROW_FORMAT = Dynamic;
 

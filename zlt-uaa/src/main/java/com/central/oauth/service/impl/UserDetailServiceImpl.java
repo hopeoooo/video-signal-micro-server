@@ -3,8 +3,10 @@ package com.central.oauth.service.impl;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.feign.UserService;
 import com.central.common.model.SysUser;
+import com.central.common.redis.template.RedisRepository;
 import com.central.oauth.service.ITokensService;
 import com.central.oauth.service.ZltUserDetailsService;
+import com.central.oauth.utils.ConstantPlayer;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +36,9 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
 
     @Resource
     private ITokensService tokensService;
+
+    @Resource
+    private RedisRepository redisRepository;
 
     @Override
     public boolean supports(String accountType) {
@@ -68,17 +73,18 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
     }
 
     private String getUserNameFrom(){
-        List<SysUser> sysUsers = userService.queryPlayerList();
-        for (SysUser sysUser:sysUsers) {
-            if(!tokensService.exist(sysUser.getUsername(),"webApp")){
-                return sysUser.getUsername();
-            }
+        if(!redisRepository.exists(ConstantPlayer.PLAYER_ACCOUNT_QUEUE))
+            throw new InternalAuthenticationServiceException("未创建游客");
+        else {
+            Object playName = redisRepository.rightPop(ConstantPlayer.PLAYER_ACCOUNT_QUEUE);
+            if(playName !=null)
+                return playName.toString();
         }
         throw new InternalAuthenticationServiceException("游客已满");
     }
 
     private LoginAppUser checkUser(LoginAppUser loginAppUser) {
-        if (loginAppUser != null && !loginAppUser.isEnabled()) {
+        if (loginAppUser != null && !loginAppUser.isEnabled() && !loginAppUser.getType().equals("APP_GUEST")) {
             throw new DisabledException("用户已作废");
         }
         return loginAppUser;
