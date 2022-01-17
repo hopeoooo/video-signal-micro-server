@@ -25,7 +25,7 @@ public class DownloadStationServiceImpl extends SuperServiceImpl<DownloadStation
     @Override
     public PageResult2<DownloadStation> findDownloadStationList(Map<String, Object> map) {
         Page<DownloadStation> page = new Page<>(MapUtils.getInteger(map, "page"),  MapUtils.getInteger(map, "limit"));
-        List<DownloadStation> list = baseMapper.selectList(page);
+        List<DownloadStation> list = baseMapper.findList(page);
         return PageResult2.<DownloadStation>builder().data(list).count(page.getTotal()).build();
     }
 
