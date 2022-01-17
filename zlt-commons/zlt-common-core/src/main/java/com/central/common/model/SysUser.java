@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -77,6 +78,10 @@ public class SysUser extends SuperEntity {
 
 	@ApiModelProperty(value = "当前余额")
 	@TableField(exist = false)
-	private String currentBalance;
+	private BigDecimal currentBalance;
 
+
+	public BigDecimal getCurrentBalance(){
+		return currentBalance.setScale(2, BigDecimal.ROUND_DOWN);
+	}
 }
