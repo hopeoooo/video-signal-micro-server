@@ -80,4 +80,17 @@ public class DownloadStationController {
         return configService.generateVersionNumber(terminalType);
     }
 
+
+
+    /**
+     * 删除
+     *
+     * @param id
+     */
+    @ApiOperation("删除")
+    @DeleteMapping(value = "/download/deleteDownloadStationId/{id}")
+    public Result deleteDownloadStationId(@PathVariable Long id) {
+        return configService.deleteDownloadStationId(id);
+    }
+
 }
