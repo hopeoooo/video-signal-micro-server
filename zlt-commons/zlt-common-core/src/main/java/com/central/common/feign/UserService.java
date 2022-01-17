@@ -4,6 +4,7 @@ import com.central.common.constant.ServiceNameConstants;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.feign.fallback.UserServiceFallbackFactory;
 import com.central.common.model.*;
+import com.central.common.vo.SysMoneyVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -111,6 +112,9 @@ public interface UserService {
      */
     @PostMapping("/userMoney/save")
     Result<SysUserMoney> save(@RequestBody SysUserMoney sysUserMoney);
+
+    @PostMapping("/userMoney/playerMoney")
+    Result<Boolean> updateMoney(@RequestBody SysMoneyVO sysMoneyVO);
 
     @PostMapping(value = "/loginLog/addLog", params = "LoginLog")
     Result<Boolean> addLoginlog(@RequestBody LoginLog loginLog);

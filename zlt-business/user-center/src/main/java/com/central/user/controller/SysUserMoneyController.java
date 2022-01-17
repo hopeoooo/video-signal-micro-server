@@ -8,17 +8,16 @@ import com.central.common.model.SysUserMoney;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
 import com.central.user.util.RedissLockUtil;
+import com.central.common.vo.SysMoneyVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 /**
  * 用户钱包表
@@ -45,6 +44,27 @@ public class SysUserMoneyController {
             sysUserMoney = new SysUserMoney();
         }
         return Result.succeed(sysUserMoney);
+    }
+
+    @ApiOperation(value = "设置玩家金额")
+    @PostMapping("/playerMoney")
+    public Result<Boolean> updateMoney(@RequestBody SysMoneyVO sysMoneyVO){
+        log.info("udpate money for player {}",sysMoneyVO.getUid());
+        SysUserMoney sysUserMoney = userMoneyService.lambdaQuery().eq(SysUserMoney::getUserId,sysMoneyVO.getUid()).one();
+        Boolean result = Boolean.FALSE;
+        if(sysUserMoney != null){
+            log.info("+++++++++  udpate user money  {}",sysMoneyVO.getUid());
+            result = userMoneyService.lambdaUpdate().eq(SysUserMoney::getUserId,sysMoneyVO.getUid()).set(SysUserMoney::getMoney,sysMoneyVO.getUserMoney()).update();
+        } else{
+            log.info("+++++++++  udpate user money  {}",sysMoneyVO.getUid());
+            SysUserMoney userMoney = new SysUserMoney();
+            userMoney.setMoney(sysMoneyVO.getUserMoney());
+            userMoney.setUserId(sysMoneyVO.getUid());
+            userMoney.setUnfinishedCode(BigDecimal.ZERO);
+            result = userMoneyService.save(userMoney);
+        }
+        log.info("+++++++++  udpate user money  {}",result);
+        return Result.succeed(result);
     }
 
     @ApiOperation(value = "保存")
