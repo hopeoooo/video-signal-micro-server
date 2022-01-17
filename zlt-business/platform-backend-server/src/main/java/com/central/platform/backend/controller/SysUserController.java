@@ -2,6 +2,7 @@ package com.central.platform.backend.controller;
 
 import cn.hutool.json.JSONObject;
 import com.central.common.constant.CommonConstant;
+import com.central.common.constant.UserConstant;
 import com.central.common.model.*;
 import com.central.config.feign.ConfigService;
 import com.central.log.annotation.AuditLog;
@@ -121,6 +122,10 @@ public class SysUserController {
             @ApiImplicitParam(name = "transterType", value = "0：人工下分, 1：人工上分", required = true, dataType = "Boolean")
     })
     public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType){
+
+        if(money.compareTo(UserConstant.maxTransterMoney) >= 0){
+            return Result.failed("用户上分金额太大");
+        }
         return sysUserService.transterMoney(userId, money, remark, transterType);
     }
 }
