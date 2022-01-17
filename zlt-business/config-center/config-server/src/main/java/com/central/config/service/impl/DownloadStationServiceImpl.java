@@ -54,9 +54,10 @@ public class DownloadStationServiceImpl extends SuperServiceImpl<DownloadStation
         List<String> list=new ArrayList<>();
         String versionNumber = baseMapper.getVersionNumber(terminalType);
         if (versionNumber==null){
-            versionNumber="1.1.0";
+            versionNumber="1.1.1";
         }
-        for (int j=0;j<10;j++){
+        list.add(versionNumber);
+        for (int j=0;j<9;j++){
             String[] aa =versionNumber.split("\\.");
             Integer one=null;
             Integer two=null;
