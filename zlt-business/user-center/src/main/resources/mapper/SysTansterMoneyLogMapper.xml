@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.central.user.mapper.SysTansterMoneyLogMapper">
+
+    <sql id="UnionColumns">
+        ${alias}.id,
+        ${alias}.user_id,
+        ${alias}.order_no,
+        ${alias}.user_name,
+        ${alias}.money,
+        ${alias}.before_money,
+        ${alias}.after_money,
+        ${alias}.create_time,
+        ${alias}.update_time,
+        ${alias}.remark,
+        ${alias}.order_type
+    </sql>
+
+    <sql id="where">
+        <where>
+            <if test="u.userName != null and u.userName != ''">
+                and t.user_name = #{u.username}
+            </if>
+            <if test="u.userId != null and u.userId != ''">
+                and t.user_id like = #{u.userId}
+            </if>
+            <if test="u.orderType != null and u.orderType != ''">
+                and t.order_type = #{u.orderType}
+            </if>
+            <if test="u.startTime != null and u.endTime != null">
+                and t.create_time >= #{u.startTime} and t.create_time = #{u.endTime}
+            </if>
+        </where>
+    </sql>
+
+    <select id="findList" resultType="com.central.common.model.SysTansterMoneyLog">
+        select 
+            <include refid="UnionColumns">
+                <property name="alias" value="b"/>
+            </include>
+        from sys_tanster_money_log t
+        <include refid="where" />
+        order by t.id desc
+    </select>
+
+</mapper>
