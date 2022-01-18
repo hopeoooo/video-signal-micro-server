@@ -28,12 +28,10 @@ public class SysUserJettonController {
     public Result<String> queryJettonByUid(@LoginUser SysUser sysUser){
 
         SysUserJetton sysUserJetton = sysUserJettonService.lambdaQuery().eq(SysUserJetton::getUid,sysUser.getId()).one();
-        log.info("++++++++++  {}",sysUserJetton);
-        log.info(sysUserJetton.getJettonConfig());
-        return Result.succeed(sysUserJetton == null?"": sysUserJetton.getJettonConfig(),"query success");
+        return Result.succeed(sysUserJetton == null?"5,10,20,50,100": sysUserJetton.getJettonConfig(),"query success");
     }
 
-    @PutMapping("/put_config")
+    @PostMapping("/put_config")
     @ApiOperation(value = "设置用户筹码")
     public Result<Boolean> updateJettonConfig(@RequestBody SysUserJettonVO sysUserJettonVO, @LoginUser SysUser sysUser){
         SysUserJetton dbSysjetton = sysUserJettonService.lambdaQuery().eq(SysUserJetton::getUid,sysUser.getId()).one();
