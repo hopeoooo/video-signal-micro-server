@@ -125,7 +125,6 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("人工上下分:{}",userId,throwable);
                 return Result.failed("上线分错误");
             }
-
             @Override
             public PageResult2<SysTansterMoneyLogVo> findTransterMoneyList(Map<String, Object> params) {
                 log.error("findTransterMoneyList查询会员账变异常:{}", params, throwable);
