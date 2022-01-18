@@ -80,7 +80,7 @@ public class GoogleCodeController {
         if (!loginAppUser.isEnabled()){
             return Result.failed("该账号状态异常");
         }
-        if (loginAppUser.getGaBind() == 1) {
+        if (loginAppUser.getGaBind() != null && loginAppUser.getGaBind() == 1) {
             return Result.failed("该账号已经绑定谷歌验证码");
         }
         if (!passwordEncoder.matches(password, loginAppUser.getPassword())) {
