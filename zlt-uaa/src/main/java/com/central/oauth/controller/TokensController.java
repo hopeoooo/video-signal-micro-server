@@ -3,6 +3,8 @@ package com.central.oauth.controller;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.config.dto.TouristDto;
+import com.central.config.feign.ConfigService;
 import com.central.oauth.model.TokenVo;
 import com.central.oauth.service.ITokensService;
 import com.central.oauth2.common.util.AuthUtils;
@@ -44,6 +46,9 @@ public class TokensController {
     @Resource
     private PasswordEncoder passwordEncoder;
 
+    @Resource
+    private ConfigService configService;
+
     @GetMapping("")
     @ApiOperation(value = "token列表")
     public PageResult<TokenVo> list(@RequestParam Map<String, Object> params, String tenantId) {
@@ -54,8 +59,10 @@ public class TokensController {
     @ApiOperation(value = "游客人数")
     public Result<Integer> queryPlayerNums(){
         Integer player_num = tokensService.playerNums("online");
+        String touristDto = configService.findMinOnlineUserQuantity().getDatas();
+        Integer total = Integer.parseInt(touristDto)+player_num;
         log.info("++++++++++++++ {}",player_num);
-        return Result.succeed(player_num);
+        return Result.succeed(total);
     }
 
     @GetMapping("/key")
