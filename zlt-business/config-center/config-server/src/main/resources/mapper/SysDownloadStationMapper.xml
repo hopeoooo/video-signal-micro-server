@@ -4,9 +4,15 @@
 <mapper namespace="com.central.config.mapper.DownloadStationMapper">
 
 
-    <select id="selectList" resultType="com.central.config.model.DownloadStation">
+    <select id="findList" resultType="com.central.config.model.DownloadStation">
         SELECT * from download_station d
         ORDER BY d.create_time desc
     </select>
 
+
+    <select id="getVersionNumber" resultType="String">
+        SELECT d.version_number from download_station d
+        WHERE d.terminal_type=#{terminalType}
+        ORDER BY d.create_time desc LIMIT 1
+    </select>
 </mapper>

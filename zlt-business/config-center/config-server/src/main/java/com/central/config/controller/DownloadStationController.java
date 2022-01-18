@@ -3,6 +3,7 @@ package com.central.config.controller;
 import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.config.model.DownloadStation;
+import com.central.config.model.SysNotice;
 import com.central.config.service.IDownloadStationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,6 +42,17 @@ public class DownloadStationController {
     }
 
 
+    @ApiOperation("自动生成版本号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "terminalType", value = "终端类型,1：安卓，2：ios", required = true),
+    })
+    @GetMapping("/generateVersionNumber")
+    public Result<List<String>>  generateVersionNumber( @RequestParam("terminalType") String  terminalType) {
+        List<String> strings = downloadStationService.generateVersionNumber(terminalType);
+        return Result.succeed(strings,"查询成功");
+    }
+
+
     /**
      * 新增or更新
      *
@@ -53,5 +65,22 @@ public class DownloadStationController {
         Result result = downloadStationService.saveOrUpdateDownloadStation(downloadStation);
         return result;
     }
+
+    /**
+     * 删除
+     *
+     * @param id
+     */
+    @ApiOperation("删除")
+    @DeleteMapping(value = "/deleteDownloadStationId/{id}")
+    public Result deleteDownloadStationId(@PathVariable Long id) {
+        DownloadStation downloadStation = downloadStationService.selectById(id);
+        if (downloadStation==null){
+            return  Result.failed("此数据不存在");
+        }
+        downloadStation.deleteById(id);
+        return Result.succeed("删除成功");
+    }
+
 
 }

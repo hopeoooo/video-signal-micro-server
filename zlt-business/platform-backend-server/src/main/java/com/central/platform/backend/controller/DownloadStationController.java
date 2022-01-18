@@ -65,4 +65,32 @@ public class DownloadStationController {
         return configService.saveOrUpdateDownloadStation(downloadStation);
     }
 
+
+    /**
+     * 自动生成版本号
+     * @param terminalType
+     * @return
+     */
+    @ApiOperation("自动生成版本号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "terminalType", value = "终端类型,1：安卓，2：ios", required = true),
+    })
+    @GetMapping("/download/generateVersionNumber")
+    public Result<List<String>>  generateVersionNumber( @RequestParam("terminalType")String  terminalType) {
+        return configService.generateVersionNumber(terminalType);
+    }
+
+
+
+    /**
+     * 删除
+     *
+     * @param id
+     */
+    @ApiOperation("删除")
+    @DeleteMapping(value = "/download/deleteDownloadStationId/{id}")
+    public Result deleteDownloadStationId(@PathVariable Long id) {
+        return configService.deleteDownloadStationId(id);
+    }
+
 }

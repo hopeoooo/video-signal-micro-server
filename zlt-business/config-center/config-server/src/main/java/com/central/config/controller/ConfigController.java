@@ -228,6 +228,11 @@ public class ConfigController {
             //循环获取file数组中得文件
             for(int i = 0;i<file.length;i++){
                 MultipartFile files = file[i];
+                //校验文件大小
+                Boolean result = verifySize(files);
+                if (!result){
+                    return Result.failed("文件不能大于2M");
+                }
                 //校验格式
                 Boolean aBoolean = verifyFormat(files.getOriginalFilename());
                 if (!aBoolean){
@@ -337,21 +342,20 @@ public class ConfigController {
      * @param file
      * @return
      */
-    public Result verifySize(MultipartFile file) {
+    public Boolean verifySize(MultipartFile file) {
         InputStream inputStream = null;
         try {
              inputStream = file.getInputStream();
             long size = inputStream.available();
             System.out.println("文件大小：" + size + " Byte");
             if (size == 0 || size > 2 * 1024 * 1024) {
-                return Result.failed("文件不能大于2M");
+                return false;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return Result.succeed();
+        return true;
     }
-
     /**
      * 上传
      * @param file
