@@ -5,6 +5,7 @@ import com.central.common.dto.LoginLogPageDto;
 import com.central.common.feign.fallback.UserServiceFallbackFactory;
 import com.central.common.model.*;
 import com.central.common.vo.SysMoneyVO;
+import com.central.common.vo.SysTansterMoneyLogVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -123,4 +124,6 @@ public interface UserService {
     Result<SysUserMoney> transterMoney(@RequestParam("userId") Long userId, @RequestParam("money") BigDecimal money,
                                        @RequestParam("remark") String remark, @RequestParam("transterType") Boolean transterType);
 
+    @GetMapping(value = "/sysTansterMoney/findList", params = "params")
+    PageResult2<SysTansterMoneyLogVo> findTransterMoneyList(@RequestParam("params") Map<String, Object> params);
 }
