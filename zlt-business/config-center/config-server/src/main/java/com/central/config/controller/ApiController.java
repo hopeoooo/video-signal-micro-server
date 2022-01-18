@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -39,6 +41,15 @@ public class ApiController {
     @Value("${zlt.app.version:1.0.0}")
     private String version;
 
+    @Value("${spring.cloud.nacos.discovery.namespace}")
+    private String nacosNameSpace;
+    @Value("${spring.cloud.nacos.server-addr}")
+    private String nacosIp;
+    @Value("${spring.datasource.url}")
+    private String mysqlIp;
+    @Value("${spring.redis.host}")
+    private String redisIp;
+
     @ApiOperation(value = "查询版本号")
     @GetMapping("/getVersion")
     public Result<String> getVersion() {
@@ -49,6 +60,16 @@ public class ApiController {
     @GetMapping("/push/{message}")
     public Result<String> push(@PathVariable(name = "message") String message) {
         return pushService.push(message);
+    }
+    @ApiOperation(value = "ip测试")
+    @GetMapping("/ipTest")
+    public Result ipTest() {
+        Map<String,Object> map=new HashMap<>();
+        map.put("nacosNameSpace",nacosNameSpace);
+        map.put("nacosIp",nacosIp);
+        map.put("mysqlIp",mysqlIp);
+        map.put("redisIp",redisIp);
+        return Result.succeed(map);
     }
 
     @ApiOperation("logo查询")
