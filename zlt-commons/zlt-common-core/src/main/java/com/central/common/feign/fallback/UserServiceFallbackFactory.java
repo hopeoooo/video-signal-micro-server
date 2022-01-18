@@ -4,6 +4,7 @@ import com.central.common.dto.LoginLogPageDto;
 import com.central.common.feign.UserService;
 import com.central.common.model.*;
 import com.central.common.vo.SysMoneyVO;
+import com.central.common.vo.SysTansterMoneyLogVo;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -123,6 +124,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) {
                 log.error("人工上下分:{}",userId,throwable);
                 return Result.failed("上线分错误");
+            }
+
+            @Override
+            public PageResult2<SysTansterMoneyLogVo> findTransterMoneyList(Map<String, Object> params) {
+                log.error("findTransterMoneyList查询会员账变异常:{}", params, throwable);
+                return new PageResult2();
             }
         };
     }
