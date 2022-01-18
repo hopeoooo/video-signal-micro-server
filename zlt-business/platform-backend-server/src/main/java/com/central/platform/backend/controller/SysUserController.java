@@ -2,8 +2,10 @@ package com.central.platform.backend.controller;
 
 import cn.hutool.json.JSONObject;
 import com.central.common.constant.CommonConstant;
+import com.central.common.constant.SecurityConstants;
 import com.central.common.constant.UserConstant;
 import com.central.common.model.*;
+import com.central.common.redis.template.RedisRepository;
 import com.central.config.feign.ConfigService;
 import com.central.log.annotation.AuditLog;
 import com.central.platform.backend.service.SysUserService;
@@ -31,6 +33,8 @@ public class SysUserController {
     private SysUserService sysUserService;
     @Resource
     private ConfigService configService;
+    @Autowired
+    private RedisRepository redisRepository;
 
 
     /**
@@ -51,7 +55,22 @@ public class SysUserController {
         return Result.succeed(sysUserList);
     }
 
-
+    /**
+     * 获取用户是否在线
+     */
+    @ApiOperation(value = "获取用户是否在线")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "会员账号", required = true, dataType = "String")
+    })
+    @GetMapping("/users/online")
+    public Result findOnlineUser(String username) {
+        if(StringUtils.isBlank(username)){
+            return Result.failed("参数必传");
+        }
+        String redisKey = SecurityConstants.REDIS_UNAME_TO_ACCESS+"online:"+username;
+        boolean exists = redisRepository.exists(redisKey);
+        return Result.succeed(exists);
+    }
 
     /**
      * 新增or更新 APP用户
