@@ -45,7 +45,7 @@ public class GoogleCodeController {
         if (loginAppUser == null || !loginAppUser.getType().equals("BACKEND")) {
             return Result.failed("用户名或密码错误");
         }
-        if (loginAppUser.getGaBind() == 1) {
+        if (loginAppUser.getGaBind() != null && loginAppUser.getGaBind() == 1) {
             return Result.failed("该账号已经绑定谷歌验证码");
         }
         if (StringUtils.isBlank(loginAppUser.getGaKey())) {
@@ -93,7 +93,7 @@ public class GoogleCodeController {
         Result result = userService.updateGaKey(param);
         if (result != null && result.getResp_code() == 0){
             String qrcode = GoogleAuthUtil.getQcode(username, secret);
-            return Result.succeed(qrcode);
+            return Result.succeed(qrcode,"");
         }
         return Result.failed("获取谷歌二维码失败");
     }
