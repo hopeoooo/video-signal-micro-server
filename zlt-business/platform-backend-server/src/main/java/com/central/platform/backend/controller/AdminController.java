@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -25,6 +26,9 @@ import java.util.Map;
 public class AdminController {
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 后台管理员查询
@@ -57,6 +61,11 @@ public class AdminController {
             return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
         }
         sysUser.setType(CommonConstant.USER_TYPE_BACKEND);
+        if(StringUtils.isBlank(sysUser.getPassword())){
+            sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
+        }else{
+            sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
+        }
         return sysUserService.saveOrUpdate(sysUser);
     }
 }
