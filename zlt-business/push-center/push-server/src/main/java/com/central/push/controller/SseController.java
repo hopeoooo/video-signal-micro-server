@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
  */
 @RestController
 @RequestMapping("/sse")
-@Api(tags = "消息推送")
+@Api(tags = "sse消息推送")
 public class SseController {
 
     @ApiOperation(value = "创建连接")
