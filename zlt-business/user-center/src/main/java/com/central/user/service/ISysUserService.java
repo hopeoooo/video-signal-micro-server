@@ -1,17 +1,12 @@
 package com.central.user.service;
 
+import com.central.common.model.*;
+import com.central.common.service.ISuperService;
+import com.central.user.model.SysUserExcel;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.central.common.service.ISuperService;
-import com.central.user.dto.SysUserPageDto;
-import com.central.user.model.SysUserExcel;
-import com.central.common.model.PageResult;
-import com.central.common.model.Result;
-import com.central.common.model.LoginAppUser;
-import com.central.common.model.SysRole;
-import com.central.common.model.SysUser;
 
 /**
  * @author zlt

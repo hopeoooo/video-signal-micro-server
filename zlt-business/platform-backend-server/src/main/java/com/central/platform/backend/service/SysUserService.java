@@ -8,15 +8,21 @@ import java.util.Map;
 
 public interface SysUserService {
 
-        Result saveOrUpdate(SysUser sysUser);
+    Result saveOrUpdate(SysUser sysUser);
 
-        PageResult2<SysUser> findSysUserList(Map<String, Object> params);
+    PageResult2<SysUser> findSysUserList(Map<String, Object> params);
 
-        Result delete(Long id);
+    Result delete(Long id);
 
-         Result updateEnabled(@RequestParam Map<String, Object> params) ;
+    Result updateEnabled(@RequestParam Map<String, Object> params) ;
 
-        Result resetPassword(Long id);
+    Result resetPassword(Long id);
 
     Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType);
+
+    LoginAppUser findByUsername(String username);
+
+    Result updateGaKey(Map<String, Object> params);
+
+    Result updateGaBind(Map<String, Object> params);
 }
