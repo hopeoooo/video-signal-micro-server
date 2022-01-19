@@ -1,9 +1,6 @@
 package com.central.oauth.config;
 
-import com.central.oauth.granter.MobilePwdGranter;
-import com.central.oauth.granter.OpenIdGranter;
-import com.central.oauth.granter.PwdGoogleGranter;
-import com.central.oauth.granter.PwdImgCodeGranter;
+import com.central.oauth.granter.*;
 import com.central.oauth.service.IValidateCodeService;
 import com.central.oauth.service.impl.CustomTokenServices;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
@@ -115,6 +112,8 @@ public class TokenGranterConfig {
             tokenGranters.add(new PwdImgCodeGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory, validateCodeService));
             // 添加openId模式
             tokenGranters.add(new OpenIdGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
+            // 添加guest游客授权模式
+            tokenGranters.add(new GuestGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
             // 添加手机号加密码授权模式
             tokenGranters.add(new MobilePwdGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
             // 添加密码+Google身份验证码
@@ -167,10 +166,10 @@ public class TokenGranterConfig {
     @ConditionalOnMissingBean
     protected DefaultTokenServices createDefaultTokenServices() {
         DefaultTokenServices tokenServices = new CustomTokenServices(isSingleLogin);
-        tokenServices.setTokenStore(tokenStore);
-        tokenServices.setSupportRefreshToken(true);
+        tokenServices.setTokenStore(tokenStore); // 存储令牌策略
+        tokenServices.setSupportRefreshToken(true); // 运行令牌自动刷新
         tokenServices.setReuseRefreshToken(reuseRefreshToken);
-        tokenServices.setClientDetailsService(clientDetailsService);
+        tokenServices.setClientDetailsService(clientDetailsService); // 客户端详情服务
         tokenServices.setTokenEnhancer(tokenEnhancer());
         addUserDetailsService(tokenServices);
         return tokenServices;

@@ -38,12 +38,6 @@ import java.util.Set;
 
 /**
  * OAuth2 授权服务器配置
- *
- * @author zlt
- * @date 2018/10/24
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
  */
 @Configuration
 @EnableAuthorizationServer
@@ -74,20 +68,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private TokenGranter tokenGranter;
 
     /**
-     * 配置身份认证器，配置认证方式，TokenStore，TokenGranter，OAuth2RequestFactory
-     * @param endpoints
-     */
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        endpoints.tokenStore(tokenStore)
-                .authenticationManager(authenticationManager)
-                //.userDetailsService(userDetailsServiceFactory.getService(SecurityConstants.DEF_ACCOUNT_TYPE))
-                .authorizationCodeServices(authorizationCodeServices)
-                .exceptionTranslator(webResponseExceptionTranslator)
-                .tokenGranter(tokenGranter);
-    }
-
-    /**
+     * 1. 配置客户端
      * 配置应用名称 应用id
      * 配置OAuth2的客户端相关信息
      * @param clients
@@ -100,16 +81,33 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     /**
+     * 2. 配置令牌服务
+     * 用来配置令牌(token)的访问端点和令牌服务(toknservices)。
+     * 配置身份认证器，配置认证方式，TokenStore，TokenGranter，OAuth2RequestFactory
+     * @param endpoints
+     */
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        endpoints.tokenStore(tokenStore)
+                .authenticationManager(authenticationManager)
+                //.userDetailsService(userDetailsServiceFactory.getService(SecurityConstants.DEF_ACCOUNT_TYPE))
+                .authorizationCodeServices(authorizationCodeServices)
+                .exceptionTranslator(webResponseExceptionTranslator)
+                .tokenGranter(tokenGranter); // 所有的授权全部交由自己来掌控，当标准的四种授权模式已经满足不了你的需求时，才会考虑使用这个。
+    }
+
+    /**
+     * 3. 用来配置令牌端点(Token Endpoint)的安全约束
      * 对应于配置AuthorizationServer安全认证的相关信息，创建ClientCredentialsTokenEndpointFilter核心过滤器
      * @param security
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
         security
-                .tokenKeyAccess("isAuthenticated()")
-                .checkTokenAccess("permitAll()")
+                .tokenKeyAccess("isAuthenticated()")    // isAuthenticated()是否已授权, 已授权的可以访问 oauth/token_key
+                .checkTokenAccess("permitAll()")        // permitAll()公开 都可以访问 oauth/check_token
                 //让/oauth/token支持client_id以及client_secret作登录认证
-                .allowFormAuthenticationForClients();
+                .allowFormAuthenticationForClients();  //表单认证，申请令牌
     }
 
     @Bean

@@ -28,8 +28,16 @@ public interface ZltUserDetailsService extends UserDetailsService {
     UserDetails loadUserByMobile(String mobile);
 
     /**
+     * 获取一个游客信息
+     */
+    UserDetails loadGuestUser();
+
+    /**
      * 根据用户id/openId查询用户
      * @param userId 用户id/openId
      */
     SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException;
+
+
+
 }

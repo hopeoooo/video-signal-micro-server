@@ -65,4 +65,19 @@ public class SysUserServiceImpl implements SysUserService {
     public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) {
         return  userService.transterMoney(userId, money, remark, transterType);
     }
+
+    @Override
+    public LoginAppUser findByUsername(String username) {
+        return userService.findByUsername(username);
+    }
+
+    @Override
+    public Result updateGaKey(Map<String, Object> params) {
+        return userService.updateGaKey(params);
+    }
+
+    @Override
+    public Result updateGaBind(Map<String, Object> params) {
+        return userService.updateGaBind(params);
+    }
 }
