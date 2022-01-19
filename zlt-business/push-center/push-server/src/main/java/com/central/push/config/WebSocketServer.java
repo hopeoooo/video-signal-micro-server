@@ -6,6 +6,7 @@ import com.central.common.model.PushResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -114,7 +115,12 @@ public class WebSocketServer {
     public static String sendOneMessage(String message, String userName) throws Exception {
         Session session = null;
         for (Session s : connectSession.values()) {
-            if (s.getQueryString().equals(userName)) {
+            Map<String, String> pathParameters = s.getPathParameters();
+            if (CollectionUtils.isEmpty(pathParameters) || StringUtils.isBlank(pathParameters.get("userName"))) {
+                continue;
+            }
+            String sName = pathParameters.get("userName");
+            if (sName.equals(userName)) {
                 session = s;
                 break;
             }
