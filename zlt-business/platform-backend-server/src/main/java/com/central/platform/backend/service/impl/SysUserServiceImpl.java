@@ -62,6 +62,11 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
+    public Result updateVerify(Long id) {
+        return userService.updateVerify(id);
+    }
+
+    @Override
     public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) {
         return  userService.transterMoney(userId, money, remark, transterType);
     }
