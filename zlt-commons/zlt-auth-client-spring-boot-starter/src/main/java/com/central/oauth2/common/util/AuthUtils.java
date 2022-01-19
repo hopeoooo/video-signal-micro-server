@@ -108,7 +108,7 @@ public class AuthUtils {
     }
 
     /**
-     * 获取登陆的帐户类型
+     * 获取登陆的帐户类型 account_type
      */
     public static String getAccountType(Authentication authentication) {
         String accountType = null;

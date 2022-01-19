@@ -2,23 +2,19 @@ package com.central.oauth.service.impl;
 
 import com.central.common.constant.SecurityConstants;
 import com.central.common.feign.UserService;
-import com.central.common.model.SysUser;
+import com.central.common.model.LoginAppUser;
 import com.central.common.redis.template.RedisRepository;
 import com.central.oauth.service.ITokensService;
 import com.central.oauth.service.ZltUserDetailsService;
 import com.central.oauth.utils.ConstantPlayer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.social.security.SocialUserDetails;
 import org.springframework.stereotype.Service;
 
-import com.central.common.model.LoginAppUser;
-
-import lombok.extern.slf4j.Slf4j;
-
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @author zlt
@@ -69,6 +65,12 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
     @Override
     public UserDetails loadUserByMobile(String mobile) {
         LoginAppUser loginAppUser = userService.findByMobile(mobile);
+        return checkUser(loginAppUser);
+    }
+
+    @Override
+    public UserDetails loadGuestUser() {
+        LoginAppUser loginAppUser = userService.findGuest();
         return checkUser(loginAppUser);
     }
 

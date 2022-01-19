@@ -1,6 +1,7 @@
 package com.central.oauth.granter;
 
-import com.central.oauth2.common.token.MobileAuthenticationToken;
+import com.central.oauth.service.impl.UserDetailServiceFactory;
+import com.central.oauth2.common.token.GuestUserAuthenticationToken;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -13,14 +14,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 手机号 + 密码 授权模式
+ * guest 游客授权模式
  */
-public class MobilePwdGranter extends AbstractTokenGranter {
-    private static final String GRANT_TYPE = "mobile_password";
+public class GuestGranter extends AbstractTokenGranter {
+    private static final String GRANT_TYPE = "guest";
 
     private final AuthenticationManager authenticationManager;
 
-    public MobilePwdGranter(AuthenticationManager authenticationManager, AuthorizationServerTokenServices tokenServices
+    private UserDetailServiceFactory userDetailsServiceFactory;
+
+    public GuestGranter(AuthenticationManager authenticationManager, AuthorizationServerTokenServices tokenServices
             , ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory) {
         super(tokenServices, clientDetailsService, requestFactory, GRANT_TYPE);
         this.authenticationManager = authenticationManager;
@@ -28,20 +31,18 @@ public class MobilePwdGranter extends AbstractTokenGranter {
 
     @Override
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
-        Map<String, String> parameters = new LinkedHashMap<>(tokenRequest.getRequestParameters());
-        String mobile = parameters.get("mobile");
-        String password = parameters.get("password");
-        // Protect from downstream leaks of password 防止下游密码泄露
-        parameters.remove("password");
 
-        Authentication userAuth = new MobileAuthenticationToken(mobile, password);
+        Map<String, String> parameters = new LinkedHashMap<>(tokenRequest.getRequestParameters());
+
+        Authentication userAuth = new GuestUserAuthenticationToken();
         ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
         userAuth = authenticationManager.authenticate(userAuth);
         if (userAuth == null || !userAuth.isAuthenticated()) {
-            throw new InvalidGrantException("Could not authenticate mobile: " + mobile);
+            throw new InvalidGrantException("Could not authenticate guest");
         }
 
         OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);
         return new OAuth2Authentication(storedOAuth2Request, userAuth);
+
     }
 }

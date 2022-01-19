@@ -1,9 +1,5 @@
 package com.central.user.service.impl;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,14 +7,15 @@ import com.central.common.constant.CommonConstant;
 import com.central.common.lock.DistributedLock;
 import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
-import com.central.user.dto.SysUserPageDto;
 import com.central.user.mapper.SysRoleMenuMapper;
+import com.central.user.mapper.SysUserMapper;
 import com.central.user.model.SysRoleUser;
 import com.central.user.model.SysUserExcel;
-import com.central.user.mapper.SysUserMapper;
 import com.central.user.service.ISysRoleUserService;
 import com.central.user.service.ISysUserMoneyService;
+import com.central.user.service.ISysUserService;
 import com.central.user.util.PasswordUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,11 +30,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.central.user.service.ISysUserService;
-
-import lombok.extern.slf4j.Slf4j;
-
 import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author 作者 owen E-mail: 624191343@qq.com
@@ -293,7 +288,7 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
     @Override
     public Result saveOrUpdateUser(SysUser sysUser) throws Exception {
         Boolean saveMark=false;
-        if (sysUser.getId() == null) {
+        if (sysUser.getId() == null) {  // 新增加用户
             saveMark=true;
             if (StringUtils.isBlank(sysUser.getType())) {
                 sysUser.setType(UserType.BACKEND.name());

@@ -39,7 +39,7 @@ public class DefaultResourceServerConf extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         resources.tokenStore(tokenStore)
-                .stateless(true)
+                .stateless(true) // 无状态模式
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .expressionHandler(expressionHandler)
                 .accessDeniedHandler(oAuth2AccessDeniedHandler);
