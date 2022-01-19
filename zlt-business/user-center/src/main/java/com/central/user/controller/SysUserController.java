@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +61,9 @@ public class SysUserController {
 
     @Autowired
     private IQueryService queryService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 当前登录用户 LoginAppUser
@@ -374,6 +378,38 @@ public class SysUserController {
         appUserService.update(updateWrapper);
         return isAutoBet == true ? Result.succeed("投注自动提交已开启") : Result.succeed("投注自动提交已关闭");
     }
+
+    @ApiOperation(value = "登录用户修改登录密码")
+    @GetMapping("/users/updateLoginPassword")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "oldLoginPassword", value = "原登录密码", required = true),
+            @ApiImplicitParam(name = "newLoginPassword", value = "新登录密码", required = true),
+            @ApiImplicitParam(name = "confirmLoginPassword", value = "确认登录密码", required = true)})
+    public Result updateIsAutoBet(@LoginUser SysUser user, @NotBlank(message = "oldLoginPassword不允许为空") String oldLoginPassword, @NotBlank(message = "newLoginPassword不允许为空") String newLoginPassword, @NotBlank(message = "confirmLoginPassword不允许为空") String confirmLoginPassword) {
+        if (oldLoginPassword.equals(newLoginPassword)) {
+            return Result.failed("两次输入密码不匹配，请仔细确认");
+        }
+        if (!newLoginPassword.equals(confirmLoginPassword)) {
+            return Result.failed("两次输入密码不匹配，请仔细确认");
+        }
+        if (!newLoginPassword.matches(RegexEnum.ACCOUNT.getRegex())) {
+            return Result.failed("密码" + RegexEnum.ACCOUNT.getDesc());
+        }
+        Long id = user.getId();
+        SysUser sysUser = appUserService.selectById(id);
+        if (!passwordEncoder.matches(oldLoginPassword, sysUser.getPassword())) {
+            return Result.failed("原登录密码填写错误");
+        }
+        cacheEvictUser(id);
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, id);
+        updateWrapper.set(SysUser::getPassword, passwordEncoder.encode(newLoginPassword));
+        appUserService.update(updateWrapper);
+        return Result.succeed();
+    }
+
+
+
     /**
      * 清除缓存
      */
