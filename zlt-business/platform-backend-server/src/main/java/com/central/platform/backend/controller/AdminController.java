@@ -61,11 +61,11 @@ public class AdminController {
             return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
         }
         sysUser.setType(CommonConstant.USER_TYPE_BACKEND);
-        if(StringUtils.isBlank(sysUser.getPassword())){
-            sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
-        }else{
-            sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
-        }
+//        if(StringUtils.isBlank(sysUser.getPassword())){
+//            sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
+//        }else{
+//            sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
+//        }
         return sysUserService.saveOrUpdate(sysUser);
     }
 }
