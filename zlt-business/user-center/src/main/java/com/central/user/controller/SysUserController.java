@@ -1,19 +1,36 @@
 package com.central.user.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
 import com.central.common.model.*;
 import com.central.common.utils.ExcelUtil;
+//import com.central.log.annotation.AuditLog;
 import com.central.log.annotation.AuditLog;
 import com.central.search.client.service.IQueryService;
 import com.central.search.model.LogicDelDto;
 import com.central.search.model.SearchDto;
+import com.central.user.dto.SysUserPageDto;
 import com.central.user.model.SysUserExcel;
 import com.central.user.service.ISysUserService;
 import com.central.user.vo.UserInfoVo;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import com.central.user.service.ISysUserService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -55,6 +72,9 @@ public class SysUserController {
 
     @Autowired
     private IQueryService queryService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 当前登录用户 LoginAppUser
@@ -247,6 +267,24 @@ public class SysUserController {
     }
 
     /**
+     * 谷歌验证码是否校验状态修改
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "谷歌验证码是否校验状态修改")
+    @PutMapping("/users/{id}/updateVerify")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
+    })
+    public Result updateVerify(@PathVariable Long id) {
+        if (checkAdmin(id)) {
+            return Result.failed(ADMIN_CHANGE_MSG);
+        }
+        cacheEvictUser(id);
+        return appUserService.updateVerify(id);
+    }
+    /**
      * 管理后台，给用户重置密码
      *
      * @param id
@@ -386,6 +424,38 @@ public class SysUserController {
         appUserService.update(updateWrapper);
         return isAutoBet == true ? Result.succeed("投注自动提交已开启") : Result.succeed("投注自动提交已关闭");
     }
+
+    @ApiOperation(value = "登录用户修改登录密码")
+    @GetMapping("/users/updateLoginPassword")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "oldLoginPassword", value = "原登录密码", required = true),
+            @ApiImplicitParam(name = "newLoginPassword", value = "新登录密码", required = true),
+            @ApiImplicitParam(name = "confirmLoginPassword", value = "确认登录密码", required = true)})
+    public Result updateIsAutoBet(@LoginUser SysUser user, @NotBlank(message = "oldLoginPassword不允许为空") String oldLoginPassword, @NotBlank(message = "newLoginPassword不允许为空") String newLoginPassword, @NotBlank(message = "confirmLoginPassword不允许为空") String confirmLoginPassword) {
+        if (oldLoginPassword.equals(newLoginPassword)) {
+            return Result.failed("两次输入密码不匹配，请仔细确认");
+        }
+        if (!newLoginPassword.equals(confirmLoginPassword)) {
+            return Result.failed("两次输入密码不匹配，请仔细确认");
+        }
+        if (!newLoginPassword.matches(RegexEnum.ACCOUNT.getRegex())) {
+            return Result.failed("密码" + RegexEnum.ACCOUNT.getDesc());
+        }
+        Long id = user.getId();
+        SysUser sysUser = appUserService.selectById(id);
+        if (!passwordEncoder.matches(oldLoginPassword, sysUser.getPassword())) {
+            return Result.failed("原登录密码填写错误");
+        }
+        cacheEvictUser(id);
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, id);
+        updateWrapper.set(SysUser::getPassword, passwordEncoder.encode(newLoginPassword));
+        appUserService.update(updateWrapper);
+        return Result.succeed();
+    }
+
+
+
     /**
      * 清除缓存
      */
