@@ -89,6 +89,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
+            public  Result updateVerify(Long id) {
+                log.error("updateVerify修改Verify:{}", id, throwable);
+                return Result.failed("修改Verify失败");
+            }
+
+            @Override
             public Result updateEnabled(Map<String, Object> params) {
                 log.error("updateEnabled修改状态异常:{}", params, throwable);
                 return Result.failed("修改状态失败");

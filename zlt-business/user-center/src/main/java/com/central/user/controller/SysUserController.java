@@ -1,15 +1,23 @@
 package com.central.user.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
 import com.central.common.model.*;
 import com.central.common.utils.ExcelUtil;
+//import com.central.log.annotation.AuditLog;
 import com.central.log.annotation.AuditLog;
 import com.central.search.client.service.IQueryService;
 import com.central.search.model.LogicDelDto;
 import com.central.search.model.SearchDto;
+import com.central.user.dto.SysUserPageDto;
 import com.central.user.model.SysUserExcel;
 import com.central.user.service.ISysUserService;
 import com.central.user.vo.UserInfoVo;
@@ -258,6 +266,24 @@ public class SysUserController {
         return appUserService.updateGaBind(params);
     }
 
+    /**
+     * 谷歌验证码是否校验状态修改
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "谷歌验证码是否校验状态修改")
+    @PutMapping("/users/{id}/updateVerify")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
+    })
+    public Result updateVerify(@PathVariable Long id) {
+        if (checkAdmin(id)) {
+            return Result.failed(ADMIN_CHANGE_MSG);
+        }
+        cacheEvictUser(id);
+        return appUserService.updateVerify(id);
+    }
     /**
      * 管理后台，给用户重置密码
      *
