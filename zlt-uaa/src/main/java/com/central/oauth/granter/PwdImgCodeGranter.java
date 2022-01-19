@@ -13,6 +13,7 @@ import java.util.Map;
 
 /**
  * password + 图像验证码 授权模式
+ * 资源所有者密码令牌授予者
  */
 @Slf4j
 public class PwdImgCodeGranter extends ResourceOwnerPasswordTokenGranter {

@@ -5,15 +5,13 @@ import com.central.common.feign.UserService;
 import com.central.common.model.*;
 import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
-import org.springframework.cloud.openfeign.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.cloud.openfeign.FallbackFactory;
 
 import java.math.BigDecimal;
-import java.util.Map;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * userService降级工场
@@ -35,6 +33,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             @Override
             public LoginAppUser findByUsername(String username) {
                 log.error("通过用户名查询用户异常:{}", username, throwable);
+                return new LoginAppUser();
+            }
+
+            @Override
+            public LoginAppUser findGuest(){
+                log.error("通过游客用户异常:{}", throwable.getMessage());
                 return new LoginAppUser();
             }
 

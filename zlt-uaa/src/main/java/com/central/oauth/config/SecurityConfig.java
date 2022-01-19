@@ -4,6 +4,7 @@ import com.central.common.config.DefaultPasswordConfig;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.properties.TenantProperties;
 import com.central.oauth.filter.LoginProcessSetTenantFilter;
+import com.central.oauth.mobile.GuestAuthenticationSecurityConfig;
 import com.central.oauth.mobile.MobileAuthenticationSecurityConfig;
 import com.central.oauth.openid.OpenIdAuthenticationSecurityConfig;
 import com.central.oauth.password.PasswordAuthenticationProvider;
@@ -66,6 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private MobileAuthenticationSecurityConfig mobileAuthenticationSecurityConfig;
 
 	@Autowired
+	private GuestAuthenticationSecurityConfig guestAuthenticationSecurityConfig;
+
+	@Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
@@ -113,10 +117,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.logoutSuccessHandler(logoutSuccessHandler)
 					.addLogoutHandler(logoutHandler)
 					.clearAuthentication(true)
-					.and()
-                .apply(openIdAuthenticationSecurityConfig)
-                    .and()
-				.apply(mobileAuthenticationSecurityConfig)
+					.and().apply(openIdAuthenticationSecurityConfig)
+					.and().apply(mobileAuthenticationSecurityConfig)
+					.and().apply(guestAuthenticationSecurityConfig)
 					.and()
 				.addFilterBefore(new LoginProcessSetTenantFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
