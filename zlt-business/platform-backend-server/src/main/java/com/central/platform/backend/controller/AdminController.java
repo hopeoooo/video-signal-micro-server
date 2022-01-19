@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -61,11 +62,32 @@ public class AdminController {
             return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
         }
         sysUser.setType(CommonConstant.USER_TYPE_BACKEND);
-//        if(StringUtils.isBlank(sysUser.getPassword())){
-//            sysUser.setPassword(passwordEncoder.encode(CommonConstant.DEF_USER_PASSWORD));
-//        }else{
-//            sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
-//        }
         return sysUserService.saveOrUpdate(sysUser);
+    }
+
+    /**
+     * 重置密码
+     */
+    @ApiOperation(value = "重置密码")
+    @PutMapping(value = "/users/{id}/password")
+    public Result resetPasswords(@PathVariable Long id) {
+        return sysUserService.resetPassword(id);
+    }
+
+
+    /**
+     * 重置谷歌验证码
+     */
+    @ApiOperation(value = "重置谷歌验证码")
+    @PutMapping(value = "/users/{id}/resetGoogleCode")
+    public Result resetGoogleCode(@PathVariable Long id) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("id",id);
+        param.put("gaBind",2);
+        Result result = sysUserService.updateGaBind(param);
+        if (result != null && result.getResp_code() == 0){
+            return Result.succeed();
+        }
+        return Result.failed("重置失败");
     }
 }
