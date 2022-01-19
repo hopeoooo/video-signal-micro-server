@@ -18,6 +18,8 @@ public interface SysUserService {
 
     Result resetPassword(Long id);
 
+    Result updateVerify(Long id);
+
     Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType);
 
     LoginAppUser findByUsername(String username);

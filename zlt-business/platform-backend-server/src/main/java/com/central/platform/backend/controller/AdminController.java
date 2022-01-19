@@ -66,6 +66,15 @@ public class AdminController {
     }
 
     /**
+     * 谷歌验证码是否校验状态修改
+     */
+    @ApiOperation(value = "谷歌验证码是否校验状态修改")
+    @PutMapping(value = "/users/{id}/updateVerify")
+    public Result updateVerify(@PathVariable Long id) {
+        return sysUserService.updateVerify(id);
+    }
+
+    /**
      * 重置密码
      */
     @ApiOperation(value = "重置密码")
@@ -73,7 +82,6 @@ public class AdminController {
     public Result resetPasswords(@PathVariable Long id) {
         return sysUserService.resetPassword(id);
     }
-
 
     /**
      * 重置谷歌验证码
