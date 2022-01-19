@@ -10,3 +10,6 @@ where client_id = 'app';
 ALTER TABLE `user-center`.`sys_user`
 ADD COLUMN `ga_bind` tinyint(1) NULL COMMENT '谷歌验证码是否绑定1 1：已绑定，其他：未绑定' AFTER `is_auto_bet`,
 ADD COLUMN `ga_key` varchar(255) NULL COMMENT '谷歌验证码KEY' AFTER `ga_bind`;
+
+ALTER TABLE `user-center`.`sys_user`
+ADD COLUMN `verify` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否验证 1：是，其他：否' AFTER `ga_key`;

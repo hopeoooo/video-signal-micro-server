@@ -65,6 +65,8 @@ public class SysUser extends SuperEntity {
 	@ApiModelProperty(value = "谷歌验证码是否绑定1 1：已绑定，其他：未绑定")
 	private Integer gaBind;
 
+	@ApiModelProperty(value = "是否验证 1：是，其他：否")
+	private Integer verify;
 
 	@TableField(exist = false)
 	private List<SysRole> roles;

@@ -120,11 +120,7 @@ public class ValidateCodeServiceImpl implements IValidateCodeService {
 
     @Override
     public void validateGoogleCode(String googleCode,String username) {
-        if (StrUtil.isBlank(googleCode)) {
-            throw new ValidateCodeException("请在请求参数中携带googleCode参数");
-        }
         try {
-            Integer code = Integer.parseInt(googleCode);
             if (StrUtil.isBlank(username)) {
                 throw new ValidateCodeException("请在请求参数中携带username参数");
             }
@@ -133,13 +129,19 @@ public class ValidateCodeServiceImpl implements IValidateCodeService {
             if (loginAppUser == null || !loginAppUser.getType().equals("BACKEND")) {
                 throw new InternalAuthenticationServiceException("用户名或密码错误");
             }
-            String secret = loginAppUser.getGaKey();
-            if (StrUtil.isBlank(secret) || loginAppUser.getGaBind() == null || loginAppUser.getGaBind() != 1) {
-                throw new ValidateCodeException("请先绑定谷歌身份验证器");
-            }
-            boolean checkCode = GoogleAuthUtil.check_code(secret, code);
-            if (!checkCode) {
-                throw new ValidateCodeException("谷歌身份验证失败");
+            if (loginAppUser.getVerify() != null && loginAppUser.getVerify() == 1){
+                if (StrUtil.isBlank(googleCode)) {
+                    throw new ValidateCodeException("请在请求参数中携带googleCode参数");
+                }
+                Integer code = Integer.parseInt(googleCode);
+                String secret = loginAppUser.getGaKey();
+                if (StrUtil.isBlank(secret) || loginAppUser.getGaBind() == null || loginAppUser.getGaBind() != 1) {
+                    throw new ValidateCodeException("请先绑定谷歌身份验证器");
+                }
+                boolean checkCode = GoogleAuthUtil.check_code(secret, code);
+                if (!checkCode) {
+                    throw new ValidateCodeException("谷歌身份验证失败");
+                }
             }
         }catch (Exception ex){
             throw new ValidateCodeException("谷歌身份验证失败");
