@@ -4,6 +4,7 @@ import com.central.common.feign.UserService;
 import com.central.common.model.LoginAppUser;
 import com.central.common.model.Result;
 import com.central.common.utils.GoogleAuthUtil;
+import com.central.common.utils.PwdEncoderUtil;
 import com.central.platform.backend.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -84,9 +85,14 @@ public class GoogleCodeController {
         if (loginAppUser.getGaBind() != null && loginAppUser.getGaBind() == 1) {
             return Result.failed("该账号已经绑定谷歌验证码");
         }
-        if (!passwordEncoder.matches(password, loginAppUser.getPassword())) {
+        PasswordEncoder encoder = PwdEncoderUtil.getDelegatingPasswordEncoder("bcrypt");
+        Boolean match = encoder.matches(password,loginAppUser.getPassword());
+        if (!match){
             return Result.failed("用户名或密码错误");
         }
+//        if (!passwordEncoder.matches(password, loginAppUser.getPassword())) {
+//            return Result.failed("用户名或密码错误");
+//        }
         String secret = GoogleAuthUtil.generateSecretKey();
         Map<String, Object> param = new HashMap<>();
         param.put("id",loginAppUser.getId());
