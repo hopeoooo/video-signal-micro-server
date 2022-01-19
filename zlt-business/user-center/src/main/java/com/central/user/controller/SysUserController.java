@@ -19,6 +19,7 @@ import com.central.search.model.LogicDelDto;
 import com.central.search.model.SearchDto;
 import com.central.user.dto.SysUserPageDto;
 import com.central.user.model.SysUserExcel;
+import com.central.user.service.ISysUserService;
 import com.central.user.vo.UserInfoVo;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.collections4.MapUtils;
@@ -35,10 +36,20 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author 作者 owen E-mail: 624191343@qq.com
@@ -92,6 +103,23 @@ public class SysUserController {
     @ApiOperation(value = "根据用户名查询用户")
     public LoginAppUser findByUsername(String username) {
         return appUserService.findByUsername(username);
+    }
+
+    /**
+     * 查询一个游客用户登录对象LoginAppUser
+     */
+    @GetMapping(value = "/users-anon/findGuest")
+    public LoginAppUser findGuest(){
+        // TODO 随机获取一个游客用户
+//        List<SysUser> playList = this.queryPlayerList();
+//        for (SysUser sysUser:playList) {
+//            if(!tokensService.exist(sysUser.getUsername(),"webApp")){
+//                return sysUser.getUsername();
+//            }
+//        }
+//        throw new InternalAuthenticationServiceException("游客已满");
+
+        return appUserService.findByUsername("play21");
     }
 
     /**

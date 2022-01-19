@@ -39,6 +39,14 @@ public interface UserService {
     LoginAppUser findByUsername(@RequestParam("username") String username);
 
     /**
+     * feign rpc访问远程/users-anon/login1接口
+     *
+     * @return
+     */
+    @GetMapping(value = "/users-anon/findGuest")
+    LoginAppUser findGuest();
+
+    /**
      * 通过手机号查询用户、角色信息
      *
      * @param mobile 手机号
