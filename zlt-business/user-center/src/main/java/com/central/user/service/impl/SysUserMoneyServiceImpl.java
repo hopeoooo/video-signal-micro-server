@@ -100,6 +100,15 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         log.info("用户金额userId:{},推送结果:{}", userId, push);
     }
 
+    @Override
+    @CachePut(key="#p0.userId")
+    public SysUserMoney receiveWashCode(SysUserMoney userMoney) {
+        userMoney.setMoney(userMoney.getMoney().add(userMoney.getWashCode()));
+        userMoney.setWashCode(BigDecimal.ZERO);
+        baseMapper.updateById(userMoney);
+        return userMoney;
+    }
+
     private SysTansterMoneyLog getSysTansterMoneyLog(BigDecimal beforeMoery, BigDecimal money, SysUser sysUser,
                                                      String remark, Boolean transterType, BigDecimal afterMoney) {
         SysTansterMoneyLog sysTansterMoneyLog = new SysTansterMoneyLog();

@@ -1,24 +1,27 @@
 package com.central.user.controller;
 
+import cn.hutool.core.date.DateUtil;
 import com.central.common.annotation.LoginUser;
-import com.central.common.constant.CommonConstant;
 import com.central.common.constant.UserConstant;
-import com.central.common.model.Result;
-import com.central.common.model.SysUser;
-import com.central.common.model.SysUserMoney;
+import com.central.common.model.*;
+import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
 import com.central.user.util.RedissLockUtil;
 import com.central.common.vo.SysMoneyVO;
+import com.central.user.vo.SysUserMoneyVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 用户钱包表
@@ -36,15 +39,19 @@ public class SysUserMoneyController {
 
     @Autowired
     private ISysUserService iSysUserService;
+    @Autowired
+    private ISysTansterMoneyLogService iSysTansterMoneyLogService;
 
     @ApiOperation(value = "查询当前登录用户的钱包")
     @GetMapping("/getMoney")
-    public Result<SysUserMoney> getMoney(@LoginUser SysUser user) {
+    public Result<SysUserMoneyVo> getMoney(@LoginUser SysUser user) {
         SysUserMoney sysUserMoney = userMoneyService.findByUserId(user.getId());
         if (sysUserMoney == null) {
             sysUserMoney = new SysUserMoney();
         }
-        return Result.succeed(sysUserMoney);
+        SysUserMoneyVo vo = new SysUserMoneyVo();
+        BeanUtils.copyProperties(sysUserMoney, vo);
+        return Result.succeed(vo);
     }
 
     @ApiOperation(value = "设置玩家金额")
@@ -110,4 +117,44 @@ public class SysUserMoneyController {
     }
 
 
+    @ApiOperation("登录用户领取洗码")
+    @GetMapping("/receiveWashCode")
+    public Result<String> receiveWashCode(@LoginUser SysUser user) {
+        //获取登陆用户
+        Long userId = user.getId();
+        String moneyKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK + userId;
+        boolean moneyLock = RedissLockUtil.tryLock(moneyKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
+        String washCodeKey = UserConstant.redisKey.SYS_USER_MONEY_WASH_CODE_LOCK + userId;
+        boolean washCodeLock = RedissLockUtil.tryLock(washCodeKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
+        if (!moneyLock || !washCodeLock) {
+            return Result.failed("领取失败");
+        }
+        try {
+            SysUserMoney userMoney = userMoneyService.findByUserId(userId);
+            BigDecimal washCode = BigDecimal.ZERO;
+            if (userMoney != null && userMoney.getWashCode() != null) {
+                washCode = userMoney.getWashCode();
+            }
+            if (washCode.compareTo(BigDecimal.ONE) == -1) {
+                return Result.failed("金额小于1,不能领取");
+            }
+            BigDecimal money = userMoney.getMoney();
+            userMoneyService.receiveWashCode(userMoney);
+            userMoneyService.syncPushMoneyToWebApp(userId);
+            //记录账变
+            SysTansterMoneyLog sysTansterMoneyLog = new SysTansterMoneyLog();
+            sysTansterMoneyLog.setUserId(userId);
+            sysTansterMoneyLog.setUserName(user.getUsername());
+            sysTansterMoneyLog.setMoney(washCode);
+            sysTansterMoneyLog.setBeforeMoney(money);
+            sysTansterMoneyLog.setAfterMoney(money.add(washCode));
+            sysTansterMoneyLog.setOrderType(CapitalEnum.WASH_CODE.getType());
+            sysTansterMoneyLog.setOrderNo("XM" + DateUtil.format(new Date(), "yyyyMMddHHmmssSSS"));
+            iSysTansterMoneyLogService.syncSave(sysTansterMoneyLog);
+            return Result.succeed("成功领取金额" + washCode.stripTrailingZeros().toPlainString());
+        } finally {
+            RedissLockUtil.unlock(moneyKey);
+            RedissLockUtil.unlock(washCodeKey);
+        }
+    }
 }

@@ -10,4 +10,9 @@ import java.util.Map;
 
 public interface ISysTansterMoneyLogService extends ISuperService<SysTansterMoneyLog> {
     PageResult<SysTansterMoneyLogVo> findSysTansterMoneyList(Map<String, Object> params);
+    /**
+     * 异步保存账变记录
+     * @param sysTansterMoneyLog
+     */
+    void syncSave(SysTansterMoneyLog sysTansterMoneyLog);
 }
