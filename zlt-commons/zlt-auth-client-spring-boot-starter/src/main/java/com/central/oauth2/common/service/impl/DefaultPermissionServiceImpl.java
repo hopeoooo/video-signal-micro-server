@@ -49,6 +49,25 @@ public abstract class DefaultPermissionServiceImpl {
         if (HttpMethod.OPTIONS.name().equalsIgnoreCase(requestMethod)) {
             return true;
         }
+
+        /*
+         * TODO ：资源服访问权限处理
+         * 判断是前端用户还是后端用户  /platform-backend 与 requestURI
+         * 备注，临时处理
+         */
+        String userType = AuthUtils.getUserType(authentication);
+        if ( requestURI.startsWith("/platform-backend/") ) {
+            // 不是后台用户不能访问
+            if (!userType.equals(CommonConstant.USER_TYPE_BACKEND)) {
+                return false;
+            }
+        } else {
+            // 后台用户不能访问
+            if ( userType.equals(CommonConstant.USER_TYPE_BACKEND) ){
+                return false;
+            }
+        }
+
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             //判断是否开启url权限验证
             if (!securityProperties.getAuth().getUrlPermission().getEnable()) {

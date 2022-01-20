@@ -2,18 +2,19 @@ package com.central.oauth.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.central.common.constant.CommonConstant;
+import com.central.common.constant.SecurityConstants;
 import com.central.common.feign.UserService;
 import com.central.common.model.LoginAppUser;
-import com.central.common.redis.template.RedisRepository;
-import com.central.common.constant.SecurityConstants;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
-import com.central.oauth.exception.ValidateCodeException;
-import com.central.oauth.service.IValidateCodeService;
+import com.central.common.redis.template.RedisRepository;
 import com.central.common.utils.GoogleAuthUtil;
+import com.central.oauth.exception.CustomOAuth2Exception;
+import com.central.oauth.modle.CodeErrorAuthEnum;
+import com.central.oauth.service.IValidateCodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -100,51 +101,57 @@ public class ValidateCodeServiceImpl implements IValidateCodeService {
     @Override
     public void validate(String deviceId, String validCode) {
         if (StrUtil.isBlank(deviceId)) {
-            throw new ValidateCodeException("请在请求参数中携带deviceId参数");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_DEVICE_ID.getCode(), "请在请求参数中携带deviceId参数");
         }
         String code = this.getCode(deviceId);
         if (StrUtil.isBlank(validCode)) {
-            throw new ValidateCodeException("请填写验证码");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_EMPTY_VALIDATE_CODE.getCode(), "请填写验证码");
         }
 
         if (code == null) {
-            throw new ValidateCodeException("验证码不存在或已过期");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_VALIDATE_CODE.getCode(), "验证码不存在或已过期");
         }
 
         if (!StrUtil.equals(code, validCode.toLowerCase())) {
-            throw new ValidateCodeException("验证码不正确");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_VALIDATE_CODE_ERR.getCode(), "验证码不正确");
         }
 
         this.remove(deviceId);
     }
 
     @Override
-    public void validateGoogleCode(String googleCode,String username) {
+    public void validateGoogleCode(String googleCode, String username) {
+
         try {
             if (StrUtil.isBlank(username)) {
-                throw new ValidateCodeException("请在请求参数中携带username参数");
+                throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_NO_PARAMS_USERNAME.getCode(), "请在请求参数中携带username参数");
             }
-            // TODO 验证google验证码
             LoginAppUser loginAppUser = userService.findByUsername(username);
-            if (loginAppUser == null || !loginAppUser.getType().equals("BACKEND")) {
-                throw new InternalAuthenticationServiceException("用户名或密码错误");
+            // TODO 通过类型来判断用户的处理方式是错误的
+            if (loginAppUser == null || !loginAppUser.getType().equals(CommonConstant.USER_TYPE_BACKEND)) {
+                throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USERNAME_PASSWORD.getCode(), "用户名或密码错误");
             }
+
             if (loginAppUser.getVerify() != null && loginAppUser.getVerify() == 1){
+
                 if (StrUtil.isBlank(googleCode)) {
-                    throw new ValidateCodeException("请在请求参数中携带googleCode参数");
+                    throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_GOOGLE_CODE.getCode(), "请在请求参数中携带googleCode参数");
                 }
+
                 Integer code = Integer.parseInt(googleCode);
                 String secret = loginAppUser.getGaKey();
+
+                // TODO 定义全局常量
                 if (StrUtil.isBlank(secret) || loginAppUser.getGaBind() == null || loginAppUser.getGaBind() != 1) {
-                    throw new ValidateCodeException("请先绑定谷歌身份验证器");
+                    throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_GOOGLE_CODE_BIND.getCode(), "请先绑定谷歌身份验证器");
                 }
                 boolean checkCode = GoogleAuthUtil.check_code(secret, code);
                 if (!checkCode) {
-                    throw new ValidateCodeException("谷歌身份验证失败");
+                    throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_GOOGLE_CODE_VALI.getCode(), "谷歌身份验证失败");
                 }
             }
         }catch (Exception ex){
-            throw new ValidateCodeException("谷歌身份验证失败");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_GOOGLE_CODE_VALI.getCode(), "谷歌身份验证失败");
         }
     }
 

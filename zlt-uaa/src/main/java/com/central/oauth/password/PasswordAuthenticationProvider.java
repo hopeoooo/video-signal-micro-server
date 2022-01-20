@@ -1,13 +1,14 @@
 package com.central.oauth.password;
 
 import com.alibaba.fastjson.JSON;
+import com.central.oauth.exception.CustomOAuth2Exception;
+import com.central.oauth.modle.CodeErrorAuthEnum;
 import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth.utils.IpUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -69,34 +70,31 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
     protected void additionalAuthenticationChecks(UserDetails userDetails,
                                                   UsernamePasswordAuthenticationToken authentication)
             throws AuthenticationException {
-        if (authentication.getCredentials() == null) {
-            logger.debug("Authentication failed: no credentials provided");
 
-            throw new BadCredentialsException(messages.getMessage(
-                    "AbstractUserDetailsAuthenticationProvider.badCredentials",
-                    "Bad credentials"));
+        if (authentication.getCredentials() == null) {
+            logger.error("Authentication failed: no credentials provided");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USERNAME_PASSWORD.getCode(), "用户名或密码错误");
         }
+
         String presentedPassword = authentication.getCredentials().toString();
 
-        if(!isPlayer(authentication)){
-            if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
-                logger.debug("Authentication failed: password does not match stored value");
+        if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
+            logger.error("Authentication failed: password does not match stored value");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USERNAME_PASSWORD.getCode(), "用户名或密码错误");
+        }
 
-                throw new BadCredentialsException(messages.getMessage(
-                        "AbstractUserDetailsAuthenticationProvider.badCredentials",
-                        "Bad credentials"));
-            }
-        }else{
+        // TODO 移到其它地方
+        if(isPlayer(authentication)){
             //给游客初始化金额
             processLoginInfoService.initAmount(userDetails);
         }
-
         log.info("++++++++++  userDetails {}",userDetails);
         String logInIp = getLoginIp();
         log.info("+++++++ logInIp is {}",logInIp);
         processLoginInfoService.processLoginInfo(userDetails,getLoginIp());
     }
 
+    // TODO 移到其它地方
     public  String getLoginIp(){
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
@@ -104,7 +102,7 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
         return IpUtil.getIpAddr(request);
     }
 
-
+    // TODO 移到其它地方
     private Boolean isPlayer(UsernamePasswordAuthenticationToken authentication){
         // Details={account_type=admin, grant_type=password_code, deviceId=C5ACEFA0-13A1-423A-BC05-58D708C3D218, username=test, player=player}
         log.info("{}",authentication.getDetails());
@@ -121,14 +119,12 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
     }
 
     @Override
-    protected final UserDetails retrieveUser(String username,
-                                             UsernamePasswordAuthenticationToken authentication)
-            throws AuthenticationException {
+    protected final UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)  throws AuthenticationException {
         prepareTimingAttackProtection();
         try {
             UserDetails loadedUser = userDetailsServiceFactory.getService(authentication).loadUserByUsername(username);
             if (loadedUser == null) {
-                throw new InternalAuthenticationServiceException("UserDetailsService returned null, which is an interface contract violation");
+                throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USER_EMPTY.getCode(), "获取用户信息失败");
             }
             return loadedUser;
         }
@@ -140,7 +136,8 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
             throw ex;
         }
         catch (Exception ex) {
-            throw new InternalAuthenticationServiceException(ex.getMessage(), ex);
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH.getCode(), ex.getMessage());
+//            throw new InternalAuthenticationServiceException(ex.getMessage(), ex);
         }
     }
 

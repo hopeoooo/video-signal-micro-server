@@ -178,8 +178,9 @@ public interface SecurityConstants {
 
     /**
      * 默认账号类型
+     * 当app用户和后台用户在同一表时, 默认账户类型为"sys_user"
      */
-    String DEF_ACCOUNT_TYPE = "admin";
+    String DEF_ACCOUNT_TYPE = "sys_user";
 
     /**
      * 账号类型参数名

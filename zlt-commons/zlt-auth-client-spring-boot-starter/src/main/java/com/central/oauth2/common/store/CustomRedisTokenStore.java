@@ -261,6 +261,7 @@ public class CustomRedisTokenStore implements TokenStore {
     private String getOnlineKey(OAuth2Authentication authentication){
         log.info("+++++++ authentication is {}",authentication);
         String returnKey = "";
+        // TODO 处理 "APP_GUEST"
         SysUser sysUser = (SysUser) authentication.getPrincipal();
         if(sysUser.getType().equals("APP_GUEST"))
             returnKey= SecurityConstants.REDIS_UNAME_TO_ACCESS+"APP_GUEST:"+sysUser.getUsername();
@@ -283,7 +284,7 @@ public class CustomRedisTokenStore implements TokenStore {
         byte[] authToAccessKey = serializeKey(AUTH_TO_ACCESS + authenticationKeyGenerator.extractKey(authentication));
         byte[] approvalKey = serializeKey(SecurityConstants.REDIS_UNAME_TO_ACCESS + getApprovalKey(authentication));
         byte[] clientId = serializeKey(SecurityConstants.REDIS_CLIENT_ID_TO_ACCESS + authentication.getOAuth2Request().getClientId());
-        byte[] onlineKey = serializeKey(getOnlineKey(authentication));
+        byte[] onlineKey = serializeKey(getOnlineKey(authentication));  // TODO 重新处理在线玩家
 
         RedisConnection conn = getConnection();
         try {

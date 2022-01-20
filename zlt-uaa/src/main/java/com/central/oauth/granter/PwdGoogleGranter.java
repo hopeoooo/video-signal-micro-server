@@ -30,7 +30,6 @@ public class PwdGoogleGranter extends ResourceOwnerPasswordTokenGranter {
         String username = parameters.get("username");
         //校验图形验证码
         validateCodeService.validateGoogleCode(googleCode,username);
-
         return super.getOAuth2Authentication(client, tokenRequest);
     }
 }

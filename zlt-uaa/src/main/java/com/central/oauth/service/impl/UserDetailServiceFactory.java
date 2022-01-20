@@ -3,10 +3,11 @@ package com.central.oauth.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.constant.SecurityConstants;
+import com.central.oauth.exception.CustomOAuth2Exception;
+import com.central.oauth.modle.CodeErrorAuthEnum;
 import com.central.oauth.service.ZltUserDetailsService;
 import com.central.oauth2.common.util.AuthUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,6 @@ public class UserDetailServiceFactory {
                 }
             }
         }
-        throw new InternalAuthenticationServiceException(StrUtil.format(ERROR_MSG, accountType));
+        throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_ACCOUNT_TYPE.getCode(), StrUtil.format(ERROR_MSG, accountType));
     }
 }
