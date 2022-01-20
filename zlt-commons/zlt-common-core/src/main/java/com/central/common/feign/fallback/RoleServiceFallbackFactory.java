@@ -5,6 +5,7 @@ import com.central.common.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -17,6 +18,12 @@ public class RoleServiceFallbackFactory implements FallbackFactory<RoleService> 
             public PageResult<SysRole> findRoles(Map<String, Object> params) {
                 log.error("findRoles查询角色异常:{}", params, throwable);
                 return new PageResult();
+            }
+
+            @Override
+            public Result<List<SysRole>> findAll() {
+                log.error("findAll查询角色异常",  throwable);
+                return Result.failed("查询角色失败");
             }
 
             @Override

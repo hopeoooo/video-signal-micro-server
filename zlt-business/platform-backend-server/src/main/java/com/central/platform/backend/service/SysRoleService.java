@@ -6,6 +6,7 @@ import com.central.common.model.SysRole;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SysRoleService {
@@ -20,4 +21,6 @@ public interface SysRoleService {
 
 
     Result deleteRole(@PathVariable("id")  Long id) ;
+
+    Result<List<SysRole>> findAll() ;
 }
