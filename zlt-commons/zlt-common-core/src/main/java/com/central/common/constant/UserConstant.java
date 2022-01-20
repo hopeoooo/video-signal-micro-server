@@ -15,8 +15,9 @@ public interface UserConstant {
     BigDecimal maxTransterMoney = BigDecimal.valueOf(10000000);
 
     interface redisKey{
-        String SYS_USER_MONEY_MONEY_LOCK = "sys_user_money_money_lock::";
         Integer WAIT_TIME = 120; //获取锁等待时间
         Integer LEASE_TIME = 60; //
+        String SYS_USER_MONEY_MONEY_LOCK = "lock::sys_user_money::money::";
+        String SYS_USER_MONEY_WASH_CODE_LOCK = "lock::sys_user_money::wash_code::";
     }
 }

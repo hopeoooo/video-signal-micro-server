@@ -3,32 +3,30 @@ package com.central.user.service.impl;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.*;
+import com.central.common.service.impl.SuperServiceImpl;
 import com.central.push.feign.PushService;
 import com.central.user.mapper.SysUserMoneyMapper;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
-import com.central.user.service.ISysUserService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.central.common.service.impl.SuperServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.collections4.MapUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -98,6 +96,15 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         PushResult<SysUserMoney> pushResult = PushResult.succeed(money, "money");
         Result<String> push = pushService.pushOne(JSONObject.toJSONString(pushResult), userId.toString());
         log.info("用户金额userId:{},推送结果:{}", userId, push);
+    }
+
+    @Override
+    @CachePut(key="#p0.userId")
+    public SysUserMoney receiveWashCode(SysUserMoney userMoney) {
+        userMoney.setMoney(userMoney.getMoney().add(userMoney.getWashCode()));
+        userMoney.setWashCode(BigDecimal.ZERO);
+        baseMapper.updateById(userMoney);
+        return userMoney;
     }
 
     private SysTansterMoneyLog getSysTansterMoneyLog(BigDecimal beforeMoery, BigDecimal money, SysUser sysUser,

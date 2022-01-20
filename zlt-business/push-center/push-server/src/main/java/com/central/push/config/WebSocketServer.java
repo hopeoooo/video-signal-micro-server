@@ -6,8 +6,10 @@ import com.central.common.model.PushResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * ws://localhost:9900/api-push/ws/asset?admin     admin 为用户名
  */
-@ServerEndpoint(value = "/ws/asset")
+@ServerEndpoint(value = "/ws/asset/{userName}")
 @Component
 @Slf4j
 public class WebSocketServer {
@@ -30,8 +32,7 @@ public class WebSocketServer {
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(Session session) throws IOException {
-        String userName = session.getQueryString();
+    public void onOpen(Session session, @PathParam("userName") String userName) throws IOException {
         if (StringUtils.isBlank(userName)) {
             throw new IOException("userName不能为空");
         }
@@ -44,8 +45,7 @@ public class WebSocketServer {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(Session session) {
-        String userName = session.getQueryString();
+    public void onClose(Session session, @PathParam("userName") String userName) {
         connectSession.remove(userName);
         log.info("有连接关闭，当前连接数为：{}", connectSession.size());
     }
@@ -56,7 +56,7 @@ public class WebSocketServer {
      * @param message 客户端发送过来的消息
      */
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public void onMessage(String message, Session session, @PathParam("userName") String userName) {
         log.info("来自客户端的消息：{}", message);
         PushResult pushResult = PushResult.succeed(message, "heartbeat");
         SendMessage(session, JSONObject.toJSONString(pushResult));
@@ -115,7 +115,12 @@ public class WebSocketServer {
     public static String sendOneMessage(String message, String userName) throws Exception {
         Session session = null;
         for (Session s : connectSession.values()) {
-            if (s.getQueryString().equals(userName)) {
+            Map<String, String> pathParameters = s.getPathParameters();
+            if (CollectionUtils.isEmpty(pathParameters) || StringUtils.isBlank(pathParameters.get("userName"))) {
+                continue;
+            }
+            String sName = pathParameters.get("userName");
+            if (sName.equals(userName)) {
                 session = s;
                 break;
             }
