@@ -32,7 +32,8 @@ public class WebSocketServer {
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("userName") String userName) throws IOException {
+    public void onOpen(Session session) throws IOException {
+        String userName = session.getQueryString();
         if (StringUtils.isBlank(userName)) {
             throw new IOException("userName不能为空");
         }
@@ -45,7 +46,8 @@ public class WebSocketServer {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(Session session, @PathParam("userName") String userName) {
+    public void onClose(Session session) {
+        String userName = session.getQueryString();
         connectSession.remove(userName);
         log.info("有连接关闭，当前连接数为：{}", connectSession.size());
     }
@@ -56,7 +58,7 @@ public class WebSocketServer {
      * @param message 客户端发送过来的消息
      */
     @OnMessage
-    public void onMessage(String message, Session session, @PathParam("userName") String userName) {
+    public void onMessage(String message, Session session) {
         log.info("来自客户端的消息：{}", message);
         PushResult pushResult = PushResult.succeed(message, "heartbeat");
         SendMessage(session, JSONObject.toJSONString(pushResult));
@@ -114,14 +116,9 @@ public class WebSocketServer {
      */
     public static String sendOneMessage(String message, String userName) throws Exception {
         Session session = null;
-        for (Session s : connectSession.values()) {
-            Map<String, String> pathParameters = s.getPathParameters();
-            if (CollectionUtils.isEmpty(pathParameters) || StringUtils.isBlank(pathParameters.get("userName"))) {
-                continue;
-            }
-            String sName = pathParameters.get("userName");
-            if (sName.equals(userName)) {
-                session = s;
+        for (Map.Entry<String, Session> map : connectSession.entrySet()) {
+            if (map.getKey().equals(userName)) {
+                session = map.getValue();
                 break;
             }
         }

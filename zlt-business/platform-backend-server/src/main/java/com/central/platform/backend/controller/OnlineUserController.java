@@ -93,8 +93,13 @@ public class OnlineUserController {
              if (onlineUserList == null || onlineUserList.size() == 0)
                  return Result.succeed(onlineUserList);
              Map<String, List<OnlineUser>> map = onlineUserList.stream().collect(Collectors.groupingBy(OnlineUser::getStaticsDay));
+             Map<String,List<OnlineUser>> result = new TreeMap<>();
+             map.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEachOrdered(x->result.put(x.getKey(),x.getValue()));
+             map.clear();
              List<OnlineUser> list = new LinkedList<>();
-             map.forEach((k,v)->{
+             result.forEach((k,v)->{
                  Integer onlineNum = v.stream().mapToInt(OnlineUser::getOnlineNum).sum();
                  OnlineUser onlineUser = new OnlineUser();
                  onlineUser.setStaticsDay(k);
@@ -102,7 +107,7 @@ public class OnlineUserController {
                 list.add(onlineUser);
              });
              onlineUserList.clear();
-             map.clear();
+             result.clear();
              return Result.succeed(list);
         }
         }catch (Exception ex){
