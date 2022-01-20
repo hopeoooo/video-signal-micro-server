@@ -29,8 +29,7 @@ public class WashCodeChangeController {
     @ApiOperation(value = "查询登录用户洗码记录")
     @GetMapping("/getWashCodeRecord")
     public Result<PageResult2<WashCodeChangeVo>> getWashCodeRecord(@LoginUser SysUser user) {
-        Long id = user.getId();
-        PageResult2<WashCodeChangeVo> washCodeChangeList = washCodeChangeService.getWashCodeRecord(3L);
+        PageResult2<WashCodeChangeVo> washCodeChangeList = washCodeChangeService.getWashCodeRecord(user.getId());
         return Result.succeed(washCodeChangeList);
     }
 
