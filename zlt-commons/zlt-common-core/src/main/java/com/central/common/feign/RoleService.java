@@ -28,6 +28,10 @@ public interface RoleService {
     PageResult<SysRole> findRoles(@RequestParam Map<String, Object> params);
 
 
+
+    @GetMapping("/allRoles")
+    Result<List<SysRole>> findAll() ;
+
     /**
      * 角色新增或者更新
      *

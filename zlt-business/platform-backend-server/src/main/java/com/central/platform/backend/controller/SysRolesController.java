@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,7 +27,7 @@ public class SysRolesController {
      * @param params
      * @return
      */
-    @ApiOperation(value = "后台管理查询角色")
+    @ApiOperation(value = "后台管理查询角色列表")
     @GetMapping("/roles")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
@@ -37,6 +38,18 @@ public class SysRolesController {
         return roleService.findRoles(params);
     }
 
+
+
+
+    /**
+     * 用户管理查询所有角色
+     * @return
+     */
+    @ApiOperation(value = "后台管理查询角色下拉框")
+    @GetMapping("/allRoles")
+    public Result<List<SysRole>> findAll() {
+        return roleService.findAll();
+    }
     /**
      * 角色新增或者更新
      *
