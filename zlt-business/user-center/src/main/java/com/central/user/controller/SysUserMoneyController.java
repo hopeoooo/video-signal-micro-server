@@ -132,7 +132,7 @@ public class SysUserMoneyController {
         try {
             SysUserMoney userMoney = userMoneyService.findByUserId(userId);
             BigDecimal washCode = BigDecimal.ZERO;
-            if (userMoney != null) {
+            if (userMoney != null && userMoney.getWashCode() != null) {
                 washCode = userMoney.getWashCode();
             }
             if (washCode.compareTo(BigDecimal.ONE) == -1) {
