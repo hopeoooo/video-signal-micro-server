@@ -37,7 +37,7 @@ public class WebSocketServer {
             throw new IOException("userName不能为空");
         }
         connectSession.put(userName, session);
-        log.info("有连接加入，当前连接数为：{}", connectSession.size());
+        log.info("用户:{} 加入连接，当前连接数为：{}",userName, connectSession.size());
         SendMessage(session, "连接成功");
     }
 
@@ -47,7 +47,7 @@ public class WebSocketServer {
     @OnClose
     public void onClose(Session session, @PathParam("userName") String userName) {
         connectSession.remove(userName);
-        log.info("有连接关闭，当前连接数为：{}", connectSession.size());
+        log.info("用户:{} 关闭连接，当前连接数为：{}", userName,connectSession.size());
     }
 
     /**
@@ -114,14 +114,9 @@ public class WebSocketServer {
      */
     public static String sendOneMessage(String message, String userName) throws Exception {
         Session session = null;
-        for (Session s : connectSession.values()) {
-            Map<String, String> pathParameters = s.getPathParameters();
-            if (CollectionUtils.isEmpty(pathParameters) || StringUtils.isBlank(pathParameters.get("userName"))) {
-                continue;
-            }
-            String sName = pathParameters.get("userName");
-            if (sName.equals(userName)) {
-                session = s;
+        for (Map.Entry<String, Session> map : connectSession.entrySet()) {
+            if (map.getKey().equals(userName)) {
+                session = map.getValue();
                 break;
             }
         }
