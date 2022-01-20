@@ -2,6 +2,7 @@ package com.central.user.controller;
 
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
+import com.central.common.constant.UserConstant;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.model.SysUserMoney;
@@ -86,8 +87,8 @@ public class SysUserMoneyController {
         if(money.compareTo(BigDecimal.ZERO) <= 0){
             return Result.failed("参数错误");
         }
-        String redisKey = CommonConstant.redisKet.REDIS_TRANSTER_USER_KEY + "_" + userId;
-        boolean moneyLock = RedissLockUtil.tryLock(redisKey, CommonConstant.redisKet.WAIT_TIME, CommonConstant.redisKet.LEASE_TIME);
+        String redisKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK  + userId;
+        boolean moneyLock = RedissLockUtil.tryLock(redisKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
         try {
             if(moneyLock){
                 SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
