@@ -284,6 +284,24 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
         return i > 0 ? Result.succeed(appUser, "更新成功") : Result.failed("更新失败");
     }
 
+    @Override
+    public Result updateVerify(Long id) {
+        SysUser appUser = baseMapper.selectById(id);
+        if (appUser == null) {
+            return Result.failed("用户不存在");
+        }
+        if (appUser.getVerify() != null && appUser.getVerify() == 1){
+            appUser.setVerify(2);
+        }else {
+            appUser.setVerify(1);
+        }
+        appUser.setUpdateTime(new Date());
+        int i = baseMapper.updateById(appUser);
+        log.info("修改用户：{}", appUser);
+
+        return i > 0 ? Result.succeed(appUser, "更新成功") : Result.failed("更新失败");
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Result saveOrUpdateUser(SysUser sysUser) throws Exception {

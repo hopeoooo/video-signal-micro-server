@@ -127,4 +127,11 @@ public interface ISysUserService extends ISuperService<SysUser> {
 	 * @return
 	 */
 	Result updateGaBind(Map<String, Object> params);
+
+	/**
+	 * 谷歌验证码是否校验状态修改
+	 * @param id
+	 * @return
+	 */
+	Result updateVerify(Long id);
 }
