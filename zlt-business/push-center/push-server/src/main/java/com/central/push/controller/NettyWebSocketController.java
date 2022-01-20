@@ -23,12 +23,12 @@ public class NettyWebSocketController {
      * @param message
      * @return
      */
-    @GetMapping(value = "/sendAll/{message}")
-    @ApiOperation(value = "群发消息")
-    public Result sendAllMessage(@PathVariable(name = "message") String message) throws Exception {
-        NettyWebSocketServer.batchSendMessage(message);
-        return Result.succeed("群消息发送成功");
-    }
+//    @GetMapping(value = "/sendAll/{message}")
+//    @ApiOperation(value = "群发消息")
+//    public Result sendAllMessage(@PathVariable(name = "message") String message) throws Exception {
+//        NettyWebSocketServer.batchSendMessage(message);
+//        return Result.succeed("群消息发送成功");
+//    }
 
     /**
      * 指定用户发消息
@@ -37,13 +37,13 @@ public class NettyWebSocketController {
      * @param userName 用户名
      * @return
      */
-    @ApiOperation(value = "指定用户推发消息")
-    @GetMapping(value = "/sendOne/{userName}/{message}")
-    public Result sendOneMessage(@PathVariable(name = "userName") String userName, @PathVariable(name = "message") String message) throws Exception {
-        String msg = NettyWebSocketServer.sendOneMessage(message, userName);
-        if(StringUtils.isBlank(msg)){
-            return Result.succeed(userName + "消息推送成功");
-        }
-        return Result.failed(msg);
-    }
+//    @ApiOperation(value = "指定用户推发消息")
+//    @GetMapping(value = "/sendOne/{userName}/{message}")
+//    public Result sendOneMessage(@PathVariable(name = "userName") String userName, @PathVariable(name = "message") String message) throws Exception {
+//        String msg = NettyWebSocketServer.sendOneMessage(message, userName);
+//        if(StringUtils.isBlank(msg)){
+//            return Result.succeed(userName + "消息推送成功");
+//        }
+//        return Result.failed(msg);
+//    }
 }

@@ -12,6 +12,7 @@ import com.central.user.service.ISysTansterMoneyLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -43,5 +44,11 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
         }
         long total = page.getTotal();
         return PageResult.<SysTansterMoneyLogVo>builder().data(sysTansterMoneyLogs).code(0).count(total).build();
+    }
+
+    @Override
+    @Async
+    public void syncSave(SysTansterMoneyLog sysTansterMoneyLog) {
+        baseMapper.insert(sysTansterMoneyLog);
     }
 }
