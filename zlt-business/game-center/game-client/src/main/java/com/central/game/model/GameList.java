@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
@@ -25,4 +26,10 @@ public class GameList extends SuperEntity {
 
     @ApiModelProperty(value = "游戏名称")
     private String name;
+    @ApiModelProperty(value = "游戏状态 0：禁用，1：正常，2：维护")
+    private Integer gameStatus;
+    @ApiModelProperty(value = "返水比例(%)")
+    private BigDecimal gameRate;
+    @ApiModelProperty(value = "游戏状态 0：禁用，1：启用")
+    private Integer rateStatus;
 }

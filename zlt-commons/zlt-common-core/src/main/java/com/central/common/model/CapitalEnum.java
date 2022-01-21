@@ -14,6 +14,7 @@ public enum CapitalEnum {
     BET(4, "下注"),
     ARTIFICIALIN(5, "手动入款"),
     ARTIFICIALOUT(6, "手动出款"),
+    WASH_CODE(7, "领取洗码"),
     DEFAULT(-1, "未知");
 
     @Getter
