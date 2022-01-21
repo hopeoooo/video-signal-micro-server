@@ -1,19 +1,12 @@
 package com.central.common.model;
 
-import com.central.common.model.SuperEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.central.common.utils.Decimal2Serializer;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 用户钱包表

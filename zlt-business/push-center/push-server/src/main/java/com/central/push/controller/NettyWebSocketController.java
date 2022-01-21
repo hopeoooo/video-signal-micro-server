@@ -2,6 +2,7 @@ package com.central.push.controller;
 
 import com.central.common.model.Result;
 import com.central.push.config.NettyWebSocketServer;
+import com.central.push.config.WebSocketServer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
