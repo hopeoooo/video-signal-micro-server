@@ -6,6 +6,8 @@ import com.central.oauth.service.IValidateCodeService;
 import com.wf.captcha.base.Captcha;
 import com.wf.captcha.GifCaptcha;
 import com.wf.captcha.utils.CaptchaUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -17,9 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 验证码提供
- * @author zlt
- * @date 2018/12/18
  */
+@Api(tags = "验证码验证")
 @Controller
 public class ValidateCodeController {
     @Autowired
@@ -27,9 +28,11 @@ public class ValidateCodeController {
 
     /**
      * 创建验证码
+     * @param deviceId 随机的UUID值
      *
      * @throws Exception
      */
+    @ApiOperation(value = "创建验证码")
     @GetMapping(SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/{deviceId}")
     public void createCode(@PathVariable String deviceId, HttpServletResponse response) throws Exception {
         Assert.notNull(deviceId, "机器码不能为空");
@@ -52,6 +55,7 @@ public class ValidateCodeController {
      * @param mobile 手机号
      * @return R
      */
+    @ApiOperation(value = "发送手机验证码")
     @ResponseBody
     @GetMapping(SecurityConstants.MOBILE_VALIDATE_CODE_URL_PREFIX + "/{mobile}")
     public Result createCode(@PathVariable String mobile) {
