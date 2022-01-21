@@ -46,6 +46,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
                 log.error("查询全部开启返水的游戏失败", throwable);
                 return Result.failed("查询全部开启返水的游戏失败");
             }
+
+            @Override
+            public Result<List<GameList>> findGameList(Integer state) {
+                log.error("findGameList查询洗码配置列表失败", throwable);
+                return Result.failed("查询失败");
+            }
         };
     }
 }

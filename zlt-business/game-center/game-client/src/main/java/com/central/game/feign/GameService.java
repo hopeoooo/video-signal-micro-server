@@ -45,4 +45,7 @@ public interface GameService {
     @GetMapping("/gamelist/findAllOpenRate")
     Result<List<GameList>> findAllOpenRate();
 
+    @GetMapping("/gamelist/findGameList")
+     Result<List<GameList>> findGameList(@RequestParam("state") Integer state) ;
+
 }

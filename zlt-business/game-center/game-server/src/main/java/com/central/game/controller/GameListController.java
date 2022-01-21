@@ -1,8 +1,6 @@
 package com.central.game.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.PageResult2;
 import com.central.game.model.GameList;
 import com.central.game.service.IGameListService;
@@ -12,7 +10,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
-import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SuperPage;
 
@@ -70,6 +67,18 @@ public class GameListController {
     @GetMapping("/findAllOpenRate")
     public Result<List<GameList>> findAllOpenRate() {
         List<GameList> list = gameListService.lambdaQuery().in(GameList::getRateStatus,1).list();
+        return Result.succeed(list);
+    }
+
+
+    @ApiOperation(value = "查询洗码配置列表(后台)")
+    @GetMapping("/findGameList")
+    public Result<List<GameList>> findGameList(@RequestParam(value = "state", required = false)Integer state) {
+        LambdaQueryWrapper<GameList> wrapper = new LambdaQueryWrapper<>();
+        if (state!=null){
+            wrapper.eq(GameList::getRateStatus,state);
+        }
+        List<GameList> list = gameListService.list(wrapper);
         return Result.succeed(list);
     }
 }

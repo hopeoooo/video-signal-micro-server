@@ -1,8 +1,11 @@
 package com.central.config.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.central.common.model.PushResult;
 import com.central.common.model.Result;
+import com.central.common.model.SysUserMoney;
 import com.central.config.dto.logoUrlDto;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysPlatformConfig;
@@ -59,7 +62,8 @@ public class ApiController {
     @ApiOperation(value = "消息推送测试")
     @GetMapping("/push/{message}")
     public Result<String> push(@PathVariable(name = "message") String message) {
-        return pushService.push(message);
+        PushResult<SysUserMoney> pushResult = PushResult.succeed(new SysUserMoney(), "money","用户钱包推送成功");
+        return pushService.sendOneMessage("admin", JSONObject.toJSONString(pushResult));
     }
     @ApiOperation(value = "ip测试")
     @GetMapping("/ipTest")

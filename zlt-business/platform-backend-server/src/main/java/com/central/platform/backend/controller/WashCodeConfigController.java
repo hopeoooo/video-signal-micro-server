@@ -1,5 +1,6 @@
 package com.central.platform.backend.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.central.common.model.Result;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
@@ -19,12 +20,12 @@ public class WashCodeConfigController {
     @Resource
     private GameService gameService;
 
-    @ApiOperation("查询洗码配置")
-    @ResponseBody
-    @GetMapping("/gamelist/findAll")
-    public Result<List<GameList>> findWashCodeConfigList() {
-        return gameService.findAll();
+    @ApiOperation(value = "查询洗码配置")
+    @GetMapping("/gamelist/findGameList")
+    public Result<List<GameList>> findGameList( @RequestParam(value = "state", required = false) Integer state) {
+        return  gameService.findGameList(state);
     }
+
 
     @ApiOperation(value = "新增/更新")
     @PostMapping("/gamelist/save")

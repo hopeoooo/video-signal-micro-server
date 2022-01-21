@@ -51,7 +51,7 @@ public class NettyWebSocketServer {
     @OnMessage
     public void onMessage(Session session, String message) {
         log.info("来自客户端的消息：{}", message);
-        PushResult pushResult = PushResult.succeed(message, "heartbeat");
+        PushResult pushResult = PushResult.succeed(message, "heartbeat","客户端消息接收成功");
         session.sendText(JSONObject.toJSONString(pushResult));
     }
 
@@ -90,7 +90,7 @@ public class NettyWebSocketServer {
      * @param message
      * @throws IOException
      */
-    public static void batchSendMessage(String message) throws Exception {
+    public static void batchSendMessage(String message){
         for (Session session : connectSession.values()) {
             if (session.isOpen()) {
                 session.sendText(message);
@@ -105,7 +105,7 @@ public class NettyWebSocketServer {
      * @param message
      * @throws IOException
      */
-    public static String sendOneMessage(String message, String userName) throws Exception {
+    public static String sendOneMessage(String message, String userName){
         Session session = null;
         for (Map.Entry<String, Session> map : connectSession.entrySet()) {
             if (map.getKey().equals(userName)) {
