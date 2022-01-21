@@ -40,6 +40,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
                 log.error("根据ID删除游戏失败", throwable);
                 return Result.failed("根据ID删除游戏失败");
             }
+
+            @Override
+            public Result<List<GameList>> findAllOpenRate() {
+                log.error("查询全部开启返水的游戏失败", throwable);
+                return Result.failed("查询全部开启返水的游戏失败");
+            }
         };
     }
 }

@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface IWashCodeChangeService extends ISuperService<WashCodeChange> {
 
-    PageResult2<WashCodeChangeVo> getWashCodeRecord(Long userId);
+    PageResult2<WashCodeChangeVo> getWashCodeRecord(Long userId,String startTime,String endTime);
 }
 

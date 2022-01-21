@@ -31,7 +31,7 @@ public interface GameService {
      * @param id
      * @return
      */
-    @GetMapping("/findById/{id}")
+    @GetMapping("/gamelist/findById/{id}")
     Result<GameList> findById(@PathVariable("id") Long id);
 
     /**
@@ -39,7 +39,10 @@ public interface GameService {
      * @param id
      * @return
      */
-    @DeleteMapping("/deleteById/{id}")
+    @DeleteMapping("/gamelist/deleteById/{id}")
     Result deleteById(@PathVariable("id") Long id);
+
+    @GetMapping("/gamelist/findAllOpenRate")
+    Result<List<GameList>> findAllOpenRate();
 
 }
