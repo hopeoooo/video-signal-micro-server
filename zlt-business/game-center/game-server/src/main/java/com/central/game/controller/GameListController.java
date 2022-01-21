@@ -62,7 +62,7 @@ public class GameListController {
     @ApiOperation(value = "查询全部游戏")
     @GetMapping("/findAll")
     public Result<List<GameList>> findAll() {
-        List<GameList> list = gameListService.list();
+        List<GameList> list = gameListService.lambdaQuery().in(GameList::getGameStatus,1,2).list();
         return Result.succeed(list);
     }
 }
