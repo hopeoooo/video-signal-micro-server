@@ -59,4 +59,12 @@ public class FileController {
     public PageResult<FileInfo> findFiles(@RequestParam Map<String, Object> params) {
         return fileService.findList(params);
     }
+
+    /**
+     * test
+     */
+    @GetMapping(value = "/flies/test")
+    public String test(){
+        return "test";
+    }
 }

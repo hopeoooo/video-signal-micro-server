@@ -16,9 +16,10 @@ public class FileServiceFallbackFactory implements FallbackFactory<FileService> 
     public FileService create(Throwable cause) {
         return new FileService() {
             @Override
-            public String list() {
-                return null;
+            public String test() {
+                return "";
             }
+
             @Override
             public Result upload(MultipartFile file) throws Exception {
                 log.error("upload上传异常", cause);
