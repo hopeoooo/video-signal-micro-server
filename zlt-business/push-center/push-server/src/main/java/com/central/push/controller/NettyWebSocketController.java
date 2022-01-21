@@ -2,7 +2,6 @@ package com.central.push.controller;
 
 import com.central.common.model.Result;
 import com.central.push.config.NettyWebSocketServer;
-import com.central.push.config.WebSocketServer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/netty/ws/api")
-@Api(tags = "nettyWebSocket消息推送")
+@RequestMapping("/ws/api")
+@Api(tags = "WebSocket消息推送")
 public class NettyWebSocketController {
 
 

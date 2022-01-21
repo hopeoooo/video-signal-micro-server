@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * https://blog.csdn.net/w1014074794/article/details/113985267
  */
 @Slf4j
-@ServerEndpoint(path = "/ws/{userName}",host = "${ws.host}",port = "${ws.port}")
+@ServerEndpoint(path = "/ws/asset/{userName}",host = "${ws.host}",port = "${ws.port}")
 @Component
 public class NettyWebSocketServer {
 
