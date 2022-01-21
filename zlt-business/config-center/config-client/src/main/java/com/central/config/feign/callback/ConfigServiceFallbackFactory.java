@@ -7,6 +7,7 @@ import com.central.config.feign.ConfigService;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
+import com.central.config.model.WashCodeConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -173,6 +174,12 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             public Result updateMinOnlineUserQuantity(String minOnlineUserQuantity) {
                 log.error("updateMinOnlineUserQuantity编辑最低在线人数异常:{}", minOnlineUserQuantity, cause);
                 return Result.failed("编辑失败");
+            }
+
+            @Override
+            public Result<List<WashCodeConfig>> findWashCodeConfigList() {
+                log.error("findWashCodeConfigList查询洗码配置列表异常" ,cause);
+                return Result.failed("查询失败");
             }
         };
     }
