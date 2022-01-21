@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 登陆授权接口(参考)
+ * 登陆【参考接口】
  */
-@Api(tags = "登陆授权接口参考")
+@Api(tags = "登陆【参考接口】")
 @RestController
 @RequestMapping("/test/oauth")
 public class LoginController {
