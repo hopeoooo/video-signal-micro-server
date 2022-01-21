@@ -1,5 +1,6 @@
 package com.central.game.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.central.common.model.SuperEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
@@ -32,4 +33,7 @@ public class GameList extends SuperEntity {
     private BigDecimal gameRate;
     @ApiModelProperty(value = "返水状态 0：禁用，1：启用")
     private Integer rateStatus;
+    @TableField(exist = false)
+    @ApiModelProperty(value = "在线人数")
+    private Integer onlineNum = 0;
 }
