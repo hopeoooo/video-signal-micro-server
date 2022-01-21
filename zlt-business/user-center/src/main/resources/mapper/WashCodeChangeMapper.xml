@@ -3,8 +3,8 @@
 
 <mapper namespace="com.central.user.mapper.WashCodeChangeMapper">
 
-    <select id="getWashCodeRecord" resultType="com.central.user.vo.WashCodeChangeVo">
+    <select id="getWashCodeRecord" resultType="com.central.common.model.WashCodeChange">
         select SUM(amount) amount,SUM(validbet) validbet,game_id gameId,game_name gameName
-        from wash_code_change where user_id=#{userId} GROUP BY game_id
+        from wash_code_change where user_id=#{userId} and create_time between #{startTime} and #{endTime} GROUP BY game_id
     </select>
 </mapper>

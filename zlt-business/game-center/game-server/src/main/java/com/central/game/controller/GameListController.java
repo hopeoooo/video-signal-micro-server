@@ -65,4 +65,11 @@ public class GameListController {
         List<GameList> list = gameListService.lambdaQuery().in(GameList::getGameStatus,1,2).list();
         return Result.succeed(list);
     }
+
+    @ApiOperation(value = "查询全部开启返水的游戏")
+    @GetMapping("/findAllOpenRate")
+    public Result<List<GameList>> findAllOpenRate() {
+        List<GameList> list = gameListService.lambdaQuery().in(GameList::getRateStatus,1).list();
+        return Result.succeed(list);
+    }
 }

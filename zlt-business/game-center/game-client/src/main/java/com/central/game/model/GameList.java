@@ -30,6 +30,6 @@ public class GameList extends SuperEntity {
     private Integer gameStatus;
     @ApiModelProperty(value = "返水比例(%)")
     private BigDecimal gameRate;
-    @ApiModelProperty(value = "游戏状态 0：禁用，1：启用")
+    @ApiModelProperty(value = "返水状态 0：禁用，1：启用")
     private Integer rateStatus;
 }

@@ -24,7 +24,7 @@ public class WashCodeChange extends SuperEntity {
     @ApiModelProperty(value = "用户ID")
     private Long userId;
     @ApiModelProperty(value = "游戏ID")
-    private String gameId;
+    private Long gameId;
     @ApiModelProperty(value = "游戏名称")
     private String gameName;
     @ApiModelProperty(value = "注单ID")
