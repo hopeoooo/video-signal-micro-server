@@ -77,7 +77,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     @Transactional
     @CachePut(key="#sysUserMoney.userId")
     public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Boolean transterType, String remark, SysUser sysUser) {
-        BigDecimal userMoery = sysUserMoney.getMoney();
+        BigDecimal userMoery = sysUserMoney.getMoney()==null?BigDecimal.ZERO:sysUserMoney.getMoney();
         if(transterType){//上分
             sysUserMoney.setMoney(sysUserMoney.getMoney().add(money));
         }else{

@@ -7,7 +7,7 @@ import com.central.game.model.GameList;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-;import java.util.List;
+import java.util.List;
 
 /**
  */

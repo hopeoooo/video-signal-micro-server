@@ -46,6 +46,7 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
         return PageResult.<SysTansterMoneyLogVo>builder().data(sysTansterMoneyLogs).code(0).count(total).build();
     }
 
+
     @Override
     @Async
     public void syncSave(SysTansterMoneyLog sysTansterMoneyLog) {

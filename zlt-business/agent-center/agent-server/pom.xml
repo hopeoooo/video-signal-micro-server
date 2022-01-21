@@ -25,6 +25,14 @@
             <groupId>com.zlt</groupId>
             <artifactId>search-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>config-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>file-client</artifactId>
+        </dependency>
 
         <!-- @FeiginClients的负载均衡，不使用UserService不需要引用 -->
         <dependency>

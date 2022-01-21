@@ -7,7 +7,6 @@ import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.yeauty.annotation.*;
 import org.yeauty.pojo.Session;
 
@@ -20,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * https://blog.csdn.net/w1014074794/article/details/113985267
  */
 @Slf4j
-@ServerEndpoint(path = "/ws/asset/{userName}",host = "${ws.host}",port = "${ws.port}")
+@ServerEndpoint(path = "/ws/asset/{userName}", host = "${ws.host}", port = "${ws.port}")
 @Component
 public class NettyWebSocketServer {
 
@@ -28,24 +27,24 @@ public class NettyWebSocketServer {
     private static Map<String, Session> connectSession = new ConcurrentHashMap<>();
 
     @OnOpen
-    public void onOpen(Session session, @PathVariable String userName) throws IOException{
+    public void onOpen(Session session, @PathVariable String userName) throws IOException {
         if (StringUtils.isBlank(userName)) {
             throw new IOException("userName不能为空");
         }
         connectSession.put(userName, session);
-        log.info("用户:{} 加入连接，当前连接数为：{}", userName,connectSession.size());
-        onMessage(session,"连接成功");
+        log.info("用户:{} 加入连接，当前连接数为：{}", userName, connectSession.size());
+        onMessage(session, "连接成功");
     }
 
     @OnClose
     public void onClose(Session session, @PathVariable String userName) throws IOException {
         connectSession.remove(userName);
-        log.info("用户:{} 关闭连接，当前连接数为：{}",userName, connectSession.size());
+        log.info("用户:{} 关闭连接，当前连接数为：{}", userName, connectSession.size());
     }
 
     @OnError
-    public void onError(Session session, Throwable throwable) {
-        log.error("发生错误：{}", throwable.getMessage());
+    public void onError(Session session, @PathVariable String userName, Throwable throwable) {
+        log.error("用户:{}连接发生错误：{}", userName, throwable.getMessage());
         throwable.printStackTrace();
     }
 

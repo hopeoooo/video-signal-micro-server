@@ -8,17 +8,16 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-;
-
 /**
+ *
  */
 @FeignClient(name = ServiceNameConstants.CONFIG_FLIE, fallbackFactory = FileServiceFallbackFactory.class, decode404 = true)
 public interface FileService {
     /**
      * 查询文件列表
      */
-    @PostMapping(value = "/flies/list")
-    String list();
+    @GetMapping(value = "/flies/test")
+    String test();
 
     /**
      * 文件上传

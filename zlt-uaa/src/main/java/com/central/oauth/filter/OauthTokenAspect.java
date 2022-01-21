@@ -3,13 +3,14 @@ package com.central.oauth.filter;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.context.TenantContextHolder;
 import com.central.common.model.Result;
+import com.central.oauth.exception.CustomOAuth2Exception;
+import com.central.oauth.modle.CodeErrorAuthEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.util.OAuth2Utils;
@@ -40,8 +41,7 @@ public class OauthTokenAspect {
             Object[] args = joinPoint.getArgs();
             Principal principal = (Principal) args[0];
             if (!(principal instanceof Authentication)) {
-                throw new InsufficientAuthenticationException(
-                        "There is no client authentication. Try adding an appropriate authentication filter.");
+                throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH.getCode(), "没有客户端身份验证。尝试添加适当的身份验证过滤器");
             }
             String clientId = getClientId(principal);
             Map<String, String> parameters = (Map<String, String>) args[1];
@@ -74,7 +74,7 @@ public class OauthTokenAspect {
     private String getClientId(Principal principal) {
         Authentication client = (Authentication) principal;
         if (!client.isAuthenticated()) {
-            throw new InsufficientAuthenticationException("The client is not authenticated.");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH.getCode(), "客户端没有授权");
         }
         String clientId = client.getName();
         if (client instanceof OAuth2Authentication) {

@@ -3,7 +3,6 @@ package com.central.oauth.controller;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.oauth.model.TokenVo;
 import com.central.oauth.service.ITokensService;
@@ -17,7 +16,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -29,8 +31,6 @@ import java.util.stream.Collectors;
 
 /**
  * token管理接口
- *
- * @author zlt
  */
 @Api(tags = "Token管理")
 @Slf4j

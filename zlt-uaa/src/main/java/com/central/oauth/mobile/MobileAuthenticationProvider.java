@@ -1,11 +1,12 @@
 package com.central.oauth.mobile;
 
+import com.central.oauth.exception.CustomOAuth2Exception;
+import com.central.oauth.modle.CodeErrorAuthEnum;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth2.common.token.MobileAuthenticationToken;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,10 +30,10 @@ public class MobileAuthenticationProvider implements AuthenticationProvider {
         String password = (String) authenticationToken.getCredentials();
         UserDetails user = userDetailsServiceFactory.getService(authenticationToken).loadUserByMobile(mobile);
         if (user == null) {
-            throw new InternalAuthenticationServiceException("手机号或密码错误");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_PHONE_PWD.getCode(), "手机号或密码错误");
         }
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new InternalAuthenticationServiceException("手机号或密码错误");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_PHONE_PWD.getCode(), "手机号或密码错误");
         }
         MobileAuthenticationToken authenticationResult = new MobileAuthenticationToken(user, password, user.getAuthorities());
         authenticationResult.setDetails(authenticationToken.getDetails());

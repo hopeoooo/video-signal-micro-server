@@ -108,6 +108,21 @@ public class AuthUtils {
     }
 
     /**
+     * 获取登陆的帐户类型 userType
+     */
+    public static String getUserType(Authentication authentication) {
+        Object principal = authentication.getPrincipal();
+        String userType = null;
+        if (principal instanceof SysUser) {
+            userType = ((SysUser) principal).getType();
+        }
+//        else if (principal instanceof String) {
+//            userType = (String) principal;
+//        }
+        return userType;
+    }
+
+    /**
      * 获取登陆的帐户类型 account_type
      */
     public static String getAccountType(Authentication authentication) {

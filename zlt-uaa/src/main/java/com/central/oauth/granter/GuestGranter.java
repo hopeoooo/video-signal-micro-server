@@ -31,7 +31,7 @@ public class GuestGranter extends AbstractTokenGranter {
 
     @Override
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
-
+        // Client认证通过,来到这里
         Map<String, String> parameters = new LinkedHashMap<>(tokenRequest.getRequestParameters());
 
         Authentication userAuth = new GuestUserAuthenticationToken();

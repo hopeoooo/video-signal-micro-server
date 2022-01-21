@@ -1,11 +1,12 @@
 package com.central.oauth.openid;
 
+import com.central.oauth.exception.CustomOAuth2Exception;
+import com.central.oauth.modle.CodeErrorAuthEnum;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth2.common.token.OpenIdAuthenticationToken;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -26,7 +27,7 @@ public class OpenIdAuthenticationProvider implements AuthenticationProvider {
         String openId = (String) authenticationToken.getPrincipal();
         UserDetails user = userDetailsServiceFactory.getService(authenticationToken).loadUserByUserId(openId);
         if (user == null) {
-            throw new InternalAuthenticationServiceException("openId错误");
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_OPENID.getCode(), "openId错误");
         }
         OpenIdAuthenticationToken authenticationResult = new OpenIdAuthenticationToken(user, user.getAuthorities());
         authenticationResult.setDetails(authenticationToken.getDetails());

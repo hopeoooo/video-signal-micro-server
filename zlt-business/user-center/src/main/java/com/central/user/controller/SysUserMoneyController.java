@@ -2,8 +2,6 @@ package com.central.user.controller;
 
 import cn.hutool.core.date.DateUtil;
 import com.central.common.annotation.LoginUser;
-import com.central.common.constant.CommonConstant;
-import com.central.common.constant.UserConstant;
 import com.central.common.constant.UserConstant;
 import com.central.common.model.*;
 import com.central.user.service.ISysTansterMoneyLogService;
