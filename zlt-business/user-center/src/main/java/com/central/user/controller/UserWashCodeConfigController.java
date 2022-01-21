@@ -28,7 +28,7 @@ public class UserWashCodeConfigController {
     @GetMapping("/findUserWashCodeConfigList/{userId}")
     public Result<List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable Long userId) {
         List<UserWashCodeConfig> userWashCodeConfig = userWashCodeConfigService.findUserWashCodeConfigList(userId);
-        return Result.succeed(userWashCodeConfig);
+        return Result.succeed(userWashCodeConfig,"查询成功");
     }
 
 

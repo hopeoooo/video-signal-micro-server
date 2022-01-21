@@ -222,4 +222,19 @@ CREATE TABLE `login_log`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 76 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_german2_ci ROW_FORMAT = Dynamic;
-SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+DROP TABLE IF EXISTS `user_wash_code_config`;
+CREATE TABLE `user_wash_code_config`  (
+                                          `id` bigint(20) NOT NULL AUTO_INCREMENT,
+                                          `create_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+                                          `create_time` datetime(0) NULL DEFAULT NULL,
+                                          `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+                                          `update_time` datetime(0) NULL DEFAULT NULL,
+                                          `game_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '游戏Id',
+                                          `game_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '游戏名称',
+                                          `game_rate` decimal(10, 2) UNSIGNED ZEROFILL NOT NULL COMMENT '返水比例',
+                                          `user_id` bigint(20) NOT NULL COMMENT '用户id',
+                                          PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
