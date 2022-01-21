@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.central.game.feign.callback.GameServiceFallbackFactory
+com.central.game.AutoEnableClient

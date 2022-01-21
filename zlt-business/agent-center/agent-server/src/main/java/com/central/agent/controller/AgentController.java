@@ -1,6 +1,8 @@
 package com.central.agent.controller;
 
 import com.central.common.feign.UserService;
+import com.central.config.feign.ConfigService;
+import com.central.file.feign.FileService;
 import com.central.search.client.feign.SearchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,9 +28,22 @@ public class AgentController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private ConfigService configService;
+
+    @Resource
+    private FileService fileService;
+
     @ApiOperation(value = "查询代理列表")
     @GetMapping("/list")
     public String list(){
         return "test.game";
+    }
+
+
+    @ApiOperation(value = "查询代理列表")
+    @GetMapping("/test1")
+    public String test1(){
+        return configService.list() + fileService.test();
     }
 }

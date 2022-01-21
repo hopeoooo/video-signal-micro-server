@@ -24,7 +24,7 @@ public interface ConfigService {
     /**
      * 查询游戏列表
      */
-    @PostMapping(value = "/system/list")
+    @GetMapping(value = "/system/list")
     String list();
 
     @GetMapping("/system/findTouristAmount")

@@ -1,7 +1,6 @@
 package com.central;
 
 import com.central.common.lb.annotation.EnableFeignInterceptor;
-import com.central.config.annotation.EnableConfigClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -18,7 +17,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableDiscoveryClient
 //@EnableRedisHttpSession
 @EnableScheduling
-@EnableConfigClient
 @SpringBootApplication
 public class UaaServerApp {
 	public static void main(String[] args) {
