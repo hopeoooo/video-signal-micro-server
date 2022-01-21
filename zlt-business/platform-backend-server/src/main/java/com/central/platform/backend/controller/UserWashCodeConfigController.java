@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @Api(tags = "个人洗码配置")
@@ -21,14 +22,14 @@ public class UserWashCodeConfigController {
     @ApiOperation("查询个人洗码配置")
     @ResponseBody
     @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
-    public Result<UserWashCodeConfig> findUserWashCodeConfigList(@PathVariable Long userId) {
+    public Result<List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable Long userId) {
         return userWashCodeConfigService.findUserWashCodeConfigList(userId);
     }
 
 
     @ApiOperation(value = "保存")
     @PostMapping("/userWashCode/saveUserWashCodeConfig")
-    public Result saveUserWashCodeConfig(@RequestBody UserWashCodeConfig userWashCodeConfig) {
-        return userWashCodeConfigService.saveUserWashCodeConfig(userWashCodeConfig);
+    public Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfig> list) {
+        return userWashCodeConfigService.saveUserWashCodeConfig(list);
     }
 }

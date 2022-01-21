@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -24,8 +26,8 @@ public class UserWashCodeConfigController {
     @ApiOperation("查询个人洗码配置")
     @ResponseBody
     @GetMapping("/findUserWashCodeConfigList/{userId}")
-    public Result<UserWashCodeConfig> findUserWashCodeConfigList(@PathVariable Long userId) {
-        UserWashCodeConfig userWashCodeConfig = userWashCodeConfigService.findUserWashCodeConfigList(userId);
+    public Result<List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable Long userId) {
+        List<UserWashCodeConfig> userWashCodeConfig = userWashCodeConfigService.findUserWashCodeConfigList(userId);
         return Result.succeed(userWashCodeConfig);
     }
 
@@ -33,7 +35,7 @@ public class UserWashCodeConfigController {
 
     @ApiOperation(value = "保存")
     @PostMapping("/saveUserWashCodeConfig")
-    public Result saveUserWashCodeConfig(@RequestBody UserWashCodeConfig userWashCodeConfig) {
-        return userWashCodeConfigService.saveCache(userWashCodeConfig);
+    public Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfig> list) {
+        return userWashCodeConfigService.saveCache(list);
     }
 }

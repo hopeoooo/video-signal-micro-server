@@ -3,10 +3,12 @@ package com.central.platform.backend.service;
 import com.central.common.model.Result;
 import com.central.common.model.UserWashCodeConfig;
 
+import java.util.List;
+
 public interface IUserWashCodeConfigService  {
 
-    Result<UserWashCodeConfig> findUserWashCodeConfigList(Long userId);
+    Result<List<UserWashCodeConfig>> findUserWashCodeConfigList(Long userId);
 
 
-    Result saveUserWashCodeConfig(UserWashCodeConfig userWashCodeConfig) ;
+    Result saveUserWashCodeConfig( List<UserWashCodeConfig> list) ;
 }

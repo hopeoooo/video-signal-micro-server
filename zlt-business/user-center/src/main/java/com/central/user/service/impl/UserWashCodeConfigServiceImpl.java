@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Slf4j
 @Service
@@ -18,15 +20,16 @@ public class UserWashCodeConfigServiceImpl extends SuperServiceImpl<UserWashCode
 
 
     @Override
-    public UserWashCodeConfig findUserWashCodeConfigList(Long userId) {
+    public   List<UserWashCodeConfig> findUserWashCodeConfigList(Long userId) {
         LambdaQueryWrapper<UserWashCodeConfig> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserWashCodeConfig::getUserId,userId);
-        return baseMapper.selectOne(wrapper);
+        List<UserWashCodeConfig> userWashCodeConfigs = baseMapper.selectList(wrapper);
+        return userWashCodeConfigs;
     }
 
-    public Result saveCache(UserWashCodeConfig userWashCodeConfig) {
-        boolean b = saveOrUpdate(userWashCodeConfig);
-        return b ? Result.succeed(userWashCodeConfig, "操作成功") : Result.failed("操作失败");
+    public Result saveCache(List<UserWashCodeConfig> list) {
+        boolean b = saveOrUpdateBatch(list);
+        return b ? Result.succeed(list, "操作成功") : Result.failed("操作失败");
     }
 
 }

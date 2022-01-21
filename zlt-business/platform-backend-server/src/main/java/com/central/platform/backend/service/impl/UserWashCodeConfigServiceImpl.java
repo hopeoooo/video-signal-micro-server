@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 @Slf4j
@@ -17,12 +18,12 @@ public class UserWashCodeConfigServiceImpl implements IUserWashCodeConfigService
     @Resource
     private UserService userService;
     @Override
-    public Result<UserWashCodeConfig> findUserWashCodeConfigList(Long userId) {
+    public Result<List<UserWashCodeConfig>> findUserWashCodeConfigList(Long userId) {
         return  userService.findUserWashCodeConfigList(userId);
     }
 
     @Override
-    public Result saveUserWashCodeConfig(UserWashCodeConfig userWashCodeConfig) {
-        return userService.saveUserWashCodeConfig(userWashCodeConfig);
+    public Result saveUserWashCodeConfig( List<UserWashCodeConfig> list) {
+        return userService.saveUserWashCodeConfig(list);
     }
 }

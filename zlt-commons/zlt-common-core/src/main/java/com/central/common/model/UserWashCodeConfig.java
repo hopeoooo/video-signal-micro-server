@@ -15,20 +15,11 @@ import java.math.BigDecimal;
 public class UserWashCodeConfig extends SuperEntity {
 
     @ApiModelProperty(value = "用户ID")
-    private String userId;
-
-    @ApiModelProperty(value = "百家乐返水比例")
-    private BigDecimal baccarat = BigDecimal.ZERO;
-
-    @ApiModelProperty(value = "龙虎返水比例")
-    private BigDecimal dragonTiger = BigDecimal.ZERO;
-
-    @ApiModelProperty(value = "轮盘返水比例")
-    private BigDecimal roulette = BigDecimal.ZERO;
-
-    @ApiModelProperty(value = "骰宝返水比例")
-    private BigDecimal sicBo = BigDecimal.ZERO;
-
-    @ApiModelProperty(value = "色碟返水比例")
-    private BigDecimal seDie = BigDecimal.ZERO;
+    private Long userId;
+    @ApiModelProperty(value = "游戏ID")
+    private Long gameId;
+    @ApiModelProperty(value = "游戏名称")
+    private String gameName;
+    @ApiModelProperty(value = "返水比例")
+    private BigDecimal gameRate = BigDecimal.ZERO;
 }

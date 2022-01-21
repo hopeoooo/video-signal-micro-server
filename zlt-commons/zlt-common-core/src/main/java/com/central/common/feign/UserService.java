@@ -140,9 +140,9 @@ public interface UserService {
 
 
     @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
-     Result<UserWashCodeConfig> findUserWashCodeConfigList(@PathVariable("userId") Long userId) ;
+     Result< List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable("userId") Long userId) ;
 
 
     @PostMapping("/userWashCode/saveUserWashCodeConfig")
-    Result saveUserWashCodeConfig(@RequestBody UserWashCodeConfig userWashCodeConfig) ;
+    Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfig> list) ;
 }

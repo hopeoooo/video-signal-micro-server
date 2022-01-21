@@ -142,14 +142,14 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result<UserWashCodeConfig> findUserWashCodeConfigList(Long userId) {
+            public Result< List<UserWashCodeConfig>> findUserWashCodeConfigList(Long userId) {
                 log.error("findUserWashCodeConfigList查询个人洗码配置异常:{}",userId,throwable);
                 return Result.failed("查询失败");
             }
 
             @Override
-            public Result saveUserWashCodeConfig(UserWashCodeConfig userWashCodeConfig) {
-                log.error("saveUserWashCodeConfig编辑个人洗码配置异常:{}",userWashCodeConfig,throwable);
+            public Result saveUserWashCodeConfig( List<UserWashCodeConfig> list) {
+                log.error("saveUserWashCodeConfig编辑个人洗码配置异常:{}",list,throwable);
                 return Result.failed("编辑失败");
             }
         };
