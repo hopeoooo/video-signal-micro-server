@@ -116,8 +116,8 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
     @Async
     public void syncPushNoticeToWebApp() {
         List<SysNotice> noticeList = getNoticeList();
-        PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, "notice");
-        Result<String> push = pushService.push(JSONObject.toJSONString(pushResult));
+        PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, "notice","公告推送成功");
+        Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
         log.info("公告消息推送结果:{}",push);
     }
 

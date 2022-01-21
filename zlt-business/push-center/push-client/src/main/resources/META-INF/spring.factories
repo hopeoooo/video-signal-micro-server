@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.central.push.feign.callback.PushServiceFallbackFactory
+com.central.push.AutoEnableClient
