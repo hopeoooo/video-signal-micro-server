@@ -175,12 +175,6 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 log.error("updateMinOnlineUserQuantity编辑最低在线人数异常:{}", minOnlineUserQuantity, cause);
                 return Result.failed("编辑失败");
             }
-
-            @Override
-            public Result<List<WashCodeConfig>> findWashCodeConfigList() {
-                log.error("findWashCodeConfigList查询洗码配置列表异常" ,cause);
-                return Result.failed("查询失败");
-            }
         };
     }
 }

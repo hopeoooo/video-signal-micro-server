@@ -1,15 +1,12 @@
 package com.central.platform.backend.controller;
 
 import com.central.common.model.Result;
-import com.central.config.feign.ConfigService;
-import com.central.config.model.WashCodeConfig;
+import com.central.game.feign.GameService;
+import com.central.game.model.GameList;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -20,12 +17,19 @@ import java.util.List;
 @RequestMapping("/washCode/backend")
 public class WashCodeConfigController {
     @Resource
-    private ConfigService configService;
+    private GameService gameService;
 
     @ApiOperation("查询洗码配置")
     @ResponseBody
-    @GetMapping("/washCode/findWashCodeConfigList")
-    public Result<List<WashCodeConfig>> findWashCodeConfigList() {
-        return configService.findWashCodeConfigList();
+    @GetMapping("/gamelist/findAll")
+    public Result<List<GameList>> findWashCodeConfigList() {
+        return gameService.findAll();
+    }
+
+    @ApiOperation(value = "新增/更新")
+    @PostMapping("/gamelist/save")
+    public Result save(@RequestBody GameList gameList) {
+        gameService.save(gameList);
+        return Result.succeed();
     }
 }

@@ -201,7 +201,4 @@ public interface ConfigService {
     @PostMapping("/system/updateMinOnlineUserQuantity")
     Result updateMinOnlineUserQuantity(@RequestParam("minOnlineUserQuantity") String minOnlineUserQuantity);
 
-
-    @GetMapping("/washCode/findWashCodeConfigList")
-     Result<List<WashCodeConfig>> findWashCodeConfigList() ;
 }
