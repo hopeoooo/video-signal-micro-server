@@ -1,7 +1,6 @@
 package com.central.oauth.service.impl;
 
 import com.central.common.constant.SecurityConstants;
-import com.central.common.feign.UserService;
 import com.central.common.model.LoginAppUser;
 import com.central.common.redis.template.RedisRepository;
 import com.central.oauth.exception.CustomOAuth2Exception;
@@ -9,6 +8,7 @@ import com.central.oauth.modle.CodeErrorAuthEnum;
 import com.central.oauth.service.ITokensService;
 import com.central.oauth.service.ZltUserDetailsService;
 import com.central.oauth.utils.ConstantPlayer;
+import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;

@@ -1,12 +1,10 @@
 package com.central.platform.backend.service.impl;
 
-import com.central.common.feign.MenuService;
-import com.central.common.feign.RoleService;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.platform.backend.service.SysMenuService;
-import com.central.platform.backend.service.SysRoleService;
+import com.central.user.feign.MenuService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

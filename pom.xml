@@ -290,7 +290,17 @@
                 <version>${fastdfs-client.version}</version>
             </dependency>
 
-            <!-- 项目业务逻辑模块-OpenFeign客户端模块 版本管理 Start -->
+            <!-- 业务逻辑模块版本管理（Business）  Start -->
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>user-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.zlt</groupId>-->
+<!--                <artifactId>user-center</artifactId>-->
+<!--                <version>${project.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>com.zlt</groupId>
                 <artifactId>search-client</artifactId>
@@ -341,24 +351,18 @@
                 <artifactId>push-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- 项目业务逻辑模块-OpenFeign客户端模块 版本管理 End -->
+            <!-- 业务逻辑模块版本管理（Business）  End -->
 
-            <dependency>
-                <groupId>com.zlt</groupId>
-                <artifactId>platform-backend-server</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.zlt</groupId>
-                <artifactId>user-center</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.zlt</groupId>
                 <artifactId>file-center</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>platform-backend-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>eu.bitwalker</groupId>
                 <artifactId>UserAgentUtils</artifactId>

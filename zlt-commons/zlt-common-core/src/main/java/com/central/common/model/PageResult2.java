@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 分页实体类
  *
- * @author zlt
+ * // TODO PageResult2 还为全部统一，做事不能只做一半
  */
 @Data
 @Builder

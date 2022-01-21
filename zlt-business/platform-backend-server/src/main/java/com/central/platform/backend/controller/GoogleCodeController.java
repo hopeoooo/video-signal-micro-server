@@ -1,6 +1,5 @@
 package com.central.platform.backend.controller;
 
-import com.central.common.feign.UserService;
 import com.central.common.model.LoginAppUser;
 import com.central.common.model.Result;
 import com.central.common.utils.GoogleAuthUtil;
@@ -13,9 +12,11 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 

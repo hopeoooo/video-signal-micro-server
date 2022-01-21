@@ -1,13 +1,11 @@
 package com.central.config.feign.callback;
 
-import com.central.common.feign.UserService;
 import com.central.common.model.*;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
-import com.central.config.model.WashCodeConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.web.bind.annotation.RequestParam;

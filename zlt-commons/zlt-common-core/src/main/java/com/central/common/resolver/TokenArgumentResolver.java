@@ -3,7 +3,6 @@ package com.central.common.resolver;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.SecurityConstants;
-import com.central.common.feign.UserService;
 import com.central.common.model.SysRole;
 import com.central.common.model.SysUser;
 import lombok.extern.slf4j.Slf4j;
@@ -20,19 +19,15 @@ import java.util.List;
 
 /**
  * Token转化SysUser
- *
- * @author zlt
- * @date 2018/12/21
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
  */
 @Slf4j
 public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
-    private UserService userService;
-
-    public TokenArgumentResolver(UserService userService) {
-        this.userService = userService;
+//    private UserService userService;
+//
+//    public TokenArgumentResolver(UserService userService) {
+//        this.userService = userService;
+//    }
+    public TokenArgumentResolver() {
     }
 
     /**
@@ -47,6 +42,7 @@ public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     /**
+     * 处理 @LoginUser 参数注解
      * @param methodParameter       入参集合
      * @param modelAndViewContainer model 和 view
      * @param nativeWebRequest      web相关
@@ -59,7 +55,8 @@ public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest nativeWebRequest,
                                   WebDataBinderFactory webDataBinderFactory) {
         LoginUser loginUser = methodParameter.getParameterAnnotation(LoginUser.class);
-        boolean isFull = loginUser.isFull();
+        // TODO 移除了 isFull去查用用户的功能 待清理内容
+//        boolean isFull = loginUser.isFull();
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         String userId = request.getHeader(SecurityConstants.USER_ID_HEADER);
         String username = request.getHeader(SecurityConstants.USER_HEADER);
@@ -71,13 +68,13 @@ public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
             return null;
         }
         SysUser user;
-        if (isFull) {
-            user = userService.selectByUsername(username);
-        } else {
+//        if (isFull) {
+//            user = userService.selectByUsername(username);
+//        } else {
             user = new SysUser();
             user.setId(Long.valueOf(userId));
             user.setUsername(username);
-        }
+//        }
         List<SysRole> sysRoleList = new ArrayList<>();
         Arrays.stream(roles.split(",")).forEach(role -> {
             SysRole sysRole = new SysRole();

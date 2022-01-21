@@ -1,11 +1,11 @@
 package com.central.platform.backend.service.impl;
 
-import com.central.common.feign.UserService;
 import com.central.common.model.Result;
 import com.central.common.model.UserWashCodeConfig;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
 import com.central.platform.backend.service.IUserWashCodeConfigService;
+import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
