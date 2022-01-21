@@ -1,12 +1,9 @@
 package com.central.user.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.central.common.model.SuperEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
