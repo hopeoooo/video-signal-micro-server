@@ -1,6 +1,7 @@
 package com.central.file.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.central.common.model.PageResult;
 import com.central.file.model.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
