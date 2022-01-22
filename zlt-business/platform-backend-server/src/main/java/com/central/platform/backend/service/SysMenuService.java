@@ -2,6 +2,7 @@ package com.central.platform.backend.service;
 
 
 import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public interface SysMenuService {
      * 查询所有菜单
      * @return
      */
-    Result<PageResult<SysMenu>> findAlls() ;
+    Result<PageResult2<SysMenu>> findAlls() ;
 
     /**
      * 添加菜单 或者 更新

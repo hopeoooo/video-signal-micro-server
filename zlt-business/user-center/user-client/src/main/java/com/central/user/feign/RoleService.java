@@ -1,7 +1,7 @@
 package com.central.user.feign;
 
 import com.central.common.constant.ServiceNameConstants;
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
@@ -24,7 +24,7 @@ public interface RoleService {
      * @return
      */
     @GetMapping("/roles")
-    PageResult<SysRole> findRoles(@RequestParam Map<String, Object> params);
+    PageResult2<SysRole> findRoles(@RequestParam Map<String, Object> params);
 
 
 

@@ -123,16 +123,16 @@ public class SysMenuController {
 
     @ApiOperation(value = "查询所有菜单")
     @GetMapping("/findAlls")
-    public PageResult<SysMenu> findAlls() {
+    public PageResult2<SysMenu> findAlls() {
         List<SysMenu> list = menuService.findAll();
-        return PageResult.<SysMenu>builder().data(list).code(0).count((long) list.size()).build();
+        return PageResult2.<SysMenu>builder().data(list).count((long) list.size()).build();
     }
 
     @ApiOperation(value = "获取菜单以及顶级菜单")
     @GetMapping("/findOnes")
-    public PageResult<SysMenu> findOnes() {
+    public PageResult2<SysMenu> findOnes() {
         List<SysMenu> list = menuService.findOnes();
-        return PageResult.<SysMenu>builder().data(list).code(0).count((long) list.size()).build();
+        return PageResult2.<SysMenu>builder().data(list).count((long) list.size()).build();
     }
 
     /**

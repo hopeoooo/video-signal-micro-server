@@ -1,6 +1,6 @@
 package com.central.user.feign.callback;
 
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.user.feign.MenuService;
@@ -37,15 +37,15 @@ public class MenuServiceFallbackFactory implements FallbackFactory<MenuService> 
             }
 
             @Override
-            public PageResult<SysMenu> findAlls() {
+            public PageResult2<SysMenu> findAlls() {
                 log.error("findAlls查询全部菜单异常", throwable);
-                return new PageResult();
+                return new PageResult2();
             }
 
             @Override
-            public PageResult<SysMenu> findOnes() {
+            public PageResult2<SysMenu> findOnes() {
                 log.error("findOnes获取菜单异常", throwable);
-                return new PageResult();
+                return new PageResult2();
             }
 
             @Override

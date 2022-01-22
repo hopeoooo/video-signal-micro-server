@@ -1,6 +1,6 @@
 package com.central.user.feign.callback;
 
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.user.feign.RoleService;
@@ -17,9 +17,9 @@ public class RoleServiceFallbackFactory implements FallbackFactory<RoleService> 
     public RoleService create(Throwable throwable) {
         return new RoleService() {
             @Override
-            public PageResult<SysRole> findRoles(Map<String, Object> params) {
+            public PageResult2<SysRole> findRoles(Map<String, Object> params) {
                 log.error("findRoles查询角色异常:{}", params, throwable);
-                return new PageResult();
+                return new PageResult2();
             }
 
             @Override
