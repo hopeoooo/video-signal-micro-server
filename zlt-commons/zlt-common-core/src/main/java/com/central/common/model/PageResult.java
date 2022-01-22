@@ -11,13 +11,13 @@ import java.util.List;
 /**
  * 分页实体类
  *
- * // TODO PageResult2 还为全部统一，做事不能只做一半
+ * // TODO PageResult 还为全部统一，做事不能只做一半
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageResult2<T> implements Serializable {
+public class PageResult<T> implements Serializable {
     private static final long serialVersionUID = -275582248840137389L;
     /**
      * 总数

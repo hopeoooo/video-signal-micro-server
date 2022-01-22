@@ -2,7 +2,7 @@ package com.central.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.CapitalEnum;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.SysTansterMoneyLog;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.vo.SysTansterMoneyLogVo;
@@ -29,7 +29,7 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
      * @return
      */
     @Override
-    public PageResult2<SysTansterMoneyLogVo> findSysTansterMoneyList(Map<String, Object> params) {
+    public PageResult<SysTansterMoneyLogVo> findSysTansterMoneyList(Map<String, Object> params) {
         Page<SysTansterMoneyLog> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
         List<SysTansterMoneyLog> list = baseMapper.findList(page, params);
 
@@ -42,7 +42,7 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
             sysTansterMoneyLogs.add(sysTansterMoney);
         }
         long total = page.getTotal();
-        return PageResult2.<SysTansterMoneyLogVo>builder().data(sysTansterMoneyLogs).count(total).build();
+        return PageResult.<SysTansterMoneyLogVo>builder().data(sysTansterMoneyLogs).count(total).build();
     }
 
 

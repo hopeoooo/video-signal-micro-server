@@ -1,6 +1,6 @@
 package com.central.user.controller;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.user.service.ISysRoleService;
@@ -31,7 +31,7 @@ public class SysRoleController {
      */
     @ApiOperation(value = "后台管理查询角色")
     @GetMapping("/roles")
-    public PageResult2<SysRole> findRoles(@RequestParam Map<String, Object> params) {
+    public PageResult<SysRole> findRoles(@RequestParam Map<String, Object> params) {
         return sysRoleService.findRoles(params);
     }
 

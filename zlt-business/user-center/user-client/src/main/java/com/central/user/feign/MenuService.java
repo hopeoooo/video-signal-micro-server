@@ -1,7 +1,7 @@
 package com.central.user.feign;
 
 import com.central.common.constant.ServiceNameConstants;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
@@ -44,14 +44,14 @@ public interface MenuService {
      * @return
      */
     @GetMapping("/menus/findAlls")
-    PageResult2<SysMenu> findAlls() ;
+    PageResult<SysMenu> findAlls() ;
 
     /**
      * 菜单管理：修改按钮获取菜单以及顶级菜单
      * @return
      */
     @GetMapping("/menus/findOnes")
-    PageResult2<SysMenu> findOnes() ;
+    PageResult<SysMenu> findOnes() ;
 
 
     /**

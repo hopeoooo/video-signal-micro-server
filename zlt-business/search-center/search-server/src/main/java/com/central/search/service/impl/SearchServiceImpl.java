@@ -1,6 +1,6 @@
 package com.central.search.service.impl;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.es.utils.SearchBuilder;
 import com.central.search.model.SearchDto;
 import com.central.search.service.ISearchService;
@@ -32,7 +32,7 @@ public class SearchServiceImpl implements ISearchService {
      * @return
      */
     @Override
-    public PageResult2<JsonNode> strQuery(String indexName, SearchDto searchDto) throws IOException {
+    public PageResult<JsonNode> strQuery(String indexName, SearchDto searchDto) throws IOException {
         return SearchBuilder.builder(client, indexName)
                 .setStringQuery(searchDto.getQueryStr())
                 .addSort(searchDto.getSortCol(), SortOrder.DESC)

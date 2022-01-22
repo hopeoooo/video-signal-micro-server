@@ -190,7 +190,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
     })
     @GetMapping("/users")
-    public PageResult2<SysUser> findUsers(@RequestParam Map<String, Object> params) {
+    public PageResult<SysUser> findUsers(@RequestParam Map<String, Object> params) {
         return appUserService.findUsers(params);
     }
 
@@ -372,7 +372,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "queryStr", value = "搜索关键字", dataType = "String")
     })
     @GetMapping("/users/search")
-    public PageResult2<JsonNode> search(SearchDto searchDto) {
+    public PageResult<JsonNode> search(SearchDto searchDto) {
         searchDto.setIsHighlighter(true);
         searchDto.setSortCol("createTime");
         return queryService.strQuery("sys_user", searchDto, SEARCH_LOGIC_DEL_DTO);

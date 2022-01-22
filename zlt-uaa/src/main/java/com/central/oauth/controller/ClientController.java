@@ -1,6 +1,6 @@
 package com.central.oauth.controller;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.oauth.dto.ClientDto;
 import com.central.oauth.model.Client;
@@ -26,8 +26,8 @@ public class ClientController {
 
     @GetMapping("/list")
     @ApiOperation(value = "应用列表")
-    public Result<PageResult2<Client>> list(@RequestParam Map<String, Object> params) {
-        PageResult2<Client> clientPageResult = clientService.listClient(params, true);
+    public Result<PageResult<Client>> list(@RequestParam Map<String, Object> params) {
+        PageResult<Client> clientPageResult = clientService.listClient(params, true);
         return Result.succeed(clientPageResult);
     }
 
@@ -40,7 +40,7 @@ public class ClientController {
     @GetMapping("/all")
     @ApiOperation(value = "所有应用")
     public Result<List<Client>> allClient() {
-        PageResult2<Client> page = clientService.listClient(Maps.newHashMap(), false);
+        PageResult<Client> page = clientService.listClient(Maps.newHashMap(), false);
         return Result.succeed(page.getData());
     }
 

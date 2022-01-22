@@ -53,10 +53,10 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
      * @return
      */
     @Override
-    public PageResult2<SysUserMoney> findList(Map<String, Object> params){
+    public PageResult<SysUserMoney> findList(Map<String, Object> params){
         Page<SysUserMoney> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
         List<SysUserMoney> list  =  baseMapper.findList(page, params);
-        return PageResult2.<SysUserMoney>builder().data(list).count(page.getTotal()).build();
+        return PageResult.<SysUserMoney>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override
