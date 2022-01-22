@@ -40,7 +40,10 @@ public class GameRoomList extends SuperEntity {
     private BigDecimal betMax;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty(value = "维护开始时间")
     private Date maintainStart;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty(value = "维护结束时间")
     private Date maintainEnd;
 }

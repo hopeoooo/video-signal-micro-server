@@ -39,6 +39,20 @@ public class GameRoomListController {
         return Result.succeed(gameRoomList);
     }
 
+    @ApiOperation(value = "根据游戏ID查询房间列表(前台用)")
+    @GetMapping("/findRoomListByGameId/{gameId}")
+    public Result<List<GameRoomList>> findRoomListByGameId(@PathVariable("gameId") Long gameId) {
+        List<GameRoomList> gameRoomList = iGameRoomListService.lambdaQuery().eq(GameRoomList::getGameId,gameId).ne(GameRoomList::getRoomStatus,0).list();
+        return Result.succeed(gameRoomList);
+    }
+
+    @ApiOperation(value = "根据房间ID查询房间详情")
+    @GetMapping("/findRoomDetailById/{id}")
+    public Result<GameRoomList> findRoomDetailById(@PathVariable("id") Long id) {
+        GameRoomList room = iGameRoomListService.getById(id);
+        return Result.succeed(room);
+    }
+
     @ApiOperation(value = "新增/更新")
     @PostMapping("/save")
     public Result save(@RequestBody GameRoomList gameRoomList) {
