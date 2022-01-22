@@ -1,7 +1,7 @@
 package com.central.game.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.game.model.GameList;
 import com.central.game.service.IGameListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class GameListController {
 
     @ApiOperation(value = "分页查询列表")
     @GetMapping("/list")
-    public Result<PageResult2<GameList>> list(@ModelAttribute SuperPage superPage) {
+    public Result<PageResult<GameList>> list(@ModelAttribute SuperPage superPage) {
         return Result.succeed(gameListService.findList(superPage));
     }
 

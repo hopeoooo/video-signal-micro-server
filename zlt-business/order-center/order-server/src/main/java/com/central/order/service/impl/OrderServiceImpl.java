@@ -1,6 +1,6 @@
 package com.central.order.service.impl;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import org.springframework.stereotype.Service;
 import com.central.common.model.SuperPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,9 +28,9 @@ public class OrderServiceImpl extends SuperServiceImpl<OrderMapper, Order> imple
      * @return
      */
     @Override
-    public PageResult2<Order> findList(SuperPage superPage){
+    public PageResult<Order> findList(SuperPage superPage){
         Page<Order> page = new Page<>(superPage.getPage(), superPage.getLimit());
         List<Order> list  =  baseMapper.findList(page, superPage);
-        return PageResult2.<Order>builder().data(list).count(page.getTotal()).build();
+        return PageResult.<Order>builder().data(list).count(page.getTotal()).build();
     }
 }

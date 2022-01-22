@@ -1,7 +1,7 @@
 package com.central.oauth.controller;
 
 import com.central.common.constant.SecurityConstants;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.config.feign.ConfigService;
 import com.central.oauth.model.TokenVo;
@@ -51,7 +51,7 @@ public class TokensController {
 
     @GetMapping("")
     @ApiOperation(value = "token列表")
-    public PageResult2<TokenVo> list(@RequestParam Map<String, Object> params, String tenantId) {
+    public PageResult<TokenVo> list(@RequestParam Map<String, Object> params, String tenantId) {
         return tokensService.listTokens(params, tenantId);
     }
 

@@ -1,6 +1,6 @@
 package com.central.platform.backend.service.impl;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.platform.backend.service.SysTansterMoneyLogService;
 import com.central.user.feign.UserService;
@@ -18,7 +18,7 @@ public class SysTansterMoneyLogServiceImpl implements SysTansterMoneyLogService 
     private UserService userService;
 
     @Override
-    public PageResult2<SysTansterMoneyLogVo> findList(Map<String, Object> params) {
+    public PageResult<SysTansterMoneyLogVo> findList(Map<String, Object> params) {
         return userService.findTransterMoneyList(params);
     }
 }

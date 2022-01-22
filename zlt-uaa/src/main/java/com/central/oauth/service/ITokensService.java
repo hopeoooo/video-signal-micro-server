@@ -1,6 +1,6 @@
 package com.central.oauth.service;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.oauth.model.TokenVo;
 
 import java.util.Map;
@@ -14,7 +14,7 @@ public interface ITokensService {
      * @param params 请求参数
      * @param clientId 应用id
      */
-    PageResult2<TokenVo> listTokens(Map<String, Object> params, String clientId);
+    PageResult<TokenVo> listTokens(Map<String, Object> params, String clientId);
 
 
     Integer playerNums(String clientId);

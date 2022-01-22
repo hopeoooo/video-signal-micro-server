@@ -1,6 +1,6 @@
 package com.central.search.service;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.search.model.SearchDto;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -17,5 +17,5 @@ public interface ISearchService {
      * @param searchDto 搜索Dto
      * @return
      */
-    PageResult2<JsonNode> strQuery(String indexName, SearchDto searchDto) throws IOException;
+    PageResult<JsonNode> strQuery(String indexName, SearchDto searchDto) throws IOException;
 }

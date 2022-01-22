@@ -1,9 +1,8 @@
 package com.central.platform.backend.service;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public interface SysRoleService {
      * @param params
      * @return
      */
-    PageResult2<SysRole> findRoles(@RequestParam Map<String, Object> params) ;
+    PageResult<SysRole> findRoles(@RequestParam Map<String, Object> params) ;
 
     Result saveOrUpdate(@RequestBody SysRole sysRole) throws Exception ;
 

@@ -3,7 +3,7 @@ package com.central.admin.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.central.admin.model.IndexDto;
 import com.central.admin.service.IIndexService;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.utils.JsonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,7 +71,7 @@ public class IndexServiceImpl implements IIndexService {
     }
 
     @Override
-    public PageResult2<Map<String, String>> list(String queryStr, String indices) throws IOException {
+    public PageResult<Map<String, String>> list(String queryStr, String indices) throws IOException {
         if (StrUtil.isNotEmpty(queryStr)) {
             indices = queryStr;
         }
@@ -87,7 +87,7 @@ public class IndexServiceImpl implements IIndexService {
             TypeReference<List<Map<String, String>>> typeRef = new TypeReference<List<Map<String, String>>>() {};
             listOfIndicesFromEs = mapper.readValue(rawBody, typeRef);
         }
-        return PageResult2.<Map<String, String>>builder().data(listOfIndicesFromEs).build();
+        return PageResult.<Map<String, String>>builder().data(listOfIndicesFromEs).build();
     }
 
     @Override

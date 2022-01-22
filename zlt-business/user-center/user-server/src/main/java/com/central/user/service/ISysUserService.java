@@ -73,7 +73,7 @@ public interface ISysUserService extends ISuperService<SysUser> {
 	 * @param params
 	 * @return
 	 */
-	PageResult2<SysUser> findUsers(Map<String, Object> params);
+	PageResult<SysUser> findUsers(Map<String, Object> params);
 
 
 	/**

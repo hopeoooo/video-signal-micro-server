@@ -34,7 +34,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public PageResult2<SysUser> findSysUserList(Map<String, Object> params) {
+    public PageResult<SysUser> findSysUserList(Map<String, Object> params) {
         return userService.findSysUserList(params);
     }
 

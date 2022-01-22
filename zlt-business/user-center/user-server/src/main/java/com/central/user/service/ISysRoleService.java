@@ -1,6 +1,6 @@
 package com.central.user.service;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.common.service.ISuperService;
@@ -24,7 +24,7 @@ public interface ISysRoleService extends ISuperService<SysRole> {
 	 * @param params
 	 * @return
 	 */
-	PageResult2<SysRole> findRoles(Map<String, Object> params);
+	PageResult<SysRole> findRoles(Map<String, Object> params);
 
 	/**
 	 * 新增或更新角色

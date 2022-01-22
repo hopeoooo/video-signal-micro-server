@@ -1,9 +1,8 @@
 package com.central.config.controller;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.config.model.DownloadStation;
-import com.central.config.model.SysNotice;
 import com.central.config.service.IDownloadStationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -37,7 +36,7 @@ public class DownloadStationController {
             @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
     })
-    public PageResult2<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) {
+    public PageResult<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) {
         return downloadStationService.findDownloadStationList(params);
     }
 

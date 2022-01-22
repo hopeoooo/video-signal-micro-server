@@ -1,14 +1,13 @@
 package com.central.config.feign;
 
 import com.central.common.constant.ServiceNameConstants;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
-import com.central.config.model.WashCodeConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -162,7 +161,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/download/findDownloadStationList")
-   PageResult2<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) ;
+    PageResult<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) ;
 
     /**
      * 新增or更新App升级管理

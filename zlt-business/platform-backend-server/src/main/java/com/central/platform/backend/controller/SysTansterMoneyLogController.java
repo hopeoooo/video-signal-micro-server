@@ -1,10 +1,7 @@
 package com.central.platform.backend.controller;
 
-import com.central.common.constant.CommonConstant;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.model.SysTansterMoneyLog;
-import com.central.common.model.SysUser;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.platform.backend.service.SysTansterMoneyLogService;
 import io.swagger.annotations.Api;
@@ -40,8 +37,8 @@ public class SysTansterMoneyLogController {
             @ApiImplicitParam(name = "endTime", value = "结束时间", required = false, dataType = "Date"),
     })
     @GetMapping("/users/list")
-    public Result<PageResult2<SysTansterMoneyLogVo>> list(@RequestParam Map<String, Object> params) {
-        PageResult2<SysTansterMoneyLogVo> sysUserList = sysTansterMoneyLogService.findList(params);
+    public Result<PageResult<SysTansterMoneyLogVo>> list(@RequestParam Map<String, Object> params) {
+        PageResult<SysTansterMoneyLogVo> sysUserList = sysTansterMoneyLogService.findList(params);
         return Result.succeed(sysUserList);
     }
 

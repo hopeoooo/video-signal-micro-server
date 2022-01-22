@@ -62,15 +62,15 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public PageResult2<SysUser> findSysUserList(Map<String, Object> params) {
+            public PageResult<SysUser> findSysUserList(Map<String, Object> params) {
                 log.error("findSysUserList查询用户异常:{}", params, throwable);
-                return new PageResult2();
+                return new PageResult();
             }
 
             @Override
-            public PageResult2<LoginLogPageDto> findUserLoginLogList(Map<String, Object> params) {
+            public PageResult<LoginLogPageDto> findUserLoginLogList(Map<String, Object> params) {
                 log.error("findUserLoginLogList查询会员日志异常:{}", params, throwable);
-                return new PageResult2();
+                return new PageResult();
             }
 
             @Override
@@ -144,9 +144,9 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 return Result.failed("上线分错误");
             }
             @Override
-            public PageResult2<SysTansterMoneyLogVo> findTransterMoneyList(Map<String, Object> params) {
+            public PageResult<SysTansterMoneyLogVo> findTransterMoneyList(Map<String, Object> params) {
                 log.error("findTransterMoneyList查询会员账变异常:{}", params, throwable);
-                return new PageResult2();
+                return new PageResult();
             }
 
             @Override

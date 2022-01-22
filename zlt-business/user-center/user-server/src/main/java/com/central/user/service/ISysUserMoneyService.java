@@ -1,6 +1,6 @@
 package com.central.user.service;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.SysUser;
 import com.central.common.model.SysUserMoney;
 import com.central.common.service.ISuperService;
@@ -20,7 +20,7 @@ public interface ISysUserMoneyService extends ISuperService<SysUserMoney> {
      * @param params
      * @return
      */
-    PageResult2<SysUserMoney> findList(Map<String, Object> params);
+    PageResult<SysUserMoney> findList(Map<String, Object> params);
 
     SysUserMoney findByUserId(Long userId);
 
