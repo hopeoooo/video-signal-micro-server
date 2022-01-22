@@ -1,6 +1,6 @@
 package com.central.platform.backend.controller;
 
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.platform.backend.service.SysMenuService;
@@ -62,7 +62,7 @@ public class SysMenuController {
      */
     @ApiOperation(value = "查询所有菜单")
     @GetMapping("/menus/findAlls")
-    public Result<PageResult<SysMenu>> findAlls() {
+    public Result<PageResult2<SysMenu>> findAlls() {
         return menuService.findAlls();
     }
 

@@ -3,7 +3,7 @@ package com.central.user.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.lock.DistributedLock;
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -55,12 +55,12 @@ public class SysRoleServiceImpl extends SuperServiceImpl<SysRoleMapper, SysRole>
     }
 
     @Override
-    public PageResult<SysRole> findRoles(Map<String, Object> params) {
+    public PageResult2<SysRole> findRoles(Map<String, Object> params) {
         Integer curPage = MapUtils.getInteger(params, "page");
         Integer limit = MapUtils.getInteger(params, "limit");
         Page<SysRole> page = new Page<>(curPage == null ? 0 : curPage, limit == null ? -1 : limit);
         List<SysRole> list = baseMapper.findList(page, params);
-        return PageResult.<SysRole>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult2.<SysRole>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override

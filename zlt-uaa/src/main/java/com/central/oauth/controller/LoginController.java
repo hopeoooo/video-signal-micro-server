@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 登陆【参考接口】
  */
-@Api(tags = "登陆【参考接口】")
+@Api(tags = "登陆【参考接口文档】 实际请求请对接实际请求地址")
 @RestController
 @RequestMapping("/test/oauth")
 public class LoginController {
@@ -18,7 +18,7 @@ public class LoginController {
      * 游客登陆
      */
     @PostMapping("/appGuest")
-    @ApiOperation(value = "游客登陆", notes = "post请求请求接口：/oauth/token")
+    @ApiOperation(value = "游客登陆", notes = "实际请求地址 post请求请求接口：/oauth/token")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Username", value = "授权用户：video-signal-webapp", required = true, dataType = "String"),
             @ApiImplicitParam(name = "Password", value = "授权密码：video-signal-webapp_YYDS", required = true, dataType = "String"),
@@ -49,7 +49,7 @@ public class LoginController {
      * 视讯app登陆
      */
     @PostMapping("/app")
-    @ApiOperation(value = "app登陆", notes = "post请求请求接口：/oauth/token")
+    @ApiOperation(value = "app登陆", notes = "实际请求地址 post请求请求接口：/oauth/token")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Username", value = "授权用户：video-signal-webapp", required = true, dataType = "String"),
             @ApiImplicitParam(name = "Password", value = "授权密码：video-signal-webapp_YYDS", required = true, dataType = "String"),
@@ -84,13 +84,13 @@ public class LoginController {
      * 视讯后台管理系统登陆登陆
      */
     @PostMapping("/backend")
-    @ApiOperation(value = "后台管理系统登陆", notes = "post请求请求接口：/oauth/token")
+    @ApiOperation(value = "后台管理系统登陆", notes = "实际请求地址 post请求请求接口：/oauth/token")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Username", value = "授权用户：video-signal-platform", required = true, dataType = "String"),
             @ApiImplicitParam(name = "Password", value = "授权密码：video-signal-platform_YYDS", required = true, dataType = "String"),
             @ApiImplicitParam(name = "grant_type", value = "password_google", required = true, dataType = "String"),
             @ApiImplicitParam(name = "username", value = "用户账号", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "googleCode", value = "google验证码", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "googleCode", value = "google验证码", required = false, dataType = "String"),
             @ApiImplicitParam(name = "deviceId", value = "UUID随机值", required = true, dataType = "String")
     })
     @ApiResponses({

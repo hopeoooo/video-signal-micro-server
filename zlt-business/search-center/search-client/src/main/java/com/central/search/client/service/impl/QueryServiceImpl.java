@@ -1,7 +1,7 @@
 package com.central.search.client.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.search.client.feign.AggregationService;
 import com.central.search.client.feign.SearchService;
 import com.central.search.client.service.IQueryService;
@@ -26,12 +26,12 @@ public class QueryServiceImpl implements IQueryService {
     private AggregationService aggregationService;
 
     @Override
-    public PageResult<JsonNode> strQuery(String indexName, SearchDto searchDto) {
+    public PageResult2<JsonNode> strQuery(String indexName, SearchDto searchDto) {
         return strQuery(indexName, searchDto, null);
     }
 
     @Override
-    public PageResult<JsonNode> strQuery(String indexName, SearchDto searchDto, LogicDelDto logicDelDto) {
+    public PageResult2<JsonNode> strQuery(String indexName, SearchDto searchDto, LogicDelDto logicDelDto) {
         setLogicDelQueryStr(searchDto, logicDelDto);
         return searchService.strQuery(indexName, searchDto);
     }

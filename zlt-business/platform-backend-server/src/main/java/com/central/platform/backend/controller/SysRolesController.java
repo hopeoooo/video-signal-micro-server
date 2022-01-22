@@ -1,6 +1,6 @@
 package com.central.platform.backend.controller;
 
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.platform.backend.service.SysRoleService;
@@ -34,7 +34,7 @@ public class SysRolesController {
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "name", value = "角色名称", required = false, dataType = "String")
     })
-    public PageResult<SysRole> findRoles(@RequestParam Map<String, Object> params) {
+    public PageResult2<SysRole> findRoles(@RequestParam Map<String, Object> params) {
         return roleService.findRoles(params);
     }
 

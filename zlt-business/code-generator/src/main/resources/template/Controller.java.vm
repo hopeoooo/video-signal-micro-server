@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import ${package}.${moduleName}.model.${className};
 import ${package}.${moduleName}.service.I${className}Service;
-import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 
 /**

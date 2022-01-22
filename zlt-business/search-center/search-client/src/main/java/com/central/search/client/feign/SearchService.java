@@ -1,7 +1,7 @@
 package com.central.search.client.feign;
 
 import com.central.common.constant.ServiceNameConstants;
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.search.client.feign.fallback.SearchServiceFallbackFactory;
 import com.central.search.model.SearchDto;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,5 +19,5 @@ public interface SearchService {
      * @param searchDto 搜索Dto
      */
     @PostMapping(value = "/search/{indexName}")
-    PageResult<JsonNode> strQuery(@PathVariable("indexName") String indexName, @RequestBody SearchDto searchDto);
+    PageResult2<JsonNode> strQuery(@PathVariable("indexName") String indexName, @RequestBody SearchDto searchDto);
 }

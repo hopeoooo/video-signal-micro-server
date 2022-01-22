@@ -1,7 +1,7 @@
 package com.central.admin.service;
 
 import com.central.admin.model.IndexDto;
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 
 import java.io.IOException;
 import java.util.Map;
@@ -29,7 +29,7 @@ public interface IIndexService {
      * @param queryStr 搜索字符串
      * @param indices 默认显示的索引名
      */
-    PageResult<Map<String, String>> list(String queryStr, String indices) throws IOException;
+    PageResult2<Map<String, String>> list(String queryStr, String indices) throws IOException;
 
     /**
      * 显示索引明细

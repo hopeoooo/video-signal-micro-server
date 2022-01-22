@@ -2,7 +2,6 @@ package com.central.file.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.central.common.model.PageResult;
 import com.central.file.mapper.FileMapper;
 import com.central.file.model.FileInfo;
 import com.central.file.service.IFileService;

@@ -3,16 +3,13 @@ package com.central.oauth.service.impl;
 import cn.hutool.core.util.PageUtil;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.constant.SecurityConstants;
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.redis.template.RedisRepository;
 import com.central.oauth.model.TokenVo;
 import com.central.oauth.service.ITokensService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -40,7 +37,7 @@ public class RedisTokensServiceImpl implements ITokensService {
     private RedisRepository redisRepository;
 
     @Override
-    public PageResult<TokenVo> listTokens(Map<String, Object> params, String clientId) {
+    public PageResult2<TokenVo> listTokens(Map<String, Object> params, String clientId) {
         Integer page = MapUtils.getInteger(params, "page");
         Integer limit = MapUtils.getInteger(params, "limit");
         int[] startEnds = PageUtil.transToStartEnd(page, limit);
@@ -76,7 +73,7 @@ public class RedisTokensServiceImpl implements ITokensService {
                 result.add(tokenVo);
             }
         }
-        return PageResult.<TokenVo>builder().data(result).code(0).count(size).build();
+        return PageResult2.<TokenVo>builder().data(result).count(size).build();
     }
 
     @Override

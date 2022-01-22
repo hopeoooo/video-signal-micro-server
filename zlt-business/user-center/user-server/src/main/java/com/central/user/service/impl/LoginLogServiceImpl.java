@@ -3,7 +3,7 @@ package com.central.user.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.LoginLog;
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.user.mapper.LoginLogMapper;
 import com.central.user.service.ILoginLogService;
@@ -22,10 +22,10 @@ import java.util.Map;
 public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginLog> implements ILoginLogService {
 
     @Override
-    public PageResult<LoginLogPageDto> queryList(Map<String, Object> map) {
+    public PageResult2<LoginLogPageDto> queryList(Map<String, Object> map) {
         Page<LoginLogPageDto> page = new Page<>(MapUtils.getInteger(map, "page"),  MapUtils.getInteger(map, "limit"));
         List<LoginLogPageDto> list  =  baseMapper.findAllLoginLog(page, map);
-        return PageResult.<LoginLogPageDto>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult2.<LoginLogPageDto>builder().data(list).count(page.getTotal()).build();
     }
 
 }

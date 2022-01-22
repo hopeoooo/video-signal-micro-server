@@ -1,6 +1,6 @@
 package com.central.user.controller;
 
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.service.ISysTansterMoneyLogService;
 import io.swagger.annotations.Api;
@@ -41,7 +41,7 @@ public class SysTansterMoneyLogController {
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
     })
     @GetMapping("/findList")
-    public PageResult<SysTansterMoneyLogVo> findSysTansterMoneyList(@RequestParam Map<String, Object> params) {
+    public PageResult2<SysTansterMoneyLogVo> findSysTansterMoneyList(@RequestParam Map<String, Object> params) {
         return sysTansterMoneyLogService.findSysTansterMoneyList(params);
     }
 }

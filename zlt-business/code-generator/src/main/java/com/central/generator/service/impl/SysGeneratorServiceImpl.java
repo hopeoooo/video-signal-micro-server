@@ -8,7 +8,6 @@ import java.util.zip.ZipOutputStream;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.central.common.model.PageResult;
 import com.central.generator.mapper.SysGeneratorMapper;
 import com.central.generator.service.SysGeneratorService;
 import com.central.generator.utils.GenUtils;

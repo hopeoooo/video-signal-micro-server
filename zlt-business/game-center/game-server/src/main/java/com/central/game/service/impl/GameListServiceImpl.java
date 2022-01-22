@@ -5,7 +5,6 @@ import com.central.game.mapper.GameListMapper;
 import com.central.game.model.GameList;
 import com.central.game.service.IGameListService;
 import org.springframework.stereotype.Service;
-import com.central.common.model.PageResult;
 import com.central.common.model.SuperPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.service.impl.SuperServiceImpl;

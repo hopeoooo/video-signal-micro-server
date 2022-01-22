@@ -1,6 +1,5 @@
 package com.central.log.controller;
 
-import com.central.common.model.PageResult;
 import com.central.search.client.service.IQueryService;
 import com.central.search.model.SearchDto;
 import com.fasterxml.jackson.databind.JsonNode;

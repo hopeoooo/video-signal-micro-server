@@ -2,7 +2,6 @@ package com.central.order.service.impl;
 
 import com.central.common.model.PageResult2;
 import org.springframework.stereotype.Service;
-import com.central.common.model.PageResult;
 import com.central.common.model.SuperPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.service.impl.SuperServiceImpl;

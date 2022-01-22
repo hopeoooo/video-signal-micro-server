@@ -211,7 +211,7 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
     }
 
     @Override
-    public PageResult<SysUser> findUsers(Map<String, Object> params) {
+    public PageResult2<SysUser> findUsers(Map<String, Object> params) {
         Page<SysUser> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
         List<SysUser> list = baseMapper.findList(page, params);
         long total = page.getTotal();
@@ -222,7 +222,7 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
             list.forEach(u -> u.setRoles(sysRoles.stream().filter(r -> !ObjectUtils.notEqual(u.getId(), r.getUserId()))
                     .collect(Collectors.toList())));
         }
-        return PageResult.<SysUser>builder().data(list).code(0).count(total).build();
+        return PageResult2.<SysUser>builder().data(list).count(total).build();
     }
 
     @Override

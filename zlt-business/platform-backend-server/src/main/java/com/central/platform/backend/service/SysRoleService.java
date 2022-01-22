@@ -1,6 +1,6 @@
 package com.central.platform.backend.service;
 
-import com.central.common.model.PageResult;
+import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import io.swagger.annotations.ApiOperation;
@@ -15,9 +15,9 @@ public interface SysRoleService {
      * @param params
      * @return
      */
-  PageResult<SysRole> findRoles(@RequestParam Map<String, Object> params) ;
+    PageResult2<SysRole> findRoles(@RequestParam Map<String, Object> params) ;
 
-  Result saveOrUpdate(@RequestBody SysRole sysRole) throws Exception ;
+    Result saveOrUpdate(@RequestBody SysRole sysRole) throws Exception ;
 
 
     Result deleteRole(@PathVariable("id")  Long id) ;
