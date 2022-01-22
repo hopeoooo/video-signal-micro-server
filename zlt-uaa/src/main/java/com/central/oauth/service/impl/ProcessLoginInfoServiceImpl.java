@@ -1,24 +1,20 @@
 package com.central.oauth.service.impl;
 
 import cn.hutool.core.date.DateTime;
-import com.central.common.feign.UserService;
 import com.central.common.model.LoginLog;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.vo.SysMoneyVO;
 import com.central.config.dto.TouristDto;
+import com.central.config.feign.ConfigService;
 import com.central.oauth.service.ProcessLoginInfoService;
+import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import com.central.config.feign.ConfigService;
-
 import java.math.BigDecimal;
 
 @Slf4j
@@ -27,8 +23,6 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
 
     @Resource
     private UserService userService;
-
-
 
     @Resource
     private ConfigService configService;

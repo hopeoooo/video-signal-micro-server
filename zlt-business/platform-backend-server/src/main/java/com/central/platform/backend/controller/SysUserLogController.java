@@ -1,10 +1,9 @@
 package com.central.platform.backend.controller;
 
 import com.central.common.dto.LoginLogPageDto;
-import com.central.common.feign.UserService;
-import com.central.common.model.PageResult;
 import com.central.common.model.PageResult2;
 import com.central.common.model.Result;
+import com.central.user.feign.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

@@ -1,10 +1,10 @@
 package com.central.oauth.component.schedule;
 
 import com.central.common.constant.SecurityConstants;
-import com.central.common.feign.UserService;
 import com.central.common.model.SysUser;
 import com.central.common.redis.template.RedisRepository;
 import com.central.oauth.utils.ConstantPlayer;
+import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

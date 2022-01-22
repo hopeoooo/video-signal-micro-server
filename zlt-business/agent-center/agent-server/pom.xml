@@ -23,6 +23,10 @@
         </dependency>
         <dependency>
             <groupId>com.zlt</groupId>
+            <artifactId>user-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.zlt</groupId>
             <artifactId>search-client</artifactId>
         </dependency>
         <dependency>

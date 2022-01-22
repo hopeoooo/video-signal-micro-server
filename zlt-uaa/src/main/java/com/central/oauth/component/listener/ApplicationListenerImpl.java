@@ -1,9 +1,9 @@
 package com.central.oauth.component.listener;
 
-import com.central.common.feign.UserService;
 import com.central.common.model.SysUser;
 import com.central.common.redis.template.RedisRepository;
 import com.central.oauth.utils.ConstantPlayer;
+import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;

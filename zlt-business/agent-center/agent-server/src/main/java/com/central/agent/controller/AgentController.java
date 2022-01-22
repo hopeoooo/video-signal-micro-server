@@ -1,9 +1,9 @@
 package com.central.agent.controller;
 
-import com.central.common.feign.UserService;
 import com.central.config.feign.ConfigService;
 import com.central.file.feign.FileService;
 import com.central.search.client.feign.SearchService;
+import com.central.user.feign.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

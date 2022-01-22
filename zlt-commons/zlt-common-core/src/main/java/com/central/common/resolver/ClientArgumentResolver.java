@@ -14,9 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * head中的应用参数注入clientId中
- *
- * @author zlt
- * @date 2019/7/10
  */
 @Slf4j
 public class ClientArgumentResolver implements HandlerMethodArgumentResolver {
@@ -32,6 +29,7 @@ public class ClientArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     /**
+     * 处理 @LoginClient 参数注解
      * @param methodParameter       入参集合
      * @param modelAndViewContainer model 和 view
      * @param nativeWebRequest      web相关
