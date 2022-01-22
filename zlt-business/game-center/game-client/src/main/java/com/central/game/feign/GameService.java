@@ -2,8 +2,10 @@ package com.central.game.feign;
 
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.Result;
+import com.central.common.vo.SysMoneyVO;
 import com.central.game.feign.callback.GameServiceFallbackFactory;
 import com.central.game.model.GameList;
+import com.central.game.model.GameRoomList;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,4 +50,39 @@ public interface GameService {
     @GetMapping("/gamelist/findGameList")
      Result<List<GameList>> findGameList(@RequestParam("state") Integer state) ;
 
+    /**
+     * 房间列表
+     *
+     * @param gameId
+     * @return
+     */
+    @GetMapping("/gameRoomlist/findList")
+    Result<List<GameRoomList>> findList(@RequestParam("gameId") Long gameId) ;
+
+    /**
+     * 新增或者修改房间
+     *
+     * @param gameRoomList
+     * @return
+     */
+    @PostMapping("/gameRoomlist/save")
+    Result save(@RequestBody GameRoomList gameRoomList) ;
+
+    /**
+     * 修改房间状态
+     *
+     * @param id
+     * @param roomStatus
+     * @return
+     */
+    @PostMapping("/gameRoomlist/roomStatus/{id}")
+    Result updateRoomStatus(@PathVariable("id") Long id, @RequestParam("roomStatus") Integer roomStatus) ;
+
+    /**
+     * 根据ID删除房间
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/gameRoomlist//deleteById/{id}")
+    Result roomDeleteById(@PathVariable("id") Long id);
 }

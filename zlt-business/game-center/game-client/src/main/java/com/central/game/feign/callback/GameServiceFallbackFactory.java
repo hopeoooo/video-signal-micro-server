@@ -3,6 +3,7 @@ package com.central.game.feign.callback;
 import com.central.common.model.Result;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
+import com.central.game.model.GameRoomList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
@@ -50,6 +51,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             @Override
             public Result<List<GameList>> findGameList(Integer state) {
                 log.error("findGameList查询洗码配置列表失败", throwable);
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result<List<GameRoomList>> findList(Long gameId) {
+                log.error("findList查询房间列表失败", throwable);
                 return Result.failed("查询失败");
             }
         };

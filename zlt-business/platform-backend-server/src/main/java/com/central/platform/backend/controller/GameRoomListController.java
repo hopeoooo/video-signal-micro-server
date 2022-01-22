@@ -1,8 +1,8 @@
-package com.central.game.controller;
+package com.central.platform.backend.controller;
 
 import com.central.common.model.Result;
+import com.central.game.feign.GameService;
 import com.central.game.model.GameRoomList;
-import com.central.game.service.IGameRoomListService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,7 +20,7 @@ import java.util.List;
 public class GameRoomListController {
 
     @Autowired
-    private IGameRoomListService iGameRoomListService;
+    private GameService gameService;
 
     /**
      * 分页查询房间数据
@@ -35,15 +35,14 @@ public class GameRoomListController {
             @ApiImplicitParam(name = "gameId", value = "游戏Id", required = false, dataType = "Long")
     })
     public Result<List<GameRoomList>> findList(@RequestParam("gameId") Long gameId) {
-        List<GameRoomList> gameRoomList = iGameRoomListService.findGameRoomList(gameId);
-        return Result.succeed(gameRoomList);
+        return gameService.findList(gameId);
     }
 
     @ApiOperation(value = "新增/更新")
     @PostMapping("/save")
     public Result save(@RequestBody GameRoomList gameRoomList) {
-        iGameRoomListService.saveOrUpdate(gameRoomList);
-        return Result.succeed();
+
+        return gameService.save(gameRoomList);
     }
 
     @ApiOperation(value = "根据ID修改房间状态")
@@ -52,21 +51,12 @@ public class GameRoomListController {
             @ApiImplicitParam(name = "roomStatus", value = "游戏房间状态 0禁用，1：正常，2：维护", required = false, dataType = "Integer")
     })
     public Result updateRoomStatus(@PathVariable Long id, @RequestParam("roomStatus") Integer roomStatus) {
-        if(roomStatus > 2 || roomStatus < 0){
-            return Result.failed("参数不合法");
-        }
-        Boolean result = iGameRoomListService.updateRoomStatus(id, roomStatus);
-        if(result){
-            return Result.succeed();
-        }else{
-            return Result.failed("修改房间状态失败");
-        }
+        return gameService.updateRoomStatus(id, roomStatus);
     }
 
     @ApiOperation(value = "根据ID删除")
     @DeleteMapping("/deleteById/{id}")
     public Result roomDeleteById(@PathVariable Long id) {
-        iGameRoomListService.removeById(id);
-        return Result.succeed();
+        return gameService.roomDeleteById(id);
     }
 }
