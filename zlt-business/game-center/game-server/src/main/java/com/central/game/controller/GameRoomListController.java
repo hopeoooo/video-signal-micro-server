@@ -34,7 +34,7 @@ public class GameRoomListController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "gameId", value = "游戏Id", required = false, dataType = "Long")
     })
-    public Result<List<GameRoomList>> findList(@RequestParam("gameId") Long gameId) {
+    public Result<List<GameRoomList>> findList(@RequestParam(value = "gameId",required = false) Long gameId) {
         List<GameRoomList> gameRoomList = iGameRoomListService.findGameRoomList(gameId);
         return Result.succeed(gameRoomList);
     }
