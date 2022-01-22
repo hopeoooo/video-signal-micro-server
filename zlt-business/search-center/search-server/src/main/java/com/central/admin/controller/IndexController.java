@@ -3,7 +3,6 @@ package com.central.admin.controller;
 import com.central.admin.model.IndexDto;
 import com.central.admin.properties.IndexProperties;
 import com.central.admin.service.IIndexService;
-import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,7 @@ public class IndexController {
      * 索引列表
      */
     @GetMapping("/indices")
-    public PageResult<Map<String, String>> list(@RequestParam(required = false) String queryStr) throws IOException {
+    public PageResult2<Map<String, String>> list(@RequestParam(required = false) String queryStr) throws IOException {
         return indexService.list(queryStr, indexProperties.getShow());
     }
 

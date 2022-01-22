@@ -1,12 +1,11 @@
 package com.central.platform.backend.controller;
 
 import com.central.common.constant.SecurityConstants;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.redis.template.RedisRepository;
 import com.central.platform.backend.model.OnlineUser;
 import com.central.platform.backend.service.IOnlineUserService;
-import com.central.platform.backend.service.impl.OnlineUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -138,8 +137,8 @@ public class OnlineUserController {
             @ApiImplicitParam(name = "endDate", value = "注册结束时间查询", required = true),
     })
     @GetMapping("/online/findPageList")
-    public Result<PageResult2<OnlineUser>> findPageList(@RequestParam Map<String, Object> params) {
-        PageResult2<OnlineUser> pageList = iOnlineUserService.findPageList(params);
+    public Result<PageResult<OnlineUser>> findPageList(@RequestParam Map<String, Object> params) {
+        PageResult<OnlineUser> pageList = iOnlineUserService.findPageList(params);
         return Result.succeed(pageList);
     }
 }

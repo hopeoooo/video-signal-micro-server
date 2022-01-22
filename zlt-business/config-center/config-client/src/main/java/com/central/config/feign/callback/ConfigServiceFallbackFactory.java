@@ -139,9 +139,9 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 return null;
             }
             @Override
-            public  PageResult2<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) {
+            public PageResult<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) {
                 log.error("findDownloadStationList查询异常" ,cause);
-                return new PageResult2<>();
+                return new PageResult<>();
             }
 
             @Override

@@ -1,17 +1,17 @@
 package com.central.common.model;
 
-import java.io.Serializable;
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * 分页实体类
  *
- * @author zlt
+ * // TODO PageResult 还为全部统一，做事不能只做一半
  */
 @Data
 @Builder
@@ -23,10 +23,6 @@ public class PageResult<T> implements Serializable {
      * 总数
      */
     private Long count;
-    /**
-     * 是否成功：0 成功、1 失败
-     */
-    private int code;
     /**
      * 当前页结果集
      */

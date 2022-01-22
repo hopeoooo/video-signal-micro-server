@@ -1,7 +1,7 @@
 package com.central.user.controller;
 
 import com.central.common.annotation.LoginUser;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.utils.DateUtil;
@@ -31,7 +31,7 @@ public class WashCodeChangeController {
             @ApiImplicitParam(name = "date", value = "时间：0：今天，1：昨天，2：近7天", required = true)
     })
     @GetMapping("/getWashCodeRecord")
-    public Result<PageResult2<WashCodeChangeVo>> getWashCodeRecord(@LoginUser SysUser user,String date) {
+    public Result<PageResult<WashCodeChangeVo>> getWashCodeRecord(@LoginUser SysUser user, String date) {
         String startTime = null;
         String endTime = null;
         if ("1".equals(date)) {
@@ -44,7 +44,7 @@ public class WashCodeChangeController {
             startTime = DateUtil.getStartTime(0);
             endTime = DateUtil.getEndTime(0);
         }
-        PageResult2<WashCodeChangeVo> washCodeChangeList = washCodeChangeService.getWashCodeRecord(3L,startTime,endTime);
+        PageResult<WashCodeChangeVo> washCodeChangeList = washCodeChangeService.getWashCodeRecord(3L,startTime,endTime);
         return Result.succeed(washCodeChangeList);
     }
 

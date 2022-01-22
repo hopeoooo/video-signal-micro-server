@@ -1,6 +1,6 @@
 package com.central.game.service;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.SuperPage;
 import com.central.common.service.ISuperService;
 import com.central.game.model.GameList;
@@ -17,6 +17,6 @@ public interface IGameListService extends ISuperService<GameList> {
      * @param superPage
      * @return
      */
-    PageResult2<GameList> findList(SuperPage superPage);
+    PageResult<GameList> findList(SuperPage superPage);
 }
 

@@ -44,14 +44,14 @@ public interface MenuService {
      * @return
      */
     @GetMapping("/menus/findAlls")
-     PageResult<SysMenu> findAlls() ;
+    PageResult<SysMenu> findAlls() ;
 
     /**
      * 菜单管理：修改按钮获取菜单以及顶级菜单
      * @return
      */
     @GetMapping("/menus/findOnes")
-     PageResult<SysMenu> findOnes() ;
+    PageResult<SysMenu> findOnes() ;
 
 
     /**

@@ -222,7 +222,7 @@ public class SearchBuilder {
         SearchHits searchHits = response.getHits();
         long totalCnt = searchHits.getTotalHits().value;
         List<JsonNode> list = getList(searchHits);
-        return PageResult.<JsonNode>builder().data(list).code(0).count(totalCnt).build();
+        return PageResult.<JsonNode>builder().data(list).count(totalCnt).build();
     }
 
     /**

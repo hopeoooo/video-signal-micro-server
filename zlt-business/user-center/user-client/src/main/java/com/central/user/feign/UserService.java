@@ -68,14 +68,14 @@ public interface UserService {
      * @return
      */
     @GetMapping(value = "/users", params = "params")
-    PageResult2<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
+    PageResult<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
 
     /**
      * 查询会员日志列表
      * @return
      */
     @GetMapping(value = "/loginLog/findUserLoginLogList", params = "params")
-    PageResult2<LoginLogPageDto> findUserLoginLogList(@RequestParam("params") Map<String, Object> params) ;
+    PageResult<LoginLogPageDto> findUserLoginLogList(@RequestParam("params") Map<String, Object> params) ;
 
 
 
@@ -134,7 +134,7 @@ public interface UserService {
                                        @RequestParam("remark") String remark, @RequestParam("transterType") Boolean transterType);
 
     @GetMapping(value = "/sysTansterMoney/findList", params = "params")
-    PageResult2<SysTansterMoneyLogVo> findTransterMoneyList(@RequestParam("params") Map<String, Object> params);
+    PageResult<SysTansterMoneyLogVo> findTransterMoneyList(@RequestParam("params") Map<String, Object> params);
 
 
     @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
