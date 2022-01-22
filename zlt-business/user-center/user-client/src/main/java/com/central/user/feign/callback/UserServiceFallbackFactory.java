@@ -15,25 +15,32 @@ import java.util.Map;
 
 /**
  * userService降级工场
- *
- * @author zlt
- * @date 2019/1/18
  */
 @Slf4j
 public class UserServiceFallbackFactory implements FallbackFactory<UserService> {
     @Override
     public UserService create(Throwable throwable) {
+        /**
+         * TODO 等待验证所有FallbackFactory是否完成
+         */
         return new UserService() {
+//            @Override
+//            public SysUser selectByUsername(String username) {
+//                log.error("通过用户名查询用户异常:{}", username, throwable);
+//                return new SysUser();
+//            }
+
             @Override
             public SysUser selectByUsername(String username) {
-                log.error("通过用户名查询用户异常:{}", username, throwable);
-                return new SysUser();
+                log.error("服务器异常，selectByUsername通过用户名查询用户异常:{}", username);
+                return null;
             }
 
             @Override
             public LoginAppUser findByUsername(String username) {
-                log.error("通过用户名查询用户异常:{}", username, throwable);
-                return new LoginAppUser();
+//                log.error("通过用户名查询用户异常:{}", username, throwable);
+                log.error("服务器异常，findByUsername通过用户名查询用户异常:{}", username);
+                return null;
             }
 
             @Override
@@ -59,6 +66,7 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("findSysUserList查询用户异常:{}", params, throwable);
                 return new PageResult2();
             }
+
             @Override
             public PageResult2<LoginLogPageDto> findUserLoginLogList(Map<String, Object> params) {
                 log.error("findUserLoginLogList查询会员日志异常:{}", params, throwable);
