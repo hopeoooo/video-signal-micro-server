@@ -8,6 +8,7 @@ import java.util.zip.ZipOutputStream;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.central.common.model.PageResult;
 import com.central.generator.mapper.SysGeneratorMapper;
 import com.central.generator.service.SysGeneratorService;
 import com.central.generator.utils.GenUtils;
@@ -30,7 +31,7 @@ public class SysGeneratorServiceImpl extends ServiceImpl implements SysGenerator
         Page<Map<String, Object>> page = new Page<>(MapUtils.getInteger(map, "page"), MapUtils.getInteger(map, "limit"));
 
         List<Map<String, Object>> list = sysGeneratorMapper.queryList(page, map);
-        return PageResult.<Map<String, Object>>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult.<Map<String, Object>>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override
