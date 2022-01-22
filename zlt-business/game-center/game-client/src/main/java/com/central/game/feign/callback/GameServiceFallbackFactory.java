@@ -3,6 +3,7 @@ package com.central.game.feign.callback;
 import com.central.common.model.Result;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
+import com.central.game.model.GameRoomList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
@@ -45,6 +46,36 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             public Result<List<GameList>> findAllOpenRate() {
                 log.error("查询全部开启返水的游戏失败", throwable);
                 return Result.failed("查询全部开启返水的游戏失败");
+            }
+
+            @Override
+            public Result<List<GameList>> findGameList(Integer state) {
+                log.error("findGameList查询洗码配置列表失败", throwable);
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result<List<GameRoomList>> findList(Long gameId) {
+                log.error("findList查询房间列表失败", throwable);
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result save(GameRoomList gameRoomList) {
+                log.error("save房间失败", throwable);
+                return Result.failed("保存房间失败");
+            }
+
+            @Override
+            public Result updateRoomStatus(Long id, Integer roomStatus) {
+                log.error("更新房间失败", throwable);
+                return Result.failed("更新房间失败");
+            }
+
+            @Override
+            public Result roomDeleteById(Long id) {
+                log.error("删除房间失败", throwable);
+                return Result.failed("删除房间失败");
             }
         };
     }

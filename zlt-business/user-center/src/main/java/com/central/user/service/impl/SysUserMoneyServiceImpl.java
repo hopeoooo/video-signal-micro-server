@@ -93,8 +93,8 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     @Async
     public void syncPushMoneyToWebApp(Long userId) {
         SysUserMoney money = findByUserId(userId);
-        PushResult<SysUserMoney> pushResult = PushResult.succeed(money, "money");
-        Result<String> push = pushService.pushOne(JSONObject.toJSONString(pushResult), userId.toString());
+        PushResult<SysUserMoney> pushResult = PushResult.succeed(money, "money","用户钱包推送成功");
+        Result<String> push = pushService.sendOneMessage(userId.toString(),JSONObject.toJSONString(pushResult));
         log.info("用户金额userId:{},推送结果:{}", userId, push);
     }
 

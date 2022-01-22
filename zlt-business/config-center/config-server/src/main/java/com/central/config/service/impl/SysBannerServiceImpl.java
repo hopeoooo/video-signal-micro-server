@@ -94,8 +94,8 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     @Async
     public void syncPushBannerToWebApp() {
         List<SysBanner> bannerList = getBannerList();
-        PushResult<List<SysBanner>> pushResult = PushResult.succeed(bannerList, "banner");
-        Result<String> push = pushService.push(JSONObject.toJSONString(pushResult));
+        PushResult<List<SysBanner>> pushResult = PushResult.succeed(bannerList, "banner","轮播图推送成功");
+        Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
         log.info("轮播图推送结果:{}",push);
     }
 }

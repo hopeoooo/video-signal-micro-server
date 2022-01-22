@@ -19,11 +19,11 @@ public class PushResult<T> implements Serializable {
     private String resp_msg;
     private String type;
 
-    public static <T> PushResult<T> succeed(T model, String type) {
-        return of(model, CodeEnum.SUCCESS.getCode(), type);
+    public static <T> PushResult<T> succeed(T model, String type,String msg) {
+        return of(model, CodeEnum.SUCCESS.getCode(),msg, type);
     }
 
-    public static <T> PushResult<T> of(T datas, Integer code, String type) {
-        return new PushResult<>(datas, code, "消息推送成功", type);
+    public static <T> PushResult<T> of(T datas, Integer code, String msg,String type) {
+        return new PushResult<>(datas, code, msg, type);
     }
 }
