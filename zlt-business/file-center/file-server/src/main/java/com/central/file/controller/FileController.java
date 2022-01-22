@@ -1,5 +1,6 @@
 package com.central.file.controller;
 
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.file.model.FileInfo;
 import com.central.file.service.IFileService;

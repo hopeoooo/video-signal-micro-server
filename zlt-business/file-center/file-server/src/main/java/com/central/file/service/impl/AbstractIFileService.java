@@ -2,6 +2,7 @@ package com.central.file.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.central.common.model.PageResult;
 import com.central.file.mapper.FileMapper;
 import com.central.file.model.FileInfo;
 import com.central.file.service.IFileService;
@@ -77,6 +78,6 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileI
     public PageResult<FileInfo> findList(Map<String, Object> params) {
         Page<FileInfo> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
         List<FileInfo> list = baseMapper.findList(page, params);
-        return PageResult.<FileInfo>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult.<FileInfo>builder().data(list).count(page.getTotal()).build();
     }
 }
