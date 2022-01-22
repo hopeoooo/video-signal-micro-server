@@ -1,6 +1,5 @@
 package com.central.platform.backend.service.impl;
 
-import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.platform.backend.service.SysMenuService;
