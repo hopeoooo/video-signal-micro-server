@@ -25,59 +25,25 @@ import java.util.List;
 @Api(tags = "游戏列表")
 public class GameListController {
 
-//    @Autowired
-//    private GameService gameService;
-//
-//    @ApiOperation(value = "分页查询列表")
-//    @GetMapping("/list")
-//    public Result list(@ModelAttribute SuperPage superPage) {
-//        return gameService.findAll();
-//    }
-//
-//    @ApiOperation(value = "根据ID查询")
-//    @GetMapping("/findById/{id}")
-//    public Result<GameList> findById(@PathVariable Long id) {
-//        GameList model = gameListService.getById(id);
-//        return Result.succeed(model);
-//    }
-//
-//    @ApiOperation(value = "新增/更新")
-//    @PostMapping("/save")
-//    public Result save(@RequestBody GameList gameList) {
-//        gameListService.saveOrUpdate(gameList);
-//        return Result.succeed();
-//    }
-//
-//    @ApiOperation(value = "根据ID删除")
-//    @DeleteMapping("/deleteById/{id}")
-//    public Result deleteById(@PathVariable Long id) {
-//        gameListService.removeById(id);
-//        return Result.succeed();
-//    }
-//
-//    @ApiOperation(value = "查询全部游戏")
-//    @GetMapping("/findAll")
-//    public Result<List<GameList>> findAll() {
-//        List<GameList> list = gameListService.lambdaQuery().in(GameList::getGameStatus,1,2).list();
-//        return Result.succeed(list);
-//    }
-//
-//    @ApiOperation(value = "查询全部开启返水的游戏")
-//    @GetMapping("/findAllOpenRate")
-//    public Result<List<GameList>> findAllOpenRate() {
-//        List<GameList> list = gameListService.lambdaQuery().in(GameList::getRateStatus,1).list();
-//        return Result.succeed(list);
-//    }
-//
-//
-//    @ApiOperation(value = "查询洗码配置列表(后台)")
-//    @GetMapping("/findGameList")
-//    public Result<List<GameList>> findGameList(@RequestParam(value = "state", required = false)Integer state) {
-//        LambdaQueryWrapper<GameList> wrapper = new LambdaQueryWrapper<>();
-//        if (state!=null){
-//            wrapper.eq(GameList::getRateStatus,state);
-//        }
-//        List<GameList> list = gameListService.list(wrapper);
-//        return Result.succeed(list);
-//    }
+    @Autowired
+    private GameService gameService;
+
+    @ApiOperation(value = "新增/更新")
+    @PostMapping("/save")
+    public Result save(@RequestBody GameList gameList) {
+        return gameService.save(gameList);
+    }
+
+    @ApiOperation(value = "根据ID删除")
+    @DeleteMapping("/deleteById/{id}")
+    public Result deleteById(@PathVariable Long id) {
+        return gameService.deleteById(id);
+    }
+
+    @ApiOperation(value = "查询全部游戏")
+    @GetMapping("/findAll")
+    public Result<List<GameList>> findAll() {
+        return gameService.findAll();
+    }
+
 }
