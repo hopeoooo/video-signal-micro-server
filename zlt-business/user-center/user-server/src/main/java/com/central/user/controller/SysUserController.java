@@ -22,11 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
@@ -59,6 +62,9 @@ public class SysUserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Resource
+    private RedisTemplate redisTemplate;
 
     /**
      * 当前登录用户 LoginAppUser
@@ -95,16 +101,16 @@ public class SysUserController {
      */
     @GetMapping(value = "/users-anon/findGuest")
     public LoginAppUser findGuest(){
-        // TODO 随机获取一个游客用户
-//        List<SysUser> playList = this.queryPlayerList();
-//        for (SysUser sysUser:playList) {
-//            if(!tokensService.exist(sysUser.getUsername(),"webApp")){
-//                return sysUser.getUsername();
-//            }
-//        }
-//        throw new InternalAuthenticationServiceException("游客已满");
+        log.info("+++++++++  find guest");
 
-        return appUserService.findByUsername("play21");
+        if(!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE))
+            throw new InternalAuthenticationServiceException("游客已使用完");
+
+        Object playName = redisTemplate.opsForList().rightPop(CommonConstant.PLAYER_ACCOUNT_QUEUE);
+        if(playName ==null)
+            throw new InternalAuthenticationServiceException("游客已满");
+
+        return appUserService.findByUsername(playName.toString());
     }
 
     /**

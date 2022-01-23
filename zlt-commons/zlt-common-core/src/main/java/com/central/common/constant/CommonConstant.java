@@ -152,4 +152,6 @@ public interface CommonConstant {
         Integer WAIT_TIME = 120; //获取锁等待时间
         Integer LEASE_TIME = 60; //
     }
+
+    String PLAYER_ACCOUNT_QUEUE = "player_acc_list";
 }
