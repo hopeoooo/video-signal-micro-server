@@ -30,6 +30,7 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
     @Async
     @Override
     public void processLoginInfo(UserDetails userDetails,String loginIp) {
+        log.info("+++++++ logInIp is {}",loginIp);
         SysUser sysUser = (SysUser) userDetails;
         log.info("++++++++++++ sysUser {}",sysUser);
         sysUser.setLoginIp(loginIp);
@@ -49,11 +50,11 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
 
     @Async
     @Override
-    public void initAmount(UserDetails userDetails) {
+    public void initAmount(SysUser userDetails) {
         Result<TouristDto> touristDtoResult = configService.findTouristAmount();
         log.info("init Amount is {}",touristDtoResult);
         log.info("authentication is {}",userDetails);
-        SysUser sysUser = (SysUser) userDetails;
+        SysUser sysUser =  userDetails;
         BigDecimal maxAmount = touristDtoResult.getDatas().getTouristAmount();
         // 游客初始化金额  持久化
         SysMoneyVO sysMoneyVO = new SysMoneyVO();
