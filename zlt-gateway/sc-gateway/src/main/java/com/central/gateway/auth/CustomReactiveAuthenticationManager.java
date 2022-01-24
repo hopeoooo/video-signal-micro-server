@@ -10,19 +10,21 @@ import org.springframework.security.oauth2.server.resource.BearerTokenAuthentica
 import reactor.core.publisher.Mono;
 
 /**
- * @author zlt
- * @date 2019/10/6
- * <p>
- * Blog: https://zlt2000.gitee.io
- * Github: https://github.com/zlt2000
+ * 自定义 响应式 认证 管理
  */
-public class CustomAuthenticationManager implements ReactiveAuthenticationManager {
+public class CustomReactiveAuthenticationManager implements ReactiveAuthenticationManager {
     private TokenStore tokenStore;
 
-    public CustomAuthenticationManager(TokenStore tokenStore) {
+    public CustomReactiveAuthenticationManager(TokenStore tokenStore) {
         this.tokenStore = tokenStore;
     }
 
+    /**
+     * 使用redis的token方式处理认证
+     * 处理：调用BearerTokenAuthenticationToken的getToken方法
+     * @param authentication
+     * @return
+     */
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         return Mono.justOrEmpty(authentication)
@@ -31,15 +33,16 @@ public class CustomAuthenticationManager implements ReactiveAuthenticationManage
                 .map(BearerTokenAuthenticationToken::getToken)
                 .flatMap((accessTokenValue -> {
                     OAuth2AccessToken accessToken = tokenStore.readAccessToken(accessTokenValue);
-                    if (accessToken == null) {
+                    if (accessToken == null) { // 没有找到token，无效的token
                         return Mono.error(new InvalidTokenException("Invalid access token: " + accessTokenValue));
-                    } else if (accessToken.isExpired()) {
-                        tokenStore.removeAccessToken(accessToken);
-                        return Mono.error(new InvalidTokenException("Access token expired: " + accessTokenValue));
                     }
-
+//                    else if (accessToken.isExpired()) { // token已经过期
+//                        tokenStore.removeAccessToken(accessToken);
+//                        return Mono.error(new InvalidTokenException("Access token expired: " + accessTokenValue));
+//                    }
+                    // 自动续签的前提是token还为过期
                     OAuth2Authentication result = tokenStore.readAuthentication(accessToken);
-                    if (result == null) {
+                    if (result == null) { // 无效的token
                         return Mono.error(new InvalidTokenException("Invalid access token: " + accessTokenValue));
                     }
                     return Mono.just(result);

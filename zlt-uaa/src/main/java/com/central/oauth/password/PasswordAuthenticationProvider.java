@@ -83,14 +83,6 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
             throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USERNAME_PASSWORD.getCode(), "用户名或密码错误");
         }
 
-        // TODO 移到其它地方
-        if(isPlayer(authentication)){
-            //给游客初始化金额
-            processLoginInfoService.initAmount(userDetails);
-        }
-        log.info("++++++++++  userDetails {}",userDetails);
-        String logInIp = getLoginIp();
-        log.info("+++++++ logInIp is {}",logInIp);
         processLoginInfoService.processLoginInfo(userDetails,getLoginIp());
     }
 
@@ -100,17 +92,6 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
         HttpServletRequest request = servletRequestAttributes.getRequest();
 
         return IpUtil.getIpAddr(request);
-    }
-
-    // TODO 移到其它地方
-    private Boolean isPlayer(UsernamePasswordAuthenticationToken authentication){
-        // Details={account_type=admin, grant_type=password_code, deviceId=C5ACEFA0-13A1-423A-BC05-58D708C3D218, username=test, player=player}
-        log.info("{}",authentication.getDetails());
-        String jsonString = JSON.toJSONString(authentication.getDetails());
-        Map<String,Object> detailMap = JSON.parseObject(jsonString,Map.class);
-        String player = detailMap.get("player")==null?authentication.getName():detailMap.get("player").toString();
-        log.info("++++++++++++ player {}",player);
-        return "player".equals(player);
     }
 
     @Override

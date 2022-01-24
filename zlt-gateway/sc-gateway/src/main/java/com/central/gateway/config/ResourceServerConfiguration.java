@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -37,8 +36,9 @@ public class ResourceServerConfiguration {
 
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+
         //认证处理器
-        ReactiveAuthenticationManager customAuthenticationManager = new CustomAuthenticationManager(tokenStore);
+        CustomReactiveAuthenticationManager customAuthenticationManager = new CustomReactiveAuthenticationManager(tokenStore);
         JsonAuthenticationEntryPoint entryPoint = new JsonAuthenticationEntryPoint();
         //token转换器
         ServerBearerTokenAuthenticationConverter tokenAuthenticationConverter = new ServerBearerTokenAuthenticationConverter();

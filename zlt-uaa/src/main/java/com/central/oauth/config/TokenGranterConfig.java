@@ -2,6 +2,7 @@ package com.central.oauth.config;
 
 import com.central.oauth.granter.*;
 import com.central.oauth.service.IValidateCodeService;
+import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.oauth.service.impl.CustomTokenServices;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth.service.impl.UserDetailsByNameServiceFactoryWrapper;
@@ -65,6 +66,9 @@ public class TokenGranterConfig {
     @Autowired
     private RandomValueAuthorizationCodeServices authorizationCodeServices;
 
+    @Autowired
+    private ProcessLoginInfoService processLoginInfoService;
+
     private boolean reuseRefreshToken = true;
 
     private AuthorizationServerTokenServices tokenServices;
@@ -113,7 +117,7 @@ public class TokenGranterConfig {
             // 添加openId模式
             tokenGranters.add(new OpenIdGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
             // 添加guest游客授权模式
-            tokenGranters.add(new GuestGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
+            tokenGranters.add(new GuestGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory,processLoginInfoService));
             // 添加手机号加密码授权模式
             tokenGranters.add(new MobilePwdGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
             // 添加密码+Google身份验证码
