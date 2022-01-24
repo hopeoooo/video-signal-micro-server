@@ -241,13 +241,13 @@ public class SysBannerController {
     }
 
     /**
-     * 群发公告消息
+     * 群发轮播图消息
      *
      * @return
      */
-    @ApiOperation(value = "webSocket群发公告消息")
-    @GetMapping("/pushNotice")
-    public PushResult<List<SysBanner>> pushNotice() {
+    @ApiOperation(value = "webSocket群发轮播图消息")
+    @GetMapping("/pushBanner")
+    public PushResult<List<SysBanner>> pushBanner() {
         List<SysBanner> bannerList = bannerService.getBannerList();
         PushResult<List<SysBanner>> pushResult = PushResult.succeed(bannerList, "banner","轮播图推送成功");
         Result<String> push = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
