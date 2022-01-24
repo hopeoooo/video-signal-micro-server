@@ -1,6 +1,8 @@
 package com.central.game.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.central.common.model.SuperEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,6 +28,8 @@ import io.swagger.annotations.ApiModelProperty;
 public class GameList extends SuperEntity {
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "id", type = IdType.INPUT)
+    private Long id;
     @ApiModelProperty(value = "游戏名称")
     private String name;
     @ApiModelProperty(value = "游戏状态 0：禁用，1：正常，2：维护")
