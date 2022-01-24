@@ -1,9 +1,12 @@
 package com.central.config.controller;
 
+import com.central.common.model.PushResult;
 import com.central.common.model.Result;
+import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
 import com.central.config.service.ISysNoticeService;
 import com.central.log.annotation.AuditLog;
+import com.central.push.feign.PushService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,6 +27,8 @@ import java.util.Map;
 public class SysNoticeConfigController {
     @Autowired
     private ISysNoticeService noticeService;
+    @Autowired
+    private PushService pushService;
 
     /**
      * 查询公告管理列表
@@ -101,5 +106,20 @@ public class SysNoticeConfigController {
         Result result = noticeService.saveOrUpdateUser(sysNotice);
         noticeService.syncPushNoticeToWebApp();
         return result;
+    }
+
+    /**
+     * 群发公告消息
+     *
+     * @return
+     */
+    @ApiOperation(value = "webSocket群发公告消息")
+    @GetMapping("/pushNotice")
+    public PushResult<List<SysNotice>> pushNotice() {
+        List<SysNotice> noticeList = noticeService.getNoticeList();
+        PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, "notice","公告推送成功");
+        Result<String> push = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+        log.info("轮播图推送结果:{}",push);
+        return pushResult;
     }
 }

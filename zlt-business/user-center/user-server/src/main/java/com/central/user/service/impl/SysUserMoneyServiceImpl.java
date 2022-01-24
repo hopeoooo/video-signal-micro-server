@@ -11,6 +11,7 @@ import com.central.push.feign.PushService;
 import com.central.user.mapper.SysUserMoneyMapper;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
+import com.central.user.service.ISysUserService;
 import com.central.user.vo.SysUserMoneyVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -45,6 +46,8 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     private ISysTansterMoneyLogService iSysTansterMoneyLogService;
     @Autowired
     private PushService pushService;
+    @Autowired
+    private ISysUserService iSysUserService;
 
 
     /**
@@ -97,11 +100,12 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         if (money == null) {
             money = new SysUserMoney();
         }
+        SysUser sysUser = iSysUserService.selectById(userId);
         SysUserMoneyVo vo = new SysUserMoneyVo();
         BeanUtils.copyProperties(money, vo);
         PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, "money","用户钱包推送成功");
-        Result<String> push = pushService.sendOneMessage(userId.toString(),JSONObject.toJSONString(pushResult));
-        log.info("用户钱包userId:{},推送结果:{}", userId, push);
+        Result<String> push = pushService.sendOneMessage(sysUser.getUsername(),JSONObject.toJSONString(pushResult));
+        log.info("用户钱包userName:{},推送结果:{}", userId, push);
     }
 
     @Override
