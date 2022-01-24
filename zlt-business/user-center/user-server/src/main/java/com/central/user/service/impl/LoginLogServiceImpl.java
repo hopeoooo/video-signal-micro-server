@@ -25,7 +25,7 @@ public class LoginLogServiceImpl extends SuperServiceImpl<LoginLogMapper, LoginL
     public PageResult<LoginLogPageDto> queryList(Map<String, Object> map) {
         Page<LoginLogPageDto> page = new Page<>(MapUtils.getInteger(map, "page"),  MapUtils.getInteger(map, "limit"));
         List<LoginLogPageDto> list  =  baseMapper.findAllLoginLog(page, map);
-        return PageResult.<LoginLogPageDto>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult.<LoginLogPageDto>builder().data(list).count(page.getTotal()).build();
     }
 
 }

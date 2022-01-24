@@ -87,7 +87,7 @@ public class IndexServiceImpl implements IIndexService {
             TypeReference<List<Map<String, String>>> typeRef = new TypeReference<List<Map<String, String>>>() {};
             listOfIndicesFromEs = mapper.readValue(rawBody, typeRef);
         }
-        return PageResult.<Map<String, String>>builder().data(listOfIndicesFromEs).code(0).build();
+        return PageResult.<Map<String, String>>builder().data(listOfIndicesFromEs).build();
     }
 
     @Override

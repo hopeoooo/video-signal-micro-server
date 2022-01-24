@@ -1,12 +1,11 @@
 package com.central.config.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.config.mapper.DownloadStationMapper;
 import com.central.config.model.DownloadStation;
-import com.central.config.model.SysNotice;
 import com.central.config.service.IDownloadStationService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -23,10 +22,10 @@ import java.util.Map;
 public class DownloadStationServiceImpl extends SuperServiceImpl<DownloadStationMapper, DownloadStation> implements IDownloadStationService {
 
     @Override
-    public PageResult2<DownloadStation> findDownloadStationList(Map<String, Object> map) {
+    public PageResult<DownloadStation> findDownloadStationList(Map<String, Object> map) {
         Page<DownloadStation> page = new Page<>(MapUtils.getInteger(map, "page"),  MapUtils.getInteger(map, "limit"));
         List<DownloadStation> list = baseMapper.findList(page);
-        return PageResult2.<DownloadStation>builder().data(list).count(page.getTotal()).build();
+        return PageResult.<DownloadStation>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override

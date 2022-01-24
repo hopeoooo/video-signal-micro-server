@@ -1,6 +1,6 @@
 package com.central.user.service.impl;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.common.model.UserWashCodeConfig;
 import com.central.common.model.WashCodeChange;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -27,11 +27,11 @@ public class WashCodeChangeServiceImpl extends SuperServiceImpl<WashCodeChangeMa
     private IUserWashCodeConfigService userWashCodeConfigService;
 
     @Override
-    public PageResult2<WashCodeChangeVo> getWashCodeRecord(Long userId, String startTime, String endTime) {
+    public PageResult<WashCodeChangeVo> getWashCodeRecord(Long userId, String startTime, String endTime) {
         //查询最新的洗码返水配置
         List<UserWashCodeConfig> washCodeConfigList = userWashCodeConfigService.findWashCodeConfigList(userId);
         if (CollectionUtils.isEmpty(washCodeConfigList)) {
-            return PageResult2.<WashCodeChangeVo>builder().data(null).count(0L).build();
+            return PageResult.<WashCodeChangeVo>builder().data(null).count(0L).build();
         }
         List<WashCodeChange> recordList = mapper.getWashCodeRecord(userId, startTime, endTime);
         List<WashCodeChangeVo> resultList = new ArrayList<>();
@@ -51,6 +51,6 @@ public class WashCodeChangeServiceImpl extends SuperServiceImpl<WashCodeChangeMa
                 }
             }
         }
-        return PageResult2.<WashCodeChangeVo>builder().data(resultList).count((long) resultList.size()).build();
+        return PageResult.<WashCodeChangeVo>builder().data(resultList).count((long) resultList.size()).build();
     }
 }

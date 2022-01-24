@@ -60,6 +60,7 @@ public class OauthTokenAspect {
                  */
                 return proceed;
             } else {
+                // 登陆成功，返回授权的token
                 ResponseEntity<OAuth2AccessToken> responseEntity = (ResponseEntity<OAuth2AccessToken>) proceed;
                 OAuth2AccessToken body = responseEntity.getBody();
                 return ResponseEntity

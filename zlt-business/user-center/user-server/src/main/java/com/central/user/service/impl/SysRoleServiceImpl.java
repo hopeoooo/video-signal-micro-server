@@ -60,7 +60,7 @@ public class SysRoleServiceImpl extends SuperServiceImpl<SysRoleMapper, SysRole>
         Integer limit = MapUtils.getInteger(params, "limit");
         Page<SysRole> page = new Page<>(curPage == null ? 0 : curPage, limit == null ? -1 : limit);
         List<SysRole> list = baseMapper.findList(page, params);
-        return PageResult.<SysRole>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult.<SysRole>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override

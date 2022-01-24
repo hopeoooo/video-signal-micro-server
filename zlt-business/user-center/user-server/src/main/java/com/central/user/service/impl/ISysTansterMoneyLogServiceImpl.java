@@ -42,7 +42,7 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
             sysTansterMoneyLogs.add(sysTansterMoney);
         }
         long total = page.getTotal();
-        return PageResult.<SysTansterMoneyLogVo>builder().data(sysTansterMoneyLogs).code(0).count(total).build();
+        return PageResult.<SysTansterMoneyLogVo>builder().data(sysTansterMoneyLogs).count(total).build();
     }
 
 

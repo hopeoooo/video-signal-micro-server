@@ -31,7 +31,7 @@ public class SysGeneratorServiceImpl extends ServiceImpl implements SysGenerator
         Page<Map<String, Object>> page = new Page<>(MapUtils.getInteger(map, "page"), MapUtils.getInteger(map, "limit"));
 
         List<Map<String, Object>> list = sysGeneratorMapper.queryList(page, map);
-        return PageResult.<Map<String, Object>>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult.<Map<String, Object>>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override

@@ -111,36 +111,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.anyRequest()
 					//授权服务器关闭basic认证
                     .permitAll()
-                    .and()
-				.logout()
+				.and()
+					.logout()
 					.logoutUrl(SecurityConstants.LOGOUT_URL)
 					.logoutSuccessHandler(logoutSuccessHandler)
 					.addLogoutHandler(logoutHandler)
 					.clearAuthentication(true)
-					.and().apply(openIdAuthenticationSecurityConfig)
-					.and().apply(mobileAuthenticationSecurityConfig)
-					.and().apply(guestAuthenticationSecurityConfig)
-					.and()
-				.addFilterBefore(new LoginProcessSetTenantFilter(), UsernamePasswordAuthenticationFilter.class)
-                .csrf().disable()
-				// 解决不允许显示在iframe的问题
-				.headers().frameOptions().disable().cacheControl();
+				.and().apply(openIdAuthenticationSecurityConfig)
+				.and().apply(mobileAuthenticationSecurityConfig)
+				.and().apply(guestAuthenticationSecurityConfig)
+				.and()
+					.addFilterBefore(new LoginProcessSetTenantFilter(), UsernamePasswordAuthenticationFilter.class)
+                	.csrf().disable()
+					// 解决不允许显示在iframe的问题
+					.headers().frameOptions().disable().cacheControl();
 
 		if (tenantProperties.getEnable()) {
 			//解决不同租户单点登录时角色没变化
 			http.formLogin()
-					.loginPage(SecurityConstants.LOGIN_PAGE)
-						.and()
-					.addFilterAt(tenantAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
-					.apply(tenantAuthenticationSecurityConfig);
+						.loginPage(SecurityConstants.LOGIN_PAGE)
+					.and()
+						.addFilterAt(tenantAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
+						.apply(tenantAuthenticationSecurityConfig);
 		} else {
 			http.formLogin()
-					.loginPage(SecurityConstants.LOGIN_PAGE)
-					.loginProcessingUrl(SecurityConstants.OAUTH_LOGIN_PRO_URL)
-					.successHandler(authenticationSuccessHandler)
-					.authenticationDetailsSource(authenticationDetailsSource);
+						.loginPage(SecurityConstants.LOGIN_PAGE)
+						.loginProcessingUrl(SecurityConstants.OAUTH_LOGIN_PRO_URL)
+						.successHandler(authenticationSuccessHandler)
+						.authenticationDetailsSource(authenticationDetailsSource);
 		}
-
 
 		// 基于密码 等模式可以无session,不支持授权码模式
 		if (authenticationEntryPoint != null) {

@@ -1,6 +1,6 @@
 package com.central.order.controller;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.central.order.model.Order;
 import com.central.order.service.IOrderService;
-import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SuperPage;
 
@@ -29,7 +28,7 @@ public class OrderController {
 
     @ApiOperation(value = "查询列表")
     @GetMapping("/list")
-    public Result<PageResult2<Order>> list(@ModelAttribute SuperPage superPage) {
+    public Result<PageResult<Order>> list(@ModelAttribute SuperPage superPage) {
         return Result.succeed(orderService.findList(superPage));
     }
 

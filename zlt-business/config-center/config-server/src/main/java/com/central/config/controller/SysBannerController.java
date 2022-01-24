@@ -4,11 +4,13 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.config.constants.ConfigConstants;
 import com.central.config.model.SysBanner;
 import com.central.config.service.ISysBannerService;
 import com.central.file.feign.FileService;
+import com.central.push.feign.PushService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,6 +40,8 @@ public class SysBannerController {
 
     @Resource
     private FileService fileService;
+    @Autowired
+    private PushService pushService;
 
     /**
      * 查询公告管理列表
@@ -234,6 +238,21 @@ public class SysBannerController {
             info.put("fileId",fileId);
         }
         return info;
+    }
+
+    /**
+     * 群发轮播图消息
+     *
+     * @return
+     */
+    @ApiOperation(value = "webSocket群发轮播图消息")
+    @GetMapping("/pushBanner")
+    public PushResult<List<SysBanner>> pushBanner() {
+        List<SysBanner> bannerList = bannerService.getBannerList();
+        PushResult<List<SysBanner>> pushResult = PushResult.succeed(bannerList, "banner","轮播图推送成功");
+        Result<String> push = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+        log.info("轮播图推送结果:{}",push);
+        return pushResult;
     }
 
     /**

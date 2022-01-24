@@ -31,7 +31,7 @@ public interface ISysUserMoneyService extends ISuperService<SysUserMoney> {
     /**
      * 异步推送消息到前端
      */
-    void syncPushMoneyToWebApp(Long userId);
+    void syncPushMoneyToWebApp(Long userId,String userName);
 
     SysUserMoney receiveWashCode(SysUserMoney userMoney);
 }

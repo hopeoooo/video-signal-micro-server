@@ -11,9 +11,11 @@ import com.central.push.feign.PushService;
 import com.central.user.mapper.SysUserMoneyMapper;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
+import com.central.user.vo.SysUserMoneyVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
@@ -54,7 +56,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     public PageResult<SysUserMoney> findList(Map<String, Object> params){
         Page<SysUserMoney> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
         List<SysUserMoney> list  =  baseMapper.findList(page, params);
-        return PageResult.<SysUserMoney>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult.<SysUserMoney>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override
@@ -90,11 +92,16 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
 
     @Override
     @Async
-    public void syncPushMoneyToWebApp(Long userId) {
+    public void syncPushMoneyToWebApp(Long userId,String userName) {
         SysUserMoney money = findByUserId(userId);
-        PushResult<SysUserMoney> pushResult = PushResult.succeed(money, "money","用户钱包推送成功");
-        Result<String> push = pushService.sendOneMessage(userId.toString(),JSONObject.toJSONString(pushResult));
-        log.info("用户金额userId:{},推送结果:{}", userId, push);
+        if (money == null) {
+            money = new SysUserMoney();
+        }
+        SysUserMoneyVo vo = new SysUserMoneyVo();
+        BeanUtils.copyProperties(money, vo);
+        PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, "money","用户钱包推送成功");
+        Result<String> push = pushService.sendOneMessage(userName,JSONObject.toJSONString(pushResult));
+        log.info("用户钱包userName:{},推送结果:{}", userId, push);
     }
 
     @Override
