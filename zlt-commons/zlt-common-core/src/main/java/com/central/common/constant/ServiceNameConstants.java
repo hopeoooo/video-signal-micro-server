@@ -50,4 +50,8 @@ public interface ServiceNameConstants {
      * 消息推送服务
      */
     String PUSH_SERVICE = "push-center";
+    /**
+     * 消息推送服务
+     */
+    String TRANSLATE_SERVICE = "translate-center";
 }
