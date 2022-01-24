@@ -3,6 +3,7 @@ package com.central.game.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.central.common.model.SuperEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
@@ -36,4 +37,12 @@ public class GameList extends SuperEntity {
     @TableField(exist = false)
     @ApiModelProperty(value = "在线人数")
     private Integer onlineNum = 0;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty(value = "维护开始时间")
+    private Date maintainStart;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty(value = "维护结束时间")
+    private Date maintainEnd;
 }

@@ -34,5 +34,7 @@
         <module>config-center</module>
         <!-- 配置中心 -->
         <module>push-center</module>
+        <!-- 翻译中心 -->
+        <module>translate-center</module>
     </modules>
 </project>

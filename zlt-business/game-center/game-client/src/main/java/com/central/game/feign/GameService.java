@@ -56,7 +56,7 @@ public interface GameService {
      * @param gameId
      * @return
      */
-    @GetMapping("/gameRoomlist/findList")
+    @GetMapping("/gameRoomList/findList")
     Result<List<GameRoomList>> findList(@RequestParam("gameId") Long gameId) ;
 
     /**
@@ -65,7 +65,7 @@ public interface GameService {
      * @param gameRoomList
      * @return
      */
-    @PostMapping("/gameRoomlist/save")
+    @PostMapping("/gameRoomList/save")
     Result save(@RequestBody GameRoomList gameRoomList) ;
 
     /**
@@ -75,7 +75,7 @@ public interface GameService {
      * @param roomStatus
      * @return
      */
-    @PostMapping("/gameRoomlist/roomStatus/{id}")
+    @PostMapping("/gameRoomList/roomStatus/{id}")
     Result updateRoomStatus(@PathVariable("id") Long id, @RequestParam("roomStatus") Integer roomStatus) ;
 
     /**
@@ -83,6 +83,6 @@ public interface GameService {
      * @param id
      * @return
      */
-    @DeleteMapping("/gameRoomlist//deleteById/{id}")
+    @DeleteMapping("/gameRoomList//deleteById/{id}")
     Result roomDeleteById(@PathVariable("id") Long id);
 }

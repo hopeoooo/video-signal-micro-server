@@ -30,23 +30,20 @@ public class GameRoomListController {
      */
     @ResponseBody
     @ApiOperation(value = "查询房间列表数据")
-    @GetMapping("/findList")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "gameId", value = "游戏Id", required = false, dataType = "Long")
-    })
-    public Result<List<GameRoomList>> findList(@RequestParam("gameId") Long gameId) {
+    @GetMapping("/gameRoomList/findList")
+    public Result<List<GameRoomList>> findList(@RequestParam(value = "gameId", required = false)  Long gameId) {
         return gameService.findList(gameId);
     }
 
     @ApiOperation(value = "新增/更新")
-    @PostMapping("/save")
+    @PostMapping("/gameRoomList/save")
     public Result save(@RequestBody GameRoomList gameRoomList) {
 
         return gameService.save(gameRoomList);
     }
 
     @ApiOperation(value = "根据ID修改房间状态")
-    @PostMapping("/roomStatus/{id}")
+    @PostMapping("/gameRoomList/roomStatus/{id}")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roomStatus", value = "游戏房间状态 0禁用，1：正常，2：维护", required = false, dataType = "Integer")
     })
@@ -55,7 +52,7 @@ public class GameRoomListController {
     }
 
     @ApiOperation(value = "根据ID删除")
-    @DeleteMapping("/deleteById/{id}")
+    @DeleteMapping("/gameRoomList/deleteById/{id}")
     public Result roomDeleteById(@PathVariable Long id) {
         return gameService.roomDeleteById(id);
     }
