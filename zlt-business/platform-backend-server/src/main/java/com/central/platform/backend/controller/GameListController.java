@@ -39,9 +39,10 @@ public class GameListController {
     }
 
     @ApiOperation(value = "查询全部游戏")
-    @GetMapping("/findAll")
-    public Result<List<GameList>> findAll() {
-        return gameService.findAll();
+    @GetMapping("/gamelist/findGameList")
+    public Result<List<GameList>> findGameList( @RequestParam(value = "state", required = false) Integer state) {
+        return  gameService.findGameList(state);
     }
+
 
 }
