@@ -8,6 +8,9 @@ import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
+
+// TODO 这些moulde移到 user-client里面
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("user_wash_code_config")
