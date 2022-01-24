@@ -1,10 +1,12 @@
 package com.central.user.controller;
 
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.UserConstant;
 import com.central.common.model.*;
 import com.central.common.vo.SysMoneyVO;
+import com.central.push.feign.PushService;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户钱包表
@@ -40,6 +43,8 @@ public class SysUserMoneyController {
     private ISysUserService iSysUserService;
     @Autowired
     private ISysTansterMoneyLogService iSysTansterMoneyLogService;
+    @Autowired
+    private PushService pushService;
 
     @ApiOperation(value = "查询当前登录用户的钱包")
     @GetMapping("/getMoney")
@@ -155,5 +160,25 @@ public class SysUserMoneyController {
             RedissLockUtil.unlock(moneyKey);
             RedissLockUtil.unlock(washCodeKey);
         }
+    }
+
+    /**
+     * 私发用户钱包消息
+     *
+     * @return
+     */
+    @ApiOperation(value = "webSocket私发登录用户钱包消息")
+    @GetMapping("/pushMoney")
+    public PushResult<SysUserMoneyVo> pushNotice(@LoginUser SysUser user) {
+        SysUserMoney sysUserMoney = userMoneyService.findByUserId(user.getId());
+        if (sysUserMoney == null) {
+            sysUserMoney = new SysUserMoney();
+        }
+        SysUserMoneyVo vo = new SysUserMoneyVo();
+        BeanUtils.copyProperties(sysUserMoney, vo);
+        PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, "money","用户钱包推送成功");
+        Result<String> push = pushService.sendOneMessage(user.getUsername(), JSONObject.toJSONString(pushResult));
+        log.info("用户钱包userName:{},推送结果:{}", user.getUsername(), push);
+        return pushResult;
     }
 }

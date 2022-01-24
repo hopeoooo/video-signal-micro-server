@@ -1,7 +1,10 @@
 package com.central.oauth.granter;
 
+import com.central.common.model.SysUser;
+import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth2.common.token.GuestUserAuthenticationToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -16,6 +19,7 @@ import java.util.Map;
 /**
  * guest 游客授权模式
  */
+@Slf4j
 public class GuestGranter extends AbstractTokenGranter {
     private static final String GRANT_TYPE = "guest";
 
@@ -23,10 +27,13 @@ public class GuestGranter extends AbstractTokenGranter {
 
     private UserDetailServiceFactory userDetailsServiceFactory;
 
+    private ProcessLoginInfoService processLoginInfoService;
+
     public GuestGranter(AuthenticationManager authenticationManager, AuthorizationServerTokenServices tokenServices
-            , ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory) {
+            , ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory,ProcessLoginInfoService processLoginInfoService) {
         super(tokenServices, clientDetailsService, requestFactory, GRANT_TYPE);
         this.authenticationManager = authenticationManager;
+        this.processLoginInfoService = processLoginInfoService;
     }
 
     @Override
@@ -38,10 +45,12 @@ public class GuestGranter extends AbstractTokenGranter {
         ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
         userAuth = authenticationManager.authenticate(userAuth);
         if (userAuth == null || !userAuth.isAuthenticated()) {
+            logger.info("player is not exsit");
             throw new InvalidGrantException("Could not authenticate guest");
         }
-
+        log.info("{}",userAuth.getPrincipal());
         OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);
+        processLoginInfoService.initAmount((SysUser) userAuth.getPrincipal());
         return new OAuth2Authentication(storedOAuth2Request, userAuth);
 
     }
