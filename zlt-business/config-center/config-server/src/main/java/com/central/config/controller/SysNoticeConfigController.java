@@ -119,7 +119,7 @@ public class SysNoticeConfigController {
         List<SysNotice> noticeList = noticeService.getNoticeList();
         PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, "notice","公告推送成功");
         Result<String> push = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
-        log.info("轮播图推送结果:{}",push);
+        log.info("公告推送结果:{}",push);
         return pushResult;
     }
 }
