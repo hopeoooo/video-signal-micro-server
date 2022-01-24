@@ -78,6 +78,6 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileI
     public PageResult<FileInfo> findList(Map<String, Object> params) {
         Page<FileInfo> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
         List<FileInfo> list = baseMapper.findList(page, params);
-        return PageResult.<FileInfo>builder().data(list).code(0).count(page.getTotal()).build();
+        return PageResult.<FileInfo>builder().data(list).count(page.getTotal()).build();
     }
 }

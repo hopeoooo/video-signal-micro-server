@@ -10,7 +10,7 @@ public interface SysUserService {
 
     Result saveOrUpdate(SysUser sysUser);
 
-    PageResult2<SysUser> findSysUserList(Map<String, Object> params);
+    PageResult<SysUser> findSysUserList(Map<String, Object> params);
 
     Result delete(Long id);
 

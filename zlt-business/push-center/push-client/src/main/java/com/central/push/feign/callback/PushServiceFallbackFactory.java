@@ -18,13 +18,13 @@ public class PushServiceFallbackFactory implements FallbackFactory<PushService> 
 
             @Override
             public Result sendAllMessage(String message) {
-                log.error("群发消息失败", throwable);
+                log.error("sendAllMessage群发消息异常");
                 return Result.failed("群发消息失败");
             }
 
             @Override
             public Result sendOneMessage(String userName, String message) {
-                log.error("给用户:{}推送消息失败",userName, throwable);
+                log.error("sendOneMessage给用户:{}推送消息异常",userName);
                 return Result.failed("私发消息失败");
             }
         };

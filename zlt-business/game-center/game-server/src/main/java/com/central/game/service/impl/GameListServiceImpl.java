@@ -1,11 +1,10 @@
 package com.central.game.service.impl;
 
-import com.central.common.model.PageResult2;
+import com.central.common.model.PageResult;
 import com.central.game.mapper.GameListMapper;
 import com.central.game.model.GameList;
 import com.central.game.service.IGameListService;
 import org.springframework.stereotype.Service;
-import com.central.common.model.PageResult;
 import com.central.common.model.SuperPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -28,9 +27,9 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
      * @return
      */
     @Override
-    public PageResult2<GameList> findList(SuperPage superPage){
+    public PageResult<GameList> findList(SuperPage superPage){
         Page<GameList> page = new Page<>(superPage.getPage(), superPage.getLimit());
         List<GameList> list  =  baseMapper.findList(page, superPage);
-        return PageResult2.<GameList>builder().data(list).count(page.getTotal()).build();
+        return PageResult.<GameList>builder().data(list).count(page.getTotal()).build();
     }
 }
