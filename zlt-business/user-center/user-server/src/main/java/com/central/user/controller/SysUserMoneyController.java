@@ -108,7 +108,7 @@ public class SysUserMoneyController {
                     return Result.failed("用户不存在或钱包错误");
                 }
                 SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, sysUser);
-                userMoneyService.syncPushMoneyToWebApp(userId);
+                userMoneyService.syncPushMoneyToWebApp(userId,sysUser.getUsername());
                 return Result.succeed(saveSysUserMoney);
             }else{
                 return Result.failed("上下分请求太过频繁");
@@ -144,7 +144,7 @@ public class SysUserMoneyController {
             }
             BigDecimal money = userMoney.getMoney();
             userMoneyService.receiveWashCode(userMoney);
-            userMoneyService.syncPushMoneyToWebApp(userId);
+            userMoneyService.syncPushMoneyToWebApp(userId,user.getUsername());
             //记录账变
             SysTansterMoneyLog sysTansterMoneyLog = new SysTansterMoneyLog();
             sysTansterMoneyLog.setUserId(userId);
