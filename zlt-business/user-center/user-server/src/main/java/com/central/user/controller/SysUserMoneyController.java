@@ -169,7 +169,7 @@ public class SysUserMoneyController {
      */
     @ApiOperation(value = "webSocket私发登录用户钱包消息")
     @GetMapping("/pushMoney")
-    public PushResult<SysUserMoneyVo> pushNotice(@LoginUser SysUser user) {
+    public PushResult<SysUserMoneyVo> pushMoney(@LoginUser SysUser user) {
         SysUserMoney sysUserMoney = userMoneyService.findByUserId(user.getId());
         if (sysUserMoney == null) {
             sysUserMoney = new SysUserMoney();
