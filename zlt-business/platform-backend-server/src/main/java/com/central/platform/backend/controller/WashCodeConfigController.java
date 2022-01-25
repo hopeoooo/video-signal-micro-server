@@ -33,7 +33,7 @@ public class WashCodeConfigController {
     public Result save(@RequestBody GameList gameList) {
         BigDecimal gameRate = gameList.getGameRate();
         if (gameRate.compareTo(new BigDecimal(0))==0 || gameRate.compareTo(new BigDecimal(100))>0){
-            return  Result.failed("返水比例设置范围在1-100");
+            return  Result.failed("返水比例设置错误");
         }
         gameService.save(gameList);
         return Result.succeed();
