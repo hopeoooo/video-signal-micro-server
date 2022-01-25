@@ -1,17 +1,13 @@
 package com.central.config.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.central.common.model.PushResult;
 import com.central.common.model.Result;
-import com.central.common.model.SysUserMoney;
 import com.central.config.dto.logoUrlDto;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysPlatformConfig;
 import com.central.config.service.IDownloadStationService;
 import com.central.config.service.ISysPlatformConfigService;
-import com.central.push.feign.PushService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,12 +16,12 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -38,8 +34,6 @@ public class ApiController {
     private IDownloadStationService downloadStationService;
     @Autowired
     private ISysPlatformConfigService platformConfigService;
-    @Autowired
-    private PushService pushService;
 
     @Value("${zlt.app.version:1.0.0}")
     private String version;
@@ -59,12 +53,6 @@ public class ApiController {
         return Result.succeed(version, "查询成功");
     }
 
-    @ApiOperation(value = "消息推送测试")
-    @GetMapping("/push/{message}")
-    public Result<String> push(@PathVariable(name = "message") String message) {
-        PushResult<SysUserMoney> pushResult = PushResult.succeed(new SysUserMoney(), "money","用户钱包推送成功");
-        return pushService.sendOneMessage("admin", JSONObject.toJSONString(pushResult));
-    }
     @ApiOperation(value = "ip测试")
     @GetMapping("/ipTest")
     public Result ipTest() {
