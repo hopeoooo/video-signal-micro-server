@@ -35,7 +35,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class I18NInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nInfo> implements I18nInfosService{
+public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nInfo> implements I18nInfosService{
 
     @Autowired
     private I18nInfoMapper mapper;
@@ -55,6 +55,12 @@ public class I18NInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         return I18nUtil.getFullSource();
     }
 
+    /**
+     * 初始化国际化资源redis缓存
+     *
+     * @author lance
+     * @since 2022 -01-25 17:24:33
+     */
     @Override
     @PostConstruct
     public void initI18nSourceRedis() {
