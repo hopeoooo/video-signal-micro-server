@@ -17,14 +17,14 @@ CREATE TABLE `i18n_info` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
     `page_id` bigint(20) NOT NULL COMMENT '页面id,position表的type=0的数据',
     `position_id` bigint(20) NULL DEFAULT NULL COMMENT '位置id,position表的type=1的数据',
-    `zh_cn` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL COMMENT '中文-简体',
-    `en_us` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL COMMENT '英语-美国',
-    `khm` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL COMMENT '高棉语',
-    `th` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL COMMENT '泰语',
-    `operator` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL COMMENT '操作人',
+    `zh_cn` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '中文-简体',
+    `en_us` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '英语-美国',
+    `khm` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '高棉语',
+    `th` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '泰语',
+    `operator` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '操作人',
     `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
     `update_time` datetime NULL DEFAULT NULL COMMENT '操作时间',   
     PRIMARY KEY(`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_german2_ci COMMENT = '国际化字典表';
 
-INSERT INTO `translate-center`.`i18n_info` (`id`, `page_id`, `position_id`, `zh_cn`, `en_us`, `khm`, `th`, `operator`, `update_time`) VALUES (1, 1, NULL, '默认', '', '', '', '', '2022-01-25 13:40:08');
+INSERT INTO `translate-center`.`i18n_info` (`id`, `page_id`, `position_id`, `zh_cn`, `en_us`, `khm`, `th`, `operator`) VALUES (1, 1, NULL, '默认', '', '', '', '');

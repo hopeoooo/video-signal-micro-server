@@ -1,6 +1,7 @@
 package com.central.translate.controller;
 
 import com.central.common.annotation.LoginUser;
+import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
@@ -62,6 +63,18 @@ public class TranslateController {
     @ApiOperation(value = "查询国际化字典分页")
     public PageResult<I18nInfoPageVO> infos(@ModelAttribute QueryI18nInfoPageParam param){
         return i18nInfosService.findInfos(param);
+    }
+
+    /**
+     * 获取所有的国际化资源
+     *
+     * @return {@link Result} 出参释义
+     * @author lance
+     * @since 2022 -01-25 14:34:28
+     */
+    @GetMapping("/translate/fullSource")
+    public Result<I18nSourceDTO> fullSource() {
+        return Result.succeed(i18nInfosService.getFullI18nSource());
     }
 
 }

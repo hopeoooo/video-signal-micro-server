@@ -48,9 +48,14 @@ public class I18NInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
     @Cacheable(cacheNames = "fullSource")
     public I18nSourceDTO getFullI18nSource() {
         List<I18nInfo> i18nInfoList = list();
-
-        // TODO
-        return null;
+        I18nSourceDTO dto = new I18nSourceDTO();
+        for (I18nInfo f: i18nInfoList) {
+            dto.getZhCn().put(f.getZhCn(), f.getZhCn());
+            dto.getEnUs().put(f.getZhCn(), f.getEnUs());
+            dto.getKhm().put(f.getZhCn(), f.getKhm());
+            dto.getTh().put(f.getZhCn(), f.getTh());
+        }
+        return dto;
     }
 
     /**
@@ -78,6 +83,14 @@ public class I18NInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         return count > 0;
     }
 
+    /**
+     * 查询国际化字典分页
+     *
+     * @param param 查询参数
+     * @return {@link PageResult} 分页数据
+     * @author lance
+     * @since 2022 -01-25 12:25:12
+     */
     @Override
     public PageResult<I18nInfoPageVO> findInfos(QueryI18nInfoPageParam param) {
         Page<I18nInfoPageVO> page = new Page<>(param.getPage(), param.getLimit());

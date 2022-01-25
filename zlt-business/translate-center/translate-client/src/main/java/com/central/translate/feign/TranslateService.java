@@ -1,6 +1,7 @@
 package com.central.translate.feign;
 
 import com.central.common.constant.ServiceNameConstants;
+import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.params.translate.QueryI18nInfoPageParam;
@@ -40,5 +41,16 @@ public interface TranslateService {
      */
     @GetMapping("/translate/infos")
     PageResult<I18nInfoPageVO> infos(@ModelAttribute QueryI18nInfoPageParam param);
+
+
+    /**
+     * 获取所有的国际化资源
+     *
+     * @return {@link Result} 出参释义
+     * @author lance
+     * @since 2022 -01-25 14:34:28
+     */
+    @GetMapping("/translate/fullSource")
+    Result<I18nSourceDTO> fullSource();
 
 }
