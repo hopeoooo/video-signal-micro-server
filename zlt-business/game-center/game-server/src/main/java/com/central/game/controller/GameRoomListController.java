@@ -65,8 +65,8 @@ public class GameRoomListController {
     @PostMapping("/roomStatus/{id}")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roomStatus", value = "游戏房间状态 0禁用，1：正常，2：维护", required = false, dataType = "Integer"),
-            @ApiImplicitParam(name = "maintainStart", value = "起始时间查询", required = false),
-            @ApiImplicitParam(name = "maintainEnd", value = "结束时间查询", required = false),
+            @ApiImplicitParam(name = "maintainStart", value = "维护开始时间", required = false),
+            @ApiImplicitParam(name = "maintainEnd", value = "维护结束时间", required = false),
     })
     public Result updateRoomStatus(@PathVariable Long id, @RequestParam("roomStatus") Integer roomStatus,
                                    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") String maintainStart,
