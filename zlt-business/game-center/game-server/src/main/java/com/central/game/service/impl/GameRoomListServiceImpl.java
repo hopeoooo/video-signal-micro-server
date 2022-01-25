@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -31,12 +34,28 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     }
 
     @Override
-    public Boolean updateRoomStatus(Long id, Integer roomStatus) {
+    public Boolean updateRoomStatus(Long id, Integer roomStatus,String maintainStart,String maintainEnd) {
         GameRoomList gameRoomList = gameRoomListMapper.selectById(id);
         if(gameRoomList == null){
             return false;
         }
         gameRoomList.setRoomStatus(roomStatus);
+        if (roomStatus==2){
+            if (maintainStart==null || maintainEnd==null){
+                return false;
+            }
+            Date maintainStartTemp=null;
+            Date maintainEndTemp=null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                maintainStartTemp = sdf.parse(maintainStart);
+                maintainEndTemp = sdf.parse(maintainEnd);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            gameRoomList.setMaintainStart(maintainStartTemp);
+            gameRoomList.setMaintainEnd(maintainEndTemp);
+        }
         gameRoomListMapper.updateById(gameRoomList);
         return true;
     }

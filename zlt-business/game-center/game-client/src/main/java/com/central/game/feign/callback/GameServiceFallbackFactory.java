@@ -67,11 +67,10 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
-            public Result updateRoomStatus(Long id, Integer roomStatus) {
+            public Result updateRoomStatus(Long id, Integer roomStatus, String maintainStart, String maintainEnd) {
                 log.error("更新房间失败", throwable);
                 return Result.failed("更新房间失败");
             }
-
             @Override
             public Result roomDeleteById(Long id) {
                 log.error("删除房间失败", throwable);

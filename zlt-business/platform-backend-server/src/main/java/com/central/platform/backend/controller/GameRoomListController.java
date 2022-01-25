@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,10 +49,14 @@ public class GameRoomListController {
     @ApiOperation(value = "根据ID修改房间状态")
     @PostMapping("/gameRoomList/roomStatus/{id}")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roomStatus", value = "游戏房间状态 0禁用，1：正常，2：维护", required = false, dataType = "Integer")
+            @ApiImplicitParam(name = "roomStatus", value = "游戏房间状态 0禁用，1：正常，2：维护", required = false, dataType = "Integer"),
+            @ApiImplicitParam(name = "maintainStart", value = "起始时间查询", required = false),
+            @ApiImplicitParam(name = "maintainEnd", value = "结束时间查询", required = false),
     })
-    public Result updateRoomStatus(@PathVariable Long id, @RequestParam("roomStatus") Integer roomStatus) {
-        return gameService.updateRoomStatus(id, roomStatus);
+    public Result updateRoomStatus(@PathVariable Long id, @RequestParam("roomStatus") Integer roomStatus,
+                                   @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") String maintainStart,
+                                   @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") String maintainEnd) {
+        return gameService.updateRoomStatus(id, roomStatus,maintainStart,maintainEnd);
     }
 
     @ApiOperation(value = "根据ID删除")

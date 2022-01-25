@@ -76,7 +76,8 @@ public interface GameService {
      * @return
      */
     @PostMapping("/gameRoomList/roomStatus/{id}")
-    Result updateRoomStatus(@PathVariable("id") Long id, @RequestParam("roomStatus") Integer roomStatus) ;
+    Result updateRoomStatus(@PathVariable("id") Long id, @RequestParam("roomStatus") Integer roomStatus
+            ,@RequestParam("maintainStart") String maintainStart,@RequestParam("maintainEnd")String maintainEnd) ;
 
     /**
      * 根据ID删除房间
