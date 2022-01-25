@@ -39,13 +39,14 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         if(gameRoomList == null){
             return false;
         }
+        Date maintainStartTemp=null;
+        Date maintainEndTemp=null;
         gameRoomList.setRoomStatus(roomStatus);
-        if (roomStatus==2){
-            if (maintainStart==null || maintainEnd==null){
+        if (roomStatus==2) {
+            if (maintainStart == null || maintainEnd == null) {
                 return false;
             }
-            Date maintainStartTemp=null;
-            Date maintainEndTemp=null;
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             try {
                 maintainStartTemp = sdf.parse(maintainStart);
@@ -53,9 +54,9 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            gameRoomList.setMaintainStart(maintainStartTemp);
-            gameRoomList.setMaintainEnd(maintainEndTemp);
         }
+        gameRoomList.setMaintainStart(maintainStartTemp);
+        gameRoomList.setMaintainEnd(maintainEndTemp);
         gameRoomListMapper.updateById(gameRoomList);
         return true;
     }

@@ -1,5 +1,7 @@
 package com.central.game.model;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.central.common.model.SuperEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -41,9 +43,11 @@ public class GameRoomList extends SuperEntity {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "维护开始时间")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Date maintainStart;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "维护结束时间")
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Date maintainEnd;
 }
