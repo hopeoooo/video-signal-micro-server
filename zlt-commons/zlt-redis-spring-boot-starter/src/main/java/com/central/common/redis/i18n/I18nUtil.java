@@ -1,5 +1,6 @@
 package com.central.common.redis.i18n;
 
+import cn.hutool.core.util.StrUtil;
 import com.central.common.constant.I18nKeys;
 import com.central.common.dto.I18nSourceDTO;
 import org.springframework.beans.BeansException;
@@ -92,6 +93,9 @@ public class I18nUtil implements ApplicationContextAware {
 
     // 找到对应语言的redis key
     private static String keyOf(String language) {
+        if (StrUtil.isBlank(language)) {
+            return I18nKeys.Redis.EN_US_KEY;
+        }
         switch (language) {
             case I18nKeys.Locale.EN_US:
                 return I18nKeys.Redis.EN_US_KEY;
@@ -100,7 +104,7 @@ public class I18nUtil implements ApplicationContextAware {
             case I18nKeys.Locale.TH:
                 return I18nKeys.Redis.TH_KEY;
         }
-        return "";
+        return I18nKeys.Redis.EN_US_KEY;
     }
 
     /**
