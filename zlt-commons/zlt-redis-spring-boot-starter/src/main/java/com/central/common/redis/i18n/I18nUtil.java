@@ -37,7 +37,7 @@ public class I18nUtil implements ApplicationContextAware {
      * @since 2022 -01-25 18:18:28
      */
     public static String translate(String language, String key) {
-        if (I18nKeys.ZH_CN.equals(language)) {
+        if (I18nKeys.Locale.ZH_CN.equals(language)) {
             return key;
         }
         String value = redisTemplate.<String, String>opsForHash().get(keyOf(language), key);
@@ -93,11 +93,11 @@ public class I18nUtil implements ApplicationContextAware {
     // 找到对应语言的redis key
     private static String keyOf(String language) {
         switch (language) {
-            case I18nKeys.EN_US:
+            case I18nKeys.Locale.EN_US:
                 return I18nKeys.Redis.EN_US_KEY;
-            case I18nKeys.KHM:
+            case I18nKeys.Locale.KHM:
                 return I18nKeys.Redis.KHM_KEY;
-            case I18nKeys.TH:
+            case I18nKeys.Locale.TH:
                 return I18nKeys.Redis.TH_KEY;
         }
         return "";

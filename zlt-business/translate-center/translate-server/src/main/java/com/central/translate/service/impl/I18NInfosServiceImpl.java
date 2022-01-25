@@ -131,15 +131,15 @@ public class I18NInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             }
             if (enusChange) {
                 // 更新英文国际化
-                I18nUtil.resetSource(I18nKeys.EN_US, i18nKey, param.getEnUs());
+                I18nUtil.resetSource(I18nKeys.Locale.EN_US, i18nKey, param.getEnUs());
             }
             if (khmChange) {
                 // 更新高棉语国际化
-                I18nUtil.resetSource(I18nKeys.KHM, i18nKey, param.getKhm());
+                I18nUtil.resetSource(I18nKeys.Locale.KHM, i18nKey, param.getKhm());
             }
             if (thChange) {
                 // 更新泰语国际化
-                I18nUtil.resetSource(I18nKeys.TH, i18nKey, param.getTh());
+                I18nUtil.resetSource(I18nKeys.Locale.TH, i18nKey, param.getTh());
             }
         }
 
@@ -161,16 +161,16 @@ public class I18NInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
 
         if (StrUtil.isNotBlank(param.getWord()) && param.getLanguage() != null) {
             switch (param.getLanguage()) {
-                case 0:
+                case I18nKeys.LocaleCode.ZH_CN:
                     params.setZhCn(param.getWord());
                     break;
-                case 1:
+                case I18nKeys.LocaleCode.EN_US:
                     params.setEnUs(param.getWord());
                     break;
-                case 2:
+                case I18nKeys.LocaleCode.KHM:
                     params.setKhm(param.getWord());
                     break;
-                case 3:
+                case I18nKeys.LocaleCode.TH:
                     params.setTh(param.getWord());
                     break;
             }

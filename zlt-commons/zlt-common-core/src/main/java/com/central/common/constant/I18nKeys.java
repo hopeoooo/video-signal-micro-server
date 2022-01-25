@@ -8,13 +8,38 @@ package com.central.common.constant;
  */
 public interface I18nKeys {
 
-    String ZH_CN = "zh_cn";
+    /**
+     * 语种
+     */
+    interface Locale {
+        /**
+         * 简体中文
+         */
+        String ZH_CN = "zh_cn";
 
-    String EN_US = "en_us";
+        /**
+         * 英文
+         */
+        String EN_US = "en_us";
 
-    String KHM = "khm";
+        /**
+         * 高棉语
+         */
+        String KHM = "khm";
 
-    String TH = "th";
+        /**
+         * 泰语
+         */
+        String TH = "th";
+    }
+
+    // 语种代码
+    interface LocaleCode {
+        int ZH_CN = 0;
+        int EN_US = 1;
+        int KHM = 2;
+        int TH = 3;
+    }
 
     interface Redis {
         /**

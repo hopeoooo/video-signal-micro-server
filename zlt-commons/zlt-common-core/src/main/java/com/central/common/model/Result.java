@@ -11,7 +11,6 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Result<T> implements Serializable {
 
     private T datas;
@@ -35,7 +34,11 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> of(T datas, Integer code, String msg) {
-        return new Result<>(datas, code, msg);
+        Result<T> result = new Result<>();
+        result.setDatas(datas);
+        result.setResp_code(code);
+        result.setResp_msg(msg);
+        return result;
     }
 
     public static <T> Result<T> failed(String msg) {
