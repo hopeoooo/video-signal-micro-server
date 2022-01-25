@@ -36,6 +36,7 @@ public class UserWashCodeConfigServiceImpl implements IUserWashCodeConfigService
             UserWashCodeConfig userWashCodeConfig = new UserWashCodeConfig();
             userWashCodeConfig.setGameId(info.getId());
             userWashCodeConfig.setGameName(info.getName());
+            userWashCodeConfig.setGameRate(info.getGameRate());
             list.add(userWashCodeConfig);
         });
         return  Result.succeed(list,"查询成功");
