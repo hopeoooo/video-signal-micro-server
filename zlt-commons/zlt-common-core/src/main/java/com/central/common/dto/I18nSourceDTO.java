@@ -11,16 +11,13 @@ import java.util.Map;
 @Data
 public class I18nSourceDTO {
 
-    @ApiModelProperty("中文国际化资源")
-    private Map<String, String> zhCn = new HashMap<>();
-
     @ApiModelProperty("英文国际化资源")
-    private Map<String, String> enUs = new HashMap<>();
+    private Map<String, String> enUs;
 
     @ApiModelProperty("高棉语国际化资源")
-    private Map<String, String> khm = new HashMap<>();
+    private Map<String, String> khm;
 
     @ApiModelProperty("泰语国际化资源")
-    private Map<String, String> th = new HashMap<>();
+    private Map<String, String> th;
 
 }

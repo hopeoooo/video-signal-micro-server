@@ -26,6 +26,14 @@ public interface I18nInfosService extends ISuperService<I18nInfo> {
      */
     I18nSourceDTO getFullI18nSource();
 
+    /**
+     * 初始化国际化资源redis缓存
+     *
+     * @author lance
+     * @since 2022 -01-25 17:24:33
+     */
+    void initI18nSourceRedis();
+
 
     /**
      * 更新国际化字典
