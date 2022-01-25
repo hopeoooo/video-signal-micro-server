@@ -27,16 +27,16 @@ public class ApplicationListenerImpl implements ApplicationListener<ApplicationS
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
-        log.info("+++++++++   redis init players");
-        List<SysUser> sysUsers = userService.queryPlayerList();
-        log.info("{}",sysUsers);
-        if(redisRepository.exists(ConstantPlayer.PLAYER_ACCOUNT_QUEUE)){
-
-        }else{
-            sysUsers.forEach(item ->{
-                redisRepository.leftPush(ConstantPlayer.PLAYER_ACCOUNT_QUEUE,item.getUsername());
-            });
-        }
+//        log.info("+++++++++   redis init players");
+//        List<SysUser> sysUsers = userService.queryPlayerList();
+//        log.info("{}",sysUsers);
+//        if(redisRepository.exists(ConstantPlayer.PLAYER_ACCOUNT_QUEUE)){
+//
+//        }else{
+//            sysUsers.forEach(item ->{
+//                redisRepository.leftPush(ConstantPlayer.PLAYER_ACCOUNT_QUEUE,item.getUsername());
+//            });
+//        }
 
 
     }

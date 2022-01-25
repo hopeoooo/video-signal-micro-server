@@ -25,7 +25,7 @@ public class ComparePlayers {
     private RedisRepository redisRepository;
 
 
-    @Scheduled(cron = "*/10 * * * * * ")
+//    @Scheduled(cron = "*/10 * * * * * ")
     public void scheduledTask(){
         if (!redisRepository.exists(ConstantPlayer.PLAYER_ACCOUNT_QUEUE)) return ;
         List<SysUser> sysUserList = userService.queryPlayerList();

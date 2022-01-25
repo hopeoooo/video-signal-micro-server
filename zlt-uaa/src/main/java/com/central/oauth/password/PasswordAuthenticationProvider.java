@@ -83,15 +83,6 @@ public class PasswordAuthenticationProvider extends AbstractUserDetailsAuthentic
             throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USERNAME_PASSWORD.getCode(), "用户名或密码错误");
         }
 
-        processLoginInfoService.processLoginInfo(userDetails,getLoginIp());
-    }
-
-    // TODO 移到其它地方
-    public  String getLoginIp(){
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-
-        return IpUtil.getIpAddr(request);
     }
 
     @Override
