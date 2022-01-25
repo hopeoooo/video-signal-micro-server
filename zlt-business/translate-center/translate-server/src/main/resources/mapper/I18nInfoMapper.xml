@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.central.translate.mapper.I18nInfoMapper">
+    <select id="findList" resultType="com.central.common.model.I18nInfo">
+        select * from i18n_info t
+    </select>
+
+    <select id="findPage" resultType="com.central.common.vo.I18nInfoPageVO">
+        SELECT
+            p.name as page,
+            s.name as `position`,
+            t.zh_cn,
+            t.en_us,
+            t.khm,
+            t.th,
+            t.operator,
+            t.update_time
+        FROM i18n_info t
+        LEFT JOIN i18n_position p ON t.page_id = p.id
+        LEFT JOIN i18n_position s ON t.position_id = s.id
+        <where>
+            <if test="p.zhCn != null and p.zhCn != ''">
+                AND t.zh_cn LIKE concat('%', #{p.zhCn}, '%')
+            </if>
+            <if test="p.enUs != null and p.enUs != ''">
+                AND t.en_us LIKE concat('%', #{p.enUs}, '%')
+            </if>
+            <if test="p.khm != null and p.khm != ''">
+                AND t.khm LIKE concat('%', #{p.khm}, '%')
+            </if>
+            <if test="p.th != null and p.th != ''">
+                AND t.th LIKE concat('%', #{p.th}, '%')
+            </if>
+            <if test="p.pageId != null">
+                AND t.page_id = #{p.pageId}
+            </if>
+            <if test="p.positionId != null">
+                AND t.position_id = #{p.positionId}
+            </if>
+        </where>
+    </select>
+
+</mapper>
