@@ -10,7 +10,6 @@ import org.springframework.context.annotation.ComponentScans;
 
 /**
  * 翻译服
- * 。。。。。。。
  */
 @EnableDiscoveryClient
 @EnableFeignInterceptor
