@@ -42,6 +42,12 @@ public class I18nUtil implements ApplicationContextAware {
         if (I18nKeys.Locale.ZH_CN.equals(language)) {
             return key;
         }
+        if (null == redisTemplate) {
+            return key;
+        }
+        if (StrUtil.isBlank(key)) {
+            return key;
+        }
         String value = redisTemplate.<String, String>opsForHash().get(keyOf(language), key);
         if (null == value) {
             return key;
