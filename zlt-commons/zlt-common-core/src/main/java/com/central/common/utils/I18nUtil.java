@@ -59,10 +59,10 @@ public class I18nUtil implements ApplicationContextAware {
      */
     public static String t(String key) {
         HttpServletRequest request = ServletUtil.getHttpServletRequest();
-
-        String language = request == null
-                ? I18nKeys.Locale.EN_US
-                :request.getHeader(I18nKeys.LANGUAGE);
+        if (null == request) {
+            return key;
+        }
+        String language = request.getHeader(I18nKeys.LANGUAGE);
         return translate(language, key);
     }
 
