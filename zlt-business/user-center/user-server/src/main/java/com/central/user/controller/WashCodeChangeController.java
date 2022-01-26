@@ -44,7 +44,7 @@ public class WashCodeChangeController {
             startTime = DateUtil.getStartTime(0);
             endTime = DateUtil.getEndTime(0);
         }
-        PageResult<WashCodeChangeVo> washCodeChangeList = washCodeChangeService.getWashCodeRecord(3L,startTime,endTime);
+        PageResult<WashCodeChangeVo> washCodeChangeList = washCodeChangeService.getWashCodeRecord(user.getId(),startTime,endTime);
         return Result.succeed(washCodeChangeList);
     }
 

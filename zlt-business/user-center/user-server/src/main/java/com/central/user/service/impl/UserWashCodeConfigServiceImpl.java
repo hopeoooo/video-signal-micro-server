@@ -28,7 +28,7 @@ public class UserWashCodeConfigServiceImpl extends SuperServiceImpl<UserWashCode
     private GameService gameService;
 
     @Override
-    public   List<UserWashCodeConfig> findUserWashCodeConfigList(Long userId) {
+    public List<UserWashCodeConfig> findUserWashCodeConfigList(Long userId) {
         LambdaQueryWrapper<UserWashCodeConfig> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserWashCodeConfig::getUserId,userId);
         List<UserWashCodeConfig> userWashCodeConfigs = baseMapper.selectList(wrapper);
