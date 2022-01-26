@@ -96,7 +96,7 @@ public class I18nUtil implements ApplicationContextAware {
         if (StrUtil.isBlank(language)) {
             return I18nKeys.Redis.EN_US_KEY;
         }
-        switch (language) {
+        switch (language.toLowerCase()) {
             case I18nKeys.Locale.EN_US:
                 return I18nKeys.Redis.EN_US_KEY;
             case I18nKeys.Locale.KHM:
