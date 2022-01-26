@@ -16,9 +16,12 @@ public class ServletUtil {
 	 * @return
 	 */
 	public static HttpServletRequest getHttpServletRequest() {
-		return ( ( ServletRequestAttributes ) RequestContextHolder
-				.getRequestAttributes() )
-				.getRequest();
+		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
+				.getRequestAttributes();
+		if (null == requestAttributes) {
+			return null;
+		}
+		return requestAttributes.getRequest();
 	}
 
 	/**
