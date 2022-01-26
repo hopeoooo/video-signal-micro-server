@@ -1,5 +1,7 @@
 package com.central.common.utils;
 
+import cn.hutool.core.collection.CollUtil;
+import com.central.common.constant.I18nKeys;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.Result;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -12,6 +14,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * 网关webflux的response返回工具类
@@ -26,7 +29,11 @@ public class WebfluxResponseUtil {
     }
 
     public static Mono<Void> responseFailed(ServerWebExchange exchange, int httpStatus, String msg) {
-        Result result = Result.failed(CodeEnum.ERROR_AUTH_SECURITY.getCode(), "请求地址或参数异常", msg);
+        List<String> headerList = exchange.getRequest().getHeaders().get(I18nKeys.LANGUAGE);
+        String language = CollUtil.isEmpty(headerList) ? I18nKeys.Locale.EN_US : headerList.get(0);
+        String originalMsg = I18nUtil.translate(language, "请求地址或参数异常");
+        String dataMsg = I18nUtil.translate(language, msg);
+        Result result = Result.failed(CodeEnum.ERROR_AUTH_SECURITY.getCode(), originalMsg, dataMsg);
         return responseWrite(exchange, httpStatus, result);
     }
 

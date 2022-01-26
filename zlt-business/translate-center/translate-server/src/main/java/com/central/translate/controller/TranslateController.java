@@ -77,4 +77,9 @@ public class TranslateController {
         return Result.succeed(i18nInfosService.getFullI18nSource());
     }
 
+    @GetMapping("/translate/test")
+    public Result<String> test(){
+        return Result.failed("默认");
+    }
+
 }
