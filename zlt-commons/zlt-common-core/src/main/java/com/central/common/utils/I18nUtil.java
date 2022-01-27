@@ -1,4 +1,4 @@
-package com.central.common.redis.i18n;
+package com.central.common.utils;
 
 import cn.hutool.core.util.StrUtil;
 import com.central.common.constant.I18nKeys;
@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -41,6 +42,12 @@ public class I18nUtil implements ApplicationContextAware {
         if (I18nKeys.Locale.ZH_CN.equals(language)) {
             return key;
         }
+        if (null == redisTemplate) {
+            return key;
+        }
+        if (StrUtil.isBlank(key)) {
+            return key;
+        }
         String value = redisTemplate.<String, String>opsForHash().get(keyOf(language), key);
         if (null == value) {
             return key;
@@ -51,13 +58,17 @@ public class I18nUtil implements ApplicationContextAware {
     /**
      * 翻译
      *
-     * @param language 语言
      * @param key      待翻译文本
      * @return {@link String} 出参释义
      * @author lance
      * @since 2022 -01-25 18:19:02
      */
-    public static String t(String language, String key) {
+    public static String t(String key) {
+        HttpServletRequest request = ServletUtil.getHttpServletRequest();
+        if (null == request) {
+            return key;
+        }
+        String language = request.getHeader(I18nKeys.LANGUAGE);
         return translate(language, key);
     }
 

@@ -1,5 +1,6 @@
 package com.central.common.model;
 
+import com.central.common.utils.I18nUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,7 +39,7 @@ public class Result<T> implements Serializable {
         Result<T> result = new Result<>();
         result.setDatas(datas);
         result.setResp_code(code);
-        result.setResp_msg(msg);
+        result.setResp_msg(I18nUtil.t(msg));
         return result;
     }
 

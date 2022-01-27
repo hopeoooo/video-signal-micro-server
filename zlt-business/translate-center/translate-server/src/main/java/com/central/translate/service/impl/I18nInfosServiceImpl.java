@@ -8,7 +8,7 @@ import com.central.common.constant.I18nKeys;
 import com.central.common.model.PageResult;
 import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.I18nInfo;
-import com.central.common.redis.i18n.I18nUtil;
+import com.central.common.utils.I18nUtil;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.translate.mapper.I18nInfoMapper;
 import com.central.common.params.translate.I18nInfoPageMapperParam;

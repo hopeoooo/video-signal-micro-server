@@ -9,6 +9,11 @@ package com.central.common.constant;
 public interface I18nKeys {
 
     /**
+     * header 选择语言
+     */
+    String LANGUAGE = "language";
+
+    /**
      * 语种
      */
     interface Locale {

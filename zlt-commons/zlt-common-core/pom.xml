@@ -28,6 +28,13 @@
             <artifactId>spring-security-core</artifactId>
         </dependency>
 
+        <!-- redis 依赖-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
