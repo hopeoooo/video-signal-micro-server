@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @Api(tags = "翻译api")
+@RequestMapping("/translate")
 public class TranslateController {
 
     @Autowired
@@ -38,7 +39,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-25 14:13:51
      */
-    @PostMapping("/translate/update")
+    @PostMapping("/update")
     @ApiOperation(value = "更新国际化字典")
     public Result<String> update(
             @LoginUser SysUser sysUser,
@@ -59,7 +60,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-25 14:13:51
      */
-    @GetMapping("/translate/infos")
+    @GetMapping("/infos")
     @ApiOperation(value = "查询国际化字典分页")
     public PageResult<I18nInfoPageVO> infos(@ModelAttribute QueryI18nInfoPageParam param){
         return i18nInfosService.findInfos(param);
@@ -72,12 +73,13 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-25 14:34:28
      */
-    @GetMapping("/translate/fullSource")
+    @GetMapping("/fullSource")
+    @ApiOperation(value = "查询国际化字典分页")
     public Result<I18nSourceDTO> fullSource() {
         return Result.succeed(i18nInfosService.getFullI18nSource());
     }
 
-    @GetMapping("/translate/test")
+    @GetMapping("/test")
     public Result<String> test(){
         return Result.failed("默认");
     }
