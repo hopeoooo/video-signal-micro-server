@@ -38,8 +38,8 @@ public class RoomFollowListController {
     @Autowired
     private GameService gameService;
 
-    @ApiOperation(value = "当前登录用户新增房间关注")
-    @PostMapping("/addFollow/{roomId}")
+    @ApiOperation(value = "当前登录用户关注、取消关注房间")
+    @PostMapping("/addOrRemoveFollow/{roomId}")
     public Result addFollow(@LoginUser SysUser user, @PathVariable("roomId") Long roomId) {
         Result<GameRoomList> result = gameService.findRoomDetailById(roomId);
         if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
@@ -47,31 +47,22 @@ public class RoomFollowListController {
         }
         GameRoomList roomList = result.getDatas();
         if (roomList == null || roomList.getRoomStatus() == 0) {
-            return Result.failed("当前房间不存在或已关闭,关注失败");
+            return Result.failed("当前房间不存在或已关闭,操作失败");
         }
         LambdaQueryWrapper<RoomFollowList> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.eq(RoomFollowList::getUserId, user.getId());
         queryWrapper.eq(RoomFollowList::getRoomId, roomId);
         List<RoomFollowList> list = roomFollowListService.list(queryWrapper);
+        //存在就取消关注
         if (CollectionUtils.isNotEmpty(list)) {
-            return Result.failed("当前房间已关注");
-
+            roomFollowListService.remove(queryWrapper);
+            return Result.succeed("取消关注成功");
         }
         RoomFollowList roomFollowList = new RoomFollowList();
         roomFollowList.setUserId(user.getId());
         roomFollowList.setRoomId(roomId);
         roomFollowListService.save(roomFollowList);
-        return Result.succeed();
-    }
-
-    @ApiOperation(value = "当前登录用户取消房间关注")
-    @GetMapping("/removeFollow/{roomId}")
-    public Result removeFollow(@LoginUser SysUser user, @PathVariable("roomId") Long roomId) {
-        LambdaQueryWrapper<RoomFollowList> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.eq(RoomFollowList::getUserId, user.getId());
-        queryWrapper.eq(RoomFollowList::getRoomId, roomId);
-        roomFollowListService.remove(queryWrapper);
-        return Result.succeed();
+        return Result.succeed("关注成功");
     }
 
     @ApiOperation(value = "当前登录用户查询房间关注列表")
