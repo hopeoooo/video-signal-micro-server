@@ -8,12 +8,9 @@ import lombok.Data;
 @Data
 public class RoomFollowVo {
 
-    @ApiModelProperty(value = "ID")
-    private Long id;
-
     @ApiModelProperty(value = "房间ID")
     private Long roomId;
 
     @ApiModelProperty(value = "房间名称")
-    private String roomName;
+    private String gameRoomName;
 }

@@ -87,9 +87,8 @@ public class RoomFollowListController {
             for (GameRoomList room : detail.getDatas()) {
                 if (followList.getRoomId() == room.getId() && room.getRoomStatus() != 0) {
                     RoomFollowVo vo = new RoomFollowVo();
-                    vo.setId(followList.getId());
                     vo.setRoomId(followList.getRoomId());
-                    vo.setRoomName(room.getGameRoomName());
+                    vo.setGameRoomName(room.getGameRoomName());
                     result.add(vo);
                 }
             }
