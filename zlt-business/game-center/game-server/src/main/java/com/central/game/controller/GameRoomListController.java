@@ -1,5 +1,8 @@
 package com.central.game.controller;
 
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.Result;
 import com.central.game.model.GameRoomList;
 import com.central.game.service.IGameRoomListService;
@@ -8,10 +11,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -52,6 +57,19 @@ public class GameRoomListController {
     public Result<GameRoomList> findRoomDetailById(@PathVariable("id") Long id) {
         GameRoomList room = iGameRoomListService.getById(id);
         return Result.succeed(room);
+    }
+
+    @ApiOperation(value = "根据房间ids查询房间详情")
+    @GetMapping("/findRoomDetailByIds/{ids}")
+    public Result<List<GameRoomList>> findRoomDetailByIds(@PathVariable("ids") String ids) {
+        if(StringUtils.isBlank(ids)){
+            return Result.succeed();
+        }
+        String[] idArray = ids.split(",");
+        LambdaQueryWrapper<GameRoomList> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.in(GameRoomList::getId, idArray);
+        List<GameRoomList> roomList = iGameRoomListService.list(queryWrapper);
+        return Result.succeed(roomList);
     }
 
     @ApiOperation(value = "新增/更新")

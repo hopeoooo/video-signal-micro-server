@@ -76,6 +76,19 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
                 log.error("删除房间失败", throwable);
                 return Result.failed("删除房间失败");
             }
+
+            @Override
+            public Result<GameRoomList> findRoomDetailById(Long id) {
+                log.error("findRoomDetailById查询房间详情失败id:{}", id);
+                return Result.failed("查询房间详情失败");
+            }
+
+            @Override
+            public Result<List<GameRoomList>> findRoomDetailByIds(String ids) {
+                log.error("findRoomDetailByIds查询房间详情失败ids:{}", ids);
+                return Result.failed("查询房间详情失败");
+            }
+
         };
     }
 }

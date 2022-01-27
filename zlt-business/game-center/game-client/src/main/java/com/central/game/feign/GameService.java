@@ -86,4 +86,20 @@ public interface GameService {
      */
     @DeleteMapping("/gameRoomList//deleteById/{id}")
     Result roomDeleteById(@PathVariable("id") Long id);
+
+    /**
+     * 根据房间ID查询房间详情
+     * @param id
+     * @return
+     */
+    @GetMapping("/gameRoomList/findRoomDetailById/{id}")
+    Result<GameRoomList> findRoomDetailById(@PathVariable("id") Long id);
+
+    /**
+     * 根据房间IDs查询房间详情
+     * @param ids
+     * @return
+     */
+    @GetMapping("/gameRoomList/findRoomDetailByIds/{ids}")
+    Result<List<GameRoomList>> findRoomDetailByIds(@PathVariable("ids") String ids);
 }
