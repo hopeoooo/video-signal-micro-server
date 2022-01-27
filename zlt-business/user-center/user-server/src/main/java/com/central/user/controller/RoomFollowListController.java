@@ -65,9 +65,12 @@ public class RoomFollowListController {
     }
 
     @ApiOperation(value = "当前登录用户取消房间关注")
-    @GetMapping("/removeFollow/{id}")
-    public Result removeFollow(@LoginUser SysUser user, @PathVariable("id") Long id) {
-        roomFollowListService.removeById(id);
+    @GetMapping("/removeFollow/{roomId}")
+    public Result removeFollow(@LoginUser SysUser user, @PathVariable("roomId") Long roomId) {
+        LambdaQueryWrapper<RoomFollowList> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.eq(RoomFollowList::getUserId, user.getId());
+        queryWrapper.eq(RoomFollowList::getRoomId, roomId);
+        roomFollowListService.remove(queryWrapper);
         return Result.succeed();
     }
 
