@@ -68,9 +68,10 @@ public class RoomFollowListController {
     @ApiOperation(value = "当前登录用户查询房间关注列表")
     @GetMapping("/getRoomFollowList")
     public Result<List<RoomFollowVo>> getRoomFollowList(@LoginUser SysUser user) {
+        List<RoomFollowVo> result = new ArrayList<>();
         List<RoomFollowList> list = roomFollowListService.lambdaQuery().eq(RoomFollowList::getUserId, user.getId()).orderByDesc(RoomFollowList::getCreateTime).list();
         if (CollectionUtils.isEmpty(list)) {
-            return Result.succeed();
+            return Result.succeed(result);
         }
         //查询最新的房间状态，禁用的不显示
         StringJoiner joiner = new StringJoiner(",");
@@ -82,7 +83,6 @@ public class RoomFollowListController {
         if (detail.getResp_code() != CodeEnum.SUCCESS.getCode()) {
             return Result.failed("服务器异常,查询失败");
         }
-        List<RoomFollowVo> result = new ArrayList<>();
         for (RoomFollowList followList : list) {
             for (GameRoomList room : detail.getDatas()) {
                 if (followList.getRoomId() == room.getId() && room.getRoomStatus() != 0) {
