@@ -10,6 +10,7 @@ import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.feign.TranslateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * 降级工场
  */
 @Slf4j
+@Component
 public class TranslateServiceFallbackFactory implements FallbackFactory<TranslateService> {
 
     @Override

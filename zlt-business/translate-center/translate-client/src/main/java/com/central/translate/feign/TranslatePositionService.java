@@ -3,6 +3,7 @@ package com.central.translate.feign;
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.I18nPosition;
 import com.central.common.model.Result;
+import com.central.common.params.translate.I18nPositionParam;
 import com.central.common.vo.I18nPositionVO;
 import com.central.translate.feign.callback.TranslatePositionFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -53,6 +54,6 @@ public interface TranslatePositionService {
      * @since 2022 -01-25 13:32:11
      */
     @PostMapping("/translate/position/saveOrUpdate")
-    Result<String> saveOrUpdate(@RequestBody I18nPosition position);
+    Result<String> saveOrUpdate(@RequestBody I18nPositionParam position);
 
 }

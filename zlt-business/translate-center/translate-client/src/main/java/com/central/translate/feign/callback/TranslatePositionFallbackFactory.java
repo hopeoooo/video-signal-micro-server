@@ -1,11 +1,12 @@
 package com.central.translate.feign.callback;
 
-import com.central.common.model.I18nPosition;
 import com.central.common.model.Result;
+import com.central.common.params.translate.I18nPositionParam;
 import com.central.common.vo.I18nPositionVO;
 import com.central.translate.feign.TranslatePositionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * 降级工场
  */
 @Slf4j
+@Component
 public class TranslatePositionFallbackFactory implements FallbackFactory<TranslatePositionService> {
 
     @Override
@@ -31,7 +33,7 @@ public class TranslatePositionFallbackFactory implements FallbackFactory<Transla
             }
 
             @Override
-            public Result<String> saveOrUpdate(I18nPosition position) {
+            public Result<String> saveOrUpdate(I18nPositionParam position) {
                 log.error("调用失败: {}", position);
                 return null;
             }
