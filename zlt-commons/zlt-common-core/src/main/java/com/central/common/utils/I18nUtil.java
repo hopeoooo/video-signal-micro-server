@@ -75,15 +75,15 @@ public class I18nUtil implements ApplicationContextAware {
     /**
      * 重设国际化资源redis缓存
      *
-     * @param language 入参释义
+     * @param redisKey 入参释义
      * @param key      入参释义
      * @param value    入参释义
      * @author lance
      * @since 2022 -01-25 18:05:09
      */
-    public static void resetSource(String language, String key, String value) {
+    public static void resetSource(String redisKey, String key, String value) {
         redisTemplate.opsForHash().put(
-                keyOf(language),
+                redisKey,
                 key,
                 value
         );

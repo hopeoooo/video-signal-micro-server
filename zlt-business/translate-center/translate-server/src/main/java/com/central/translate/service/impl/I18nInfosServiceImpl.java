@@ -182,15 +182,27 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             }
             if (enusChange) {
                 // 更新英文国际化
-                I18nUtil.resetSource(I18nKeys.Locale.EN_US, i18nKey, param.getEnUs());
+                I18nUtil.resetSource(
+                        I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.EN_US_KEY : I18nKeys.Redis.Front.EN_US_KEY,
+                        i18nKey,
+                        param.getEnUs()
+                );
             }
             if (khmChange) {
                 // 更新高棉语国际化
-                I18nUtil.resetSource(I18nKeys.Locale.KHM, i18nKey, param.getKhm());
+                I18nUtil.resetSource(
+                        I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.KHM_KEY : I18nKeys.Redis.Front.KHM_KEY,
+                        i18nKey,
+                        param.getKhm()
+                );
             }
             if (thChange) {
                 // 更新泰语国际化
-                I18nUtil.resetSource(I18nKeys.Locale.TH, i18nKey, param.getTh());
+                I18nUtil.resetSource(
+                        I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.TH_KEY : I18nKeys.Redis.Front.TH_KEY,
+                        i18nKey,
+                        param.getTh()
+                );
             }
         }
 
