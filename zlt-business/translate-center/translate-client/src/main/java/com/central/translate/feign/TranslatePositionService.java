@@ -4,6 +4,7 @@ import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.I18nPosition;
 import com.central.common.model.Result;
 import com.central.common.vo.I18nPositionVO;
+import com.central.translate.feign.callback.TranslatePositionFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ import java.util.List;
  * @author lance
  * @since 2022 -01-25 13:13:35
  */
-@FeignClient(name = ServiceNameConstants.TRANSLATE_SERVICE)
+@FeignClient(name = ServiceNameConstants.TRANSLATE_SERVICE, fallbackFactory = TranslatePositionFallbackFactory.class, decode404 = true)
 public interface TranslatePositionService {
 
 
