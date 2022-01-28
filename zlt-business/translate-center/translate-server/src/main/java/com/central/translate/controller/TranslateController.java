@@ -8,6 +8,7 @@ import com.central.common.model.SysUser;
 import com.central.common.params.translate.QueryI18nInfoPageParam;
 import com.central.common.params.translate.UpdateI18nInfoParam;
 import com.central.common.vo.I18nInfoPageVO;
+import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.service.I18nInfosService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
 
 /**
  * 翻译模块
@@ -106,6 +109,20 @@ public class TranslateController {
     @ApiOperation(value = "获取所有的前台台国际化资源")
     public Result<I18nSourceDTO> frontFullSource(){
         return Result.succeed(i18nInfosService.getFrontFullI18nSource());
+    }
+
+
+    /**
+     * 获取语言标签
+     *
+     * @return {@link List} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:44:41
+     */
+    @GetMapping("/languageLabel")
+    @ApiOperation(value = "获取语言标签")
+    public List<LanguageLabelVO> languageLabel(){
+        return i18nInfosService.getLanguageLabel();
     }
 
 }

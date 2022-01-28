@@ -10,6 +10,7 @@ import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.I18nInfo;
 import com.central.common.utils.I18nUtil;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.mapper.I18nInfoMapper;
 import com.central.common.params.translate.I18nInfoPageMapperParam;
 import com.central.common.params.translate.QueryI18nInfoPageParam;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -246,5 +248,22 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         long total = page.getTotal();
 
         return PageResult.<I18nInfoPageVO>builder().data(list).count(total).build();
+    }
+
+    /**
+     * 获取语言标签
+     *
+     * @return {@link List} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:34:54
+     */
+    @Override
+    public List<LanguageLabelVO> getLanguageLabel() {
+        return Arrays.asList(
+                new LanguageLabelVO(I18nKeys.LocaleCode.ZH_CN, I18nUtil.t("中文")),
+                new LanguageLabelVO(I18nKeys.LocaleCode.EN_US, I18nUtil.t("英文")),
+                new LanguageLabelVO(I18nKeys.LocaleCode.KHM, I18nUtil.t("高棉语")),
+                new LanguageLabelVO(I18nKeys.LocaleCode.TH, I18nUtil.t("泰语"))
+        );
     }
 }

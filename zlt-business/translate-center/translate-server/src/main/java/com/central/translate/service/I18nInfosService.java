@@ -7,6 +7,9 @@ import com.central.common.service.ISuperService;
 import com.central.common.params.translate.QueryI18nInfoPageParam;
 import com.central.common.params.translate.UpdateI18nInfoParam;
 import com.central.common.vo.I18nInfoPageVO;
+import com.central.common.vo.LanguageLabelVO;
+
+import java.util.List;
 
 
 /**
@@ -78,5 +81,15 @@ public interface I18nInfosService extends ISuperService<I18nInfo> {
      * @since 2022 -01-25 12:25:12
      */
     PageResult<I18nInfoPageVO> findInfos(QueryI18nInfoPageParam param);
+
+
+    /**
+     * 获取语言标签
+     *
+     * @return {@link List} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:34:54
+     */
+    List<LanguageLabelVO> getLanguageLabel();
 
 }
