@@ -81,7 +81,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         // 批量写入redis
         redisTemplate.executePipelined((RedisCallback<?>)  c -> {
             for (I18nInfo f : infos) {
-                if (I18nKeys.BACKEND.equals(f.getFrom())) {
+                if (I18nKeys.BACKEND.equals(f.getFromOf())) {
                     // 英文国际化
                     if (StrUtil.isNotBlank(f.getEnUs())) {
                         c.hSet(I18nKeys.Redis.Backend.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
@@ -102,7 +102,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                                 f.getZhCn().getBytes(StandardCharsets.UTF_8),
                                 f.getTh().getBytes(StandardCharsets.UTF_8));
                     }
-                } else if(I18nKeys.FRONT.equals(f.getFrom())) {
+                } else if(I18nKeys.FRONT.equals(f.getFromOf())) {
                     // 英文国际化
                     if (StrUtil.isNotBlank(f.getEnUs())) {
                         c.hSet(I18nKeys.Redis.Front.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
@@ -161,7 +161,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
 
         LambdaUpdateWrapper<I18nInfo> update = Wrappers.lambdaUpdate(I18nInfo.class)
                 .eq(I18nInfo::getId, param.getId())
-                .eq(I18nInfo::getFrom, from)
+                .eq(I18nInfo::getFromOf, from)
                 .set(param.getPageId() != null, I18nInfo::getPageId, param.getPageId())
                 .set(param.getPositionId() != null, I18nInfo::getPositionId, param.getPositionId())
                 .set(zhcnChange, I18nInfo::getZhCn, param.getZhCn())
