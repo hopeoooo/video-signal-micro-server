@@ -1,5 +1,6 @@
 package com.central.translate.service;
 
+import com.central.common.params.translate.I18nPositionParam;
 import com.central.common.vo.I18nPositionVO;
 import com.central.common.model.I18nPosition;
 import com.central.common.service.ISuperService;
@@ -33,5 +34,15 @@ public interface I18nPositionService extends ISuperService<I18nPosition> {
      * @since 2022 -01-25 13:05:23
      */
     List<I18nPositionVO> findByPid(Long pid);
+
+
+    /**
+     * 更新或修改
+     *
+     * @param param 入参释义
+     * @author lance
+     * @since 2022 -01-28 11:34:08
+     */
+    void saveOrUpdate(I18nPositionParam param);
 
 }
