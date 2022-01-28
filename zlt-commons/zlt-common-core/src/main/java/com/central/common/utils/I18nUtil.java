@@ -58,7 +58,7 @@ public class I18nUtil implements ApplicationContextAware {
     /**
      * 翻译
      *
-     * @param key      待翻译文本
+     * @param key 待翻译文本
      * @return {@link String} 出参释义
      * @author lance
      * @since 2022 -01-25 18:19:02
@@ -105,32 +105,49 @@ public class I18nUtil implements ApplicationContextAware {
     // 找到对应语言的redis key
     private static String keyOf(String language) {
         if (StrUtil.isBlank(language)) {
-            return I18nKeys.Redis.EN_US_KEY;
+            return I18nKeys.Redis.Backend.EN_US_KEY;
         }
         switch (language.toLowerCase()) {
             case I18nKeys.Locale.EN_US:
-                return I18nKeys.Redis.EN_US_KEY;
+                return I18nKeys.Redis.Backend.EN_US_KEY;
             case I18nKeys.Locale.KHM:
-                return I18nKeys.Redis.KHM_KEY;
+                return I18nKeys.Redis.Backend.KHM_KEY;
             case I18nKeys.Locale.TH:
-                return I18nKeys.Redis.TH_KEY;
+                return I18nKeys.Redis.Backend.TH_KEY;
         }
-        return I18nKeys.Redis.EN_US_KEY;
+        return I18nKeys.Redis.Backend.EN_US_KEY;
     }
 
     /**
-     * 获取所有语言的国际化资源
+     * 获取后台所有语言的国际化资源
      *
      * @return {@link I18nSourceDTO} 出参释义
      * @author lance
      * @since 2022 -01-25 18:11:01
      */
-    public static I18nSourceDTO getFullSource(){
+    public static I18nSourceDTO getBackendFullSource(){
         I18nSourceDTO dto = new I18nSourceDTO();
         HashOperations<String, String, String> ops = redisTemplate.<String, String>opsForHash();
-        dto.setEnUs(ops.entries(I18nKeys.Redis.EN_US_KEY));
-        dto.setKhm(ops.entries(I18nKeys.Redis.KHM_KEY));
-        dto.setTh(ops.entries(I18nKeys.Redis.TH_KEY));
+        dto.setEnUs(ops.entries(I18nKeys.Redis.Backend.EN_US_KEY));
+        dto.setKhm(ops.entries(I18nKeys.Redis.Backend.KHM_KEY));
+        dto.setTh(ops.entries(I18nKeys.Redis.Backend.TH_KEY));
+        return dto;
+    }
+
+
+    /**
+     * 获取前台所有语言的国际化资源
+     *
+     * @return {@link I18nSourceDTO} 出参释义
+     * @author lance
+     * @since 2022 -01-28 12:45:22
+     */
+    public static I18nSourceDTO getFrontFullSource(){
+        I18nSourceDTO dto = new I18nSourceDTO();
+        HashOperations<String, String, String> ops = redisTemplate.<String, String>opsForHash();
+        dto.setEnUs(ops.entries(I18nKeys.Redis.Front.EN_US_KEY));
+        dto.setKhm(ops.entries(I18nKeys.Redis.Front.KHM_KEY));
+        dto.setTh(ops.entries(I18nKeys.Redis.Front.TH_KEY));
         return dto;
     }
 

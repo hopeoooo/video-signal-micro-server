@@ -18,6 +18,7 @@ CREATE TABLE `i18n_info` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
     `page_id` bigint(20) NOT NULL COMMENT '页面id,position表的type=0的数据',
     `position_id` bigint(20) NULL DEFAULT NULL COMMENT '位置id,position表的type=1的数据',
+    `from` int NOT NULL DEFAULT 1 COMMENT '所属 0=前台，1=后台',
     `zh_cn` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '中文-简体',
     `en_us` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '英语-美国',
     `khm` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '高棉语',

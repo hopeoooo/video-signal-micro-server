@@ -44,15 +44,27 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
     private RedisTemplate<String, String> redisTemplate;
 
     /**
-     * 获取所有的国际化资源
+     * 获取所有的后台国际化资源
      *
      * @return {@link I18nSourceDTO} 国际化资源
      * @author lance
      * @since 2022 -01-25 11:58:22
      */
     @Override
-    public I18nSourceDTO getFullI18nSource() {
-        return I18nUtil.getFullSource();
+    public I18nSourceDTO getBackendFullI18nSource() {
+        return I18nUtil.getBackendFullSource();
+    }
+
+    /**
+     * 获取所有的前台国际化资源
+     *
+     * @return {@link I18nSourceDTO} 国际化资源
+     * @author lance
+     * @since 2022 -01-28 12:44:38
+     */
+    @Override
+    public I18nSourceDTO getFrontFullI18nSource() {
+        return I18nUtil.getFrontFullSource();
     }
 
     /**
@@ -64,29 +76,53 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
     @Override
     @PostConstruct
     public void initI18nSourceRedis() {
-        List<I18nInfo> list = list();
+        List<I18nInfo> infos = list();
+
         // 批量写入redis
         redisTemplate.executePipelined((RedisCallback<?>)  c -> {
-            for (I18nInfo f : list) {
-                // 英文国际化
-                if (StrUtil.isNotBlank(f.getEnUs())) {
-                    c.hSet(I18nKeys.Redis.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
-                            f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                            f.getEnUs().getBytes(StandardCharsets.UTF_8));
-                }
+            for (I18nInfo f : infos) {
+                if (I18nKeys.BACKEND.equals(f.getFrom())) {
+                    // 英文国际化
+                    if (StrUtil.isNotBlank(f.getEnUs())) {
+                        c.hSet(I18nKeys.Redis.Backend.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
+                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
+                                f.getEnUs().getBytes(StandardCharsets.UTF_8));
+                    }
 
-                // 高棉语国际化
-                if (StrUtil.isNotBlank(f.getKhm())) {
-                    c.hSet(I18nKeys.Redis.KHM_KEY.getBytes(StandardCharsets.UTF_8),
-                            f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                            f.getKhm().getBytes(StandardCharsets.UTF_8));
-                }
+                    // 高棉语国际化
+                    if (StrUtil.isNotBlank(f.getKhm())) {
+                        c.hSet(I18nKeys.Redis.Backend.KHM_KEY.getBytes(StandardCharsets.UTF_8),
+                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
+                                f.getKhm().getBytes(StandardCharsets.UTF_8));
+                    }
 
-                // 泰文国际化
-                if (StrUtil.isNotBlank(f.getTh())) {
-                    c.hSet(I18nKeys.Redis.TH_KEY.getBytes(StandardCharsets.UTF_8),
-                            f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                            f.getTh().getBytes(StandardCharsets.UTF_8));
+                    // 泰文国际化
+                    if (StrUtil.isNotBlank(f.getTh())) {
+                        c.hSet(I18nKeys.Redis.Backend.TH_KEY.getBytes(StandardCharsets.UTF_8),
+                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
+                                f.getTh().getBytes(StandardCharsets.UTF_8));
+                    }
+                } else if(I18nKeys.FRONT.equals(f.getFrom())) {
+                    // 英文国际化
+                    if (StrUtil.isNotBlank(f.getEnUs())) {
+                        c.hSet(I18nKeys.Redis.Front.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
+                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
+                                f.getEnUs().getBytes(StandardCharsets.UTF_8));
+                    }
+
+                    // 高棉语国际化
+                    if (StrUtil.isNotBlank(f.getKhm())) {
+                        c.hSet(I18nKeys.Redis.Front.KHM_KEY.getBytes(StandardCharsets.UTF_8),
+                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
+                                f.getKhm().getBytes(StandardCharsets.UTF_8));
+                    }
+
+                    // 泰文国际化
+                    if (StrUtil.isNotBlank(f.getTh())) {
+                        c.hSet(I18nKeys.Redis.Front.TH_KEY.getBytes(StandardCharsets.UTF_8),
+                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
+                                f.getTh().getBytes(StandardCharsets.UTF_8));
+                    }
                 }
             }
             return null;
@@ -104,8 +140,16 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
      * @since 2022 -01-25 12:14:35
      */
     @Override
-    public boolean updateI18nInfo(String operator, UpdateI18nInfoParam param) {
+    public boolean updateBackendI18nInfo(String operator, UpdateI18nInfoParam param) {
+        return updateI18nInfo(I18nKeys.BACKEND, operator, param);
+    }
 
+    @Override
+    public boolean updateFrontI18nInfo(String operator, UpdateI18nInfoParam param) {
+        return updateI18nInfo(I18nKeys.FRONT, operator, param);
+    }
+
+    private boolean updateI18nInfo(Integer from, String operator, UpdateI18nInfoParam param) {
         boolean zhcnChange = StrUtil.isNotBlank(param.getZhCn());
         boolean enusChange = StrUtil.isNotBlank(param.getEnUs());
         boolean khmChange = StrUtil.isNotBlank(param.getKhm());
@@ -117,6 +161,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
 
         LambdaUpdateWrapper<I18nInfo> update = Wrappers.lambdaUpdate(I18nInfo.class)
                 .eq(I18nInfo::getId, param.getId())
+                .eq(I18nInfo::getFrom, from)
                 .set(param.getPageId() != null, I18nInfo::getPageId, param.getPageId())
                 .set(param.getPositionId() != null, I18nInfo::getPositionId, param.getPositionId())
                 .set(zhcnChange, I18nInfo::getZhCn, param.getZhCn())

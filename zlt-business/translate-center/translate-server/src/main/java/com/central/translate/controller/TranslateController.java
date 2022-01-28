@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 翻译模块
@@ -31,7 +32,7 @@ public class TranslateController {
     private I18nInfosService i18nInfosService;
 
     /**
-     * 更新国际化字典
+     * 更新后台国际化字典
      *
      * @param sysUser 登录用户
      * @param param   更新参数
@@ -39,17 +40,32 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-25 14:13:51
      */
-    @PostMapping("/update")
+    @PostMapping("/backendUpdate")
     @ApiOperation(value = "更新国际化字典")
-    public Result<String> update(
-            @LoginUser SysUser sysUser,
+    public Result<String> backendUpdate(
+            @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody UpdateI18nInfoParam param){
-        try {
-            i18nInfosService.updateI18nInfo(sysUser.getUsername(), param);
-            return Result.succeed("操作成功");
-        } catch (Exception ex) {
-            return Result.failed("操作失败");
-        }
+        i18nInfosService.updateBackendI18nInfo(sysUser.getUsername(), param);
+        return Result.succeed("操作成功");
+    }
+
+
+    /**
+     * 更新前台国际化字典
+     *
+     * @param sysUser 登录用户
+     * @param param   更新参数
+     * @return {@link Result} 操作结果
+     * @author lance
+     * @since 2022 -01-28 12:46:24
+     */
+    @PostMapping("/frontUpdate")
+    @ApiOperation(value = "更新前台国际化字典")
+    public Result<String> frontUpdate(
+            @ApiIgnore @LoginUser SysUser sysUser,
+            @RequestBody UpdateI18nInfoParam param){
+        i18nInfosService.updateFrontI18nInfo(sysUser.getUsername(), param);
+        return Result.succeed("操作成功");
     }
 
     /**
@@ -67,21 +83,16 @@ public class TranslateController {
     }
 
     /**
-     * 获取所有的国际化资源
+     * 获取所有的后台国际化资源
      *
      * @return {@link Result} 出参释义
      * @author lance
      * @since 2022 -01-25 14:34:28
      */
-    @GetMapping("/fullSource")
-    @ApiOperation(value = "查询国际化字典分页")
+    @GetMapping("/backendFullSource")
+    @ApiOperation(value = "获取所有的后台国际化资源")
     public Result<I18nSourceDTO> fullSource() {
-        return Result.succeed(i18nInfosService.getFullI18nSource());
-    }
-
-    @GetMapping("/test")
-    public Result<String> test(){
-        return Result.failed("默认");
+        return Result.succeed(i18nInfosService.getBackendFullI18nSource());
     }
 
 }
