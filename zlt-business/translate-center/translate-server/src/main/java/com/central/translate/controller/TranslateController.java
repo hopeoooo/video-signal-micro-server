@@ -41,7 +41,7 @@ public class TranslateController {
      * @since 2022 -01-25 14:13:51
      */
     @PostMapping("/backendUpdate")
-    @ApiOperation(value = "更新国际化字典")
+    @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
             @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody UpdateI18nInfoParam param){
@@ -91,8 +91,21 @@ public class TranslateController {
      */
     @GetMapping("/backendFullSource")
     @ApiOperation(value = "获取所有的后台国际化资源")
-    public Result<I18nSourceDTO> fullSource() {
+    public Result<I18nSourceDTO> backendFullSource() {
         return Result.succeed(i18nInfosService.getBackendFullI18nSource());
+    }
+
+    /**
+     * 获取所有的前台国际化资源
+     *
+     * @return {@link Result} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:17:46
+     */
+    @GetMapping("/frontFullSource")
+    @ApiOperation(value = "获取所有的前台台国际化资源")
+    public Result<I18nSourceDTO> frontFullSource(){
+        return Result.succeed(i18nInfosService.getFrontFullI18nSource());
     }
 
 }
