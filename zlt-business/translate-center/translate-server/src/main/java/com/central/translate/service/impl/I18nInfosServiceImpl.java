@@ -263,6 +263,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
 
         params.setPageId(param.getPageId());
         params.setPositionId(param.getPositionId());
+        params.setFrom(param.getFrom());
 
         List<I18nInfoPageVO> list = mapper.findPage(page, params);
         long total = page.getTotal();

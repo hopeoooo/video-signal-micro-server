@@ -23,4 +23,6 @@ public class I18nInfoPageMapperParam {
 
     private Long positionId;
 
+    private Integer from;
+
 }
