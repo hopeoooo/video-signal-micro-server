@@ -288,7 +288,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         return Arrays.asList(
                 new LanguageLabelVO(I18nKeys.LocaleCode.ZH_CN, I18nUtil.t("中文")),
                 new LanguageLabelVO(I18nKeys.LocaleCode.EN_US, I18nUtil.t("英文")),
-                new LanguageLabelVO(I18nKeys.LocaleCode.KHM, I18nUtil.t("高棉语")),
+                new LanguageLabelVO(I18nKeys.LocaleCode.KHM, I18nUtil.t("柬埔寨语")),
                 new LanguageLabelVO(I18nKeys.LocaleCode.TH, I18nUtil.t("泰语"))
         );
     }
