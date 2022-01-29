@@ -37,7 +37,6 @@ public class TranslateController {
     /**
      * 更新后台国际化字典
      *
-     * @param sysUser 登录用户
      * @param param   更新参数
      * @return {@link Result} 操作结果
      * @author lance
@@ -46,9 +45,8 @@ public class TranslateController {
     @PostMapping("/backendUpdate")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
-            @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody UpdateI18nInfoParam param){
-        i18nInfosService.updateBackendI18nInfo(sysUser.getUsername(), param);
+        i18nInfosService.updateBackendI18nInfo(param);
         return Result.succeed("操作成功");
     }
 
@@ -56,7 +54,6 @@ public class TranslateController {
     /**
      * 更新前台国际化字典
      *
-     * @param sysUser 登录用户
      * @param param   更新参数
      * @return {@link Result} 操作结果
      * @author lance
@@ -65,9 +62,8 @@ public class TranslateController {
     @PostMapping("/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
-            @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody UpdateI18nInfoParam param){
-        i18nInfosService.updateFrontI18nInfo(sysUser.getUsername(), param);
+        i18nInfosService.updateFrontI18nInfo( param);
         return Result.succeed("操作成功");
     }
 

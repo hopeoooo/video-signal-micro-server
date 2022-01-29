@@ -1,8 +1,10 @@
 package com.central.platform.backend.controller;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.common.params.translate.QueryI18nInfoPageParam;
 import com.central.common.params.translate.UpdateI18nInfoParam;
 import com.central.common.vo.I18nInfoPageVO;
@@ -13,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -42,7 +45,9 @@ public class TranslateController {
     @PostMapping("/backendUpdate")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
+            @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody UpdateI18nInfoParam param){
+        param.setOperator(sysUser.getUsername());
         return i18nInfosService.backendUpdate(param);
     }
 
@@ -58,7 +63,9 @@ public class TranslateController {
     @PostMapping("/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
+            @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody UpdateI18nInfoParam param){
+        param.setOperator(sysUser.getUsername());
         return i18nInfosService.frontUpdate(param);
     }
 

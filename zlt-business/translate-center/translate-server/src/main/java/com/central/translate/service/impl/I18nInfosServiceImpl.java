@@ -150,23 +150,22 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
     /**
      * 更新国际化字典
      *
-     * @param operator 操作人
      * @param param    更新参数
      * @return {@link boolean} 是否成功
      * @author lance
      * @since 2022 -01-25 12:14:35
      */
     @Override
-    public boolean updateBackendI18nInfo(String operator, UpdateI18nInfoParam param) {
-        return updateI18nInfo(I18nKeys.BACKEND, operator, param);
+    public boolean updateBackendI18nInfo(UpdateI18nInfoParam param) {
+        return updateI18nInfo(I18nKeys.BACKEND, param);
     }
 
     @Override
-    public boolean updateFrontI18nInfo(String operator, UpdateI18nInfoParam param) {
-        return updateI18nInfo(I18nKeys.FRONT, operator, param);
+    public boolean updateFrontI18nInfo(UpdateI18nInfoParam param) {
+        return updateI18nInfo(I18nKeys.FRONT, param);
     }
 
-    private boolean updateI18nInfo(Integer from, String operator, UpdateI18nInfoParam param) {
+    private boolean updateI18nInfo(Integer from, UpdateI18nInfoParam param) {
         boolean zhcnChange = StrUtil.isNotBlank(param.getZhCn());
         boolean enusChange = StrUtil.isNotBlank(param.getEnUs());
         boolean khmChange = StrUtil.isNotBlank(param.getKhm());
@@ -185,7 +184,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                 .set(enusChange, I18nInfo::getEnUs, param.getEnUs())
                 .set(khmChange, I18nInfo::getKhm, param.getKhm())
                 .set(thChange, I18nInfo::getTh, param.getTh())
-                .set(StrUtil.isNotBlank(operator), I18nInfo::getOperator, operator)
+                .set(StrUtil.isNotBlank(param.getOperator()), I18nInfo::getOperator, param.getOperator())
                 .set(I18nInfo::getUpdateTime, new Date());
         int count = mapper.update(null, update);
         boolean succeed = count > 0;

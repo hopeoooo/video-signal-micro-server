@@ -51,25 +51,23 @@ public interface I18nInfosService extends ISuperService<I18nInfo> {
     /**
      * 更新后台国际化字典
      *
-     * @param operator 操作人
      * @param param    更新参数
      * @return {@link boolean} 是否成功
      * @author lance
      * @since 2022 -01-25 12:14:35
      */
-    boolean updateBackendI18nInfo(String operator, UpdateI18nInfoParam param);
+    boolean updateBackendI18nInfo(UpdateI18nInfoParam param);
 
 
     /**
      * 更新前台国际化字典
      *
-     * @param operator 操作人
      * @param param    更新参数
      * @return {@link boolean} 是否成功
      * @author lance
      * @since 2022 -01-28 12:21:47
      */
-    boolean updateFrontI18nInfo(String operator, UpdateI18nInfoParam param);
+    boolean updateFrontI18nInfo(UpdateI18nInfoParam param);
 
 
     /**
