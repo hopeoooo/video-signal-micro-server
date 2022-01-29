@@ -10,6 +10,7 @@ import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.feign.callback.TranslateServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public interface TranslateService {
      * @since 2022 -01-25 13:25:54
      */
     @GetMapping("/translate/infos")
-    Result<PageResult<I18nInfoPageVO>> infos(@ModelAttribute QueryI18nInfoPageParam param);
+    Result<PageResult<I18nInfoPageVO>> infos(@SpringQueryMap QueryI18nInfoPageParam param);
 
 
     /**
