@@ -1,6 +1,7 @@
 package com.central.common.lb.config;
 
 import com.central.common.constant.CommonConstant;
+import com.central.common.constant.I18nKeys;
 import com.central.common.constant.SecurityConstants;
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ public class FeignHttpInterceptorConfig {
         requestHeaders.add(SecurityConstants.USER_HEADER);
         requestHeaders.add(SecurityConstants.ROLE_HEADER);
         requestHeaders.add(CommonConstant.Z_L_T_VERSION);
+        requestHeaders.add(I18nKeys.LANGUAGE);
     }
 
     /**
