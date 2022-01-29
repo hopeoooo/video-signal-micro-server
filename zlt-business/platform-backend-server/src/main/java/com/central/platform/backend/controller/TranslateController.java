@@ -119,8 +119,8 @@ public class TranslateController {
      */
     @GetMapping("/languageLabel")
     @ApiOperation(value = "获取语言标签")
-    public List<LanguageLabelVO> languageLabel(){
-        return i18nInfosService.languageLabel();
+    public Result<List<LanguageLabelVO>> languageLabel(){
+        return Result.succeed(i18nInfosService.languageLabel());
     }
 
 }

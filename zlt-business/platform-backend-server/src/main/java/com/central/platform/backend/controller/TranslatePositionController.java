@@ -33,8 +33,8 @@ public class TranslatePositionController {
      */
     @GetMapping("/translate/position/pageList")
     @ApiOperation(value = "查询所有的翻译位置(页面)")
-    public List<I18nPositionVO> pageList() {
-        return i18nPositionService.pageList();
+    public Result<List<I18nPositionVO>> pageList() {
+        return Result.succeed(i18nPositionService.pageList());
     }
 
 
@@ -48,8 +48,8 @@ public class TranslatePositionController {
      */
     @GetMapping("/translate/position/byPid")
     @ApiOperation(value = "翻译页面下的所有位置")
-    public List<I18nPositionVO> positions(@ApiParam(value = "页面id") Long pid) {
-        return i18nPositionService.positions(pid);
+    public Result<List<I18nPositionVO>> positions(@ApiParam(value = "页面id") Long pid) {
+        return Result.succeed(i18nPositionService.positions(pid));
     }
 
     /**

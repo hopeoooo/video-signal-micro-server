@@ -76,7 +76,7 @@ public interface TranslateService {
      * @author lance
      * @since 2022 -01-28 13:17:46
      */
-    @GetMapping("/frontFullSource")
+    @GetMapping("/translate/frontFullSource")
     Result<I18nSourceDTO> frontFullSource();
 
     /**
@@ -86,7 +86,7 @@ public interface TranslateService {
      * @author lance
      * @since 2022 -01-28 13:44:41
      */
-    @GetMapping("/languageLabel")
+    @GetMapping("/translate/languageLabel")
     List<LanguageLabelVO> languageLabel();
 
 }
