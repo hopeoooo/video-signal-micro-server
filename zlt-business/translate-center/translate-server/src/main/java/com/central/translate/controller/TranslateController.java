@@ -81,8 +81,8 @@ public class TranslateController {
      */
     @GetMapping("/infos")
     @ApiOperation(value = "查询国际化字典分页")
-    public PageResult<I18nInfoPageVO> infos(@ModelAttribute QueryI18nInfoPageParam param){
-        return i18nInfosService.findInfos(param);
+    public Result<PageResult<I18nInfoPageVO>> infos(@ModelAttribute QueryI18nInfoPageParam param){
+        return Result.succeed(i18nInfosService.findInfos(param));
     }
 
     /**

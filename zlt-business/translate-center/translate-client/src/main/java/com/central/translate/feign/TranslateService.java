@@ -55,7 +55,7 @@ public interface TranslateService {
      * @since 2022 -01-25 13:25:54
      */
     @GetMapping("/translate/infos")
-    PageResult<I18nInfoPageVO> infos(@ModelAttribute QueryI18nInfoPageParam param);
+    Result<PageResult<I18nInfoPageVO>> infos(@ModelAttribute QueryI18nInfoPageParam param);
 
 
     /**

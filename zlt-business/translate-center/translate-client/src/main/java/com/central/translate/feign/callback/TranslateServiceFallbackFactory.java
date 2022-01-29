@@ -37,7 +37,7 @@ public class TranslateServiceFallbackFactory implements FallbackFactory<Translat
             }
 
             @Override
-            public PageResult<I18nInfoPageVO> infos(QueryI18nInfoPageParam param) {
+            public Result<PageResult<I18nInfoPageVO>> infos(QueryI18nInfoPageParam param) {
                 log.error("调用失败: {}", param);
                 return null;
             }
