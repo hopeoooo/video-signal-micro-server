@@ -3,6 +3,7 @@ package com.central.common.params.translate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import springfox.documentation.annotations.ApiIgnore;
 
 @ApiModel
 @Data
@@ -29,4 +30,5 @@ public class UpdateI18nInfoParam {
     @ApiModelProperty(value = "泰文")
     private String th;
 
+    String operator;
 }
