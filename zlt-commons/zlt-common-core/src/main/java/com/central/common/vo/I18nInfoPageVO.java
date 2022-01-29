@@ -10,6 +10,9 @@ import java.util.Date;
 @Data
 public class I18nInfoPageVO {
 
+    @ApiModelProperty("主键")
+    private Long id;
+
     @ApiModelProperty("页面")
     private String page;
 

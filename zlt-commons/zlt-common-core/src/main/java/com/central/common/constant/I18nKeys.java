@@ -60,6 +60,10 @@ public interface I18nKeys {
         // 前台
         interface Front {
             /**
+             * 中文国际化 key
+             */
+            String ZH_CN_KEY = "i18n:source:zh_cn:hash:" + I18nKeys.FRONT;
+            /**
              * 英文国际化 key
              */
             String EN_US_KEY = "i18n:source:en_us:hash:" + I18nKeys.FRONT;
@@ -77,6 +81,10 @@ public interface I18nKeys {
 
         // 后台
         interface Backend {
+            /**
+             * 中文国际化 key
+             */
+            String ZH_CN_KEY = "i18n:source:zh_cn:hash:" + I18nKeys.BACKEND;
             /**
              * 英文国际化 key
              */

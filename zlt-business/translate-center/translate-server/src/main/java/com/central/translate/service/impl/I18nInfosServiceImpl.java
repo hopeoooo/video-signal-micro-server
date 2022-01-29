@@ -84,6 +84,13 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         redisTemplate.executePipelined((RedisCallback<?>)  c -> {
             for (I18nInfo f : infos) {
                 if (I18nKeys.BACKEND.equals(f.getFromOf())) {
+                    // 中文国际化
+                    c.hSet(
+                            I18nKeys.Redis.Backend.ZH_CN_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8)
+                    );
+
                     // 英文国际化
                     if (StrUtil.isNotBlank(f.getEnUs())) {
                         c.hSet(I18nKeys.Redis.Backend.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
@@ -105,6 +112,14 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                                 f.getTh().getBytes(StandardCharsets.UTF_8));
                     }
                 } else if(I18nKeys.FRONT.equals(f.getFromOf())) {
+
+                    // 中文国际化
+                    c.hSet(
+                            I18nKeys.Redis.Front.ZH_CN_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8)
+                    );
+
                     // 英文国际化
                     if (StrUtil.isNotBlank(f.getEnUs())) {
                         c.hSet(I18nKeys.Redis.Front.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
@@ -181,6 +196,12 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             if (zhcnChange) {
                 // 更新中文key
                 i18nKey = param.getZhCn();
+                // 更新中文国际化
+                I18nUtil.resetSource(
+                        I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.ZH_CN_KEY : I18nKeys.Redis.Front.ZH_CN_KEY,
+                        i18nKey,
+                        param.getZhCn()
+                );
             }
             if (enusChange) {
                 // 更新英文国际化

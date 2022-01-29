@@ -8,6 +8,7 @@
 
     <select id="findPage" resultType="com.central.common.vo.I18nInfoPageVO">
         SELECT
+            t.id,
             p.name as page,
             s.name as `position`,
             t.zh_cn,

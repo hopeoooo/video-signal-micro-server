@@ -128,6 +128,7 @@ public class I18nUtil implements ApplicationContextAware {
     public static I18nSourceDTO getBackendFullSource(){
         I18nSourceDTO dto = new I18nSourceDTO();
         HashOperations<String, String, String> ops = redisTemplate.<String, String>opsForHash();
+        dto.setZhCn(ops.entries(I18nKeys.Redis.Backend.ZH_CN_KEY));
         dto.setEnUs(ops.entries(I18nKeys.Redis.Backend.EN_US_KEY));
         dto.setKhm(ops.entries(I18nKeys.Redis.Backend.KHM_KEY));
         dto.setTh(ops.entries(I18nKeys.Redis.Backend.TH_KEY));
@@ -145,6 +146,7 @@ public class I18nUtil implements ApplicationContextAware {
     public static I18nSourceDTO getFrontFullSource(){
         I18nSourceDTO dto = new I18nSourceDTO();
         HashOperations<String, String, String> ops = redisTemplate.<String, String>opsForHash();
+        dto.setZhCn(ops.entries(I18nKeys.Redis.Front.ZH_CN_KEY));
         dto.setEnUs(ops.entries(I18nKeys.Redis.Front.EN_US_KEY));
         dto.setKhm(ops.entries(I18nKeys.Redis.Front.KHM_KEY));
         dto.setTh(ops.entries(I18nKeys.Redis.Front.TH_KEY));
