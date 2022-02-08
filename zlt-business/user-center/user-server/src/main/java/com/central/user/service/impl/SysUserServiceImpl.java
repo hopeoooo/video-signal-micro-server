@@ -62,21 +62,21 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
     private DistributedLock lock;
 
     @Override
-    @Cacheable(key="'findByUsername::' + #p0")
+    @Cacheable(key="'findByUsername::' + #p0.toLowerCase()")
     public LoginAppUser findByUsername(String username) {
         SysUser sysUser = this.selectByUsername(username);
         return getLoginAppUser(sysUser);
     }
 
     @Override
-    @Cacheable(key="'findByOpenId::' + #p0")
+    @Cacheable(key="'findByOpenId::' + #p0.toLowerCase()")
     public LoginAppUser findByOpenId(String openId) {
         SysUser sysUser = this.selectByOpenId(openId);
         return getLoginAppUser(sysUser);
     }
 
     @Override
-    @Cacheable(key="'findByMobile::' + #p0")
+    @Cacheable(key="'findByMobile::' + #p0.toLowerCase()")
     public LoginAppUser findByMobile(String mobile) {
         SysUser sysUser = this.selectByMobile(mobile);
         return getLoginAppUser(sysUser);
@@ -113,7 +113,7 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
      * @return
      */
     @Override
-    @Cacheable(key="'selectByUsername::' + #p0")
+    @Cacheable(key="'selectByUsername::' + #p0.toLowerCase()")
     public SysUser selectByUsername(String username) {
         List<SysUser> users = baseMapper.selectList(
                 new QueryWrapper<SysUser>().eq("username", username)
@@ -127,7 +127,7 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
      * @return
      */
     @Override
-    @Cacheable(key="'selectByMobile::' + #p0")
+    @Cacheable(key="'selectByMobile::' + #p0.toLowerCase()")
     public SysUser selectByMobile(String mobile) {
         List<SysUser> users = baseMapper.selectList(
                 new QueryWrapper<SysUser>().eq("mobile", mobile)
@@ -147,7 +147,7 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
      * @return
      */
     @Override
-    @Cacheable(key="'selectByOpenId::' + #p0")
+    @Cacheable(key="'selectByOpenId::' + #p0.toLowerCase()")
     public SysUser selectByOpenId(String openId) {
         List<SysUser> users = baseMapper.selectList(
                 new QueryWrapper<SysUser>().eq("open_id", openId)
@@ -354,12 +354,12 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
 
     @Override
     @Caching(evict = {
-            @CacheEvict(key = "'findByUsername::' + #p0.username"),
-            @CacheEvict(key = "'findByOpenId::' + #p0.openId"),
-            @CacheEvict(key = "'findByMobile::' + #p0.mobile"),
-            @CacheEvict(key = "'selectByUsername::' + #p0.username"),
-            @CacheEvict(key = "'findByOpenId::' + #p0.openId"),
-            @CacheEvict(key = "'selectByMobile::' + #p0.mobile"),
+            @CacheEvict(key = "'findByUsername::' + #p0.username.toLowerCase()"),
+            @CacheEvict(key = "'findByOpenId::' + #p0.openId.toLowerCase()"),
+            @CacheEvict(key = "'findByMobile::' + #p0.mobile.toLowerCase()"),
+            @CacheEvict(key = "'selectByUsername::' + #p0.username.toLowerCase()"),
+            @CacheEvict(key = "'findByOpenId::' + #p0.openId.toLowerCase()"),
+            @CacheEvict(key = "'selectByMobile::' + #p0.mobile.toLowerCase()"),
             @CacheEvict(key = "'selectById::' + #p0.id"),
     })
     public void cacheEvictUser(SysUser sysUser) {
