@@ -50,6 +50,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
+            public Boolean processLoginSuccess(LoginAppUser loginAppUser) {
+                log.error("处理登录成功失败.",throwable);
+                return Boolean.FALSE;
+            }
+
+            @Override
             public LoginAppUser findByMobile(String mobile) {
                 log.error("通过手机号查询用户异常:{}", mobile, throwable);
                 return new LoginAppUser();
