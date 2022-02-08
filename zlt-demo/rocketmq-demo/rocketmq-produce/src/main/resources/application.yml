@@ -6,20 +6,29 @@ spring:
     name: rocketmq-produce
   cloud:
     stream:
+      # Spring Cloud Stream RocketMQ 配置项
       rocketmq:
         binder:
-          # RocketMQ 服务地址
-          name-server: 192.168.28.130:9876
+          # RocketMQ 服务地址 # 10.4.7.30:9876
+          name-server: 116.212.138.46:9876
+#          group: demo
+          # RocketMQ 自定义 Binding 配置项，对应 RocketMQBindingProperties Map
         bindings:
-          output:
+          gaaraSimple-out-0:
+            # RocketMQ Producer 配置项，对应 RocketMQProducerProperties 类
             producer:
-              group: produce-group
-          output2:
+              group: test # 生产者分组
+              sync: true  # 是否同步发送消息，默认为 false 异步。
+          gaaraOrder-out-0:
             producer:
-              group: test-group2
+              group: producer-group-order # 生产者分组
+              sync: true  # 是否同步发送消息，默认为 false 异步。
       bindings:
-        output:
-          destination: test-topic
+        gaaraSimple-out-0:
+          destination: topic-gaara-simple-test # 目的地。这里使用 RocketMQ Topic
+          content-type: application/json # 内容格式。这里使用 JSON
+        gaaraOrder-out-0:
+          destination: topic-gaara-order
           content-type: application/json
 
 logging:

@@ -9,13 +9,15 @@ spring:
       rocketmq:
         binder:
           # RocketMQ 服务器地址
-          name-server: 192.168.28.130:9876
+          name-server: 116.212.138.46:9876
         bindings:
+          # 生产者
           output:
             producer:
               group: order-tx-produce-group
               #开启事务消息
               transactional: true
+          # 消费者
           input:
             consumer:
               #重试失败直接进入死信队列
