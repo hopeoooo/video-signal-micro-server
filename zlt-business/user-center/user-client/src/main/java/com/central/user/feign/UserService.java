@@ -1,5 +1,6 @@
 package com.central.user.feign;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.*;
@@ -44,6 +45,14 @@ public interface UserService {
      */
     @GetMapping(value = "/users-anon/findGuest")
     LoginAppUser findGuest();
+
+    /**
+     * feign rpc访问远程/users/loginSuc接口
+     * 处理登录成功
+     * @return
+     */
+    @PostMapping(value = "/user/loginSuc",params = "loginAppUser")
+    Boolean processLoginSuccess(@RequestBody LoginAppUser loginAppUser);
 
     /**
      * 通过手机号查询用户、角色信息
