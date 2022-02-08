@@ -39,7 +39,8 @@ public class I18nUtil implements ApplicationContextAware {
      * @since 2022 -01-25 18:18:28
      */
     public static String translate(String language, String key) {
-        if (I18nKeys.Locale.ZH_CN.equals(language)) {
+
+        if (I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language)) {
             return key;
         }
         if (null == redisTemplate) {
