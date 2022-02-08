@@ -131,6 +131,12 @@ public class SysUserController {
         return Boolean.TRUE;
     }
 
+    @ApiOperation(value = "通知在线人数")
+    @PostMapping(value = "/user/notify_players")
+    public PushResult<Integer> notifyPlayers(){
+        return PushResult.succeed(0, "online_nums","在线人数推送成功");
+    }
+
     /**
      * 通过手机号查询用户、角色信息
      *
