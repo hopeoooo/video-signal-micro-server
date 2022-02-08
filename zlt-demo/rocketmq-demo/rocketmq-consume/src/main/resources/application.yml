@@ -9,31 +9,40 @@ spring:
       rocketmq:
         binder:
           # RocketMQ 服务器地址
-          name-server: 192.168.28.130:9876
+          name-server: 116.212.138.46:9876
         bindings:
-          input2:
+          gaaraSimple-in-0:
             consumer:
-              #增加tag过滤
-              tags: tagObj
+              enabled: true 	# 默认值为true
+              broadcasting: false  # 默认为false，使用集群模式
+          gaaraOrder-in-0:
+            consumer:
+              enabled: true    # 默认值为true
+              broadcasting: false  # 默认为false，使用集群模式
+              # 增加tag过滤 ，新版 (现在的写法)
+              subscription: Pay-Order   # 测试tag过滤无效
       bindings:
-        input:
-          destination: test-topic
-          content-type: text/plain
-          group: consume-group1
-          consumer:
-            #并发消费线程数
-            concurrency: 20
-        input2:
-          destination: test-topic
+        gaaraSimple-in-0:
+          destination: topic-gaara-simple-test
           content-type: application/json
-          group: consume-group2
-          consumer:
-            #并发消费线程数
-            concurrency: 20
-        input3:
-          destination: test-topic
-          content-type: text/plain
-          group: consume-group3
-          consumer:
-            #并发消费线程数
-            concurrency: 20
+          group: test
+        gaaraOrder-in-0:
+          destination: topic-gaara-order
+          content-type: application/json
+          # 消费者分组,命名规则：组名+topic名
+          group: gaaraOrder-customer-group-topic-gaara-order
+        gaaraOrderA-in-0:
+          destination: topic-gaara-order
+          content-type: application/json
+          # 消费者分组,命名规则：组名+topic名
+          group: gaaraOrderA-customer-group-topic-gaara-order
+#        consumer:
+#          batch-mode: true # 批量消费者, 为true以启用将整批消息传递给 a 中的函数List
+#      pollable-source: gaaraOrder  # 使用轮询消费者，绑定名称与函数式编程模型保持一致。
+      function:
+        # 多个bean可以用 ; 进行分割
+        definition: gaaraSimple;gaaraOrder;gaaraOrderA
+
+
+
+
