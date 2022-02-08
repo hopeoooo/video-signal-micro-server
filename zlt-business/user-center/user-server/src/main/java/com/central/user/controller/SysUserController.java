@@ -1,12 +1,15 @@
 package com.central.user.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
+import com.central.common.constant.SecurityConstants;
 import com.central.common.model.*;
 import com.central.common.utils.ExcelUtil;
 import com.central.log.annotation.AuditLog;
+import com.central.push.feign.PushService;
 import com.central.search.client.service.IQueryService;
 import com.central.search.model.LogicDelDto;
 import com.central.search.model.SearchDto;
@@ -66,6 +69,9 @@ public class SysUserController {
     @Resource
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private PushService pushService;
+
     /**
      * 当前登录用户 LoginAppUser
      *
@@ -111,6 +117,18 @@ public class SysUserController {
             throw new InternalAuthenticationServiceException("游客已满");
 
         return appUserService.findByUsername(playName.toString());
+    }
+
+    @PostMapping(value = "/user/loginSuc")
+    public Boolean processLoginSuccess(@RequestBody LoginAppUser loginAppUser){
+        log.info("login success process, user is {}",loginAppUser.getUsername());
+        String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + "online:*";
+        Set<String> keySet = redisTemplate.keys(onlineKey);
+        int playerSize = keySet.size();
+        PushResult<Integer> pushResult = PushResult.succeed(playerSize, "online_nums","在线人数推送成功");
+        Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
+        log.info("在线人数消息推送结果:{}",push);
+        return Boolean.TRUE;
     }
 
     /**
