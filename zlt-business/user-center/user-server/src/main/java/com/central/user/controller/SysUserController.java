@@ -131,6 +131,12 @@ public class SysUserController {
         return Boolean.TRUE;
     }
 
+    @ApiOperation(value = "webSocket通知游戏人数")
+    @PostMapping(value = "/user/notifyPlayers")
+    public PushResult<Integer> notifyPlayers(){
+        return PushResult.succeed(1, "online_nums","在线人数推送成功");
+    }
+
     /**
      * 通过手机号查询用户、角色信息
      *
