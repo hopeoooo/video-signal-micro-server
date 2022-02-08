@@ -1,8 +1,12 @@
 package com.central.translate.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.central.common.exception.BusinessException;
+import com.central.common.params.translate.I18nPositionParam;
+import com.central.common.utils.I18nUtil;
 import com.central.common.vo.I18nPositionVO;
 import com.central.common.model.I18nPosition;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -43,6 +47,8 @@ public class I18nPositionServiceImpl extends SuperServiceImpl<I18nPositionMapper
         for (I18nPosition p : list) {
             I18nPositionVO vo = new I18nPositionVO();
             BeanUtil.copyProperties(p, vo);
+            // 国际化处理
+            vo.setName(I18nUtil.t(vo.getName()));
             voList.add(vo);
         }
         return voList;
@@ -65,8 +71,25 @@ public class I18nPositionServiceImpl extends SuperServiceImpl<I18nPositionMapper
         for (I18nPosition p : list) {
             I18nPositionVO vo = new I18nPositionVO();
             BeanUtil.copyProperties(p, vo);
+            // 国际化处理
+            vo.setName(I18nUtil.t(vo.getName()));
             voList.add(vo);
         }
         return voList;
+    }
+
+    @Override
+    public void saveOrUpdate(I18nPositionParam param) {
+        I18nPosition p = new I18nPosition();
+        if (StrUtil.isBlank(param.getName())) {
+            throw new BusinessException("名称不能为空");
+        }
+        if (param.getIsPage() && param.getPid() == null) {
+            throw new BusinessException("pid不能为空");
+        }
+        p.setId(param.getId());
+        p.setPid(param.getPid());
+        p.setType(param.getIsPage() ? 0 : 1);
+        super.saveOrUpdate(p);
     }
 }

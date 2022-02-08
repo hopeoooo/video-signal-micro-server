@@ -6,10 +6,11 @@ CREATE TABLE `i18n_position` (
     `pid` bigint(20) NOT NULL DEFAULT -1 COMMENT '默认-1,父级id',
     `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
     `update_time` datetime NULL DEFAULT NULL COMMENT '操作时间',
+    UNIQUE INDEX `uq_name`(`name`) USING BTREE COMMENT '位置名称唯一索引',
     PRIMARY KEY(`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_german2_ci COMMENT = '翻译位置表';
 
-INSERT INTO `translate-center`.`i18n_position` (`id`, `name`, `type`, `pid`) VALUES (1, '默认', 0, -1);
+INSERT INTO `translate-center`.`i18n_position` (`id`, `name`, `type`, `pid`) VALUES (1, '系统消息', 0, -1);
 
 
 DROP TABLE IF EXISTS `i18n_info`;
@@ -17,6 +18,7 @@ CREATE TABLE `i18n_info` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
     `page_id` bigint(20) NOT NULL COMMENT '页面id,position表的type=0的数据',
     `position_id` bigint(20) NULL DEFAULT NULL COMMENT '位置id,position表的type=1的数据',
+    `from_of` int NOT NULL DEFAULT 1 COMMENT '所属 0=前台，1=后台',
     `zh_cn` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '中文-简体',
     `en_us` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '英语-美国',
     `khm` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_german2_ci NOT NULL DEFAULT '' COMMENT '高棉语',

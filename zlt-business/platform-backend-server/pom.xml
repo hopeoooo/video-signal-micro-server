@@ -94,6 +94,11 @@
             <artifactId>game-client</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>translate-client</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

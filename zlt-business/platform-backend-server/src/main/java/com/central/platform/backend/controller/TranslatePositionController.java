@@ -1,10 +1,9 @@
-package com.central.translate.controller;
+package com.central.platform.backend.controller;
 
-import com.central.common.model.I18nPosition;
 import com.central.common.model.Result;
 import com.central.common.params.translate.I18nPositionParam;
 import com.central.common.vo.I18nPositionVO;
-import com.central.translate.service.I18nPositionService;
+import com.central.translate.feign.TranslatePositionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -23,7 +22,7 @@ import java.util.List;
 public class TranslatePositionController {
 
     @Autowired
-    private I18nPositionService i18nPositionService;
+    private TranslatePositionService i18nPositionService;
 
     /**
      * 翻译页面位置列表
@@ -34,8 +33,8 @@ public class TranslatePositionController {
      */
     @GetMapping("/translate/position/pageList")
     @ApiOperation(value = "查询所有的翻译位置(页面)")
-    public List<I18nPositionVO> pageList() {
-        return i18nPositionService.findAllPage();
+    public Result<List<I18nPositionVO>> pageList() {
+        return Result.succeed(i18nPositionService.pageList());
     }
 
 
@@ -49,8 +48,8 @@ public class TranslatePositionController {
      */
     @GetMapping("/translate/position/byPid")
     @ApiOperation(value = "翻译页面下的所有位置")
-    public List<I18nPositionVO> positions(@ApiParam(value = "页面id") Long pid) {
-        return i18nPositionService.findByPid(pid);
+    public Result<List<I18nPositionVO>> positions(@ApiParam(value = "页面id") Long pid) {
+        return Result.succeed(i18nPositionService.positions(pid));
     }
 
     /**
@@ -63,13 +62,7 @@ public class TranslatePositionController {
      */
     @PostMapping("/translate/position/saveOrUpdate")
     public Result<String> saveOrUpdate(@RequestBody I18nPositionParam param) {
-        try {
-            i18nPositionService.saveOrUpdate(param);
-            return Result.succeed("操作成功");
-        } catch (Exception ex) {
-            log.error("i18n-saveOrUpdate-error", ex);
-            return Result.failed("操作失败");
-        }
+        return i18nPositionService.saveOrUpdate(param);
     }
 
 }

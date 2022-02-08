@@ -109,6 +109,12 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
+
+        <!-- redis通用组件 -->
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>zlt-redis-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

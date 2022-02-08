@@ -14,6 +14,16 @@ public interface I18nKeys {
     String LANGUAGE = "language";
 
     /**
+     * 前台
+     */
+    Integer FRONT = 0;
+
+    /**
+     * 后台
+     */
+    Integer BACKEND = 1;
+
+    /**
      * 语种
      */
     interface Locale {
@@ -47,20 +57,50 @@ public interface I18nKeys {
     }
 
     interface Redis {
-        /**
-         * 英文国际化 key
-         */
-        String EN_US_KEY = "i18n:source:en_us:hash";
+        // 前台
+        interface Front {
+            /**
+             * 中文国际化 key
+             */
+            String ZH_CN_KEY = "i18n:source:zh_cn:hash:" + I18nKeys.FRONT;
+            /**
+             * 英文国际化 key
+             */
+            String EN_US_KEY = "i18n:source:en_us:hash:" + I18nKeys.FRONT;
 
-        /**
-         * 高棉语国际化 key
-         */
-        String KHM_KEY = "i18n:source:khm:hash";
+            /**
+             * 高棉语国际化 key
+             */
+            String KHM_KEY = "i18n:source:khm:hash:" + I18nKeys.FRONT;
 
-        /**
-         * 泰语国际化 key
-         */
-        String TH_KEY = "i18n:source:th:hash";
+            /**
+             * 泰语国际化 key
+             */
+            String TH_KEY = "i18n:source:th:hash:" + I18nKeys.FRONT;
+        }
+
+        // 后台
+        interface Backend {
+            /**
+             * 中文国际化 key
+             */
+            String ZH_CN_KEY = "i18n:source:zh_cn:hash:" + I18nKeys.BACKEND;
+            /**
+             * 英文国际化 key
+             */
+            String EN_US_KEY = "i18n:source:en_us:hash:" + I18nKeys.BACKEND;
+
+            /**
+             * 高棉语国际化 key
+             */
+            String KHM_KEY = "i18n:source:khm:hash:" + I18nKeys.BACKEND;
+
+            /**
+             * 泰语国际化 key
+             */
+            String TH_KEY = "i18n:source:th:hash:" + I18nKeys.BACKEND;
+        }
+
     }
 
 }

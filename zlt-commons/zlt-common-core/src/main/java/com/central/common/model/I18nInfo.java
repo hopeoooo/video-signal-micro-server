@@ -21,6 +21,7 @@ public class I18nInfo extends SuperEntity {
 
         private Long pageId;
         private Long positionId;
+        private Integer fromOf;
         private String zhCn;
         private String enUs;
         private String khm;
