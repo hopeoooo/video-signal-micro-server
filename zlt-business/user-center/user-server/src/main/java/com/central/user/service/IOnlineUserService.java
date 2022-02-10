@@ -10,6 +10,8 @@ public interface IOnlineUserService {
 
     List<OnlineUser> findOnlineUserList(OnlineUserParams params);
 
+    List<OnlineUser> findOnlineUserMaps(Integer tag);
+
     PageResult<OnlineUser> findPageList(OnlineUserParams params);
 
     int saveOnlineUser(OnlineUser onlineUser);

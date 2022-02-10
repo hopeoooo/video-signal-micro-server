@@ -5,7 +5,6 @@ import com.central.common.constant.SecurityConstants;
 import com.central.common.constant.UserConstant;
 import com.central.common.model.*;
 import com.central.common.redis.template.RedisRepository;
-import com.central.config.feign.ConfigService;
 import com.central.log.annotation.AuditLog;
 import com.central.user.feign.UserService;
 import io.swagger.annotations.Api;
@@ -29,8 +28,6 @@ public class SysUserController {
 
     @Resource
     private UserService userService;
-    @Resource
-    private ConfigService configService;
     @Autowired
     private RedisRepository redisRepository;
 
@@ -80,13 +77,7 @@ public class SysUserController {
     @ApiOperation(value = "新增or更新")
     @AuditLog(operation = "'新增或更新用户:' + #sysUser.username")
     public Result saveOrUpdate(@RequestBody SysUser sysUser) throws Exception {
-        if(StringUtils.isBlank(sysUser.getUsername()) || !sysUser.getUsername().matches(RegexEnum.ACCOUNT.getRegex())){
-            return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
-        }
-        //设置默认头像
-        if (sysUser.getId()==null){
-            sysUser.setHeadImgUrl(configService.avatarPictureInfo());
-        }
+
         sysUser.setType(CommonConstant.USER_TYPE_APP);
         return userService.saveOrUpdate(sysUser);
     }

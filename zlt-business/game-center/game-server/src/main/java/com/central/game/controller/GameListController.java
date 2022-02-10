@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.central.common.model.Result;
 import com.central.common.model.SuperPage;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -45,6 +46,10 @@ public class GameListController {
     @ApiOperation(value = "新增/更新")
     @PostMapping("/save")
     public Result save(@RequestBody GameList gameList) {
+        BigDecimal gameRate = gameList.getGameRate();
+        if (gameRate.compareTo(new BigDecimal(0))==0 || gameRate.compareTo(new BigDecimal(100))>0){
+            return  Result.failed("返水比例设置错误");
+        }
         gameListService.saveOrUpdate(gameList);
         return Result.succeed();
     }

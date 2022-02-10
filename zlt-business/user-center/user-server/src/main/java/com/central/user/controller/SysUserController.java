@@ -7,7 +7,12 @@ import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.*;
+import com.central.common.params.user.SysUserGoogleBindParams;
+import com.central.common.params.user.SysUserParams;
 import com.central.common.utils.ExcelUtil;
+import com.central.common.utils.GoogleAuthUtil;
+import com.central.common.utils.PwdEncoderUtil;
+import com.central.config.feign.ConfigService;
 import com.central.log.annotation.AuditLog;
 import com.central.push.feign.PushService;
 import com.central.search.client.service.IQueryService;
@@ -23,6 +28,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -36,10 +42,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author 作者 owen E-mail: 624191343@qq.com
@@ -59,6 +62,9 @@ public class SysUserController {
 
     @Autowired
     private ISysUserService appUserService;
+
+    @Resource
+    private ConfigService configService;
 
     @Autowired
     private IQueryService queryService;
@@ -100,6 +106,73 @@ public class SysUserController {
     @ApiOperation(value = "根据用户名查询用户")
     public LoginAppUser findByUsername(String username) {
         return appUserService.findByUsername(username);
+    }
+
+    @ApiOperation(value = "绑定谷歌验证码")
+    @PostMapping("/users-anon/bindGoogleCode")
+    public Result<String> bindGoogleCode(@RequestBody SysUserGoogleBindParams params) {
+        String username = params.getUsername();
+        String password = params.getPassword();
+        String googleCode = params.getGoogleCode();
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password) || StringUtils.isBlank(googleCode)){
+            return Result.failed("参数必填");
+        }
+        LoginAppUser loginAppUser = findByUsername(username);
+        if (loginAppUser == null || !loginAppUser.getType().equals("BACKEND")) {
+            return Result.failed("用户名或密码错误");
+        }
+        if (loginAppUser.getGaBind() != null && loginAppUser.getGaBind() == 1) {
+            return Result.failed("该账号已经绑定谷歌验证码");
+        }
+        if (StringUtils.isBlank(loginAppUser.getGaKey())) {
+            return Result.failed("请先绑定谷歌身份验证器");
+        }
+        Map<String, Object> param = new HashMap<>();
+        param.put("id",loginAppUser.getId());
+        param.put("gaBind",1);
+        Result result = updateGaBind(param);
+        if (result != null && result.getResp_code() == 0){
+            return Result.succeed();
+        }
+        return Result.failed("绑定失败");
+    }
+
+    @ApiOperation(value = "得到谷歌二维码链接")
+    @PostMapping("/users-anon/getGoogleCodeLink")
+    public Result<String> getGoogleCodeLink(@RequestBody SysUserParams params) {
+        String username = params.getUsername();
+        String password = params.getPassword();
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)){
+            return Result.failed("参数必填");
+        }
+        LoginAppUser loginAppUser = findByUsername(username);
+        if (loginAppUser == null || !loginAppUser.getType().equals("BACKEND")) {
+            return Result.failed("用户名或密码错误");
+        }
+        if (!loginAppUser.isEnabled()){
+            return Result.failed("该账号状态异常");
+        }
+        if (loginAppUser.getGaBind() != null && loginAppUser.getGaBind() == 1) {
+            return Result.failed("该账号已经绑定谷歌验证码");
+        }
+        PasswordEncoder encoder = PwdEncoderUtil.getDelegatingPasswordEncoder("bcrypt");
+        Boolean match = encoder.matches(password,loginAppUser.getPassword());
+        if (!match){
+            return Result.failed("用户名或密码错误");
+        }
+//        if (!passwordEncoder.matches(password, loginAppUser.getPassword())) {
+//            return Result.failed("用户名或密码错误");
+//        }
+        String secret = GoogleAuthUtil.generateSecretKey();
+        Map<String, Object> param = new HashMap<>();
+        param.put("id",loginAppUser.getId());
+        param.put("gaKey",secret);
+        Result result = updateGaKey(param);
+        if (result != null && result.getResp_code() == 0){
+            String qrcode = GoogleAuthUtil.getQcode(username, secret);
+            return Result.succeed(qrcode,"");
+        }
+        return Result.failed("获取谷歌二维码失败");
     }
 
     /**
@@ -355,6 +428,13 @@ public class SysUserController {
     @PostMapping("/users/saveOrUpdate")
     @AuditLog(operation = "'新增或更新用户:' + #sysUser.username")
     public Result saveOrUpdate(@RequestBody SysUser sysUser) throws Exception {
+        if(StringUtils.isBlank(sysUser.getUsername()) || !sysUser.getUsername().matches(RegexEnum.ACCOUNT.getRegex())){
+            return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
+        }
+        //设置默认头像
+        if (sysUser.getId()==null){
+            sysUser.setHeadImgUrl(configService.avatarPictureInfo());
+        }
         if (sysUser.getId() != null) {
             cacheEvictUser(sysUser.getId());
         }

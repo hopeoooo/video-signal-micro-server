@@ -9,6 +9,7 @@ import com.central.user.feign.callback.OnlineUserServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -24,13 +25,13 @@ public interface OnlineUserService {
     /**
      * 查询在线人数
      *
-     * @param params 入参释义
+     * @param tag 入参释义
      * @return {@link Result} 出参释义
      * @author lance
      * @since 2022 -02-10 11:59:34
      */
-    @GetMapping("/online/user/list")
-    Result<List<OnlineUser>> list(@SpringQueryMap OnlineUserParams params);
+    @GetMapping("/online/user/maps")
+    Result<List<OnlineUser>> maps(@RequestParam("tag") Integer tag);
 
     /**
      * 会员报表查询

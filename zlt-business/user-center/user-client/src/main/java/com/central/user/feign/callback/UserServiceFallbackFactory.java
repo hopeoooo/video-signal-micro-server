@@ -2,11 +2,14 @@ package com.central.user.feign.callback;
 
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.*;
+import com.central.common.params.user.SysUserGoogleBindParams;
+import com.central.common.params.user.SysUserParams;
 import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,10 +39,23 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 return null;
             }
 
+            @GetMapping(value = "/users-anon/login", params = "username")
             @Override
             public LoginAppUser findByUsername(String username) {
 //                log.error("通过用户名查询用户异常:{}", username, throwable);
                 log.error("服务器异常，findByUsername通过用户名查询用户异常:{}", username);
+                return null;
+            }
+
+            @Override
+            public Result<String> bindGoogleCode(SysUserGoogleBindParams params) {
+                log.error("服务器异常，bindGoogleCode异常:{}", params);
+                return null;
+            }
+
+            @Override
+            public Result<String> getGoogleCodeLink(SysUserParams params) {
+                log.error("服务器异常，getGoogleCodeLink异常:{}", params);
                 return null;
             }
 
@@ -155,6 +171,7 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 return new PageResult();
             }
 
+            @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
             @Override
             public Result< List<UserWashCodeConfig>> findUserWashCodeConfigList(Long userId) {
                 log.error("findUserWashCodeConfigList查询个人洗码配置异常:{}",userId,throwable);

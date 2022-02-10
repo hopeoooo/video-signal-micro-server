@@ -13,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 在线会员报表
@@ -29,24 +27,6 @@ public class OnlineUserController {
     @Autowired
     private OnlineUserService onlineUserService;
 
-    private static String patten1 = "yyyy-MM-dd";
-
-    private static String patten = "yyyy-MM-dd HH:mm:ss";
-
-    public final static String start = " 00:00:00";
-
-    public final static String end = " 23:59:59";
-
-    public static SimpleDateFormat getSimpleDateFormat() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(patten);
-        return simpleDateFormat;
-    }
-
-    public static SimpleDateFormat getSimpleDateFormat1() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(patten1);
-        return simpleDateFormat;
-    }
-
     /**
      * 在线会员报表走势图查询
      */
@@ -55,59 +35,8 @@ public class OnlineUserController {
             @ApiImplicitParam(name = "tag", value = "tag:0 当日 tag:1 当月", required = true, dataType = "Integer"),
     })
     @GetMapping("/online/list")
-    public Result<List<OnlineUser>> list(Integer tag) {
-
-        OnlineUserParams params = new OnlineUserParams();
-        Calendar nowTime = Calendar.getInstance();
-        List<OnlineUser> onlineUserList = null;
-        try {
-            if (tag == null || tag == 0){
-            String format = getSimpleDateFormat1().format(nowTime.getTime());
-            String startTime = format + start;
-            String endTime = format + end;
-            Date start =getSimpleDateFormat().parse(startTime);
-            Date end = getSimpleDateFormat().parse(endTime);
-            params.setStart(start);
-            params.setEndTime(end);
-            return onlineUserService.list(params);
-        }else {
-             Calendar c = Calendar.getInstance();
-             c.add(Calendar.MONTH, 0);
-             c.set(Calendar.DAY_OF_MONTH, 1);//设置为1号,当前日期既为本月第一天
-             String monthfirst = getSimpleDateFormat1().format(c.getTime());
-             String startTime = monthfirst + start;
-             String format = getSimpleDateFormat1().format(nowTime.getTime());
-             String endTime = format + end;
-             Date start =getSimpleDateFormat().parse(startTime);
-             Date end = getSimpleDateFormat().parse(endTime);
-             params.setStart(start);
-             params.setEndTime(end);
-             Result<List<OnlineUser>> res = onlineUserService.list(params);
-             onlineUserList = res.getDatas();
-             if (onlineUserList == null || onlineUserList.size() == 0)
-                 return Result.succeed(onlineUserList);
-             Map<String, List<OnlineUser>> map = onlineUserList.stream().collect(Collectors.groupingBy(OnlineUser::getStaticsDay));
-             Map<String,List<OnlineUser>> result = new TreeMap<>();
-             map.entrySet().stream()
-                        .sorted(Map.Entry.comparingByKey())
-                        .forEachOrdered(x->result.put(x.getKey(),x.getValue()));
-             map.clear();
-             List<OnlineUser> list = new LinkedList<>();
-             result.forEach((k,v)->{
-                 Integer onlineNum = v.stream().mapToInt(OnlineUser::getOnlineNum).sum();
-                 OnlineUser onlineUser = new OnlineUser();
-                 onlineUser.setStaticsDay(k);
-                 onlineUser.setOnlineNum(onlineNum/v.size());
-                list.add(onlineUser);
-             });
-             onlineUserList.clear();
-             result.clear();
-             return Result.succeed(list);
-        }
-        }catch (Exception ex){
-            log.error("查询在线人数失败");
-        }
-        return Result.failed("查询失败");
+    public Result<List<OnlineUser>> list(@RequestParam("tag") Integer tag) {
+        return onlineUserService.maps(tag);
     }
 
     /**

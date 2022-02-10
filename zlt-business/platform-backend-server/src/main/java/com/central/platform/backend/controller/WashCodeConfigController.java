@@ -1,6 +1,5 @@
 package com.central.platform.backend.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.central.common.model.Result;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -31,11 +29,6 @@ public class WashCodeConfigController {
     @ApiOperation(value = "新增/更新")
     @PostMapping("/gamelist/save")
     public Result save(@RequestBody GameList gameList) {
-        BigDecimal gameRate = gameList.getGameRate();
-        if (gameRate.compareTo(new BigDecimal(0))==0 || gameRate.compareTo(new BigDecimal(100))>0){
-            return  Result.failed("返水比例设置错误");
-        }
-        gameService.save(gameList);
-        return Result.succeed();
+        return gameService.save(gameList);
     }
 }

@@ -4,6 +4,8 @@ import com.central.common.annotation.LoginUser;
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.*;
+import com.central.common.params.user.SysUserGoogleBindParams;
+import com.central.common.params.user.SysUserParams;
 import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
@@ -37,6 +39,12 @@ public interface UserService {
      */
     @GetMapping(value = "/users-anon/login", params = "username")
     LoginAppUser findByUsername(@RequestParam("username") String username);
+
+    @PostMapping("/users-anon/bindGoogleCode")
+    Result<String> bindGoogleCode(@RequestBody SysUserGoogleBindParams params);
+
+    @PostMapping("/users-anon/getGoogleCodeLink")
+    Result<String> getGoogleCodeLink(@RequestBody SysUserParams params);
 
     /**
      * feign rpc访问远程/users-anon/login1接口

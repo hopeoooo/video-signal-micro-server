@@ -8,6 +8,7 @@ import com.central.user.feign.OnlineUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,8 +21,8 @@ public class OnlineUserServiceFallbackFactory implements FallbackFactory<OnlineU
     public OnlineUserService create(Throwable cause) {
         return new OnlineUserService() {
             @Override
-            public Result<List<OnlineUser>> list(OnlineUserParams params) {
-                log.error("服务器异常, list查询异常: {}", params);
+            public Result<List<OnlineUser>> maps(@RequestParam("tag") Integer tag) {
+                log.error("服务器异常, maps查询异常: {}", tag);
                 return Result.succeed(Collections.emptyList());
             }
 
