@@ -608,6 +608,8 @@
         <module>zlt-config</module>
         <!-- demo -->
         <module>zlt-demo</module>
+        <module>platform-app</module>
+        <module>platform-backend</module>
     </modules>
 
     <licenses>
