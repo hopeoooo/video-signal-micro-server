@@ -17,4 +17,6 @@ public class OnlineUserParams extends PageParam {
     @ApiModelProperty(value = "注册结束时间查询")
     private Date endTime;
 
+    @ApiModelProperty(value = "tag:0 当日 tag:1 当月")
+    private Integer tag;
 }
