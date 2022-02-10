@@ -13,7 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * 平台后端管理系统服-游戏管理
+ * 平台后端管理系统服-综合管理
+ * 不确定的业务边界，规划到综合管理中
  */
 @EnableFeignInterceptor
 @EnableFeignClients(basePackages = "com.central")
