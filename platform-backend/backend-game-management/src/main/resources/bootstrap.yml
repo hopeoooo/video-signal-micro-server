@@ -1,0 +1,12 @@
+server:
+  port: 6001
+
+spring:
+  application:
+    name: platform-game-management
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${zlt.naocs.server.namespace}
+#        metadata:
+#          version: zlt

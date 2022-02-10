@@ -610,6 +610,7 @@
         <module>zlt-demo</module>
         <module>platform-app</module>
         <module>platform-backend</module>
+        <module>platform-backend/backend-other-management</module>
     </modules>
 
     <licenses>
