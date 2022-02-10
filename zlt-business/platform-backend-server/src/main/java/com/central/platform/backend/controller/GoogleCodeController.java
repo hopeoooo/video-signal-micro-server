@@ -4,7 +4,7 @@ import com.central.common.model.LoginAppUser;
 import com.central.common.model.Result;
 import com.central.common.utils.GoogleAuthUtil;
 import com.central.common.utils.PwdEncoderUtil;
-import com.central.platform.backend.service.SysUserService;
+import com.central.user.feign.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +25,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/googleCode")
 public class GoogleCodeController {
-    @Autowired
-    private SysUserService sysUserService;
+
+    @Resource
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -44,7 +46,7 @@ public class GoogleCodeController {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password) || StringUtils.isBlank(googleCode)){
             return Result.failed("参数必填");
         }
-        LoginAppUser loginAppUser = sysUserService.findByUsername(username);
+        LoginAppUser loginAppUser = userService.findByUsername(username);
         if (loginAppUser == null || !loginAppUser.getType().equals("BACKEND")) {
             return Result.failed("用户名或密码错误");
         }
@@ -57,7 +59,7 @@ public class GoogleCodeController {
         Map<String, Object> param = new HashMap<>();
         param.put("id",loginAppUser.getId());
         param.put("gaBind",1);
-        Result result = sysUserService.updateGaBind(param);
+        Result result = userService.updateGaBind(param);
         if (result != null && result.getResp_code() == 0){
             return Result.succeed();
         }
@@ -76,7 +78,7 @@ public class GoogleCodeController {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)){
             return Result.failed("参数必填");
         }
-        LoginAppUser loginAppUser = sysUserService.findByUsername(username);
+        LoginAppUser loginAppUser = userService.findByUsername(username);
         if (loginAppUser == null || !loginAppUser.getType().equals("BACKEND")) {
             return Result.failed("用户名或密码错误");
         }
@@ -98,7 +100,7 @@ public class GoogleCodeController {
         Map<String, Object> param = new HashMap<>();
         param.put("id",loginAppUser.getId());
         param.put("gaKey",secret);
-        Result result = sysUserService.updateGaKey(param);
+        Result result = userService.updateGaKey(param);
         if (result != null && result.getResp_code() == 0){
             String qrcode = GoogleAuthUtil.getQcode(username, secret);
             return Result.succeed(qrcode,"");

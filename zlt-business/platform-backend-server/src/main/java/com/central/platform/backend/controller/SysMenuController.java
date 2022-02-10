@@ -3,13 +3,13 @@ package com.central.platform.backend.controller;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
-import com.central.platform.backend.service.SysMenuService;
+import com.central.user.feign.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +19,9 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/platform/menu")
 public class SysMenuController {
-    @Autowired
-    private SysMenuService menuService;
+
+    @Resource
+    private MenuService menuService;
 
     /**
      * 根据roleId获取对应的菜单
@@ -30,7 +31,7 @@ public class SysMenuController {
     @ApiOperation(value = "根据roleId获取对应的菜单")
     @GetMapping("/menus/{roleId}/menus")
     public Result<List<Map<String, Object>>> findMenusByRoleId(@PathVariable Long roleId) {
-        return menuService.findMenusByRoleId(roleId);
+        return Result.succeed(menuService.findMenusByRoleId(roleId));
     }
 
 
@@ -63,7 +64,7 @@ public class SysMenuController {
     @ApiOperation(value = "查询所有菜单")
     @GetMapping("/menus/findAlls")
     public Result<PageResult<SysMenu>> findAlls() {
-        return menuService.findAlls();
+        return Result.succeed(menuService.findAlls());
     }
 
 

@@ -1,21 +1,17 @@
 package com.central.platform.backend.controller;
 
-import com.central.common.constant.SecurityConstants;
+import com.central.common.model.OnlineUser;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.redis.template.RedisRepository;
-import com.central.platform.backend.model.OnlineUser;
-import com.central.platform.backend.service.IOnlineUserService;
+import com.central.common.params.user.OnlineUserParams;
+import com.central.user.feign.OnlineUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -29,11 +25,9 @@ import java.util.stream.Collectors;
 @Api(tags = "在线会员报表api")
 @RequestMapping("/platform/user")
 public class OnlineUserController {
-    @Autowired
-    private IOnlineUserService iOnlineUserService;
 
     @Autowired
-    private RedisRepository redisRepository;
+    private OnlineUserService onlineUserService;
 
     private static String patten1 = "yyyy-MM-dd";
 
@@ -61,8 +55,9 @@ public class OnlineUserController {
             @ApiImplicitParam(name = "tag", value = "tag:0 当日 tag:1 当月", required = true, dataType = "Integer"),
     })
     @GetMapping("/online/list")
-    public Result<List> list(Integer tag) {
-        Map params = new HashMap();
+    public Result<List<OnlineUser>> list(Integer tag) {
+
+        OnlineUserParams params = new OnlineUserParams();
         Calendar nowTime = Calendar.getInstance();
         List<OnlineUser> onlineUserList = null;
         try {
@@ -72,10 +67,9 @@ public class OnlineUserController {
             String endTime = format + end;
             Date start =getSimpleDateFormat().parse(startTime);
             Date end = getSimpleDateFormat().parse(endTime);
-            params.put("startTime",start);
-            params.put("endTime", end);
-            onlineUserList = iOnlineUserService.findOnlineUserList(params);
-            return Result.succeed(onlineUserList);
+            params.setStart(start);
+            params.setEndTime(end);
+            return onlineUserService.list(params);
         }else {
              Calendar c = Calendar.getInstance();
              c.add(Calendar.MONTH, 0);
@@ -86,9 +80,10 @@ public class OnlineUserController {
              String endTime = format + end;
              Date start =getSimpleDateFormat().parse(startTime);
              Date end = getSimpleDateFormat().parse(endTime);
-             params.put("startTime",start);
-             params.put("endTime", end);
-             onlineUserList = iOnlineUserService.findOnlineUserList(params);
+             params.setStart(start);
+             params.setEndTime(end);
+             Result<List<OnlineUser>> res = onlineUserService.list(params);
+             onlineUserList = res.getDatas();
              if (onlineUserList == null || onlineUserList.size() == 0)
                  return Result.succeed(onlineUserList);
              Map<String, List<OnlineUser>> map = onlineUserList.stream().collect(Collectors.groupingBy(OnlineUser::getStaticsDay));
@@ -121,16 +116,14 @@ public class OnlineUserController {
     @ApiOperation(value = "及时在线会员")
     @GetMapping("/online/queryPlayerNums")
     public Result<Integer> queryPlayerNums() {
-        String redisKey = SecurityConstants.REDIS_UNAME_TO_ACCESS+"online";
-        Set<String> keySet = redisRepository.keys(redisKey+"*");
-        return Result.succeed(keySet.size());
+        return onlineUserService.queryPlayerNums();
     }
 
     /**
      * 会员报表查询
      */
     @ApiOperation(value = "会员报表查询")
-    @ApiImplicitParams({
+    /*@ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "startDate", value = "注册起始时间查询", required = true),
@@ -140,5 +133,10 @@ public class OnlineUserController {
     public Result<PageResult<OnlineUser>> findPageList(@RequestParam Map<String, Object> params) {
         PageResult<OnlineUser> pageList = iOnlineUserService.findPageList(params);
         return Result.succeed(pageList);
+    }*/
+
+    @GetMapping("/online/findPageList")
+    public Result<PageResult<OnlineUser>> findPageList(@ModelAttribute OnlineUserParams params){
+        return onlineUserService.findPageList(params);
     }
 }

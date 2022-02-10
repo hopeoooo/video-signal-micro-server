@@ -1,31 +1,30 @@
-package com.central.platform.backend.service.impl;
+package com.central.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.PageResult;
-import com.central.platform.backend.mapper.OnlineUserMapper;
-import com.central.platform.backend.model.OnlineUser;
-import com.central.platform.backend.service.IOnlineUserService;
+import com.central.common.params.user.OnlineUserParams;
+import com.central.user.mapper.OnlineUserMapper;
+import com.central.common.model.OnlineUser;
+import com.central.user.service.IOnlineUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
-public class OnlineUserService implements IOnlineUserService {
+public class OnlineUserServiceImpl implements IOnlineUserService {
     @Autowired
     private OnlineUserMapper onlineUserMapper;
     @Override
-    public List<OnlineUser> findOnlineUserList(Map<String, Object> params) {
+    public List<OnlineUser> findOnlineUserList(OnlineUserParams params) {
         return onlineUserMapper.findOnlineUserList(params);
     }
 
     @Override
-    public PageResult<OnlineUser> findPageList(Map<String, Object> params) {
-        Page<OnlineUser> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
+    public PageResult<OnlineUser> findPageList(OnlineUserParams params) {
+        Page<OnlineUser> page = new Page<>(params.getPage(), params.getLimit());
         List<OnlineUser> list = onlineUserMapper.findPageList(page, params);
         long total = page.getTotal();
         return PageResult.<OnlineUser>builder().data(list).count(total).build();

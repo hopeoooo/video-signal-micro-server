@@ -7,7 +7,7 @@ import com.central.common.model.*;
 import com.central.common.redis.template.RedisRepository;
 import com.central.config.feign.ConfigService;
 import com.central.log.annotation.AuditLog;
-import com.central.platform.backend.service.SysUserService;
+import com.central.user.feign.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,8 +27,8 @@ import java.util.Map;
 @RequestMapping("/platform/backend")
 public class SysUserController {
 
-    @Autowired
-    private SysUserService sysUserService;
+    @Resource
+    private UserService userService;
     @Resource
     private ConfigService configService;
     @Autowired
@@ -49,7 +49,7 @@ public class SysUserController {
     @GetMapping("/users/list")
     public Result<PageResult<SysUser>> list(@RequestParam Map<String, Object> params) {
         params.put("type", CommonConstant.USER_TYPE_APP);//APP用户数据
-        PageResult<SysUser> sysUserList = sysUserService.findSysUserList(params);
+        PageResult<SysUser> sysUserList = userService.findSysUserList(params);
         return Result.succeed(sysUserList);
     }
 
@@ -88,7 +88,7 @@ public class SysUserController {
             sysUser.setHeadImgUrl(configService.avatarPictureInfo());
         }
         sysUser.setType(CommonConstant.USER_TYPE_APP);
-        return sysUserService.saveOrUpdate(sysUser);
+        return userService.saveOrUpdate(sysUser);
     }
 
     /**
@@ -100,7 +100,7 @@ public class SysUserController {
     @DeleteMapping(value = "/users/{id}")
     @AuditLog(operation = "'删除用户:' + #id")
     public Result delete(@PathVariable Long id) {
-        return sysUserService.delete(id);
+        return userService.delete(id);
     }
 
     /**
@@ -116,7 +116,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "enabled", value = "是否启用(状态：0.禁用，1.启用)", required = true, dataType = "Boolean")
     })
     public Result updateEnabled(@RequestParam Map<String, Object> params) {
-        return sysUserService.updateEnabled(params);
+        return userService.updateEnabled(params);
     }
 
 
@@ -126,7 +126,7 @@ public class SysUserController {
     @ApiOperation(value = "重置密码")
     @PutMapping(value = "/users/{id}/password")
     public Result resetPasswords(@PathVariable Long id) {
-        return sysUserService.resetPassword(id);
+        return userService.resetPassword(id);
     }
 
 
@@ -143,6 +143,6 @@ public class SysUserController {
         if(money.compareTo(UserConstant.maxTransterMoney) >= 0){
             return Result.failed("用户上分金额太大");
         }
-        return sysUserService.transterMoney(userId, money, remark, transterType);
+        return userService.transterMoney(userId, money, remark, transterType);
     }
 }

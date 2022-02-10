@@ -6,7 +6,7 @@ import com.central.common.model.RegexEnum;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.log.annotation.AuditLog;
-import com.central.platform.backend.service.SysUserService;
+import com.central.user.feign.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,8 +26,9 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/platform/admin")
 public class AdminController {
-    @Autowired
-    private SysUserService sysUserService;
+
+    @Resource
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -44,7 +46,7 @@ public class AdminController {
     @GetMapping("/users/list")
     public Result<PageResult<SysUser>> list(@RequestParam Map<String, Object> params) {
         params.put("type", CommonConstant.USER_TYPE_BACKEND);//APP用户数据
-        PageResult<SysUser> sysUserList = sysUserService.findSysUserList(params);
+        PageResult<SysUser> sysUserList = userService.findSysUserList(params);
         return Result.succeed(sysUserList);
     }
 
@@ -62,7 +64,7 @@ public class AdminController {
             return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
         }
         sysUser.setType(CommonConstant.USER_TYPE_BACKEND);
-        return sysUserService.saveOrUpdate(sysUser);
+        return userService.saveOrUpdate(sysUser);
     }
 
     /**
@@ -71,7 +73,7 @@ public class AdminController {
     @ApiOperation(value = "谷歌验证码是否校验状态修改")
     @PutMapping(value = "/users/{id}/updateVerify")
     public Result updateVerify(@PathVariable Long id) {
-        return sysUserService.updateVerify(id);
+        return userService.updateVerify(id);
     }
 
     /**
@@ -80,7 +82,7 @@ public class AdminController {
     @ApiOperation(value = "重置密码")
     @PutMapping(value = "/users/{id}/password")
     public Result resetPasswords(@PathVariable Long id) {
-        return sysUserService.resetPassword(id);
+        return userService.resetPassword(id);
     }
 
     /**
@@ -92,7 +94,7 @@ public class AdminController {
         Map<String, Object> param = new HashMap<>();
         param.put("id",id);
         param.put("gaBind",2);
-        Result result = sysUserService.updateGaBind(param);
+        Result result = userService.updateGaBind(param);
         if (result != null && result.getResp_code() == 0){
             return Result.succeed();
         }

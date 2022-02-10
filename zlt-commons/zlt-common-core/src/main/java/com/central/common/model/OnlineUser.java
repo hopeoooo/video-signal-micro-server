@@ -1,4 +1,4 @@
-package com.central.platform.backend.model;
+package com.central.common.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.central.common.model.SuperEntity;

@@ -3,18 +3,18 @@ package com.central.platform.backend.controller;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.vo.SysTansterMoneyLogVo;
-import com.central.platform.backend.service.SysTansterMoneyLogService;
+import com.central.user.feign.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 @Slf4j
@@ -22,9 +22,8 @@ import java.util.Map;
 @Api(tags = "用户账变记录")
 @RequestMapping("/tansterMoney")
 public class SysTansterMoneyLogController {
-
-    @Autowired
-    private SysTansterMoneyLogService sysTansterMoneyLogService;
+    @Resource
+    private UserService userService;
 
     @ApiOperation(value = "用户列表查询")
     @ApiImplicitParams({
@@ -38,7 +37,7 @@ public class SysTansterMoneyLogController {
     })
     @GetMapping("/users/list")
     public Result<PageResult<SysTansterMoneyLogVo>> list(@RequestParam Map<String, Object> params) {
-        PageResult<SysTansterMoneyLogVo> sysUserList = sysTansterMoneyLogService.findList(params);
+        PageResult<SysTansterMoneyLogVo> sysUserList = userService.findTransterMoneyList(params);
         return Result.succeed(sysUserList);
     }
 
