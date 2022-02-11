@@ -3,6 +3,7 @@ package com.central.user.controller;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
+import com.central.user.model.co.RolePageCo;
 import com.central.user.service.ISysRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +32,7 @@ public class SysRoleController {
      */
     @ApiOperation(value = "后台管理查询角色")
     @GetMapping("/roles")
-    public PageResult<SysRole> findRoles(@RequestParam Map<String, Object> params) {
+    public PageResult<SysRole> findRoles(@ModelAttribute RolePageCo params) {
         return sysRoleService.findRoles(params);
     }
 

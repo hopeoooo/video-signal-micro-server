@@ -7,6 +7,9 @@ import com.central.common.model.*;
 import com.central.common.redis.template.RedisRepository;
 import com.central.log.annotation.AuditLog;
 import com.central.user.feign.UserService;
+import com.central.user.model.co.EnabledUserCo;
+import com.central.user.model.co.SysUserCo;
+import com.central.user.model.co.SysUserListCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,16 +39,9 @@ public class SysUserController {
      * 用户列表查询。查询APP用户数据
      */
     @ApiOperation(value = "用户列表查询")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "username", value = "会员账号", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "isOpen", value = "是否模糊查询(0:不勾选 1:勾选)", required = false, dataType = "Integer"),
-            @ApiImplicitParam(name = "enabled", value = "状态：0.禁用，1.启用", required = false, dataType = "Boolean")
-    })
     @GetMapping("/users/list")
-    public Result<PageResult<SysUser>> list(@RequestParam Map<String, Object> params) {
-        params.put("type", CommonConstant.USER_TYPE_APP);//APP用户数据
+    public Result<PageResult<SysUser>> list(@ModelAttribute SysUserListCo params) {
+        params.setType(CommonConstant.USER_TYPE_APP);//APP用户数据
         PageResult<SysUser> sysUserList = userService.findSysUserList(params);
         return Result.succeed(sysUserList);
     }
@@ -76,7 +72,7 @@ public class SysUserController {
     @PostMapping("/users/saveOrUpdate")
     @ApiOperation(value = "新增or更新")
     @AuditLog(operation = "'新增或更新用户:' + #sysUser.username")
-    public Result saveOrUpdate(@RequestBody SysUser sysUser) throws Exception {
+    public Result saveOrUpdate(@RequestBody SysUserCo sysUser) throws Exception {
 
         sysUser.setType(CommonConstant.USER_TYPE_APP);
         return userService.saveOrUpdate(sysUser);
@@ -102,11 +98,7 @@ public class SysUserController {
      */
     @ApiOperation(value = "修改用户状态")
     @GetMapping("/users/updateEnabled")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "enabled", value = "是否启用(状态：0.禁用，1.启用)", required = true, dataType = "Boolean")
-    })
-    public Result updateEnabled(@RequestParam Map<String, Object> params) {
+    public Result updateEnabled(@ModelAttribute EnabledUserCo params) {
         return userService.updateEnabled(params);
     }
 

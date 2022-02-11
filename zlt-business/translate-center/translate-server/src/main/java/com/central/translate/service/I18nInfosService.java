@@ -4,8 +4,8 @@ import com.central.common.model.PageResult;
 import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.I18nInfo;
 import com.central.common.service.ISuperService;
-import com.central.common.params.translate.QueryI18nInfoPageParam;
-import com.central.common.params.translate.UpdateI18nInfoParam;
+import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
 
@@ -56,7 +56,7 @@ public interface I18nInfosService extends ISuperService<I18nInfo> {
      * @author lance
      * @since 2022 -01-25 12:14:35
      */
-    boolean updateBackendI18nInfo(UpdateI18nInfoParam param);
+    boolean updateBackendI18nInfo(UpdateI18nInfoCo param);
 
 
     /**
@@ -67,7 +67,7 @@ public interface I18nInfosService extends ISuperService<I18nInfo> {
      * @author lance
      * @since 2022 -01-28 12:21:47
      */
-    boolean updateFrontI18nInfo(UpdateI18nInfoParam param);
+    boolean updateFrontI18nInfo(UpdateI18nInfoCo param);
 
 
     /**
@@ -78,7 +78,7 @@ public interface I18nInfosService extends ISuperService<I18nInfo> {
      * @author lance
      * @since 2022 -01-25 12:25:12
      */
-    PageResult<I18nInfoPageVO> findInfos(QueryI18nInfoPageParam param);
+    PageResult<I18nInfoPageVO> findInfos(QueryI18nInfoPageCo param);
 
 
     /**

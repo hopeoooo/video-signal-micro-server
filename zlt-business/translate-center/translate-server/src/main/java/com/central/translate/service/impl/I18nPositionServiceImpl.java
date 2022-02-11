@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.exception.BusinessException;
-import com.central.common.params.translate.I18nPositionParam;
+import com.central.translate.model.co.I18nPositionCo;
 import com.central.common.utils.I18nUtil;
 import com.central.common.vo.I18nPositionVO;
 import com.central.common.model.I18nPosition;
@@ -79,7 +79,7 @@ public class I18nPositionServiceImpl extends SuperServiceImpl<I18nPositionMapper
     }
 
     @Override
-    public void saveOrUpdate(I18nPositionParam param) {
+    public void saveOrUpdate(I18nPositionCo param) {
         I18nPosition p = new I18nPosition();
         if (StrUtil.isBlank(param.getName())) {
             throw new BusinessException("名称不能为空");

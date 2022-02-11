@@ -1,6 +1,6 @@
-package com.central.common.params.user;
+package com.central.user.model.co;
 
-import com.central.common.params.PageParam;
+import com.central.common.model.co.PageCo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.Date;
 
 @ApiModel("在线用户查询参数")
 @Data
-public class OnlineUserParams extends PageParam {
+public class OnlineUserCo extends PageCo {
 
     @ApiModelProperty(value = "注册起始时间查询")
     private Date start;

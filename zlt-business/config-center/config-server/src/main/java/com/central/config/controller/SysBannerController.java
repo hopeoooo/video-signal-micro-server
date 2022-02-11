@@ -8,6 +8,7 @@ import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.config.constants.ConfigConstants;
 import com.central.config.model.SysBanner;
+import com.central.config.model.co.BannerUpdateStateCo;
 import com.central.config.service.ISysBannerService;
 import com.central.file.feign.FileService;
 import com.central.push.feign.PushService;
@@ -100,11 +101,7 @@ public class SysBannerController {
      */
     @ApiOperation(value = "修改banner状态")
     @GetMapping("/updateState")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
-            @ApiImplicitParam(name = "state", value = "状态", required = true, dataType = "Boolean")
-    })
-    public Result updateState(@RequestParam Map<String, Object> params) {
+    public Result updateState(@ModelAttribute BannerUpdateStateCo params) {
         int i = bannerService.updateState(params);
         if (i > 0) {
             bannerService.syncPushBannerToWebApp();

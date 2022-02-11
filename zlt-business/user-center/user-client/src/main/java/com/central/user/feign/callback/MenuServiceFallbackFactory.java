@@ -4,6 +4,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.user.feign.MenuService;
+import com.central.user.model.co.SysMenuCo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
@@ -25,7 +26,7 @@ public class MenuServiceFallbackFactory implements FallbackFactory<MenuService> 
             }
 
             @Override
-            public Result setMenuToRole(SysMenu sysMenu) {
+            public Result setMenuToRole(SysMenuCo sysMenu) {
                 log.error("setMenuToRole分配菜单异常:{}", sysMenu, throwable);
                 return Result.failed("分配菜单失败");
             }
@@ -49,7 +50,7 @@ public class MenuServiceFallbackFactory implements FallbackFactory<MenuService> 
             }
 
             @Override
-            public Result saveOrUpdate(SysMenu menu) {
+            public Result saveOrUpdate(SysMenuCo menu) {
                 log.error("saveOrUpdate编辑菜单异常:{}", menu, throwable);
                 return Result.failed("编辑菜单失败");
             }

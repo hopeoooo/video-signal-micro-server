@@ -4,6 +4,8 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.user.feign.RoleService;
+import com.central.user.model.co.RolePageCo;
+import com.central.user.model.co.SysRoleCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,12 +32,7 @@ public class SysRolesController {
      */
     @ApiOperation(value = "后台管理查询角色列表")
     @GetMapping("/roles")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "name", value = "角色名称", required = false, dataType = "String")
-    })
-    public PageResult<SysRole> findRoles(@RequestParam Map<String, Object> params) {
+    public PageResult<SysRole> findRoles(@ModelAttribute RolePageCo params) {
         return roleService.findRoles(params);
     }
 
@@ -59,7 +56,7 @@ public class SysRolesController {
      */
     @ApiOperation(value = "角色新增或者更新")
     @PostMapping("/roles/saveOrUpdate")
-    public Result saveOrUpdate(@RequestBody SysRole sysRole) throws Exception {
+    public Result saveOrUpdate(@RequestBody SysRoleCo sysRole) throws Exception {
         return roleService.saveOrUpdate(sysRole);
     }
 

@@ -4,6 +4,8 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.user.feign.RoleService;
+import com.central.user.model.co.RolePageCo;
+import com.central.user.model.co.SysRoleCo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
@@ -17,7 +19,7 @@ public class RoleServiceFallbackFactory implements FallbackFactory<RoleService> 
     public RoleService create(Throwable throwable) {
         return new RoleService() {
             @Override
-            public PageResult<SysRole> findRoles(Map<String, Object> params) {
+            public PageResult<SysRole> findRoles(RolePageCo params) {
                 log.error("findRoles查询角色异常:{}", params, throwable);
                 return new PageResult();
             }
@@ -29,7 +31,7 @@ public class RoleServiceFallbackFactory implements FallbackFactory<RoleService> 
             }
 
             @Override
-            public Result saveOrUpdate(SysRole sysRole) throws Exception {
+            public Result saveOrUpdate(SysRoleCo sysRole) throws Exception {
                 log.error("saveOrUpdate编辑角色异常:{}", sysRole, throwable);
                 return Result.failed("编辑角色失败");
             }

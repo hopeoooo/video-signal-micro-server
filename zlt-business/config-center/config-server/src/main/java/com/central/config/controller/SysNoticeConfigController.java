@@ -4,6 +4,8 @@ import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
+import com.central.config.model.co.FindNoticeCo;
+import com.central.config.model.co.UpdateNoticeCo;
 import com.central.config.service.ISysNoticeService;
 import com.central.log.annotation.AuditLog;
 import com.central.push.feign.PushService;
@@ -36,11 +38,7 @@ public class SysNoticeConfigController {
     @ApiOperation("查询公告管理列表")
     @ResponseBody
     @GetMapping("/findNoticeList")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "类型(1:一般,2:维护,3:系统)", required = false, dataType = "Integer"),
-            @ApiImplicitParam(name = "state", value = "状态(0:停用,1:启用)", required = false, dataType = "Integer")
-    })
-    public Result<List<SysNotice>> findNoticeList(@RequestParam Map<String, Object> params) {
+    public Result<List<SysNotice>> findNoticeList(@ModelAttribute FindNoticeCo params) {
         List<SysNotice> noticeList = noticeService.findNoticeList(params);
         return Result.succeed(noticeList,"查询成功");
 
@@ -79,11 +77,7 @@ public class SysNoticeConfigController {
      */
     @ApiOperation(value = "修改公告状态")
     @GetMapping("/updateEnabled")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "公告id", required = true, dataType = "Long"),
-            @ApiImplicitParam(name = "state", value = "状态", required = true, dataType = "Boolean")
-    })
-    public Result updateEnabled(@RequestParam Map<String, Object> params) {
+    public Result updateEnabled(@ModelAttribute UpdateNoticeCo params) {
         Result result = noticeService.updateEnabled(params);
         noticeService.syncPushNoticeToWebApp();
         return result;

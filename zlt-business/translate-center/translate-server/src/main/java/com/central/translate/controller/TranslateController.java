@@ -1,12 +1,10 @@
 package com.central.translate.controller;
 
-import com.central.common.annotation.LoginUser;
 import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.model.SysUser;
-import com.central.common.params.translate.QueryI18nInfoPageParam;
-import com.central.common.params.translate.UpdateI18nInfoParam;
+import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.service.I18nInfosService;
@@ -15,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -45,7 +42,7 @@ public class TranslateController {
     @PostMapping("/backendUpdate")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
-            @RequestBody UpdateI18nInfoParam param){
+            @RequestBody UpdateI18nInfoCo param){
         i18nInfosService.updateBackendI18nInfo(param);
         return Result.succeed("操作成功");
     }
@@ -62,7 +59,7 @@ public class TranslateController {
     @PostMapping("/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
-            @RequestBody UpdateI18nInfoParam param){
+            @RequestBody UpdateI18nInfoCo param){
         i18nInfosService.updateFrontI18nInfo( param);
         return Result.succeed("操作成功");
     }
@@ -77,7 +74,7 @@ public class TranslateController {
      */
     @GetMapping("/infos")
     @ApiOperation(value = "查询国际化字典分页")
-    public Result<PageResult<I18nInfoPageVO>> infos(@ModelAttribute QueryI18nInfoPageParam param){
+    public Result<PageResult<I18nInfoPageVO>> infos(@ModelAttribute QueryI18nInfoPageCo param){
         return Result.succeed(i18nInfosService.findInfos(param));
     }
 

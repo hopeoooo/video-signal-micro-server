@@ -1,11 +1,13 @@
 package com.central.config.feign.callback;
 
 import com.central.common.model.*;
+import com.central.common.model.co.PageCo;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
+import com.central.config.model.co.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +37,7 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
-            public Result saveTourist(Map<String, String> params) {
+            public Result saveTourist(SaveTouristCo params) {
                 log.error("saveTourist编辑异常:{}", params, cause);
                 return Result.failed("更新失败");
             }
@@ -59,7 +61,7 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
-            public Result<List<SysNotice>> findNoticeList(Map<String, Object> params) {
+            public Result<List<SysNotice>> findNoticeList(FindNoticeCo params) {
                 log.error("findNoticeList查询公告异常:{}", params, cause);
                 return Result.failed("查询失败");
             }
@@ -71,13 +73,13 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
-            public Result updateEnabled(Map<String, Object> params) {
+            public Result updateEnabled(UpdateNoticeCo params) {
                 log.error("updateEnabled更新公告状态异常:{}", params, cause);
                 return Result.failed("更新失败");
             }
 
             @Override
-            public Result saveOrUpdate(SysNotice sysNotice) {
+            public Result saveOrUpdate(SysNoticeCo sysNotice) {
                 log.error("saveOrUpdate更新公告异常:{}", sysNotice, cause);
                 return Result.failed("更新失败");
             }
@@ -94,7 +96,7 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             }
 
             @Override
-            public Result updateState(Map<String, Object> params) {
+            public Result updateState(BannerUpdateStateCo params) {
                 log.error("updateState更新banner状态异常:{}", params, cause);
                 return Result.failed("更新失败");
             }
@@ -139,13 +141,13 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 return null;
             }
             @Override
-            public PageResult<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) {
+            public PageResult<DownloadStation> findDownloadStationList(PageCo params) {
                 log.error("findDownloadStationList查询异常" ,cause);
                 return new PageResult<>();
             }
 
             @Override
-            public Result saveOrUpdateDownloadStation(DownloadStation downloadStation) throws Exception {
+            public Result saveOrUpdateDownloadStation(DownloadStationCo downloadStation) throws Exception {
                 log.error("saveOrUpdateDownloadStation编辑异常:{}", downloadStation, cause);
                 return Result.failed("编辑失败");
             }

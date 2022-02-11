@@ -12,9 +12,9 @@ import com.central.common.utils.I18nUtil;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.mapper.I18nInfoMapper;
-import com.central.common.params.translate.I18nInfoPageMapperParam;
-import com.central.common.params.translate.QueryI18nInfoPageParam;
-import com.central.common.params.translate.UpdateI18nInfoParam;
+import com.central.translate.model.co.I18nInfoPageMapperCo;
+import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.translate.service.I18nInfosService;
 import com.central.common.vo.I18nInfoPageVO;
 import lombok.extern.slf4j.Slf4j;
@@ -156,16 +156,16 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
      * @since 2022 -01-25 12:14:35
      */
     @Override
-    public boolean updateBackendI18nInfo(UpdateI18nInfoParam param) {
+    public boolean updateBackendI18nInfo(UpdateI18nInfoCo param) {
         return updateI18nInfo(I18nKeys.BACKEND, param);
     }
 
     @Override
-    public boolean updateFrontI18nInfo(UpdateI18nInfoParam param) {
+    public boolean updateFrontI18nInfo(UpdateI18nInfoCo param) {
         return updateI18nInfo(I18nKeys.FRONT, param);
     }
 
-    private boolean updateI18nInfo(Integer from, UpdateI18nInfoParam param) {
+    private boolean updateI18nInfo(Integer from, UpdateI18nInfoCo param) {
         boolean zhcnChange = StrUtil.isNotBlank(param.getZhCn());
         boolean enusChange = StrUtil.isNotBlank(param.getEnUs());
         boolean khmChange = StrUtil.isNotBlank(param.getKhm());
@@ -240,9 +240,9 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
      * @since 2022 -01-25 12:25:12
      */
     @Override
-    public PageResult<I18nInfoPageVO> findInfos(QueryI18nInfoPageParam param) {
+    public PageResult<I18nInfoPageVO> findInfos(QueryI18nInfoPageCo param) {
         Page<I18nInfoPageVO> page = new Page<>(param.getPage(), param.getLimit());
-        I18nInfoPageMapperParam params = new I18nInfoPageMapperParam();
+        I18nInfoPageMapperCo params = new I18nInfoPageMapperCo();
 
         if (StrUtil.isNotBlank(param.getWord()) && param.getLanguage() != null) {
             switch (param.getLanguage()) {

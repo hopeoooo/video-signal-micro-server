@@ -2,8 +2,7 @@ package com.central.user.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.PageResult;
-import com.central.common.model.Result;
-import com.central.common.params.user.OnlineUserParams;
+import com.central.user.model.co.OnlineUserCo;
 import com.central.user.mapper.OnlineUserMapper;
 import com.central.common.model.OnlineUser;
 import com.central.user.service.IOnlineUserService;
@@ -21,7 +20,7 @@ public class OnlineUserServiceImpl implements IOnlineUserService {
     @Autowired
     private OnlineUserMapper onlineUserMapper;
     @Override
-    public List<OnlineUser> findOnlineUserList(OnlineUserParams params) {
+    public List<OnlineUser> findOnlineUserList(OnlineUserCo params) {
         return onlineUserMapper.findOnlineUserList(params);
     }
 
@@ -46,7 +45,7 @@ public class OnlineUserServiceImpl implements IOnlineUserService {
 
     @Override
     public List<OnlineUser> findOnlineUserMaps(Integer tag) {
-        OnlineUserParams params = new OnlineUserParams();
+        OnlineUserCo params = new OnlineUserCo();
         params.setTag(tag);
         Calendar nowTime = Calendar.getInstance();
         List<OnlineUser> onlineUserList = null;
@@ -100,7 +99,7 @@ public class OnlineUserServiceImpl implements IOnlineUserService {
     }
 
     @Override
-    public PageResult<OnlineUser> findPageList(OnlineUserParams params) {
+    public PageResult<OnlineUser> findPageList(OnlineUserCo params) {
         Page<OnlineUser> page = new Page<>(params.getPage(), params.getLimit());
         List<OnlineUser> list = onlineUserMapper.findPageList(page, params);
         long total = page.getTotal();

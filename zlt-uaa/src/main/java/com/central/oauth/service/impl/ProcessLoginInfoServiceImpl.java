@@ -1,5 +1,6 @@
 package com.central.oauth.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import com.central.common.model.LoginLog;
 import com.central.common.model.Result;
@@ -9,6 +10,7 @@ import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.user.feign.UserService;
+import com.central.user.model.co.SysUserCo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,12 +33,14 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
     @Override
     public void processLoginInfo(UserDetails userDetails,String loginIp) {
         log.info("+++++++ logInIp is {}",loginIp);
-        SysUser sysUser = (SysUser) userDetails;
+        SysUser user = (SysUser) userDetails;
+        SysUserCo sysUser = new SysUserCo();
+        BeanUtil.copyProperties(user, sysUser);
         log.info("++++++++++++ sysUser {}",sysUser);
         sysUser.setLoginIp(loginIp);
         sysUser.setLogin(Boolean.TRUE);
         userService.saveOrUpdate(sysUser);
-        addLoginLog(sysUser,loginIp);
+        addLoginLog(user,loginIp);
     }
 
     private void addLoginLog(SysUser sysUser,String loginIp){

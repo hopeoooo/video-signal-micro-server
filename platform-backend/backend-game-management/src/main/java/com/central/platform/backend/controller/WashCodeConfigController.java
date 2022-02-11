@@ -3,6 +3,7 @@ package com.central.platform.backend.controller;
 import com.central.common.model.Result;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
+import com.central.game.model.co.GameListCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class WashCodeConfigController {
 
     @ApiOperation(value = "新增/更新")
     @PostMapping("/gamelist/save")
-    public Result save(@RequestBody GameList gameList) {
+    public Result save(@RequestBody GameListCo gameList) {
         return gameService.save(gameList);
     }
 }

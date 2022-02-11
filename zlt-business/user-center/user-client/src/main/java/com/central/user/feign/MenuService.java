@@ -5,6 +5,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
+import com.central.user.model.co.SysMenuCo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public interface MenuService {
      * 给角色分配菜单
      */
     @PostMapping("/menus/granted")
-    Result setMenuToRole(@RequestBody SysMenu sysMenu);
+    Result setMenuToRole(@RequestBody SysMenuCo sysMenu);
 
 
 
@@ -61,6 +62,6 @@ public interface MenuService {
      * @return
      */
     @PostMapping("/menus/saveOrUpdate")
-     Result saveOrUpdate(@RequestBody SysMenu menu) ;
+     Result saveOrUpdate(@RequestBody SysMenuCo menu) ;
 
 }

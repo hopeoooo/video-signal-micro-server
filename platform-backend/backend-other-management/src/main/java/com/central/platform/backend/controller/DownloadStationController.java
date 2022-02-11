@@ -4,8 +4,10 @@ import com.central.common.annotation.LoginUser;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
+import com.central.common.model.co.PageCo;
 import com.central.config.feign.ConfigService;
 import com.central.config.model.DownloadStation;
+import com.central.config.model.co.DownloadStationCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -33,11 +35,7 @@ public class DownloadStationController {
     @ApiOperation("查询app升级管理列表")
     @ResponseBody
     @GetMapping("/download/findDownloadStationList")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
-    })
-    public Result<PageResult<DownloadStation>> findDownloadStationList(@RequestParam Map<String, Object> params) {
+    public Result<PageResult<DownloadStation>> findDownloadStationList(@ModelAttribute PageCo params) {
         PageResult<DownloadStation> downloadStationList = configService.findDownloadStationList(params);
         return Result.succeed(downloadStationList);
     }
@@ -51,7 +49,7 @@ public class DownloadStationController {
      */
     @ApiOperation(value = "新增or更新App升级管理")
     @PostMapping("/download/saveOrUpdateDownloadStation")
-    public Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation, @LoginUser SysUser user) throws Exception {
+    public Result saveOrUpdateDownloadStation(@RequestBody DownloadStationCo downloadStation, @LoginUser SysUser user) throws Exception {
         if(downloadStation.getId()==null){
             downloadStation.setCreateBy(user.getUsername());
             downloadStation.setUpdateBy(user.getUsername());

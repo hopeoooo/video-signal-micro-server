@@ -3,6 +3,7 @@ package com.central.platform.backend.controller;
 import com.central.common.model.Result;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameRoomList;
+import com.central.game.model.co.GameRoomListCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -41,7 +42,7 @@ public class GameRoomListController {
 
     @ApiOperation(value = "新增/更新")
     @PostMapping("/gameRoomList/save")
-    public Result save(@RequestBody GameRoomList gameRoomList) {
+    public Result save(@RequestBody GameRoomListCo gameRoomList) {
 
         return gameService.save(gameRoomList);
     }

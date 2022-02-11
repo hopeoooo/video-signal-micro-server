@@ -3,12 +3,15 @@ package com.central.config.feign;
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.model.co.PageCo;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
+import com.central.config.model.co.*;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +33,7 @@ public interface ConfigService {
     Result<TouristDto> findTouristAmount() ;
 
     @PostMapping("/system/saveTourist")
-    Result saveTourist(@RequestParam("params") Map<String, String> params) ;
+    Result saveTourist(@SpringQueryMap SaveTouristCo params) ;
 
     @GetMapping("/system/findMoneySymbol")
     Result findMoneySymbol();
@@ -48,7 +51,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/notice/findNoticeList")
-    Result<List<SysNotice>> findNoticeList(@RequestParam("params") Map<String, Object> params) ;
+    Result<List<SysNotice>> findNoticeList(@SpringQueryMap FindNoticeCo params) ;
 
     /**
      * 删除公告
@@ -65,7 +68,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/notice/updateEnabled")
-    Result updateEnabled(@RequestParam("params") Map<String, Object> params) ;
+    Result updateEnabled(@SpringQueryMap UpdateNoticeCo params) ;
 
     /**
      * 公告新增or修改
@@ -73,7 +76,7 @@ public interface ConfigService {
      * @return
      */
     @PostMapping("/notice/saveOrUpdate")
-    Result saveOrUpdate(@RequestBody SysNotice sysNotice);
+    Result saveOrUpdate(@RequestBody SysNoticeCo sysNotice);
 
 
     /**
@@ -97,7 +100,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/banner/updateState")
-    Result updateState(@RequestParam("params") Map<String, Object> params) ;
+    Result updateState(@SpringQueryMap BannerUpdateStateCo params) ;
 
     /**
      * banner新增or修改
@@ -161,7 +164,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/download/findDownloadStationList")
-    PageResult<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) ;
+    PageResult<DownloadStation> findDownloadStationList(@SpringQueryMap PageCo params) ;
 
     /**
      * 新增or更新App升级管理
@@ -170,7 +173,7 @@ public interface ConfigService {
      * @return
      */
     @PostMapping("/download/saveOrUpdateDownloadStation")
-     Result saveOrUpdateDownloadStation(@RequestBody DownloadStation downloadStation) throws Exception ;
+     Result saveOrUpdateDownloadStation(@RequestBody DownloadStationCo downloadStation) throws Exception ;
 
 
     @GetMapping("/download/generateVersionNumber")

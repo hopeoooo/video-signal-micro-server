@@ -7,8 +7,7 @@ import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.*;
-import com.central.common.params.user.SysUserGoogleBindParams;
-import com.central.common.params.user.SysUserParams;
+import com.central.user.model.co.*;
 import com.central.common.utils.ExcelUtil;
 import com.central.common.utils.GoogleAuthUtil;
 import com.central.common.utils.PwdEncoderUtil;
@@ -110,7 +109,7 @@ public class SysUserController {
 
     @ApiOperation(value = "绑定谷歌验证码")
     @PostMapping("/users-anon/bindGoogleCode")
-    public Result<String> bindGoogleCode(@RequestBody SysUserGoogleBindParams params) {
+    public Result<String> bindGoogleCode(@RequestBody SysUserGoogleBindCoCo params) {
         String username = params.getUsername();
         String password = params.getPassword();
         String googleCode = params.getGoogleCode();
@@ -127,9 +126,9 @@ public class SysUserController {
         if (StringUtils.isBlank(loginAppUser.getGaKey())) {
             return Result.failed("请先绑定谷歌身份验证器");
         }
-        Map<String, Object> param = new HashMap<>();
-        param.put("id",loginAppUser.getId());
-        param.put("gaBind",1);
+        GaBindCo param = new GaBindCo();
+        param.setId(loginAppUser.getId());
+        param.setGaBind(1);
         Result result = updateGaBind(param);
         if (result != null && result.getResp_code() == 0){
             return Result.succeed();
@@ -139,7 +138,7 @@ public class SysUserController {
 
     @ApiOperation(value = "得到谷歌二维码链接")
     @PostMapping("/users-anon/getGoogleCodeLink")
-    public Result<String> getGoogleCodeLink(@RequestBody SysUserParams params) {
+    public Result<String> getGoogleCodeLink(@RequestBody SysUserParamsCo params) {
         String username = params.getUsername();
         String password = params.getPassword();
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)){
@@ -293,7 +292,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
     })
     @GetMapping("/users")
-    public PageResult<SysUser> findUsers(@RequestParam Map<String, Object> params) {
+    public PageResult<SysUser> findUsers(@ModelAttribute SysUserListCo params) {
         return appUserService.findUsers(params);
     }
 
@@ -305,12 +304,8 @@ public class SysUserController {
      */
     @ApiOperation(value = "修改用户状态")
     @GetMapping("/users/updateEnabled")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "enabled", value = "是否启用", required = true, dataType = "Boolean")
-    })
-    public Result updateEnabled(@RequestParam Map<String, Object> params) {
-        Long id = MapUtils.getLong(params, "id");
+    public Result updateEnabled(@ModelAttribute EnabledUserCo params) {
+        Long id = params.getId();
         if (checkAdmin(id)) {
             return Result.failed(ADMIN_CHANGE_MSG);
         }
@@ -344,12 +339,8 @@ public class SysUserController {
      */
     @ApiOperation(value = "二维码绑定状态变更")
     @GetMapping("/users/updateGaBind")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "gaBind", value = "谷歌验证码是否绑定1 1：已绑定，其他：未绑定", required = true, dataType = "Integer")
-    })
-    public Result updateGaBind(@RequestParam Map<String, Object> params) {
-        Long id = MapUtils.getLong(params, "id");
+    public Result updateGaBind(@ModelAttribute GaBindCo params) {
+        Long id = params.getId();
         cacheEvictUser(id);
         return appUserService.updateGaBind(params);
     }
@@ -448,7 +439,7 @@ public class SysUserController {
      * @return
      */
     @PostMapping("/users/export")
-    public void exportUser(@RequestParam Map<String, Object> params, HttpServletResponse response) throws IOException {
+    public void exportUser(@ModelAttribute SysUserListCo params, HttpServletResponse response) throws IOException {
         List<SysUserExcel> result = appUserService.findAllUsers(params);
         //导出操作
         ExcelUtil.exportExcel(result, null, "用户", SysUserExcel.class, "user", response);

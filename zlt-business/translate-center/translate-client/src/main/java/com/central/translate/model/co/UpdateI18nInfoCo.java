@@ -1,4 +1,4 @@
-package com.central.common.params.translate;
+package com.central.translate.model.co;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,7 +7,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @ApiModel
 @Data
-public class UpdateI18nInfoParam {
+public class UpdateI18nInfoCo {
 
     @ApiModelProperty(value = "主键", required = true)
     private Long id;

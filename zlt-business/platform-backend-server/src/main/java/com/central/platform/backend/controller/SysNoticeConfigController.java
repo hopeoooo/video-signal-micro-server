@@ -4,6 +4,9 @@ package com.central.platform.backend.controller;
 import com.central.common.model.Result;
 import com.central.config.feign.ConfigService;
 import com.central.config.model.SysNotice;
+import com.central.config.model.co.FindNoticeCo;
+import com.central.config.model.co.SysNoticeCo;
+import com.central.config.model.co.UpdateNoticeCo;
 import com.central.log.annotation.AuditLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,11 +35,7 @@ public class SysNoticeConfigController {
     @ApiOperation(value = "查询公告管理列表")
     @ResponseBody
     @GetMapping("/notice/findNoticeList")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "类型(1:一般,2:维护,3:系统)", required = false, dataType = "Integer"),
-            @ApiImplicitParam(name = "state", value = "状态(0:停用,1:启用)", required = false, dataType = "Integer")
-    })
-    public Result<List<SysNotice>> findNoticeList(@RequestParam Map<String, Object> params) {
+    public Result<List<SysNotice>> findNoticeList(@ModelAttribute FindNoticeCo params) {
         return configService.findNoticeList(params);
     }
 
@@ -62,11 +61,7 @@ public class SysNoticeConfigController {
 
     @ApiOperation(value = "修改公告状态")
     @GetMapping("/notice/updateEnabled")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "公告id", required = true, dataType = "Long"),
-            @ApiImplicitParam(name = "state", value = "状态", required = true, dataType = "Boolean")
-    })
-    public Result updateEnabled(@RequestParam Map<String, Object> params) {
+    public Result updateEnabled(@ModelAttribute UpdateNoticeCo params) {
         return configService.updateEnabled(params);
     }
 
@@ -80,7 +75,7 @@ public class SysNoticeConfigController {
     @ApiOperation(value = "新增或更新")
     @PostMapping("/notice/saveOrUpdate")
     @AuditLog(operation = "'新增或更新公告:' + #sysNotice.content")
-    public Result saveOrUpdate(@RequestBody SysNotice sysNotice) throws Exception {
+    public Result saveOrUpdate(@RequestBody SysNoticeCo sysNotice) throws Exception {
         return configService.saveOrUpdate(sysNotice);
     }
 

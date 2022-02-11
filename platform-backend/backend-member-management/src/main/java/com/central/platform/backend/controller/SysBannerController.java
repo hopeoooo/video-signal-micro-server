@@ -3,6 +3,7 @@ package com.central.platform.backend.controller;
 import com.central.common.model.Result;
 import com.central.config.feign.ConfigService;
 import com.central.config.model.SysBanner;
+import com.central.config.model.co.BannerUpdateStateCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -58,11 +59,7 @@ public class SysBannerController {
      */
     @ApiOperation(value = "修改banner状态")
     @GetMapping("/banner/updateState")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
-            @ApiImplicitParam(name = "state", value = "状态", required = true, dataType = "Boolean")
-    })
-    public Result updateState(@RequestParam Map<String, Object> params) {
+    public Result updateState(@ModelAttribute BannerUpdateStateCo params) {
         return configService.updateState(params);
     }
 

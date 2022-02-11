@@ -3,7 +3,7 @@ package com.central.user.controller;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.params.user.OnlineUserParams;
+import com.central.user.model.co.OnlineUserCo;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.model.OnlineUser;
 import com.central.user.service.IOnlineUserService;
@@ -63,7 +63,7 @@ public class OnlineUserController {
      */
     @ApiOperation(value = "会员报表查询")
     @GetMapping("/findPageList")
-    public Result<PageResult<OnlineUser>> findPageList(@ModelAttribute OnlineUserParams params) {
+    public Result<PageResult<OnlineUser>> findPageList(@ModelAttribute OnlineUserCo params) {
         PageResult<OnlineUser> pageList = onlineUserService.findPageList(params);
         return Result.succeed(pageList);
     }

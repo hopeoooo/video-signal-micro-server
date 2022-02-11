@@ -2,6 +2,7 @@ package com.central.config.service;
 
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.model.co.PageCo;
 import com.central.common.service.ISuperService;
 import com.central.config.model.DownloadStation;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public interface IDownloadStationService extends ISuperService<DownloadStation> {
 
-     PageResult<DownloadStation> findDownloadStationList(Map<String, Object> map) ;
+     PageResult<DownloadStation> findDownloadStationList(PageCo map) ;
 
      Result saveOrUpdateDownloadStation(DownloadStation downloadStation) throws Exception;
 

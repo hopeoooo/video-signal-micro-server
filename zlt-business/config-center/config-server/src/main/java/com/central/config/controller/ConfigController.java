@@ -8,6 +8,7 @@ import com.central.config.dto.TouristDto;
 import com.central.config.dto.logoUrlDto;
 import com.central.config.model.SysAvatarPicture;
 import com.central.config.model.SysPlatformConfig;
+import com.central.config.model.co.SaveTouristCo;
 import com.central.config.service.ISysAvatarPictureService;
 import com.central.config.service.ISysPlatformConfigService;
 import com.central.file.feign.FileService;
@@ -81,18 +82,14 @@ public class ConfigController {
      */
     @ApiOperation(value = "全局参数:游客管理编辑")
     @PostMapping("/saveTourist")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "touristAmount", value = "游客携带金额", required = true),
-            @ApiImplicitParam(name = "touristSingleMaxBet", value = "游客单笔最大投注", required = true)
-    })
-    public Result saveTourist(@RequestParam Map<String, String> params) {
+    public Result saveTourist(@ModelAttribute SaveTouristCo params) {
         //校验数字
-        String regex = "^[0-9]*$";
+        /*String regex = "^[0-9]*$";
         if (!params.get("touristAmount").matches(regex) || !params.get("touristSingleMaxBet").matches(regex)) {
             return Result.failed("金额只能输入数字");
-        }
-        BigDecimal touristAmount =new BigDecimal( params.get("touristAmount"));
-        BigDecimal touristSingleMaxBet =new BigDecimal(  params.get("touristSingleMaxBet"));
+        }*/
+        BigDecimal touristAmount = params.getTouristAmount();
+        BigDecimal touristSingleMaxBet = params.getTouristSingleMaxBet();
         if(touristAmount.compareTo(BigDecimal.ZERO)==-1 || touristSingleMaxBet.compareTo(BigDecimal.ZERO)==-1){
             return Result.failed("金额不能小于0");
         }

@@ -3,6 +3,7 @@ package com.central.order.feign.callback;
 import com.central.common.model.Result;
 import com.central.order.feign.OrderService;
 import com.central.order.model.Order;
+import com.central.order.model.co.OrderCo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
@@ -16,7 +17,7 @@ public class OrderServiceFallbackFactory implements FallbackFactory<OrderService
     public OrderService create(Throwable throwable) {
         return new OrderService() {
             @Override
-            public Result save(Order order) {
+            public Result save(OrderCo order) {
                 log.error("订单保存失败:{}", order, throwable);
                 return Result.failed("订单保存失败");
             }

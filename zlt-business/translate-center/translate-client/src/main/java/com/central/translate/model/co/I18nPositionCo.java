@@ -1,4 +1,4 @@
-package com.central.common.params.translate;
+package com.central.translate.model.co;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @ApiModel
 @Data
-public class I18nPositionParam {
+public class I18nPositionCo {
 
     @ApiModelProperty(required = false, value = "主键，不传为新增")
     private Long id;

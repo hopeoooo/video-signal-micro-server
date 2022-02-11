@@ -1,4 +1,4 @@
-package com.central.common.params.user;
+package com.central.user.model.co;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @ApiModel
-public class SysUserParams {
+public class SysUserParamsCo {
 
     @ApiModelProperty(value = "管理员账号" , required = true)
     private String username;

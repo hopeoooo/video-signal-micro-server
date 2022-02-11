@@ -3,6 +3,7 @@ package com.central.platform.backend.controller;
 import com.central.common.model.Result;
 import com.central.common.model.UserWashCodeConfig;
 import com.central.user.feign.UserService;
+import com.central.user.model.co.UserWashCodeConfigCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class UserWashCodeConfigController {
 
     @ApiOperation(value = "保存")
     @PostMapping("/userWashCode/saveUserWashCodeConfig")
-    public Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfig> list) {
+    public Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfigCo> list) {
         return userService.saveUserWashCodeConfig(list);
     }
 }

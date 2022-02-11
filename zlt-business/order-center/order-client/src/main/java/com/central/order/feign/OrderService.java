@@ -4,6 +4,7 @@ import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.Result;
 import com.central.order.feign.callback.OrderServiceFallbackFactory;
 import com.central.order.model.Order;
+import com.central.order.model.co.OrderCo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public interface OrderService {
 
     @PostMapping("/orders/save")
-    Result save(@RequestBody Order order);
+    Result save(@RequestBody OrderCo order);
 
     @GetMapping("/orders/findById/{id}")
     Result<Order> findById(@PathVariable("id") Long id);

@@ -2,7 +2,8 @@ package com.central.game.feign;
 
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.Result;
-import com.central.common.vo.SysMoneyVO;
+import com.central.game.model.co.GameListCo;
+import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.callback.GameServiceFallbackFactory;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
@@ -19,7 +20,7 @@ public interface GameService {
      * 新增、更新
      */
     @PostMapping("/gamelist/save")
-    Result save(@RequestBody GameList gameList);
+    Result save(@RequestBody GameListCo gameList);
 
     /**
      * 查询全部游戏
@@ -66,7 +67,7 @@ public interface GameService {
      * @return
      */
     @PostMapping("/gameRoomList/save")
-    Result save(@RequestBody GameRoomList gameRoomList) ;
+    Result save(@RequestBody GameRoomListCo gameRoomList) ;
 
     /**
      * 修改房间状态

@@ -1,6 +1,6 @@
 package com.central.translate.service;
 
-import com.central.common.params.translate.I18nPositionParam;
+import com.central.translate.model.co.I18nPositionCo;
 import com.central.common.vo.I18nPositionVO;
 import com.central.common.model.I18nPosition;
 import com.central.common.service.ISuperService;
@@ -43,6 +43,6 @@ public interface I18nPositionService extends ISuperService<I18nPosition> {
      * @author lance
      * @since 2022 -01-28 11:34:08
      */
-    void saveOrUpdate(I18nPositionParam param);
+    void saveOrUpdate(I18nPositionCo param);
 
 }

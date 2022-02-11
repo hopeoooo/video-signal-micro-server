@@ -4,6 +4,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.common.service.ISuperService;
+import com.central.user.model.co.RolePageCo;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public interface ISysRoleService extends ISuperService<SysRole> {
 	 * @param params
 	 * @return
 	 */
-	PageResult<SysRole> findRoles(Map<String, Object> params);
+	PageResult<SysRole> findRoles(RolePageCo params);
 
 	/**
 	 * 新增或更新角色

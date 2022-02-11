@@ -3,6 +3,9 @@ package com.central.user.service;
 import com.central.common.model.*;
 import com.central.common.service.ISuperService;
 import com.central.user.model.SysUserExcel;
+import com.central.user.model.co.EnabledUserCo;
+import com.central.user.model.co.GaBindCo;
+import com.central.user.model.co.SysUserListCo;
 
 import java.util.List;
 import java.util.Map;
@@ -73,7 +76,7 @@ public interface ISysUserService extends ISuperService<SysUser> {
 	 * @param params
 	 * @return
 	 */
-	PageResult<SysUser> findUsers(Map<String, Object> params);
+	PageResult<SysUser> findUsers(SysUserListCo params);
 
 
 	/**
@@ -88,14 +91,14 @@ public interface ISysUserService extends ISuperService<SysUser> {
 	 * @param params
 	 * @return
 	 */
-	Result updateEnabled(Map<String, Object> params);
+	Result updateEnabled(EnabledUserCo params);
 
 	/**
 	 * 查询全部用户
 	 * @param params
 	 * @return
 	 */
-	List<SysUserExcel> findAllUsers(Map<String, Object> params);
+	List<SysUserExcel> findAllUsers(SysUserListCo params);
 
 	Result saveOrUpdateUser(SysUser sysUser) throws Exception;
 
@@ -126,7 +129,7 @@ public interface ISysUserService extends ISuperService<SysUser> {
 	 * @param params
 	 * @return
 	 */
-	Result updateGaBind(Map<String, Object> params);
+	Result updateGaBind(GaBindCo params);
 
 	/**
 	 * 谷歌验证码是否校验状态修改

@@ -2,6 +2,7 @@ package com.central.config.service;
 
 import com.central.common.service.ISuperService;
 import com.central.config.model.SysBanner;
+import com.central.config.model.co.BannerUpdateStateCo;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public interface ISysBannerService extends ISuperService<SysBanner> {
      * @param params
      * @return
      */
-    int updateState(Map<String, Object> params);
+    int updateState(BannerUpdateStateCo params);
 
     /**
      * 根据id查询

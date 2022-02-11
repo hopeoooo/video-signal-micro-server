@@ -3,6 +3,7 @@ package com.central.user.mapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.SysUser;
 import com.central.db.mapper.SuperMapper;
+import com.central.user.model.co.SysUserListCo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,5 +24,5 @@ public interface SysUserMapper extends SuperMapper<SysUser> {
      * @param params
      * @return
      */
-    List<SysUser> findList(Page<SysUser> page, @Param("u") Map<String, Object> params);
+    List<SysUser> findList(Page<SysUser> page, @Param("u") SysUserListCo params);
 }

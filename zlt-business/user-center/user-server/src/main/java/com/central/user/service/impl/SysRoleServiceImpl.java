@@ -10,6 +10,7 @@ import com.central.common.service.impl.SuperServiceImpl;
 import com.central.user.mapper.SysRoleMapper;
 import com.central.user.mapper.SysRoleMenuMapper;
 import com.central.user.mapper.SysUserRoleMapper;
+import com.central.user.model.co.RolePageCo;
 import com.central.user.service.ISysRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -55,9 +56,9 @@ public class SysRoleServiceImpl extends SuperServiceImpl<SysRoleMapper, SysRole>
     }
 
     @Override
-    public PageResult<SysRole> findRoles(Map<String, Object> params) {
-        Integer curPage = MapUtils.getInteger(params, "page");
-        Integer limit = MapUtils.getInteger(params, "limit");
+    public PageResult<SysRole> findRoles(RolePageCo params) {
+        Integer curPage = params.getPage();
+        Integer limit = params.getLimit();
         Page<SysRole> page = new Page<>(curPage == null ? 0 : curPage, limit == null ? -1 : limit);
         List<SysRole> list = baseMapper.findList(page, params);
         return PageResult.<SysRole>builder().data(list).count(page.getTotal()).build();

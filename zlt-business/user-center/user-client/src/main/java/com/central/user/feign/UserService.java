@@ -1,15 +1,14 @@
 package com.central.user.feign;
 
-import com.central.common.annotation.LoginUser;
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.*;
-import com.central.common.params.user.SysUserGoogleBindParams;
-import com.central.common.params.user.SysUserParams;
+import com.central.user.model.co.*;
 import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -41,10 +40,10 @@ public interface UserService {
     LoginAppUser findByUsername(@RequestParam("username") String username);
 
     @PostMapping("/users-anon/bindGoogleCode")
-    Result<String> bindGoogleCode(@RequestBody SysUserGoogleBindParams params);
+    Result<String> bindGoogleCode(@RequestBody SysUserGoogleBindCoCo params);
 
     @PostMapping("/users-anon/getGoogleCodeLink")
-    Result<String> getGoogleCodeLink(@RequestBody SysUserParams params);
+    Result<String> getGoogleCodeLink(@RequestBody SysUserParamsCo params);
 
     /**
      * feign rpc访问远程/users-anon/login1接口
@@ -85,14 +84,14 @@ public interface UserService {
      * @return
      */
     @GetMapping(value = "/users", params = "params")
-    PageResult<SysUser> findSysUserList(@RequestParam("params") Map<String, Object> params);
+    PageResult<SysUser> findSysUserList(@SpringQueryMap SysUserListCo params);
 
     /**
      * 查询会员日志列表
      * @return
      */
     @GetMapping(value = "/loginLog/findUserLoginLogList", params = "params")
-    PageResult<LoginLogPageDto> findUserLoginLogList(@RequestParam("params") Map<String, Object> params) ;
+    PageResult<LoginLogPageDto> findUserLoginLogList(@SpringQueryMap UserLoginLogPageCo params) ;
 
 
 
@@ -107,7 +106,7 @@ public interface UserService {
      * @return
      */
     @PostMapping(value = "/users/saveOrUpdate", params = "sysUser")
-    Result saveOrUpdate(@RequestBody SysUser sysUser);
+    Result saveOrUpdate(@RequestBody SysUserCo sysUser);
 
     /**
      * 根据ID物理删除用户
@@ -124,13 +123,13 @@ public interface UserService {
     Result updateVerify(@PathVariable("id") Long id) ;
 
     @GetMapping(value ="/users/updateEnabled", params = "SysUser")
-    Result updateEnabled(@RequestParam Map<String, Object> params);
+    Result updateEnabled(@SpringQueryMap EnabledUserCo params);
 
     @GetMapping(value ="/users/updateGaKey", params = "SysUser")
     Result updateGaKey(@RequestParam Map<String, Object> params);
 
     @GetMapping(value ="/users/updateGaBind", params = "SysUser")
-    Result updateGaBind(@RequestParam Map<String, Object> params);
+    Result updateGaBind(@SpringQueryMap GaBindCo params);
 
     /**
      * 新增用户钱包
@@ -138,7 +137,7 @@ public interface UserService {
      * @return
      */
     @PostMapping("/userMoney/save")
-    Result<SysUserMoney> save(@RequestBody SysUserMoney sysUserMoney);
+    Result<SysUserMoney> save(@RequestBody SysUserMoneyCo sysUserMoney);
 
     @PostMapping("/userMoney/playerMoney")
     Result<Boolean> updateMoney(@RequestBody SysMoneyVO sysMoneyVO);
@@ -151,7 +150,7 @@ public interface UserService {
                                        @RequestParam("remark") String remark, @RequestParam("transterType") Boolean transterType);
 
     @GetMapping(value = "/sysTansterMoney/findList", params = "params")
-    PageResult<SysTansterMoneyLogVo> findTransterMoneyList(@RequestParam("params") Map<String, Object> params);
+    PageResult<SysTansterMoneyLogVo> findTransterMoneyList(@SpringQueryMap SysTansterMoneyPageCo params);
 
 
     @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
@@ -159,5 +158,5 @@ public interface UserService {
 
 
     @PostMapping("/userWashCode/saveUserWashCodeConfig")
-    Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfig> list) ;
+    Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfigCo> list) ;
 }

@@ -2,8 +2,7 @@ package com.central.user.feign.callback;
 
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.*;
-import com.central.common.params.user.SysUserGoogleBindParams;
-import com.central.common.params.user.SysUserParams;
+import com.central.user.model.co.*;
 import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.UserService;
@@ -48,13 +47,13 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result<String> bindGoogleCode(SysUserGoogleBindParams params) {
+            public Result<String> bindGoogleCode(SysUserGoogleBindCoCo params) {
                 log.error("服务器异常，bindGoogleCode异常:{}", params);
                 return null;
             }
 
             @Override
-            public Result<String> getGoogleCodeLink(SysUserParams params) {
+            public Result<String> getGoogleCodeLink(SysUserParamsCo params) {
                 log.error("服务器异常，getGoogleCodeLink异常:{}", params);
                 return null;
             }
@@ -84,13 +83,13 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public PageResult<SysUser> findSysUserList(Map<String, Object> params) {
+            public PageResult<SysUser> findSysUserList(SysUserListCo params) {
                 log.error("findSysUserList查询用户异常:{}", params, throwable);
                 return new PageResult();
             }
 
             @Override
-            public PageResult<LoginLogPageDto> findUserLoginLogList(Map<String, Object> params) {
+            public PageResult<LoginLogPageDto> findUserLoginLogList(UserLoginLogPageCo params) {
                 log.error("findUserLoginLogList查询会员日志异常:{}", params, throwable);
                 return new PageResult();
             }
@@ -101,7 +100,7 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result saveOrUpdate(SysUser sysUser) {
+            public Result saveOrUpdate(SysUserCo sysUser) {
                 log.error("saveOrUpdate新增或修改用户数据异常:{}", sysUser, throwable);
                 return Result.failed("更新失败");
             }
@@ -125,7 +124,7 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result updateEnabled(Map<String, Object> params) {
+            public Result updateEnabled(EnabledUserCo params) {
                 log.error("updateEnabled修改状态异常:{}", params, throwable);
                 return Result.failed("修改状态失败");
             }
@@ -137,13 +136,13 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result updateGaBind(Map<String, Object> params) {
+            public Result updateGaBind(GaBindCo params) {
                 log.error("updateGaBind修改绑定二维码状态异常:{}", params, throwable);
                 return Result.failed("修改绑定二维码状态失败");
             }
 
             @Override
-            public Result<SysUserMoney> save(SysUserMoney sysUserMoney) {
+            public Result<SysUserMoney> save(SysUserMoneyCo sysUserMoney) {
                 log.error("新增用户钱包失败:{}", sysUserMoney, throwable);
                 return Result.failed("新增用户钱包失败");
             }
@@ -166,7 +165,7 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 return Result.failed("上下分错误");
             }
             @Override
-            public PageResult<SysTansterMoneyLogVo> findTransterMoneyList(Map<String, Object> params) {
+            public PageResult<SysTansterMoneyLogVo> findTransterMoneyList(SysTansterMoneyPageCo params) {
                 log.error("findTransterMoneyList查询会员账变异常:{}", params, throwable);
                 return new PageResult();
             }
@@ -179,7 +178,7 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result saveUserWashCodeConfig( List<UserWashCodeConfig> list) {
+            public Result saveUserWashCodeConfig( List<UserWashCodeConfigCo> list) {
                 log.error("saveUserWashCodeConfig编辑个人洗码配置异常:{}",list,throwable);
                 return Result.failed("编辑失败");
             }

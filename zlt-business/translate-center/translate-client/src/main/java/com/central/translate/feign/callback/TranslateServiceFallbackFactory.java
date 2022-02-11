@@ -3,8 +3,8 @@ package com.central.translate.feign.callback;
 import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.params.translate.QueryI18nInfoPageParam;
-import com.central.common.params.translate.UpdateI18nInfoParam;
+import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.feign.TranslateService;
@@ -25,19 +25,19 @@ public class TranslateServiceFallbackFactory implements FallbackFactory<Translat
     public TranslateService create(Throwable cause) {
         return new TranslateService() {
             @Override
-            public Result<String> backendUpdate(UpdateI18nInfoParam param) {
+            public Result<String> backendUpdate(UpdateI18nInfoCo param) {
                 log.error("调用失败: {}", param);
                 return null;
             }
 
             @Override
-            public Result<String> frontUpdate(UpdateI18nInfoParam param) {
+            public Result<String> frontUpdate(UpdateI18nInfoCo param) {
                 log.error("调用失败: {}", param);
                 return null;
             }
 
             @Override
-            public Result<PageResult<I18nInfoPageVO>> infos(QueryI18nInfoPageParam param) {
+            public Result<PageResult<I18nInfoPageVO>> infos(QueryI18nInfoPageCo param) {
                 log.error("调用失败: {}", param);
                 return null;
             }

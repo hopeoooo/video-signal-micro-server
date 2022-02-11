@@ -1,8 +1,7 @@
 package com.central.translate.controller;
 
-import com.central.common.model.I18nPosition;
 import com.central.common.model.Result;
-import com.central.common.params.translate.I18nPositionParam;
+import com.central.translate.model.co.I18nPositionCo;
 import com.central.common.vo.I18nPositionVO;
 import com.central.translate.service.I18nPositionService;
 import io.swagger.annotations.Api;
@@ -62,7 +61,7 @@ public class TranslatePositionController {
      * @since 2022 -01-25 13:32:11
      */
     @PostMapping("/translate/position/saveOrUpdate")
-    public Result<String> saveOrUpdate(@RequestBody I18nPositionParam param) {
+    public Result<String> saveOrUpdate(@RequestBody I18nPositionCo param) {
         try {
             i18nPositionService.saveOrUpdate(param);
             return Result.succeed("操作成功");

@@ -1,7 +1,7 @@
 package com.central.translate.feign.callback;
 
 import com.central.common.model.Result;
-import com.central.common.params.translate.I18nPositionParam;
+import com.central.translate.model.co.I18nPositionCo;
 import com.central.common.vo.I18nPositionVO;
 import com.central.translate.feign.TranslatePositionService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class TranslatePositionFallbackFactory implements FallbackFactory<Transla
             }
 
             @Override
-            public Result<String> saveOrUpdate(I18nPositionParam position) {
+            public Result<String> saveOrUpdate(I18nPositionCo position) {
                 log.error("调用失败: {}", position);
                 return null;
             }

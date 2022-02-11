@@ -4,6 +4,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.user.feign.MenuService;
+import com.central.user.model.co.SysMenuCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class SysMenuController {
      */
     @ApiOperation(value = "角色分配菜单")
     @PostMapping("/menus/granted")
-    public Result setMenuToRole(@RequestBody SysMenu sysMenu) {
+    public Result setMenuToRole(@RequestBody SysMenuCo sysMenu) {
         return menuService.setMenuToRole(sysMenu);
     }
 
@@ -76,7 +77,7 @@ public class SysMenuController {
      */
     @ApiOperation(value = "新增菜单")
     @PostMapping("/menussaveOrUpdate")
-    public Result saveOrUpdate(@RequestBody SysMenu menu) {
+    public Result saveOrUpdate(@RequestBody SysMenuCo menu) {
         return menuService.saveOrUpdate(menu);
     }
 

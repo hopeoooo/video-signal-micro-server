@@ -3,6 +3,8 @@ package com.central.config.service;
 import com.central.common.model.Result;
 import com.central.common.service.ISuperService;
 import com.central.config.model.SysNotice;
+import com.central.config.model.co.FindNoticeCo;
+import com.central.config.model.co.UpdateNoticeCo;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,7 @@ public interface ISysNoticeService extends ISuperService<SysNotice> {
      * @param params
      * @return
      */
-    List<SysNotice> findNoticeList(Map<String, Object> params) ;
+    List<SysNotice> findNoticeList(FindNoticeCo params) ;
 
 
     /**
@@ -37,7 +39,7 @@ public interface ISysNoticeService extends ISuperService<SysNotice> {
      * @param params
      * @return
      */
-    Result updateEnabled(Map<String, Object> params);
+    Result updateEnabled(UpdateNoticeCo params);
 
     Result saveOrUpdateUser(SysNotice sysNotice) throws Exception;
 

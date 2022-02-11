@@ -4,8 +4,8 @@ import com.central.common.constant.ServiceNameConstants;
 import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.params.translate.QueryI18nInfoPageParam;
-import com.central.common.params.translate.UpdateI18nInfoParam;
+import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.feign.callback.TranslateServiceFallbackFactory;
@@ -33,7 +33,7 @@ public interface TranslateService {
      * @since 2022 -01-25 13:23:38
      */
     @PostMapping("/translate/backendUpdate")
-    Result<String> backendUpdate(@RequestBody UpdateI18nInfoParam param);
+    Result<String> backendUpdate(@RequestBody UpdateI18nInfoCo param);
 
 
     /**
@@ -45,7 +45,7 @@ public interface TranslateService {
      * @since 2022 -01-28 18:13:04
      */
     @PostMapping("/translate/frontUpdate")
-    Result<String> frontUpdate(@RequestBody UpdateI18nInfoParam param);
+    Result<String> frontUpdate(@RequestBody UpdateI18nInfoCo param);
 
     /**
      * 查询国际化字典分页
@@ -56,7 +56,7 @@ public interface TranslateService {
      * @since 2022 -01-25 13:25:54
      */
     @GetMapping("/translate/infos")
-    Result<PageResult<I18nInfoPageVO>> infos(@SpringQueryMap QueryI18nInfoPageParam param);
+    Result<PageResult<I18nInfoPageVO>> infos(@SpringQueryMap QueryI18nInfoPageCo param);
 
 
     /**

@@ -2,6 +2,7 @@ package com.central.config.controller;
 
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.model.co.PageCo;
 import com.central.config.model.DownloadStation;
 import com.central.config.service.IDownloadStationService;
 import io.swagger.annotations.Api;
@@ -32,11 +33,7 @@ public class DownloadStationController {
     @ApiOperation("查询app升级管理列表")
     @ResponseBody
     @GetMapping("/findDownloadStationList")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
-    })
-    public PageResult<DownloadStation> findDownloadStationList(@RequestParam Map<String, Object> params) {
+    public PageResult<DownloadStation> findDownloadStationList(@ModelAttribute PageCo params) {
         return downloadStationService.findDownloadStationList(params);
     }
 

@@ -8,6 +8,8 @@ import com.central.common.model.Result;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.config.mapper.SysNoticeMapper;
 import com.central.config.model.SysNotice;
+import com.central.config.model.co.FindNoticeCo;
+import com.central.config.model.co.UpdateNoticeCo;
 import com.central.config.service.ISysNoticeService;
 import com.central.push.feign.PushService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +34,10 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
     private PushService pushService;
 
     @Override
-    public List<SysNotice> findNoticeList(Map<String, Object> params) {
+    public List<SysNotice> findNoticeList(FindNoticeCo params) {
         LambdaQueryWrapper<SysNotice> wrapper=new LambdaQueryWrapper<>();
-        Integer type = MapUtils.getInteger(params, "type");
-        Integer state = MapUtils.getInteger(params, "state");
+        Integer type = params.getType();
+        Integer state = params.getState();
         if (type!=null){
             wrapper.eq(SysNotice::getType, type);
         }
@@ -69,9 +71,9 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
 
 
     @Override
-    public Result updateEnabled(Map<String, Object> params) {
-        Long id = MapUtils.getLong(params, "id");
-        Boolean state = MapUtils.getBoolean(params, "state");
+    public Result updateEnabled(UpdateNoticeCo params) {
+        Long id = params.getId();
+        Boolean state = params.getState();
         SysNotice sysNotice = baseMapper.selectById(id);
         if (sysNotice == null) {
             return Result.failed("此公告不存在");

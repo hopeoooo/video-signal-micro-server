@@ -11,6 +11,9 @@ import com.central.user.mapper.SysRoleMenuMapper;
 import com.central.user.mapper.SysUserMapper;
 import com.central.user.model.SysRoleUser;
 import com.central.user.model.SysUserExcel;
+import com.central.user.model.co.EnabledUserCo;
+import com.central.user.model.co.GaBindCo;
+import com.central.user.model.co.SysUserListCo;
 import com.central.user.service.ISysRoleUserService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
@@ -215,8 +218,8 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
     }
 
     @Override
-    public PageResult<SysUser> findUsers(Map<String, Object> params) {
-        Page<SysUser> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
+    public PageResult<SysUser> findUsers(SysUserListCo params) {
+        Page<SysUser> page = new Page<>(params.getPage(), params.getLimit());
         List<SysUser> list = baseMapper.findList(page, params);
         long total = page.getTotal();
         if (total > 0) {
@@ -235,9 +238,9 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
     }
 
     @Override
-    public Result updateEnabled(Map<String, Object> params) {
-        Long id = MapUtils.getLong(params, "id");
-        Boolean enabled = MapUtils.getBoolean(params, "enabled");
+    public Result updateEnabled(EnabledUserCo params) {
+        Long id = params.getId();
+        Boolean enabled = params.getEnabled();
 
         SysUser appUser = baseMapper.selectById(id);
         if (appUser == null) {
@@ -271,9 +274,9 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
     }
 
     @Override
-    public Result updateGaBind(Map<String, Object> params) {
-        Long id = MapUtils.getLong(params, "id");
-        Integer gaBind = MapUtils.getInteger(params, "gaBind");
+    public Result updateGaBind(GaBindCo params) {
+        Long id = params.getId();
+        Integer gaBind = params.getGaBind();
 
         SysUser appUser = baseMapper.selectById(id);
         if (appUser == null) {
@@ -366,7 +369,7 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
     }
 
     @Override
-    public List<SysUserExcel> findAllUsers(Map<String, Object> params) {
+    public List<SysUserExcel> findAllUsers(SysUserListCo params) {
         List<SysUserExcel> sysUserExcels = new ArrayList<>();
         List<SysUser> list = baseMapper.findList(new Page<>(1, -1), params);
 

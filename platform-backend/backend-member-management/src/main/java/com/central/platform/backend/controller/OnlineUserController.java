@@ -3,7 +3,7 @@ package com.central.platform.backend.controller;
 import com.central.common.model.OnlineUser;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.params.user.OnlineUserParams;
+import com.central.user.model.co.OnlineUserCo;
 import com.central.user.feign.OnlineUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -65,7 +65,7 @@ public class OnlineUserController {
     }*/
 
     @GetMapping("/online/findPageList")
-    public Result<PageResult<OnlineUser>> findPageList(@ModelAttribute OnlineUserParams params){
+    public Result<PageResult<OnlineUser>> findPageList(@ModelAttribute OnlineUserCo params){
         return onlineUserService.findPageList(params);
     }
 }

@@ -3,7 +3,7 @@ package com.central.translate.mapper;
 import com.central.common.model.I18nInfo;
 import com.central.db.mapper.SuperMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.central.common.params.translate.I18nInfoPageMapperParam;
+import com.central.translate.model.co.I18nInfoPageMapperCo;
 import com.central.common.vo.I18nInfoPageVO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
@@ -41,6 +41,6 @@ public interface I18nInfoMapper extends SuperMapper<I18nInfo> {
      * @author lance
      * @since 2022 -01-25 12:28:42
      */
-    List<I18nInfoPageVO> findPage(Page<I18nInfoPageVO> page, @Param("p") I18nInfoPageMapperParam params);
+    List<I18nInfoPageVO> findPage(Page<I18nInfoPageVO> page, @Param("p") I18nInfoPageMapperCo params);
 
 }

@@ -11,6 +11,7 @@ import com.central.config.mapper.SysBannerMapper;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
+import com.central.config.model.co.BannerUpdateStateCo;
 import com.central.config.service.ISysBannerService;
 import com.central.push.feign.PushService;
 import lombok.extern.slf4j.Slf4j;
@@ -45,10 +46,10 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     }
 
     @Override
-    public int updateState(Map<String, Object> params) {
+    public int updateState(BannerUpdateStateCo params) {
         int i =0 ;
-        Long id = MapUtils.getLong(params, "id");
-        Boolean state = MapUtils.getBoolean(params, "state");
+        Long id = params.getId();
+        Boolean state = params.getState();
         SysBanner banner = baseMapper.selectById(id);
         if (banner == null) {
             return i;

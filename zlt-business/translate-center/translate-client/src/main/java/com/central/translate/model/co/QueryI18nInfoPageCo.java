@@ -1,14 +1,14 @@
-package com.central.common.params.translate;
+package com.central.translate.model.co;
 
 import com.central.common.constant.I18nKeys;
-import com.central.common.params.PageParam;
+import com.central.common.model.co.PageCo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @ApiModel("查询国际化字典分页参数")
 @Data
-public class QueryI18nInfoPageParam extends PageParam {
+public class QueryI18nInfoPageCo extends PageCo {
 
     @ApiModelProperty(required = true, value = "所属 0=前台， 1=后台， 默认1")
     private Integer from = I18nKeys.BACKEND;

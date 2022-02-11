@@ -1,4 +1,4 @@
-package com.central.common.params.translate;
+package com.central.translate.model.co;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * @since 2022 -01-25 12:46:36
  */
 @Data
-public class I18nInfoPageMapperParam {
+public class I18nInfoPageMapperCo {
 
     private String zhCn;
 

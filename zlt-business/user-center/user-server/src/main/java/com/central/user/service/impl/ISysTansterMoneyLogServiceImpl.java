@@ -7,6 +7,7 @@ import com.central.common.model.SysTansterMoneyLog;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.mapper.SysTansterMoneyLogMapper;
+import com.central.user.model.co.SysTansterMoneyPageCo;
 import com.central.user.service.ISysTansterMoneyLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -29,8 +30,8 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
      * @return
      */
     @Override
-    public PageResult<SysTansterMoneyLogVo> findSysTansterMoneyList(Map<String, Object> params) {
-        Page<SysTansterMoneyLog> page = new Page<>(MapUtils.getInteger(params, "page"), MapUtils.getInteger(params, "limit"));
+    public PageResult<SysTansterMoneyLogVo> findSysTansterMoneyList(SysTansterMoneyPageCo params) {
+        Page<SysTansterMoneyLog> page = new Page<>(params.getPage(), params.getLimit());
         List<SysTansterMoneyLog> list = baseMapper.findList(page, params);
 
         List<SysTansterMoneyLogVo> sysTansterMoneyLogs = new ArrayList<>();

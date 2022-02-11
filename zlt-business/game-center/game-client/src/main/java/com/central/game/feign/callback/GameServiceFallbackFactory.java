@@ -1,6 +1,8 @@
 package com.central.game.feign.callback;
 
 import com.central.common.model.Result;
+import com.central.game.model.co.GameListCo;
+import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
@@ -19,7 +21,7 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
     public GameService create(Throwable throwable) {
         return new GameService() {
             @Override
-            public Result save(GameList gameList) {
+            public Result save(GameListCo gameList) {
                 log.error("游戏保存失败:{}", gameList, throwable);
                 return Result.failed("游戏保存失败");
             }
@@ -61,7 +63,7 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
-            public Result save(GameRoomList gameRoomList) {
+            public Result save(GameRoomListCo gameRoomList) {
                 log.error("save房间失败", throwable);
                 return Result.failed("保存房间失败");
             }

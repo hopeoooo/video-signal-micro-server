@@ -3,7 +3,7 @@ package com.central.user.feign.callback;
 import com.central.common.model.OnlineUser;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.params.user.OnlineUserParams;
+import com.central.user.model.co.OnlineUserCo;
 import com.central.user.feign.OnlineUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -27,7 +27,7 @@ public class OnlineUserServiceFallbackFactory implements FallbackFactory<OnlineU
             }
 
             @Override
-            public Result<PageResult<OnlineUser>> findPageList(OnlineUserParams params) {
+            public Result<PageResult<OnlineUser>> findPageList(OnlineUserCo params) {
                 log.error("服务器异常, findPageList查询异常: {}", params);
                 PageResult<OnlineUser> page = new PageResult<>();
                 page.setCount(0L);

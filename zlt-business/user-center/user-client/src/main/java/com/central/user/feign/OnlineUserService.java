@@ -4,7 +4,7 @@ import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.OnlineUser;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.params.user.OnlineUserParams;
+import com.central.user.model.co.OnlineUserCo;
 import com.central.user.feign.callback.OnlineUserServiceFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -42,7 +42,7 @@ public interface OnlineUserService {
      * @since 2022 -02-10 11:59:34
      */
     @GetMapping("/online/user/findPageList")
-    Result<PageResult<OnlineUser>> findPageList(@SpringQueryMap OnlineUserParams params);
+    Result<PageResult<OnlineUser>> findPageList(@SpringQueryMap OnlineUserCo params);
 
     /**
      * 及时在线会员

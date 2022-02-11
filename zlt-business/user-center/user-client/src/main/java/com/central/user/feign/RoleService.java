@@ -5,7 +5,10 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysRole;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
+import com.central.user.model.co.RolePageCo;
+import com.central.user.model.co.SysRoleCo;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +27,7 @@ public interface RoleService {
      * @return
      */
     @GetMapping("/roles")
-    PageResult<SysRole> findRoles(@RequestParam Map<String, Object> params);
+    PageResult<SysRole> findRoles(@SpringQueryMap RolePageCo params);
 
 
 
@@ -38,7 +41,7 @@ public interface RoleService {
      * @return
      */
     @PostMapping("/roles/saveOrUpdate")
-    Result saveOrUpdate(@RequestBody SysRole sysRole) throws Exception ;
+    Result saveOrUpdate(@RequestBody SysRoleCo sysRole) throws Exception ;
 
     /**
      * 后台管理删除角色

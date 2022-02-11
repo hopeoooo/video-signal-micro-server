@@ -3,6 +3,7 @@ package com.central.platform.backend.controller;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.common.model.Result;
+import com.central.config.model.co.SaveTouristCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -51,11 +52,7 @@ public class PlatformBackendController {
      */
     @ApiOperation(value = "全局参数:游客管理编辑")
     @PostMapping("/system/saveTourist")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "touristAmount", value = "游客携带金额", required = true),
-            @ApiImplicitParam(name = "touristSingleMaxBet", value = "游客单笔最大投注", required = true)
-    })
-    public Result saveTourist(@RequestParam Map<String, String> params) {
+    public Result saveTourist(@ModelAttribute SaveTouristCo params) {
         return configService.saveTourist(params);
     }
 
