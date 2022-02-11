@@ -103,6 +103,7 @@ public class DefaultExceptionAdvice {
         return defHandler("未知异常", e);
     }
 
+    // --- 捕捉公共的参数验证错误  @Validated @Valid  Start ---
     /**
      * 参数校验异常
      * @param e
@@ -114,7 +115,6 @@ public class DefaultExceptionAdvice {
         return defHandler(e.getAllErrors().get(0).getDefaultMessage(), e);
     }
 
-    // --------------  公共异常移至公共类中 Start
     /**
      * bean参数校验异常
      * 返回状态码:200
@@ -157,6 +157,7 @@ public class DefaultExceptionAdvice {
 
     /**
      * 单个参数校验异常
+     * ConstraintViolationException ：参数上加@RequestParam或参数加@NotBlank @NotNull等
      * 返回状态码:200
      */
     @ResponseStatus(HttpStatus.OK)
@@ -169,7 +170,7 @@ public class DefaultExceptionAdvice {
         String messages = StringUtils.join(msgList.toArray(), ";");
         return defHandler(messages, e);
     }
-    // --------------  公共异常移至公共类中 End
+    // --- 捕捉公共的参数验证错误  @Validated @Valid  End ---
 
     protected Result defHandler(String msg, Exception e) {
         log.error(msg, e);
