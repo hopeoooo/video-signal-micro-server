@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -42,7 +43,7 @@ public class GameRoomListController {
 
     @ApiOperation(value = "新增/更新")
     @PostMapping("/gameRoomList/save")
-    public Result save(@RequestBody GameRoomListCo gameRoomList) {
+    public Result save(@Valid @RequestBody GameRoomListCo gameRoomList) {
 
         return gameService.save(gameRoomList);
     }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -60,8 +61,9 @@ public class SysBannerController {
      */
     @ApiOperation(value = "修改banner状态")
     @GetMapping("/banner/updateState")
-    public Result updateState(@ModelAttribute BannerUpdateStateCo params) {
-        return configService.updateState(params);
+    public Result updateState(@Valid @ModelAttribute BannerUpdateStateCo params) {
+        return Result.succeed("done");
+        //return configService.updateState(params);
     }
 
     /**

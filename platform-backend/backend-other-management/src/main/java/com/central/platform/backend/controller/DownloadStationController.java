@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class DownloadStationController {
     @ApiOperation("查询app升级管理列表")
     @ResponseBody
     @GetMapping("/download/findDownloadStationList")
-    public Result<PageResult<DownloadStation>> findDownloadStationList(@ModelAttribute PageCo params) {
+    public Result<PageResult<DownloadStation>> findDownloadStationList(@Valid @ModelAttribute PageCo params) {
         PageResult<DownloadStation> downloadStationList = configService.findDownloadStationList(params);
         return Result.succeed(downloadStationList);
     }
@@ -49,7 +50,7 @@ public class DownloadStationController {
      */
     @ApiOperation(value = "新增or更新App升级管理")
     @PostMapping("/download/saveOrUpdateDownloadStation")
-    public Result saveOrUpdateDownloadStation(@RequestBody DownloadStationCo downloadStation, @LoginUser SysUser user) throws Exception {
+    public Result saveOrUpdateDownloadStation(@Valid @RequestBody DownloadStationCo downloadStation, @LoginUser SysUser user) throws Exception {
         if(downloadStation.getId()==null){
             downloadStation.setCreateBy(user.getUsername());
             downloadStation.setUpdateBy(user.getUsername());

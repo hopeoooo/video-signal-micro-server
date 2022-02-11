@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -30,7 +31,7 @@ public class SysUserLogController {
     @ResponseBody
     @ApiOperation(value = "查询会员登录日志列表")
     @GetMapping("/loginLog/findUserLoginLogList")
-    public Result<PageResult<LoginLogPageDto>> findUserLoginLogList(@ModelAttribute UserLoginLogPageCo params) {
+    public Result<PageResult<LoginLogPageDto>> findUserLoginLogList(@Valid  @ModelAttribute UserLoginLogPageCo params) {
         PageResult<LoginLogPageDto> userLoginLogList = userService.findUserLoginLogList(params);
         return Result.succeed(userLoginLogList);
     }

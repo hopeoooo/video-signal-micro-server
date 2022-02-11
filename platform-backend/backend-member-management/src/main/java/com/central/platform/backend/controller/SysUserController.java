@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class SysUserController {
      */
     @ApiOperation(value = "用户列表查询")
     @GetMapping("/users/list")
-    public Result<PageResult<SysUser>> list(@ModelAttribute SysUserListCo params) {
+    public Result<PageResult<SysUser>> list(@Valid @ModelAttribute SysUserListCo params) {
         params.setType(CommonConstant.USER_TYPE_APP);//APP用户数据
         PageResult<SysUser> sysUserList = userService.findSysUserList(params);
         return Result.succeed(sysUserList);
@@ -72,7 +73,7 @@ public class SysUserController {
     @PostMapping("/users/saveOrUpdate")
     @ApiOperation(value = "新增or更新")
     @AuditLog(operation = "'新增或更新用户:' + #sysUser.username")
-    public Result saveOrUpdate(@RequestBody SysUserCo sysUser) throws Exception {
+    public Result saveOrUpdate(@Valid @RequestBody SysUserCo sysUser) throws Exception {
 
         sysUser.setType(CommonConstant.USER_TYPE_APP);
         return userService.saveOrUpdate(sysUser);
@@ -98,7 +99,7 @@ public class SysUserController {
      */
     @ApiOperation(value = "修改用户状态")
     @GetMapping("/users/updateEnabled")
-    public Result updateEnabled(@ModelAttribute EnabledUserCo params) {
+    public Result updateEnabled(@Valid @ModelAttribute EnabledUserCo params) {
         return userService.updateEnabled(params);
     }
 

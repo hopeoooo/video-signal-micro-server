@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class WashCodeConfigController {
 
     @ApiOperation(value = "新增/更新")
     @PostMapping("/gamelist/save")
-    public Result save(@RequestBody GameListCo gameList) {
+    public Result save(@Valid @RequestBody GameListCo gameList) {
         return gameService.save(gameList);
     }
 }

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class GameListController {
 
     @ApiOperation(value = "新增/更新")
     @PostMapping("/save")
-    public Result save(@RequestBody GameListCo gameList) {
+    public Result save(@Valid @RequestBody GameListCo gameList) {
         return gameService.save(gameList);
     }
 

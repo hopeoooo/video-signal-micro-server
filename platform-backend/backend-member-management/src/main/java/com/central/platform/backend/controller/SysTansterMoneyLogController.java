@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.Map;
 
 @Slf4j
@@ -25,7 +26,7 @@ public class SysTansterMoneyLogController {
 
     @ApiOperation(value = "用户列表查询")
     @GetMapping("/users/list")
-    public Result<PageResult<SysTansterMoneyLogVo>> list(@ModelAttribute SysTansterMoneyPageCo params) {
+    public Result<PageResult<SysTansterMoneyLogVo>> list(@Valid @ModelAttribute SysTansterMoneyPageCo params) {
         PageResult<SysTansterMoneyLogVo> sysUserList = userService.findTransterMoneyList(params);
         return Result.succeed(sysUserList);
     }

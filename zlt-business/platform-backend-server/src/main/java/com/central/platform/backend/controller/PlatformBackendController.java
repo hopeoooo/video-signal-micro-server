@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
@@ -52,7 +53,7 @@ public class PlatformBackendController {
      */
     @ApiOperation(value = "全局参数:游客管理编辑")
     @PostMapping("/system/saveTourist")
-    public Result saveTourist(@ModelAttribute SaveTouristCo params) {
+    public Result saveTourist(@Valid @ModelAttribute SaveTouristCo params) {
         return configService.saveTourist(params);
     }
 

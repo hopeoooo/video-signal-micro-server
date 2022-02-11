@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ public class SysMenuController {
      */
     @ApiOperation(value = "角色分配菜单")
     @PostMapping("/menus/granted")
-    public Result setMenuToRole(@RequestBody SysMenuCo sysMenu) {
+    public Result setMenuToRole(@Valid @RequestBody SysMenuCo sysMenu) {
         return menuService.setMenuToRole(sysMenu);
     }
 
@@ -77,7 +78,7 @@ public class SysMenuController {
      */
     @ApiOperation(value = "新增菜单")
     @PostMapping("/menussaveOrUpdate")
-    public Result saveOrUpdate(@RequestBody SysMenuCo menu) {
+    public Result saveOrUpdate(@Valid @RequestBody SysMenuCo menu) {
         return menuService.saveOrUpdate(menu);
     }
 

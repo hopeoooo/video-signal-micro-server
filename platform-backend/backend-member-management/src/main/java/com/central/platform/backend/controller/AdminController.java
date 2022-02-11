@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ public class AdminController {
     @ApiOperation(value = "后台管理员查询")
 
     @GetMapping("/users/list")
-    public Result<PageResult<SysUser>> list(@ModelAttribute SysUserListCo params) {
+    public Result<PageResult<SysUser>> list(@Valid @ModelAttribute SysUserListCo params) {
         params.setType(CommonConstant.USER_TYPE_BACKEND);//APP用户数据
         PageResult<SysUser> sysUserList = userService.findSysUserList(params);
         return Result.succeed(sysUserList);
@@ -57,7 +58,7 @@ public class AdminController {
     @PostMapping("/users/saveOrUpdate")
     @ApiOperation(value = "新增or更新")
     @AuditLog(operation = "'新增或更新用户:' + #sysUser.username")
-    public Result saveOrUpdate(@RequestBody SysUserCo sysUser){
+    public Result saveOrUpdate(@Valid @RequestBody SysUserCo sysUser){
         if(StringUtils.isBlank(sysUser.getUsername()) || !sysUser.getUsername().matches(RegexEnum.ACCOUNT.getRegex())){
             return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
         }

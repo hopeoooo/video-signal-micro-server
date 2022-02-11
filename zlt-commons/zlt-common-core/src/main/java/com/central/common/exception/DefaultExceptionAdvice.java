@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -100,6 +101,17 @@ public class DefaultExceptionAdvice {
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e) {
         return defHandler("未知异常", e);
+    }
+
+    /**
+     * 参数校验异常
+     * @param e
+     * @return
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(BindException.class)
+    public Result<String> handleBindException(BindException e) {
+        return defHandler(e.getAllErrors().get(0).getDefaultMessage(), e);
     }
 
     // --------------  公共异常移至公共类中 Start

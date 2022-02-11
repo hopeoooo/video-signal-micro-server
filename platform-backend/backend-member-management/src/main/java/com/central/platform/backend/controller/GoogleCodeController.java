@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 @Api(tags = "后台绑定谷歌验证")
 @RestController
@@ -28,13 +29,13 @@ public class GoogleCodeController {
 
     @PostMapping("/binding")
     @ApiOperation(value = "绑定")
-    public Result<String> list(@ModelAttribute SysUserGoogleBindCoCo params) {
+    public Result<String> list(@Valid @ModelAttribute SysUserGoogleBindCoCo params) {
         return userService.bindGoogleCode(params);
     }
 
     @PostMapping("/getGoogleCodeLink")
     @ApiOperation(value = "得到谷歌二维码链接")
-    public Result<String> getGoogleCodeLink(@ModelAttribute SysUserParamsCo params) {
+    public Result<String> getGoogleCodeLink(@Valid @ModelAttribute SysUserParamsCo params) {
         return userService.getGoogleCodeLink(params);
     }
 }

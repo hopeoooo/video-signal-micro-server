@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -46,7 +47,7 @@ public class TranslateController {
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
             @ApiIgnore @LoginUser SysUser sysUser,
-            @RequestBody UpdateI18nInfoCo param){
+            @Valid @RequestBody UpdateI18nInfoCo param){
         param.setOperator(sysUser.getUsername());
         return i18nInfosService.backendUpdate(param);
     }
@@ -64,7 +65,7 @@ public class TranslateController {
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
             @ApiIgnore @LoginUser SysUser sysUser,
-            @RequestBody UpdateI18nInfoCo param){
+            @Valid @RequestBody UpdateI18nInfoCo param){
         param.setOperator(sysUser.getUsername());
         return i18nInfosService.frontUpdate(param);
     }
@@ -79,7 +80,7 @@ public class TranslateController {
      */
     @GetMapping("/infos")
     @ApiOperation(value = "查询国际化字典分页")
-    public Result<PageResult<I18nInfoPageVO>> infos(@ModelAttribute QueryI18nInfoPageCo param){
+    public Result<PageResult<I18nInfoPageVO>> infos(@Valid @ModelAttribute QueryI18nInfoPageCo param){
         return i18nInfosService.infos(param);
     }
 
