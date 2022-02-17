@@ -1,5 +1,6 @@
 package com.central.translate.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -14,6 +15,7 @@ import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.mapper.I18nInfoMapper;
 import com.central.translate.model.co.I18nInfoPageMapperCo;
 import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.SaveI18nInfoCo;
 import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.translate.service.I18nInfosService;
 import com.central.common.vo.I18nInfoPageVO;
@@ -150,22 +152,14 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
     /**
      * 更新国际化字典
      *
-     * @param param    更新参数
-     * @return {@link boolean} 是否成功
+     * @param from 0前台 1后台
+     * @param param 入参释义
+     * @return {@link boolean} 出参释义
      * @author lance
-     * @since 2022 -01-25 12:14:35
+     * @since 2022 -02-17 20:30:46
      */
     @Override
-    public boolean updateBackendI18nInfo(UpdateI18nInfoCo param) {
-        return updateI18nInfo(I18nKeys.BACKEND, param);
-    }
-
-    @Override
-    public boolean updateFrontI18nInfo(UpdateI18nInfoCo param) {
-        return updateI18nInfo(I18nKeys.FRONT, param);
-    }
-
-    private boolean updateI18nInfo(Integer from, UpdateI18nInfoCo param) {
+    public boolean updateI18nInfo(Integer from, UpdateI18nInfoCo param) {
         boolean zhcnChange = StrUtil.isNotBlank(param.getZhCn());
         boolean enusChange = StrUtil.isNotBlank(param.getEnUs());
         boolean khmChange = StrUtil.isNotBlank(param.getKhm());
@@ -191,44 +185,75 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
 
         if (succeed) {
             // 更新redis
-            String i18nKey = info.getZhCn();
-            if (zhcnChange) {
-                // 更新中文key
-                i18nKey = param.getZhCn();
-                // 更新中文国际化
-                I18nUtil.resetSource(
-                        I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.ZH_CN_KEY : I18nKeys.Redis.Front.ZH_CN_KEY,
-                        i18nKey,
-                        param.getZhCn()
-                );
-            }
-            if (enusChange) {
-                // 更新英文国际化
-                I18nUtil.resetSource(
-                        I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.EN_US_KEY : I18nKeys.Redis.Front.EN_US_KEY,
-                        i18nKey,
-                        param.getEnUs()
-                );
-            }
-            if (khmChange) {
-                // 更新高棉语国际化
-                I18nUtil.resetSource(
-                        I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.KHM_KEY : I18nKeys.Redis.Front.KHM_KEY,
-                        i18nKey,
-                        param.getKhm()
-                );
-            }
-            if (thChange) {
-                // 更新泰语国际化
-                I18nUtil.resetSource(
-                        I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.TH_KEY : I18nKeys.Redis.Front.TH_KEY,
-                        i18nKey,
-                        param.getTh()
-                );
-            }
+            updateI18nRedis(from, param, info);
         }
 
         return succeed;
+    }
+
+    /**
+     * 新增国际化字典
+     *
+     * @param from  0前台 1后台
+     * @param param 入参释义
+     * @return {@link boolean} 出参释义
+     * @author lance
+     * @since 2022 -02-17 20:36:55
+     */
+    @Override
+    public boolean saveI18nInfo(Integer from, SaveI18nInfoCo param) {
+        I18nInfo info = new I18nInfo();
+        BeanUtil.copyProperties(param, info);
+        info.setFromOf(from);
+        boolean succeed = save(info);
+        if (succeed) {
+            updateI18nRedis(from, param, info);
+        }
+        return succeed;
+    }
+
+    private void updateI18nRedis(Integer from, SaveI18nInfoCo param, I18nInfo info) {
+        boolean zhcnChange = StrUtil.isNotBlank(param.getZhCn());
+        boolean enusChange = StrUtil.isNotBlank(param.getEnUs());
+        boolean khmChange = StrUtil.isNotBlank(param.getKhm());
+        boolean thChange = StrUtil.isNotBlank(param.getTh());
+
+        // 更新redis
+        String i18nKey = info.getZhCn();
+        if (zhcnChange) {
+            // 更新中文key
+            i18nKey = param.getZhCn();
+            // 更新中文国际化
+            I18nUtil.resetSource(
+                    I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.ZH_CN_KEY : I18nKeys.Redis.Front.ZH_CN_KEY,
+                    i18nKey,
+                    param.getZhCn()
+            );
+        }
+        if (enusChange) {
+            // 更新英文国际化
+            I18nUtil.resetSource(
+                    I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.EN_US_KEY : I18nKeys.Redis.Front.EN_US_KEY,
+                    i18nKey,
+                    param.getEnUs()
+            );
+        }
+        if (khmChange) {
+            // 更新高棉语国际化
+            I18nUtil.resetSource(
+                    I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.KHM_KEY : I18nKeys.Redis.Front.KHM_KEY,
+                    i18nKey,
+                    param.getKhm()
+            );
+        }
+        if (thChange) {
+            // 更新泰语国际化
+            I18nUtil.resetSource(
+                    I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.TH_KEY : I18nKeys.Redis.Front.TH_KEY,
+                    i18nKey,
+                    param.getTh()
+            );
+        }
     }
 
     /**

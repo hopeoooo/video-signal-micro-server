@@ -1,9 +1,11 @@
 package com.central.translate.controller;
 
+import com.central.common.constant.I18nKeys;
 import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.SaveI18nInfoCo;
 import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
@@ -43,7 +45,7 @@ public class TranslateController {
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
             @RequestBody UpdateI18nInfoCo param){
-        i18nInfosService.updateBackendI18nInfo(param);
+        i18nInfosService.updateI18nInfo(I18nKeys.BACKEND, param);
         return Result.succeed("操作成功");
     }
 
@@ -60,7 +62,40 @@ public class TranslateController {
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
             @RequestBody UpdateI18nInfoCo param){
-        i18nInfosService.updateFrontI18nInfo( param);
+        i18nInfosService.updateI18nInfo(I18nKeys.FRONT, param);
+        return Result.succeed("操作成功");
+    }
+
+    /**
+     * 新增后台国际化字典
+     *
+     * @param param   更新参数
+     * @return {@link Result} 操作结果
+     * @author lance
+     * @since 2022 -01-25 14:13:51
+     */
+    @PostMapping("/backendSave")
+    @ApiOperation(value = "更新后台国际化字典")
+    public Result<String> backendSave(
+            @RequestBody SaveI18nInfoCo param){
+        i18nInfosService.saveI18nInfo(I18nKeys.BACKEND, param);
+        return Result.succeed("操作成功");
+    }
+
+
+    /**
+     * 新增前台国际化字典
+     *
+     * @param param   更新参数
+     * @return {@link Result} 操作结果
+     * @author lance
+     * @since 2022 -01-28 12:46:24
+     */
+    @PostMapping("/frontUpdate")
+    @ApiOperation(value = "更新前台国际化字典")
+    public Result<String> frontSave(
+            @RequestBody SaveI18nInfoCo param){
+        i18nInfosService.saveI18nInfo(I18nKeys.FRONT, param);
         return Result.succeed("操作成功");
     }
 

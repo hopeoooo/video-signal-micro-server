@@ -5,6 +5,7 @@ import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.SaveI18nInfoCo;
 import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
@@ -46,6 +47,28 @@ public interface TranslateService {
      */
     @PostMapping("/translate/frontUpdate")
     Result<String> frontUpdate(@RequestBody UpdateI18nInfoCo param);
+
+    /**
+     * 新增后台国际化字典
+     *
+     * @param param   更新参数
+     * @return {@link Result} 操作结果
+     * @author lance
+     * @since 2022 -01-25 14:13:51
+     */
+    @PostMapping("/translate/backendSave")
+    Result<String> backendSave(@RequestBody SaveI18nInfoCo param);
+
+    /**
+     * 新增前台国际化字典
+     *
+     * @param param   更新参数
+     * @return {@link Result} 操作结果
+     * @author lance
+     * @since 2022 -01-28 12:46:24
+     */
+    @PostMapping("/translate/frontSave")
+    Result<String> frontSave(@RequestBody SaveI18nInfoCo param);
 
     /**
      * 查询国际化字典分页

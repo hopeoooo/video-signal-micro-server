@@ -6,6 +6,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.SaveI18nInfoCo;
 import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
@@ -68,6 +69,44 @@ public class TranslateController {
             @Valid @RequestBody UpdateI18nInfoCo param){
         param.setOperator(sysUser.getUsername());
         return i18nInfosService.frontUpdate(param);
+    }
+
+
+    /**
+     * 新增后台国际化字典
+     *
+     * @param param   更新参数
+     * @return {@link Result} 操作结果
+     * @author lance
+     * @since 2022 -01-25 14:13:51
+     */
+    @PostMapping("/backendSave")
+    @ApiOperation(value = "更新后台国际化字典")
+    public Result<String> backendSave(
+            @ApiIgnore @LoginUser SysUser sysUser,
+            @RequestBody SaveI18nInfoCo param){
+        param.setOperator(sysUser.getUsername());
+        i18nInfosService.backendSave(param);
+        return Result.succeed("操作成功");
+    }
+
+
+    /**
+     * 新增前台国际化字典
+     *
+     * @param param   更新参数
+     * @return {@link Result} 操作结果
+     * @author lance
+     * @since 2022 -01-28 12:46:24
+     */
+    @PostMapping("/frontUpdate")
+    @ApiOperation(value = "更新前台国际化字典")
+    public Result<String> frontSave(
+            @ApiIgnore @LoginUser SysUser sysUser,
+            @RequestBody SaveI18nInfoCo param){
+        param.setOperator(sysUser.getUsername());
+        i18nInfosService.frontSave(param);
+        return Result.succeed("操作成功");
     }
 
     /**
