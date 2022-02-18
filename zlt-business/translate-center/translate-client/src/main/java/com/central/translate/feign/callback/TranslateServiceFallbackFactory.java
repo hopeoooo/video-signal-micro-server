@@ -4,6 +4,7 @@ import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.translate.model.co.QueryI18nInfoPageCo;
+import com.central.translate.model.co.SaveI18nInfoCo;
 import com.central.translate.model.co.UpdateI18nInfoCo;
 import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
@@ -32,6 +33,18 @@ public class TranslateServiceFallbackFactory implements FallbackFactory<Translat
 
             @Override
             public Result<String> frontUpdate(UpdateI18nInfoCo param) {
+                log.error("调用失败: {}", param);
+                return null;
+            }
+
+            @Override
+            public Result<String> backendSave(SaveI18nInfoCo param) {
+                log.error("调用失败: {}", param);
+                return null;
+            }
+
+            @Override
+            public Result<String> frontSave(SaveI18nInfoCo param) {
                 log.error("调用失败: {}", param);
                 return null;
             }
