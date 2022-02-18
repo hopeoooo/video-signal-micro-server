@@ -86,8 +86,8 @@ public class TranslateController {
             @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody SaveI18nInfoCo param){
         param.setOperator(sysUser.getUsername());
-        i18nInfosService.backendSave(param);
-        return Result.succeed("操作成功");
+
+        return i18nInfosService.backendSave(param);
     }
 
 
@@ -99,14 +99,14 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-28 12:46:24
      */
-    @PostMapping("/frontUpdate")
+    @PostMapping("/frontSave")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontSave(
             @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody SaveI18nInfoCo param){
         param.setOperator(sysUser.getUsername());
-        i18nInfosService.frontSave(param);
-        return Result.succeed("操作成功");
+
+        return i18nInfosService.frontSave(param);
     }
 
     /**

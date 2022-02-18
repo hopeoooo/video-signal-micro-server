@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class TranslateController {
     @PostMapping("/backendUpdate")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
-            @RequestBody UpdateI18nInfoCo param){
+            @RequestBody @Validated(SaveI18nInfoCo.Update.class) UpdateI18nInfoCo param){
         i18nInfosService.updateI18nInfo(I18nKeys.BACKEND, param);
         return Result.succeed("操作成功");
     }
@@ -61,7 +62,7 @@ public class TranslateController {
     @PostMapping("/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
-            @RequestBody UpdateI18nInfoCo param){
+            @RequestBody @Validated(SaveI18nInfoCo.Update.class) UpdateI18nInfoCo param){
         i18nInfosService.updateI18nInfo(I18nKeys.FRONT, param);
         return Result.succeed("操作成功");
     }
@@ -77,7 +78,7 @@ public class TranslateController {
     @PostMapping("/backendSave")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendSave(
-            @RequestBody SaveI18nInfoCo param){
+            @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param){
         i18nInfosService.saveI18nInfo(I18nKeys.BACKEND, param);
         return Result.succeed("操作成功");
     }
@@ -91,10 +92,10 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-28 12:46:24
      */
-    @PostMapping("/frontUpdate")
+    @PostMapping("/frontSave")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontSave(
-            @RequestBody SaveI18nInfoCo param){
+            @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param){
         i18nInfosService.saveI18nInfo(I18nKeys.FRONT, param);
         return Result.succeed("操作成功");
     }
