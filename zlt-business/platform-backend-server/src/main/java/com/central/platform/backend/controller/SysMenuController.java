@@ -43,7 +43,7 @@ public class SysMenuController {
      */
     @ApiOperation(value = "角色分配菜单")
     @PostMapping("/menus/granted")
-    public Result setMenuToRole(@Valid @RequestBody SysMenuCo sysMenu) {
+    public Result setMenuToRole(@RequestBody SysMenuCo sysMenu) {
         return menuService.setMenuToRole(sysMenu);
     }
 
@@ -78,7 +78,7 @@ public class SysMenuController {
      */
     @ApiOperation(value = "新增菜单")
     @PostMapping("/menussaveOrUpdate")
-    public Result saveOrUpdate(@Valid @RequestBody SysMenuCo menu) {
+    public Result saveOrUpdate(@RequestBody SysMenuCo menu) {
         return menuService.saveOrUpdate(menu);
     }
 

@@ -57,7 +57,7 @@ public class SysRolesController {
      */
     @ApiOperation(value = "角色新增或者更新")
     @PostMapping("/roles/saveOrUpdate")
-    public Result saveOrUpdate(@Valid @RequestBody SysRoleCo sysRole) throws Exception {
+    public Result saveOrUpdate(@RequestBody SysRoleCo sysRole) throws Exception {
         return roleService.saveOrUpdate(sysRole);
     }
 

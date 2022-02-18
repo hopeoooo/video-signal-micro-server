@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class SysUserGoogleBindCoCo extends SysUserParamsCo {
 
     @ApiModelProperty(value = "验证码" , required = true)
-    @NotNull
+    @NotNull(message = "验证码不能为空")
     private String googleCode;
 
 }

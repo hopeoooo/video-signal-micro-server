@@ -58,7 +58,7 @@ public class AdminController {
     @PostMapping("/admin/users/saveOrUpdate")
     @ApiOperation(value = "新增or更新")
     @AuditLog(operation = "'新增或更新用户:' + #sysUser.username")
-    public Result saveOrUpdate(@Valid @RequestBody SysUserCo sysUser){
+    public Result saveOrUpdate(@RequestBody SysUserCo sysUser){
         if(StringUtils.isBlank(sysUser.getUsername()) || !sysUser.getUsername().matches(RegexEnum.ACCOUNT.getRegex())){
             return Result.failed(RegexEnum.ACCOUNT.getName() + RegexEnum.ACCOUNT.getDesc());
         }

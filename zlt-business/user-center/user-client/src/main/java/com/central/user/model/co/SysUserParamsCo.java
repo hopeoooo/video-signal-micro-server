@@ -11,10 +11,10 @@ import javax.validation.constraints.NotNull;
 public class SysUserParamsCo {
 
     @ApiModelProperty(value = "管理员账号" , required = true)
-    @NotNull
+    @NotNull(message = "管理员账号不能为空")
     private String username;
 
     @ApiModelProperty(value = "管理员密码" , required = true)
-    @NotNull
+    @NotNull(message = "管理员密码不能为空")
     private String password;
 }

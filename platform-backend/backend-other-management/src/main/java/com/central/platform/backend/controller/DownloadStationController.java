@@ -50,7 +50,7 @@ public class DownloadStationController {
      */
     @ApiOperation(value = "新增or更新App升级管理")
     @PostMapping("/download/saveOrUpdateDownloadStation")
-    public Result saveOrUpdateDownloadStation(@Valid @RequestBody DownloadStationCo downloadStation, @LoginUser SysUser user) throws Exception {
+    public Result saveOrUpdateDownloadStation(@RequestBody DownloadStationCo downloadStation, @LoginUser SysUser user) throws Exception {
         if(downloadStation.getId()==null){
             downloadStation.setCreateBy(user.getUsername());
             downloadStation.setUpdateBy(user.getUsername());

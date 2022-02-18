@@ -73,7 +73,7 @@ public class SysUserController {
     @PostMapping("/users/saveOrUpdate")
     @ApiOperation(value = "新增or更新")
     @AuditLog(operation = "'新增或更新用户:' + #sysUser.username")
-    public Result saveOrUpdate(@Valid @RequestBody SysUserCo sysUser) throws Exception {
+    public Result saveOrUpdate(@RequestBody SysUserCo sysUser) throws Exception {
 
         sysUser.setType(CommonConstant.USER_TYPE_APP);
         return userService.saveOrUpdate(sysUser);
@@ -99,7 +99,7 @@ public class SysUserController {
      */
     @ApiOperation(value = "修改用户状态")
     @GetMapping("/users/updateEnabled")
-    public Result updateEnabled(@Valid @ModelAttribute EnabledUserCo params) {
+    public Result updateEnabled(@ModelAttribute EnabledUserCo params) {
         return userService.updateEnabled(params);
     }
 

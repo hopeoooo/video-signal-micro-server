@@ -33,7 +33,7 @@ public class SysRolesController {
      */
     @ApiOperation(value = "后台管理查询角色列表")
     @GetMapping("/roles")
-    public PageResult<SysRole> findRoles(@Valid @ModelAttribute RolePageCo params) {
+    public PageResult<SysRole> findRoles(@ModelAttribute RolePageCo params) {
         return roleService.findRoles(params);
     }
 
@@ -57,7 +57,7 @@ public class SysRolesController {
      */
     @ApiOperation(value = "角色新增或者更新")
     @PostMapping("/roles/saveOrUpdate")
-    public Result saveOrUpdate(@Valid @RequestBody SysRoleCo sysRole) throws Exception {
+    public Result saveOrUpdate(@RequestBody SysRoleCo sysRole) throws Exception {
         return roleService.saveOrUpdate(sysRole);
     }
 

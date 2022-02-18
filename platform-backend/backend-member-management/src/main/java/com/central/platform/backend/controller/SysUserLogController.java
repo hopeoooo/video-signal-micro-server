@@ -31,7 +31,7 @@ public class SysUserLogController {
     @ResponseBody
     @ApiOperation(value = "查询会员登录日志列表")
     @GetMapping("/loginLog/findUserLoginLogList")
-    public Result<PageResult<LoginLogPageDto>> findUserLoginLogList(@Valid  @ModelAttribute UserLoginLogPageCo params) {
+    public Result<PageResult<LoginLogPageDto>> findUserLoginLogList(@ModelAttribute UserLoginLogPageCo params) {
         PageResult<LoginLogPageDto> userLoginLogList = userService.findUserLoginLogList(params);
         return Result.succeed(userLoginLogList);
     }

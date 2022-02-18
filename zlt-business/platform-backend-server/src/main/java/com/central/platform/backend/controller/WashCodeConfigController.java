@@ -30,7 +30,7 @@ public class WashCodeConfigController {
 
     @ApiOperation(value = "新增/更新")
     @PostMapping("/gamelist/save")
-    public Result save(@Valid @RequestBody GameListCo gameList) {
+    public Result save(@RequestBody GameListCo gameList) {
         return gameService.save(gameList);
     }
 }

@@ -36,7 +36,7 @@ public class SysNoticeConfigController {
     @ApiOperation(value = "查询公告管理列表")
     @ResponseBody
     @GetMapping("/notice/findNoticeList")
-    public Result<List<SysNotice>> findNoticeList(@Valid @ModelAttribute FindNoticeCo params) {
+    public Result<List<SysNotice>> findNoticeList(@ModelAttribute FindNoticeCo params) {
         return configService.findNoticeList(params);
     }
 
@@ -76,7 +76,7 @@ public class SysNoticeConfigController {
     @ApiOperation(value = "新增或更新")
     @PostMapping("/notice/saveOrUpdate")
     @AuditLog(operation = "'新增或更新公告:' + #sysNotice.content")
-    public Result saveOrUpdate(@Valid @RequestBody SysNoticeCo sysNotice) throws Exception {
+    public Result saveOrUpdate(@RequestBody SysNoticeCo sysNotice) throws Exception {
         return configService.saveOrUpdate(sysNotice);
     }
 

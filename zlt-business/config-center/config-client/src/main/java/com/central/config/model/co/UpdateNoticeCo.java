@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 public class UpdateNoticeCo {
 
     @ApiModelProperty(value = "公告id", required = true)
-    @NotNull
+    @NotNull(message = "主键不能为空")
     private Long id;
 
     @ApiModelProperty(value = "状态", required = true)
-    @NotNull
+    @NotNull(message = "状态不能为空")
     private Boolean state;
 
 }

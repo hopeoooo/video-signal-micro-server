@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 public class PageCo {
 
     @ApiModelProperty(value = "分页起始位置", required = true)
-    @NotNull
+    @NotNull(message = "分页起始位置不能为空")
     private Integer page;
 
     @ApiModelProperty(value = "分页结束位置", required = true)
-    @NotNull
+    @NotNull(message = "分页结束位置不能为空")
     private Integer limit;
 
 }

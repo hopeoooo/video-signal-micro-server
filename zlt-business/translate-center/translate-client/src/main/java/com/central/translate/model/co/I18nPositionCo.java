@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 @ApiModel
 @Data
 public class I18nPositionCo {
@@ -12,6 +14,7 @@ public class I18nPositionCo {
     private Long id;
 
     @ApiModelProperty(required = true, value = "位置名称")
+    @NotBlank(message = "位置名称不能为空")
     private String name;
 
     @ApiModelProperty(required = false, value = "是否是页面 默认 false")

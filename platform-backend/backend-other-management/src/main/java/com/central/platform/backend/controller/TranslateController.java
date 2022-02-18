@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -48,7 +49,7 @@ public class TranslateController {
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
             @ApiIgnore @LoginUser SysUser sysUser,
-            @Valid @RequestBody UpdateI18nInfoCo param){
+            @Validated(SaveI18nInfoCo.Update.class) @RequestBody UpdateI18nInfoCo param){
         param.setOperator(sysUser.getUsername());
         return i18nInfosService.backendUpdate(param);
     }
@@ -66,7 +67,7 @@ public class TranslateController {
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
             @ApiIgnore @LoginUser SysUser sysUser,
-            @Valid @RequestBody UpdateI18nInfoCo param){
+            @Validated(SaveI18nInfoCo.Update.class) @RequestBody UpdateI18nInfoCo param){
         param.setOperator(sysUser.getUsername());
         return i18nInfosService.frontUpdate(param);
     }
@@ -84,10 +85,10 @@ public class TranslateController {
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendSave(
             @ApiIgnore @LoginUser SysUser sysUser,
-            @RequestBody SaveI18nInfoCo param){
+            @Validated(SaveI18nInfoCo.Save.class) @RequestBody SaveI18nInfoCo param){
         param.setOperator(sysUser.getUsername());
-        i18nInfosService.backendSave(param);
-        return Result.succeed("操作成功");
+
+        return i18nInfosService.backendSave(param);
     }
 
 
@@ -103,10 +104,10 @@ public class TranslateController {
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontSave(
             @ApiIgnore @LoginUser SysUser sysUser,
-            @RequestBody SaveI18nInfoCo param){
+            @Validated(SaveI18nInfoCo.Save.class) @RequestBody SaveI18nInfoCo param){
         param.setOperator(sysUser.getUsername());
-        i18nInfosService.frontSave(param);
-        return Result.succeed("操作成功");
+
+        return i18nInfosService.frontSave(param);
     }
 
     /**

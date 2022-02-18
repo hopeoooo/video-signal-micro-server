@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 public class SaveTouristCo {
 
     @ApiModelProperty(value = "游客携带金额", required = true)
-    @NotNull
+    @NotNull(message = "游客携带金额不能为空")
     private BigDecimal touristAmount;
 
     @ApiModelProperty(value = "游客单笔最大投注", required = true)
-    @NotNull
+    @NotNull(message = "游客单笔最大投注不能为空")
     private BigDecimal touristSingleMaxBet;
 
 }
