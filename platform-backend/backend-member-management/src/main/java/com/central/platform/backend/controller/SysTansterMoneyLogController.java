@@ -19,13 +19,13 @@ import java.util.Map;
 @Slf4j
 @RestController
 @Api(tags = "用户账变记录")
-@RequestMapping("/tansterMoney")
+@RequestMapping("/member")
 public class SysTansterMoneyLogController {
     @Resource
     private UserService userService;
 
     @ApiOperation(value = "用户列表查询")
-    @GetMapping("/users/list")
+    @GetMapping("/tansterMoney/users/list")
     public Result<PageResult<SysTansterMoneyLogVo>> list(@Valid @ModelAttribute SysTansterMoneyPageCo params) {
         PageResult<SysTansterMoneyLogVo> sysUserList = userService.findTransterMoneyList(params);
         return Result.succeed(sysUserList);

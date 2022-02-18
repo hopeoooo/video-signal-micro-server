@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 @Api(tags = "角色中心")
 @Slf4j
-@RequestMapping("/platform/roles")
+@RequestMapping("/member")
 public class SysRolesController {
 
     @Resource
@@ -45,7 +45,7 @@ public class SysRolesController {
      * @return
      */
     @ApiOperation(value = "后台管理查询角色下拉框")
-    @GetMapping("/allRoles")
+    @GetMapping("/roles/allRoles")
     public Result<List<SysRole>> findAll() {
         return roleService.findAll();
     }

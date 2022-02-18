@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 @Api(tags = "后台绑定谷歌验证")
 @RestController
-@RequestMapping("/googleCode")
+@RequestMapping("/member")
 public class GoogleCodeController {
 
     @Resource
@@ -27,13 +27,13 @@ public class GoogleCodeController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/binding")
+    @PostMapping("/googleCode/binding")
     @ApiOperation(value = "绑定")
     public Result<String> list(@Valid @ModelAttribute SysUserGoogleBindCoCo params) {
         return userService.bindGoogleCode(params);
     }
 
-    @PostMapping("/getGoogleCodeLink")
+    @PostMapping("/googleCode/getGoogleCodeLink")
     @ApiOperation(value = "得到谷歌二维码链接")
     public Result<String> getGoogleCodeLink(@Valid @ModelAttribute SysUserParamsCo params) {
         return userService.getGoogleCodeLink(params);

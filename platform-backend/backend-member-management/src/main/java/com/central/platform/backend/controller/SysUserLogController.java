@@ -19,7 +19,7 @@ import java.util.Map;
 @RestController
 @Api(tags = "会员中心")
 @Slf4j
-@RequestMapping("/userLoginLog/backend")
+@RequestMapping("/member")
 public class SysUserLogController {
 
     @Resource

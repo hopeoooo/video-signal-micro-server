@@ -27,7 +27,7 @@ import java.util.Map;
 @RestController
 @Api(tags = "会员中心")
 @Slf4j
-@RequestMapping("/platform/backend")
+@RequestMapping("/member")
 public class SysUserController {
 
     @Resource

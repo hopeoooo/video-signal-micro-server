@@ -24,7 +24,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @Api(tags = "公告管理")
-@RequestMapping("/notice/backend")
+@RequestMapping("/member")
 public class SysNoticeConfigController {
     @Resource
     private ConfigService configService;

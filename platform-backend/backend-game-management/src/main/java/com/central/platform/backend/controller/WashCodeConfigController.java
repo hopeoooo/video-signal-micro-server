@@ -16,20 +16,20 @@ import java.util.List;
 @RestController
 @Api(tags = "洗码配置")
 @Slf4j
-@RequestMapping("/washCode/backend")
+@RequestMapping("/game")
 public class WashCodeConfigController {
     @Resource
     private GameService gameService;
 
     @ApiOperation(value = "查询洗码配置")
-    @GetMapping("/gamelist/findGameList")
+    @GetMapping("/washCode/backend/gamelist/findGameList")
     public Result<List<GameList>> findGameList( @RequestParam(value = "state", required = false) Integer state) {
         return  gameService.findGameList(state);
     }
 
 
     @ApiOperation(value = "新增/更新")
-    @PostMapping("/gamelist/save")
+    @PostMapping("/washCode/backend/gamelist/save")
     public Result save(@Valid @RequestBody GameListCo gameList) {
         return gameService.save(gameList);
     }

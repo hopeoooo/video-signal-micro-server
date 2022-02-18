@@ -24,7 +24,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @Api(tags = "app下载地址配置")
-@RequestMapping("/download/backend")
+@RequestMapping("/other")
 public class DownloadStationController {
     @Resource
     private ConfigService configService;

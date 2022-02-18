@@ -28,7 +28,7 @@ import java.util.Map;
 @RestController
 @Api(tags = "管理员中心")
 @Slf4j
-@RequestMapping("/platform/admin")
+@RequestMapping("/member")
 public class AdminController {
 
     @Resource
@@ -42,7 +42,7 @@ public class AdminController {
      */
     @ApiOperation(value = "后台管理员查询")
 
-    @GetMapping("/users/list")
+    @GetMapping("/admin/users/list")
     public Result<PageResult<SysUser>> list(@Valid @ModelAttribute SysUserListCo params) {
         params.setType(CommonConstant.USER_TYPE_BACKEND);//APP用户数据
         PageResult<SysUser> sysUserList = userService.findSysUserList(params);
@@ -55,7 +55,7 @@ public class AdminController {
      * @param sysUser
      * @return
      */
-    @PostMapping("/users/saveOrUpdate")
+    @PostMapping("/admin/users/saveOrUpdate")
     @ApiOperation(value = "新增or更新")
     @AuditLog(operation = "'新增或更新用户:' + #sysUser.username")
     public Result saveOrUpdate(@Valid @RequestBody SysUserCo sysUser){
@@ -70,7 +70,7 @@ public class AdminController {
      * 谷歌验证码是否校验状态修改
      */
     @ApiOperation(value = "谷歌验证码是否校验状态修改")
-    @PutMapping(value = "/users/{id}/updateVerify")
+    @PutMapping(value = "/admin/users/{id}/updateVerify")
     public Result updateVerify(@PathVariable Long id) {
         return userService.updateVerify(id);
     }
@@ -79,7 +79,7 @@ public class AdminController {
      * 重置密码
      */
     @ApiOperation(value = "重置密码")
-    @PutMapping(value = "/users/{id}/password")
+    @PutMapping(value = "/admin/users/{id}/password")
     public Result resetPasswords(@PathVariable Long id) {
         return userService.resetPassword(id);
     }
@@ -88,7 +88,7 @@ public class AdminController {
      * 重置谷歌验证码
      */
     @ApiOperation(value = "重置谷歌验证码")
-    @PutMapping(value = "/users/{id}/resetGoogleCode")
+    @PutMapping(value = "/admin/users/{id}/resetGoogleCode")
     public Result resetGoogleCode(@PathVariable Long id) {
         GaBindCo param = new GaBindCo();
         param.setId(id);

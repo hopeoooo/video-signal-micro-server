@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/gamelist")
+@RequestMapping("/game")
 @Api(tags = "游戏列表")
 public class GameListController {
 
@@ -29,13 +29,13 @@ public class GameListController {
     private GameService gameService;
 
     @ApiOperation(value = "新增/更新")
-    @PostMapping("/save")
+    @PostMapping("/gamelist/save")
     public Result save(@Valid @RequestBody GameListCo gameList) {
         return gameService.save(gameList);
     }
 
     @ApiOperation(value = "根据ID删除")
-    @DeleteMapping("/deleteById/{id}")
+    @DeleteMapping("/gamelist/deleteById/{id}")
     public Result deleteById(@PathVariable Long id) {
         return gameService.deleteById(id);
     }

@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @Api(tags = "个人洗码配置")
 @Slf4j
-@RequestMapping("/userWashCode/backend")
+@RequestMapping("/member")
 public class UserWashCodeConfigController {
 
     @Resource

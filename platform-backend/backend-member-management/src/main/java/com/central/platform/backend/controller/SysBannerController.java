@@ -24,7 +24,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @Api(tags = "轮播图")
-@RequestMapping("/platform/backend")
+@RequestMapping("/member")
 public class SysBannerController {
     @Resource
     private ConfigService configService;

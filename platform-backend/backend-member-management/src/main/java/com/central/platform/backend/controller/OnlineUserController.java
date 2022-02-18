@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Api(tags = "在线会员报表api")
-@RequestMapping("/platform/user")
+@RequestMapping("/member")
 public class OnlineUserController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class OnlineUserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "tag", value = "tag:0 当日 tag:1 当月", required = true, dataType = "Integer"),
     })
-    @GetMapping("/online/list")
+    @GetMapping("/user/online/list")
     public Result<List<OnlineUser>> list(@RequestParam("tag") Integer tag) {
         return onlineUserService.maps(tag);
     }
@@ -43,7 +43,7 @@ public class OnlineUserController {
      * 及时在线会员
      */
     @ApiOperation(value = "及时在线会员")
-    @GetMapping("/online/queryPlayerNums")
+    @GetMapping("/user/online/queryPlayerNums")
     public Result<Integer> queryPlayerNums() {
         return onlineUserService.queryPlayerNums();
     }
@@ -52,19 +52,7 @@ public class OnlineUserController {
      * 会员报表查询
      */
     @ApiOperation(value = "会员报表查询")
-    /*@ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "startDate", value = "注册起始时间查询", required = true),
-            @ApiImplicitParam(name = "endDate", value = "注册结束时间查询", required = true),
-    })
-    @GetMapping("/online/findPageList")
-    public Result<PageResult<OnlineUser>> findPageList(@RequestParam Map<String, Object> params) {
-        PageResult<OnlineUser> pageList = iOnlineUserService.findPageList(params);
-        return Result.succeed(pageList);
-    }*/
-
-    @GetMapping("/online/findPageList")
+    @GetMapping("/user/online/findPageList")
     public Result<PageResult<OnlineUser>> findPageList(@ModelAttribute OnlineUserCo params){
         return onlineUserService.findPageList(params);
     }

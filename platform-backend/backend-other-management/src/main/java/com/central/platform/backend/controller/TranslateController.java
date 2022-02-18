@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Api(tags = "翻译api")
-@RequestMapping("/translate")
+@RequestMapping("/other")
 public class TranslateController {
 
     @Autowired
@@ -44,7 +44,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-25 14:13:51
      */
-    @PostMapping("/backendUpdate")
+    @PostMapping("/translate/backendUpdate")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
             @ApiIgnore @LoginUser SysUser sysUser,
@@ -62,7 +62,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-28 12:46:24
      */
-    @PostMapping("/frontUpdate")
+    @PostMapping("/translate/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
             @ApiIgnore @LoginUser SysUser sysUser,
@@ -80,7 +80,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-25 14:13:51
      */
-    @PostMapping("/backendSave")
+    @PostMapping("/translate/backendSave")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendSave(
             @ApiIgnore @LoginUser SysUser sysUser,
@@ -99,7 +99,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-28 12:46:24
      */
-    @PostMapping("/frontUpdate")
+    @PostMapping("/translate/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontSave(
             @ApiIgnore @LoginUser SysUser sysUser,
@@ -117,7 +117,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-25 14:13:51
      */
-    @GetMapping("/infos")
+    @GetMapping("/translate/infos")
     @ApiOperation(value = "查询国际化字典分页")
     public Result<PageResult<I18nInfoPageVO>> infos(@Valid @ModelAttribute QueryI18nInfoPageCo param){
         return i18nInfosService.infos(param);
@@ -130,7 +130,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-25 14:34:28
      */
-    @GetMapping("/backendFullSource")
+    @GetMapping("/translate/backendFullSource")
     @ApiOperation(value = "获取所有的后台国际化资源")
     public Result<I18nSourceDTO> backendFullSource() {
         return i18nInfosService.backendFullSource();
@@ -143,7 +143,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-28 13:17:46
      */
-    @GetMapping("/frontFullSource")
+    @GetMapping("/translate/frontFullSource")
     @ApiOperation(value = "获取所有的前台台国际化资源")
     public Result<I18nSourceDTO> frontFullSource(){
         return i18nInfosService.frontFullSource();
@@ -157,7 +157,7 @@ public class TranslateController {
      * @author lance
      * @since 2022 -01-28 13:44:41
      */
-    @GetMapping("/languageLabel")
+    @GetMapping("/translate/languageLabel")
     @ApiOperation(value = "获取语言标签")
     public Result<List<LanguageLabelVO>> languageLabel(){
         return Result.succeed(i18nInfosService.languageLabel());

@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/gameRoomList")
+@RequestMapping("/game")
 @Api(tags = "游戏房间列表")
 public class GameRoomListController {
 

@@ -19,7 +19,7 @@ import java.util.Map;
 @RestController
 @Api(tags = "菜单管理")
 @Slf4j
-@RequestMapping("/platform/menu")
+@RequestMapping("/member")
 public class SysMenuController {
 
     @Resource
