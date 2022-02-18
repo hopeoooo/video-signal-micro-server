@@ -38,7 +38,6 @@ public class SysBannerController {
     @GetMapping("/banner/findBannerList")
     public Result<List<SysBanner>> findBannerList() {
         return configService.findBannerList();
-
     }
 
     /**
