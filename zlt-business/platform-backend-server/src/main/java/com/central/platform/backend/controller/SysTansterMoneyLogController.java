@@ -26,7 +26,7 @@ public class SysTansterMoneyLogController {
 
     @ApiOperation(value = "用户列表查询")
     @GetMapping("/users/list")
-    public Result<PageResult<SysTansterMoneyLogVo>> list(@Valid @ModelAttribute SysTansterMoneyPageCo params) {
+    public Result<PageResult<SysTansterMoneyLogVo>> list(@ModelAttribute SysTansterMoneyPageCo params) {
         PageResult<SysTansterMoneyLogVo> sysUserList = userService.findTransterMoneyList(params);
         return Result.succeed(sysUserList);
     }

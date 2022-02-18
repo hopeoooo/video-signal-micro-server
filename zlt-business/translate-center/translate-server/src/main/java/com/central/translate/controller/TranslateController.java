@@ -1,9 +1,11 @@
 package com.central.translate.controller;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.constant.I18nKeys;
 import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.translate.model.co.QueryI18nInfoPageCo;
 import com.central.translate.model.co.SaveI18nInfoCo;
 import com.central.translate.model.co.UpdateI18nInfoCo;
@@ -16,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -45,7 +49,9 @@ public class TranslateController {
     @PostMapping("/backendUpdate")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
+            @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody @Validated(SaveI18nInfoCo.Update.class) UpdateI18nInfoCo param){
+        param.setOperator(sysUser.getUsername());
         i18nInfosService.updateI18nInfo(I18nKeys.BACKEND, param);
         return Result.succeed("操作成功");
     }
@@ -62,7 +68,9 @@ public class TranslateController {
     @PostMapping("/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
+            @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody @Validated(SaveI18nInfoCo.Update.class) UpdateI18nInfoCo param){
+        param.setOperator(sysUser.getUsername());
         i18nInfosService.updateI18nInfo(I18nKeys.FRONT, param);
         return Result.succeed("操作成功");
     }
@@ -78,7 +86,9 @@ public class TranslateController {
     @PostMapping("/backendSave")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendSave(
+            @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param){
+        param.setOperator(sysUser.getUsername());
         i18nInfosService.saveI18nInfo(I18nKeys.BACKEND, param);
         return Result.succeed("操作成功");
     }
@@ -95,7 +105,9 @@ public class TranslateController {
     @PostMapping("/frontSave")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontSave(
+            @ApiIgnore @LoginUser SysUser sysUser,
             @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param){
+        param.setOperator(sysUser.getUsername());
         i18nInfosService.saveI18nInfo(I18nKeys.FRONT, param);
         return Result.succeed("操作成功");
     }
@@ -110,7 +122,7 @@ public class TranslateController {
      */
     @GetMapping("/infos")
     @ApiOperation(value = "查询国际化字典分页")
-    public Result<PageResult<I18nInfoPageVO>> infos(@ModelAttribute QueryI18nInfoPageCo param){
+    public Result<PageResult<I18nInfoPageVO>> infos(@Valid @ModelAttribute QueryI18nInfoPageCo param){
         return Result.succeed(i18nInfosService.findInfos(param));
     }
 

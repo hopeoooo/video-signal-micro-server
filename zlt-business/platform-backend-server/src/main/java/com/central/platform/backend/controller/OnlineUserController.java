@@ -53,20 +53,8 @@ public class OnlineUserController {
      * 会员报表查询
      */
     @ApiOperation(value = "会员报表查询")
-    /*@ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "startDate", value = "注册起始时间查询", required = true),
-            @ApiImplicitParam(name = "endDate", value = "注册结束时间查询", required = true),
-    })
     @GetMapping("/online/findPageList")
-    public Result<PageResult<OnlineUser>> findPageList(@RequestParam Map<String, Object> params) {
-        PageResult<OnlineUser> pageList = iOnlineUserService.findPageList(params);
-        return Result.succeed(pageList);
-    }*/
-
-    @GetMapping("/online/findPageList")
-    public Result<PageResult<OnlineUser>> findPageList(@Valid @ModelAttribute OnlineUserCo params){
+    public Result<PageResult<OnlineUser>> findPageList(@ModelAttribute OnlineUserCo params){
         return onlineUserService.findPageList(params);
     }
 }

@@ -54,7 +54,7 @@ public class OnlineUserController {
      */
     @ApiOperation(value = "会员报表查询")
     @GetMapping("/user/online/findPageList")
-    public Result<PageResult<OnlineUser>> findPageList(@Valid @ModelAttribute OnlineUserCo params){
+    public Result<PageResult<OnlineUser>> findPageList(@ModelAttribute OnlineUserCo params){
         return onlineUserService.findPageList(params);
     }
 }

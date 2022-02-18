@@ -48,9 +48,7 @@ public class TranslateController {
     @PostMapping("/translate/backendUpdate")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendUpdate(
-            @ApiIgnore @LoginUser SysUser sysUser,
             @Validated(SaveI18nInfoCo.Update.class) @RequestBody UpdateI18nInfoCo param){
-        param.setOperator(sysUser.getUsername());
         return i18nInfosService.backendUpdate(param);
     }
 
@@ -66,9 +64,7 @@ public class TranslateController {
     @PostMapping("/translate/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontUpdate(
-            @ApiIgnore @LoginUser SysUser sysUser,
             @Validated(SaveI18nInfoCo.Update.class) @RequestBody UpdateI18nInfoCo param){
-        param.setOperator(sysUser.getUsername());
         return i18nInfosService.frontUpdate(param);
     }
 
@@ -84,10 +80,7 @@ public class TranslateController {
     @PostMapping("/translate/backendSave")
     @ApiOperation(value = "更新后台国际化字典")
     public Result<String> backendSave(
-            @ApiIgnore @LoginUser SysUser sysUser,
             @Validated(SaveI18nInfoCo.Save.class) @RequestBody SaveI18nInfoCo param){
-        param.setOperator(sysUser.getUsername());
-
         return i18nInfosService.backendSave(param);
     }
 
@@ -103,9 +96,7 @@ public class TranslateController {
     @PostMapping("/translate/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
     public Result<String> frontSave(
-            @ApiIgnore @LoginUser SysUser sysUser,
             @Validated(SaveI18nInfoCo.Save.class) @RequestBody SaveI18nInfoCo param){
-        param.setOperator(sysUser.getUsername());
 
         return i18nInfosService.frontSave(param);
     }
@@ -120,7 +111,7 @@ public class TranslateController {
      */
     @GetMapping("/translate/infos")
     @ApiOperation(value = "查询国际化字典分页")
-    public Result<PageResult<I18nInfoPageVO>> infos(@Valid @ModelAttribute QueryI18nInfoPageCo param){
+    public Result<PageResult<I18nInfoPageVO>> infos(@ModelAttribute QueryI18nInfoPageCo param){
         return i18nInfosService.infos(param);
     }
 

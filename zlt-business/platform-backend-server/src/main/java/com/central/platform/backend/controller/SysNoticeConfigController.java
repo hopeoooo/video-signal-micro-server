@@ -62,7 +62,7 @@ public class SysNoticeConfigController {
 
     @ApiOperation(value = "修改公告状态")
     @GetMapping("/notice/updateEnabled")
-    public Result updateEnabled(@Valid @ModelAttribute UpdateNoticeCo params) {
+    public Result updateEnabled(@ModelAttribute UpdateNoticeCo params) {
         return configService.updateEnabled(params);
     }
 

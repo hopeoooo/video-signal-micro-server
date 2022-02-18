@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class SysNoticeConfigController {
      */
     @ApiOperation(value = "修改公告状态")
     @GetMapping("/updateEnabled")
-    public Result updateEnabled(@ModelAttribute UpdateNoticeCo params) {
+    public Result updateEnabled(@Valid @ModelAttribute UpdateNoticeCo params) {
         Result result = noticeService.updateEnabled(params);
         noticeService.syncPushNoticeToWebApp();
         return result;

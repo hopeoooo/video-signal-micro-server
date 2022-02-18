@@ -61,7 +61,7 @@ public class SysBannerController {
      */
     @ApiOperation(value = "修改banner状态")
     @GetMapping("/banner/updateState")
-    public Result updateState(@Valid @ModelAttribute BannerUpdateStateCo params) {
+    public Result updateState(@ModelAttribute BannerUpdateStateCo params) {
         return configService.updateState(params);
     }
 

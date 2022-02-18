@@ -35,7 +35,7 @@ public class DownloadStationController {
     @ApiOperation("查询app升级管理列表")
     @ResponseBody
     @GetMapping("/download/findDownloadStationList")
-    public Result<PageResult<DownloadStation>> findDownloadStationList(@Valid @ModelAttribute PageCo params) {
+    public Result<PageResult<DownloadStation>> findDownloadStationList(@ModelAttribute PageCo params) {
         PageResult<DownloadStation> downloadStationList = configService.findDownloadStationList(params);
         return Result.succeed(downloadStationList);
     }

@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.util.*;
@@ -109,7 +110,7 @@ public class SysUserController {
 
     @ApiOperation(value = "绑定谷歌验证码")
     @PostMapping("/users-anon/bindGoogleCode")
-    public Result<String> bindGoogleCode(@RequestBody SysUserGoogleBindCoCo params) {
+    public Result<String> bindGoogleCode(@Valid @RequestBody SysUserGoogleBindCoCo params) {
         String username = params.getUsername();
         String password = params.getPassword();
         String googleCode = params.getGoogleCode();
@@ -138,7 +139,7 @@ public class SysUserController {
 
     @ApiOperation(value = "得到谷歌二维码链接")
     @PostMapping("/users-anon/getGoogleCodeLink")
-    public Result<String> getGoogleCodeLink(@RequestBody SysUserParamsCo params) {
+    public Result<String> getGoogleCodeLink(@Valid @RequestBody SysUserParamsCo params) {
         String username = params.getUsername();
         String password = params.getPassword();
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)){
@@ -292,7 +293,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
     })
     @GetMapping("/users")
-    public PageResult<SysUser> findUsers(@ModelAttribute SysUserListCo params) {
+    public PageResult<SysUser> findUsers(@Valid @ModelAttribute SysUserListCo params) {
         return appUserService.findUsers(params);
     }
 

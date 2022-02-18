@@ -43,7 +43,7 @@ public class AdminController {
     @ApiOperation(value = "后台管理员查询")
 
     @GetMapping("/admin/users/list")
-    public Result<PageResult<SysUser>> list(@Valid @ModelAttribute SysUserListCo params) {
+    public Result<PageResult<SysUser>> list(@ModelAttribute SysUserListCo params) {
         params.setType(CommonConstant.USER_TYPE_BACKEND);//APP用户数据
         PageResult<SysUser> sysUserList = userService.findSysUserList(params);
         return Result.succeed(sysUserList);

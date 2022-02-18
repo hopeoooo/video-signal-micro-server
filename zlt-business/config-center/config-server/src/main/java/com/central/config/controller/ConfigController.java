@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -82,7 +83,7 @@ public class ConfigController {
      */
     @ApiOperation(value = "全局参数:游客管理编辑")
     @PostMapping("/saveTourist")
-    public Result saveTourist(@ModelAttribute SaveTouristCo params) {
+    public Result saveTourist(@Valid @ModelAttribute SaveTouristCo params) {
         //校验数字
         /*String regex = "^[0-9]*$";
         if (!params.get("touristAmount").matches(regex) || !params.get("touristSingleMaxBet").matches(regex)) {

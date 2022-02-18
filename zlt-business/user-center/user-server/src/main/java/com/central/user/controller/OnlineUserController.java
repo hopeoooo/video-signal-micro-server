@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -63,7 +64,7 @@ public class OnlineUserController {
      */
     @ApiOperation(value = "会员报表查询")
     @GetMapping("/findPageList")
-    public Result<PageResult<OnlineUser>> findPageList(@ModelAttribute OnlineUserCo params) {
+    public Result<PageResult<OnlineUser>> findPageList(@Valid @ModelAttribute OnlineUserCo params) {
         PageResult<OnlineUser> pageList = onlineUserService.findPageList(params);
         return Result.succeed(pageList);
     }

@@ -60,7 +60,7 @@ public class TranslatePositionController {
      * @since 2022 -01-25 13:32:11
      */
     @PostMapping("/translate/position/saveOrUpdate")
-    public Result<String> saveOrUpdate(@Valid  @RequestBody I18nPositionCo param) {
+    public Result<String> saveOrUpdate(@RequestBody I18nPositionCo param) {
         return i18nPositionService.saveOrUpdate(param);
     }
 

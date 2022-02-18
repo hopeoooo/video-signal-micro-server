@@ -53,7 +53,7 @@ public class PlatformBackendController {
      */
     @ApiOperation(value = "全局参数:游客管理编辑")
     @PostMapping("/system/saveTourist")
-    public Result saveTourist(@Valid @ModelAttribute SaveTouristCo params) {
+    public Result saveTourist(@ModelAttribute SaveTouristCo params) {
         return configService.saveTourist(params);
     }
 

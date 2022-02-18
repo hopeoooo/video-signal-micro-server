@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -101,7 +102,7 @@ public class SysBannerController {
      */
     @ApiOperation(value = "修改banner状态")
     @GetMapping("/updateState")
-    public Result updateState(@ModelAttribute BannerUpdateStateCo params) {
+    public Result updateState(@Valid @ModelAttribute BannerUpdateStateCo params) {
         int i = bannerService.updateState(params);
         if (i > 0) {
             bannerService.syncPushBannerToWebApp();
