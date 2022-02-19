@@ -11,7 +11,7 @@ import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
 import com.central.user.util.RedissLockUtil;
-import com.central.user.vo.SysUserMoneyVo;
+import com.central.user.model.vo.SysUserMoneyVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 用户钱包表

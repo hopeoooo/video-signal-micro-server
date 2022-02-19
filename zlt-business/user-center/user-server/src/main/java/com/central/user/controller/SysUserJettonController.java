@@ -5,7 +5,7 @@ import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.model.SysUserJetton;
 import com.central.user.service.ISysUserJettonService;
-import com.central.user.vo.SysUserJettonVO;
+import com.central.user.model.vo.SysUserJettonVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

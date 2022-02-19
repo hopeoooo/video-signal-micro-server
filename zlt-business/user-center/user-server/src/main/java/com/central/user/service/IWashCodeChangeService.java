@@ -3,7 +3,7 @@ package com.central.user.service;
 import com.central.common.model.PageResult;
 import com.central.common.model.WashCodeChange;
 import com.central.common.service.ISuperService;
-import com.central.user.vo.WashCodeChangeVo;
+import com.central.user.model.vo.WashCodeChangeVo;
 
 public interface IWashCodeChangeService extends ISuperService<WashCodeChange> {
 

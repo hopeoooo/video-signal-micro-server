@@ -6,6 +6,10 @@ import com.central.user.model.co.*;
 import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.UserService;
+import com.central.user.model.vo.RoomFollowVo;
+import com.central.user.model.vo.SysUserMoneyVo;
+import com.central.user.model.vo.UserInfoVo;
+import com.central.user.model.vo.WashCodeChangeVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -181,6 +185,48 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public Result saveUserWashCodeConfig( List<UserWashCodeConfigCo> list) {
                 log.error("saveUserWashCodeConfig编辑个人洗码配置异常:{}",list,throwable);
                 return Result.failed("编辑失败");
+            }
+
+            @Override
+            public Result updateHeadImgUrl(String headImg) {
+                log.error("updateHeadImgUrl error: {}", headImg);
+                return null;
+            }
+
+            @Override
+            public Result<UserInfoVo> findUserInfoById() {
+                log.error("findUserInfoById error");
+                return null;
+            }
+
+            @Override
+            public Result<SysUserMoneyVo> getMoney() {
+                log.error("getMoney error");
+                return null;
+            }
+
+            @Override
+            public Result<String> receiveWashCode() {
+                log.error("receiveWashCode error");
+                return null;
+            }
+
+            @Override
+            public Result<PageResult<WashCodeChangeVo>> getWashCodeRecord(String date) {
+                log.error("getWashCodeRecord error: {}", date);
+                return null;
+            }
+
+            @Override
+            public Result<List<RoomFollowVo>> getRoomFollowList() {
+                log.error("getRoomFollowList error");
+                return null;
+            }
+
+            @Override
+            public Result addFollow(Long roomId) {
+                log.error("getWashCodeRecord error: {}", roomId);
+                return null;
             }
         };
     }

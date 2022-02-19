@@ -7,7 +7,7 @@ import com.central.common.service.impl.SuperServiceImpl;
 import com.central.user.mapper.WashCodeChangeMapper;
 import com.central.user.service.IUserWashCodeConfigService;
 import com.central.user.service.IWashCodeChangeService;
-import com.central.user.vo.WashCodeChangeVo;
+import com.central.user.model.vo.WashCodeChangeVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

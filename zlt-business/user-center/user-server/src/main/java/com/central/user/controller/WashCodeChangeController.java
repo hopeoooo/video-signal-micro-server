@@ -6,7 +6,7 @@ import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.utils.DateUtil;
 import com.central.user.service.IWashCodeChangeService;
-import com.central.user.vo.WashCodeChangeVo;
+import com.central.user.model.vo.WashCodeChangeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

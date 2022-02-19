@@ -10,7 +10,7 @@ import com.central.game.feign.GameService;
 import com.central.game.model.GameRoomList;
 import com.central.user.model.RoomFollowList;
 import com.central.user.service.IRoomFollowListService;
-import com.central.user.vo.RoomFollowVo;
+import com.central.user.model.vo.RoomFollowVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

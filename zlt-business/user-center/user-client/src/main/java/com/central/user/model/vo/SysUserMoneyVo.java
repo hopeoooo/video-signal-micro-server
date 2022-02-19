@@ -1,4 +1,4 @@
-package com.central.user.vo;
+package com.central.user.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;

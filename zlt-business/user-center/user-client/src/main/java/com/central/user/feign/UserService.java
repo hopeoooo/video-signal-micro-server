@@ -1,5 +1,6 @@
 package com.central.user.feign;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.*;
@@ -7,10 +8,15 @@ import com.central.user.model.co.*;
 import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
+import com.central.user.model.vo.RoomFollowVo;
+import com.central.user.model.vo.SysUserMoneyVo;
+import com.central.user.model.vo.UserInfoVo;
+import com.central.user.model.vo.WashCodeChangeVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -159,4 +165,25 @@ public interface UserService {
 
     @PostMapping("/userWashCode/saveUserWashCodeConfig")
     Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfigCo> list) ;
+
+    @GetMapping("/users/updateHeadImg")
+    Result updateHeadImgUrl(@NotBlank(message = "headImg不允许为空") String headImg);
+
+    @GetMapping("/users/info")
+    Result<UserInfoVo> findUserInfoById();
+
+    @GetMapping("/userMoney/getMoney")
+    Result<SysUserMoneyVo> getMoney();
+
+    @GetMapping("/userMoney/receiveWashCode")
+    Result<String> receiveWashCode();
+
+    @GetMapping("/washCodeChange/getWashCodeRecord")
+    Result<PageResult<WashCodeChangeVo>> getWashCodeRecord(String date);
+
+    @GetMapping("/followList/getRoomFollowList")
+    Result<List<RoomFollowVo>> getRoomFollowList();
+
+    @PostMapping("/followList/addOrRemoveFollow/{roomId}")
+    Result addFollow(@PathVariable("roomId") Long roomId);
 }

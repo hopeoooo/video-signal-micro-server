@@ -19,7 +19,7 @@ import com.central.search.model.LogicDelDto;
 import com.central.search.model.SearchDto;
 import com.central.user.model.SysUserExcel;
 import com.central.user.service.ISysUserService;
-import com.central.user.vo.UserInfoVo;
+import com.central.user.model.vo.UserInfoVo;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
