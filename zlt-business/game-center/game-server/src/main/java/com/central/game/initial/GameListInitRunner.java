@@ -18,6 +18,11 @@ import java.math.BigDecimal;
 @Order(1)
 public class GameListInitRunner implements CommandLineRunner {
 
+    public static final Long BACCARAT = 1L;
+    public static final Long DRAGON_TIGER = 2L;
+    public static final Long SE_DIE = 3L;
+    public static final Long ROULETTE = 4L;
+
     @Autowired
     private IGameListService gameListService;
 
@@ -25,10 +30,10 @@ public class GameListInitRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         log.info("启动项目游戏列表");
         BigDecimal gameRate = new BigDecimal("0");
-        saveGameList(1L, "百家乐", gameRate);
-        saveGameList(2L, "龙虎", gameRate);
-        saveGameList(3L, "色碟", gameRate);
-        saveGameList(4L, "轮盘", gameRate);
+        saveGameList(BACCARAT, "百家乐", gameRate);
+        saveGameList(DRAGON_TIGER, "龙虎", gameRate);
+        saveGameList(SE_DIE, "色碟", gameRate);
+        saveGameList(ROULETTE, "轮盘", gameRate);
         log.info("游戏列表初始化完成");
     }
 
