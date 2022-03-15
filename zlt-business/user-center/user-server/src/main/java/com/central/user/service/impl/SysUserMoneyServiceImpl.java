@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.mapper.SysUserMoneyMapper;
 import com.central.user.service.ISysTansterMoneyLogService;
@@ -99,7 +100,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         }
         SysUserMoneyVo vo = new SysUserMoneyVo();
         BeanUtils.copyProperties(money, vo);
-        PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, "money","用户钱包推送成功");
+        PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.MONEY,"用户钱包推送成功");
         Result<String> push = pushService.sendOneMessage(userName,JSONObject.toJSONString(pushResult));
         log.info("用户钱包userName:{},推送结果:{}", userId, push);
     }

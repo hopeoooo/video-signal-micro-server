@@ -6,6 +6,7 @@ import com.central.common.annotation.LoginUser;
 import com.central.common.constant.UserConstant;
 import com.central.common.model.*;
 import com.central.common.vo.SysMoneyVO;
+import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
@@ -175,7 +176,7 @@ public class SysUserMoneyController {
         }
         SysUserMoneyVo vo = new SysUserMoneyVo();
         BeanUtils.copyProperties(sysUserMoney, vo);
-        PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, "money","用户钱包推送成功");
+        PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.MONEY,"用户钱包推送成功");
         Result<String> push = pushService.sendOneMessage(user.getUsername(), JSONObject.toJSONString(pushResult));
         log.info("用户钱包userName:{},推送结果:{}", user.getUsername(), push);
         return pushResult;

@@ -11,6 +11,7 @@ import com.central.config.model.SysBanner;
 import com.central.config.model.co.BannerUpdateStateCo;
 import com.central.config.service.ISysBannerService;
 import com.central.file.feign.FileService;
+import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -247,7 +248,7 @@ public class SysBannerController {
     @GetMapping("/pushBanner")
     public PushResult<List<SysBanner>> pushBanner() {
         List<SysBanner> bannerList = bannerService.getBannerList();
-        PushResult<List<SysBanner>> pushResult = PushResult.succeed(bannerList, "banner","轮播图推送成功");
+        PushResult<List<SysBanner>> pushResult = PushResult.succeed(bannerList, SocketTypeConstant.BANNER,"轮播图推送成功");
         Result<String> push = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("轮播图推送结果:{}",push);
         return pushResult;

@@ -8,6 +8,7 @@ import com.central.config.model.co.FindNoticeCo;
 import com.central.config.model.co.UpdateNoticeCo;
 import com.central.config.service.ISysNoticeService;
 import com.central.log.annotation.AuditLog;
+import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -112,7 +113,7 @@ public class SysNoticeConfigController {
     @GetMapping("/pushNotice")
     public PushResult<List<SysNotice>> pushNotice() {
         List<SysNotice> noticeList = noticeService.getNoticeList();
-        PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, "notice","公告推送成功");
+        PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, SocketTypeConstant.NOTICE,"公告推送成功");
         Result<String> push = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("公告推送结果:{}",push);
         return pushResult;

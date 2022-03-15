@@ -7,6 +7,7 @@ import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.*;
+import com.central.push.constant.SocketTypeConstant;
 import com.central.user.model.co.*;
 import com.central.common.utils.ExcelUtil;
 import com.central.common.utils.GoogleAuthUtil;
@@ -198,7 +199,7 @@ public class SysUserController {
         String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + "online:*";
         Set<String> keySet = redisTemplate.keys(onlineKey);
         int playerSize = keySet.size();
-        PushResult<Integer> pushResult = PushResult.succeed(playerSize, "online_nums","在线人数推送成功");
+        PushResult<Integer> pushResult = PushResult.succeed(playerSize, SocketTypeConstant.ONLINE_NUMS,"在线人数推送成功");
         Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
         log.info("在线人数消息推送结果:{}",push);
         return Boolean.TRUE;

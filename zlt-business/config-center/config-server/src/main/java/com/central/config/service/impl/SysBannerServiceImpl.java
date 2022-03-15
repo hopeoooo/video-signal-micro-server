@@ -13,6 +13,7 @@ import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
 import com.central.config.model.co.BannerUpdateStateCo;
 import com.central.config.service.ISysBannerService;
+import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -95,7 +96,7 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     @Async
     public void syncPushBannerToWebApp() {
         List<SysBanner> bannerList = getBannerList();
-        PushResult<List<SysBanner>> pushResult = PushResult.succeed(bannerList, "banner","轮播图推送成功");
+        PushResult<List<SysBanner>> pushResult = PushResult.succeed(bannerList, SocketTypeConstant.BANNER,"轮播图推送成功");
         Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
         log.info("轮播图推送结果:{}",push);
     }

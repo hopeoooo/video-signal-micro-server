@@ -11,6 +11,7 @@ import com.central.config.model.SysNotice;
 import com.central.config.model.co.FindNoticeCo;
 import com.central.config.model.co.UpdateNoticeCo;
 import com.central.config.service.ISysNoticeService;
+import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -118,7 +119,7 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
     @Async
     public void syncPushNoticeToWebApp() {
         List<SysNotice> noticeList = getNoticeList();
-        PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, "notice","公告推送成功");
+        PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, SocketTypeConstant.NOTICE,"公告推送成功");
         Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
         log.info("公告消息推送结果:{}",push);
     }
