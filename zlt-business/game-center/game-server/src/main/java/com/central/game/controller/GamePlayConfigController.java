@@ -30,8 +30,8 @@ public class GamePlayConfigController {
 
 
     @ApiOperation(value = "根据游戏ID查询玩法")
-    @GetMapping("/findAll/{gameId}")
-    public Result<List<GamePlayConfig>> findAll(@PathVariable("gameId") Long gameId) {
+    @GetMapping("/findByGameId/{gameId}")
+    public Result<List<GamePlayConfig>> findByGameId(@PathVariable("gameId") Long gameId) {
         List<GamePlayConfig> list = gamePlayConfigService.lambdaQuery().eq(GamePlayConfig::getGameId,gameId).eq(GamePlayConfig::getStatus,1).list();
         return Result.succeed(list);
     }
