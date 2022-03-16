@@ -36,5 +36,7 @@
         <module>push-center</module>
         <!-- 翻译中心 -->
         <module>translate-center</module>
+        <!-- 聊天中心 -->
+        <module>chat-center</module>
     </modules>
 </project>

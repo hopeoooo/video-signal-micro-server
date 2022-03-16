@@ -1,0 +1,15 @@
+server:
+  port: 7800
+ws:
+  port: 7801
+  host: 0.0.0.0
+
+spring:
+  application:
+    name: chat-center
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${zlt.naocs.server.namespace}
+#        metadata:
+#          version: zlt
