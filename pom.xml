@@ -296,6 +296,26 @@
                 <artifactId>user-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>app-member-management</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>backend-game-management</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>backend-member-management</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>backend-other-management</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 <!--            <dependency>-->
 <!--                <groupId>com.zlt</groupId>-->
 <!--                <artifactId>user-center</artifactId>-->
