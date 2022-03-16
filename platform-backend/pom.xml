@@ -20,5 +20,6 @@
     <modules>
         <module>backend-member-management</module>
         <module>backend-game-management</module>
+        <module>backend-other-management</module>
     </modules>
 </project>
