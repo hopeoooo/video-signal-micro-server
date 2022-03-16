@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,9 +30,9 @@ public class GamePlayConfigController {
 
 
     @ApiOperation(value = "根据游戏ID查询玩法")
-    @GetMapping("/findAll")
-    public Result<List<GamePlayConfig>> findAll() {
-        List<GamePlayConfig> list = gamePlayConfigService.lambdaQuery().eq(GamePlayConfig::getStatus,1).list();
+    @GetMapping("/findAll/{gameId}")
+    public Result<List<GamePlayConfig>> findAll(@PathVariable("gameId") Long gameId) {
+        List<GamePlayConfig> list = gamePlayConfigService.lambdaQuery().eq(GamePlayConfig::getGameId,gameId).eq(GamePlayConfig::getStatus,1).list();
         return Result.succeed(list);
     }
 
