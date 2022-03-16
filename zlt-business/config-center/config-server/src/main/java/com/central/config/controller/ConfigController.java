@@ -50,6 +50,9 @@ public class ConfigController {
     @Value("${zlt.app.version:1.0.0}")
     private String version;
 
+    @Value("${zlt.app.liveUrl:null}")
+    private String liveUrl;
+
 
     @ApiOperation(value = "查询配置列表")
     @GetMapping("/list")
@@ -61,6 +64,12 @@ public class ConfigController {
     @GetMapping("/getVersion")
     public Result<String> getVersion(){
         return Result.succeed(version,"查询成功");
+    }
+
+    @ApiOperation(value = "查询直播流地址")
+    @GetMapping("/getLiveUrl")
+    public Result<String> getLiveUrl(){
+        return Result.succeed(liveUrl,"查询成功");
     }
 
     /**
