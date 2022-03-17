@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/gameRoomList")
-@Api(tags = "游戏房间列表")
+@Api(tags = "游戏桌台列表")
 public class GameRoomListController {
 
     @Autowired

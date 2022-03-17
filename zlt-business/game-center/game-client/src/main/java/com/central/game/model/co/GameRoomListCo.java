@@ -24,11 +24,23 @@ public class GameRoomListCo {
     @ApiModelProperty(value = "返佣类型1：免佣，2：抽佣")
     private Integer commissionType;
 
-    @ApiModelProperty(value = "限红单局下注最小金额")
-    private BigDecimal betMin;
+    @ApiModelProperty(value = "庄闲最小限红")
+    private BigDecimal minBankerPlayer;
 
-    @ApiModelProperty(value = "限红单局总下注最大金额")
-    private BigDecimal betMax;
+    @ApiModelProperty(value = "庄闲最大限红")
+    private BigDecimal maxBankerPlayer;
+
+    @ApiModelProperty(value = "和最小限红")
+    private BigDecimal minSum;
+
+    @ApiModelProperty(value = "和最大限红")
+    private BigDecimal maxSum;
+
+    @ApiModelProperty(value = "对子最小限红")
+    private BigDecimal minTwain;
+
+    @ApiModelProperty(value = "对子最大限红")
+    private BigDecimal maxTwain;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "维护开始时间")
