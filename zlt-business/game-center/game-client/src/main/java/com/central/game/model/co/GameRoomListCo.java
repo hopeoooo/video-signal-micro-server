@@ -28,7 +28,7 @@ public class GameRoomListCo {
     private BigDecimal minBankerPlayer;
 
     @ApiModelProperty(value = "庄闲最大限红")
-    private BigDecimal mmaxBankerPlayer;
+    private BigDecimal maxBankerPlayer;
 
     @ApiModelProperty(value = "和最小限红")
     private BigDecimal minSum;
