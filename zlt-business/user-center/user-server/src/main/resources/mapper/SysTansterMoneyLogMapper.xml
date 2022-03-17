@@ -39,9 +39,9 @@
             <include refid="UnionColumns">
                 <property name="alias" value="b"/>
             </include>
-        from sys_tanster_money_log t
+        from sys_tanster_money_log b
         <include refid="where" />
-        order by t.id desc
+        order by b.id desc
     </select>
 
 </mapper>
