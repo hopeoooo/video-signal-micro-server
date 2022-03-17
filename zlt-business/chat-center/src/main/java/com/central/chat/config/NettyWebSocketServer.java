@@ -86,6 +86,10 @@ public class NettyWebSocketServer {
                     break;
                 }
             }
+            //相同用户名后面的连接会顶掉前面的连接，来自旧连接的消息不发送
+            if(StringUtils.isBlank(userName)){
+                return;
+            }
             Map<String, Object> data = new HashMap<>();
             data.put("userName", userName);
             data.put("message", message);
