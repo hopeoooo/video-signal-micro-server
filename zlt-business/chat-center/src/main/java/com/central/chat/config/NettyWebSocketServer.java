@@ -2,8 +2,11 @@ package com.central.chat.config;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.central.chat.service.ChatService;
+import com.central.chat.vo.MessageVo;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.yeauty.annotation.*;
 import org.yeauty.pojo.Session;
@@ -23,6 +26,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 @Data
 public class NettyWebSocketServer {
+
+    @Autowired
+    private ChatService chatService;
 
     private static final Map<String, CopyOnWriteArraySet<NettyWebSocketServer>> rooms = new HashMap<>();
 
@@ -71,11 +77,13 @@ public class NettyWebSocketServer {
         if (friends != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = sdf.format(new Date());
-            Map<String, Object> data = new HashMap<>();
-            data.put("userName", this.userName);
-            data.put("message", message);
-            data.put("date", date);
-            String msg = JSONObject.toJSONString(data);
+            MessageVo vo = new MessageVo();
+            vo.setUserName(this.userName);
+            vo.setMessage(message);
+            vo.setDate(date);
+            String msg = JSONObject.toJSONString(vo);
+            //异步保存用户聊天信息
+            //chatService.syncSaveChatMessage(roomId, msg);
             for (NettyWebSocketServer item : friends) {
                 item.session.sendText(msg);
             }
@@ -86,6 +94,14 @@ public class NettyWebSocketServer {
     public void onError(Session session, Throwable error) {
         log.info("发生错误{}", error.getMessage());
         error.printStackTrace();
+    }
+
+    public static void main(String[] args) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("userName", 1);
+        data.put("message", 1);
+        data.put("date", 1);
+        System.out.println(JSONObject.toJSONString(data));
     }
 }
 
