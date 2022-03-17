@@ -1,5 +1,6 @@
 package com.central.chat.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.central.chat.constants.ChatConstants;
 import com.central.chat.service.ChatService;
@@ -34,10 +35,7 @@ public class ChatServiceImpl implements ChatService {
             return list;
         }
         List<Object> redisList = redisRepository.getList(ChatConstants.CHAT_MESSAGE_KEY + roomId, 0, length.intValue());
-        for (Object obj : redisList) {
-            MessageVo vo = JSONObject.parseObject(obj.toString(), MessageVo.class);
-            list.add(vo);
-        }
+        list = JSON.parseArray(redisList.toString(), MessageVo.class);
         return list;
     }
 }
