@@ -76,11 +76,11 @@ public class NettyWebSocketServer {
         CopyOnWriteArraySet<NettyWebSocketServer> friends = rooms.get(roomId);
         if (friends != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String date = sdf.format(new Date());
+            String dateTime = sdf.format(new Date());
             MessageVo vo = new MessageVo();
             vo.setUserName(this.userName);
             vo.setMessage(message);
-            vo.setDate(date);
+            vo.setDateTime(dateTime);
             String msg = JSONObject.toJSONString(vo);
             //异步保存用户聊天信息
             //chatService.syncSaveChatMessage(roomId, msg);
