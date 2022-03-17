@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 import org.yeauty.annotation.*;
 import org.yeauty.pojo.Session;
 
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -54,7 +56,7 @@ public class NettyWebSocketServer {
         }
         //同名的后面的连接会覆盖前面的
         for (NettyWebSocketServer item : friends) {
-            if(item.getUserName().equals(userName)){
+            if (item.getUserName().equals(userName)) {
                 friends.remove(item);
                 break;
             }
@@ -76,20 +78,28 @@ public class NettyWebSocketServer {
         if (friends != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = sdf.format(new Date());
+            //获取发送消息的用户名
+            String userName = null;
             for (NettyWebSocketServer item : friends) {
-                String userName = item.getUserName();
-                Map<String, Object> data = new HashMap<>();
-                data.put("userName", userName);
-                data.put("message", message);
-                data.put("date", date);
-                item.session.sendText(JSONObject.toJSONString(data));
+                if (session == item.session) {
+                    userName = item.getUserName();
+                    break;
+                }
+            }
+            Map<String, Object> data = new HashMap<>();
+            data.put("userName", userName);
+            data.put("message", message);
+            data.put("date", date);
+            String msg = JSONObject.toJSONString(data);
+            for (NettyWebSocketServer item : friends) {
+                item.session.sendText(msg);
             }
         }
     }
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.info("发生错误{}",error.getMessage());
+        log.info("发生错误{}", error.getMessage());
         error.printStackTrace();
     }
 }
