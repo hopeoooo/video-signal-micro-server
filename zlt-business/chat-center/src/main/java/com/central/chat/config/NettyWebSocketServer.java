@@ -2,23 +2,16 @@ package com.central.chat.config;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.central.common.model.PushResult;
-import io.netty.handler.timeout.IdleStateEvent;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.yeauty.annotation.*;
 import org.yeauty.pojo.Session;
 
-import javax.websocket.server.PathParam;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 
@@ -78,20 +71,8 @@ public class NettyWebSocketServer {
         if (friends != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = sdf.format(new Date());
-            //获取发送消息的用户名
-            String userName = null;
-            for (NettyWebSocketServer item : friends) {
-                if (session == item.session) {
-                    userName = item.getUserName();
-                    break;
-                }
-            }
-            //相同用户名后面的连接会顶掉前面的连接，来自旧连接的消息不发送
-            if(StringUtils.isBlank(userName)){
-                return;
-            }
             Map<String, Object> data = new HashMap<>();
-            data.put("userName", userName);
+            data.put("userName", this.userName);
             data.put("message", message);
             data.put("date", date);
             String msg = JSONObject.toJSONString(data);
