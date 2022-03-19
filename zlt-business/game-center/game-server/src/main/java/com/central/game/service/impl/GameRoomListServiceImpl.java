@@ -8,6 +8,9 @@ import com.central.game.model.GameRoomList;
 import com.central.game.service.IGameRoomListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -17,6 +20,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@CacheConfig(cacheNames = {"gameRoomList"})
 public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper, GameRoomList> implements IGameRoomListService {
 
     @Autowired
@@ -34,6 +38,7 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     }
 
     @Override
+    @CacheEvict(key = "#id")
     public Boolean updateRoomStatus(Long id, Integer roomStatus,String maintainStart,String maintainEnd) {
         GameRoomList gameRoomList = gameRoomListMapper.selectById(id);
         if(gameRoomList == null){
@@ -59,5 +64,11 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         gameRoomList.setMaintainEnd(maintainEndTemp);
         gameRoomListMapper.updateById(gameRoomList);
         return true;
+    }
+
+    @Override
+    @Cacheable(key = "#id")
+    public GameRoomList findById(String id) {
+        return gameRoomListMapper.selectById(id);
     }
 }

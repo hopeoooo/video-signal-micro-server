@@ -1,5 +1,6 @@
 package com.central.game.initial;
 
+import com.central.game.constants.GameListEnum;
 import com.central.game.model.GameList;
 import com.central.game.service.IGameListService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +30,11 @@ public class GameListInitRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("启动项目游戏列表");
-        BigDecimal gameRate = new BigDecimal("0");
-        saveGameList(BACCARAT, "百家乐", gameRate);
-        saveGameList(DRAGON_TIGER, "龙虎", gameRate);
-        saveGameList(SE_DIE, "色碟", gameRate);
-        saveGameList(ROULETTE, "轮盘", gameRate);
+        BigDecimal gameRate = BigDecimal.ZERO;
+        saveGameList(GameListEnum.BACCARAT.getGameId(), GameListEnum.BACCARAT.getGameName(), gameRate);
+        saveGameList(GameListEnum.DRAGON_TIGER.getGameId(), GameListEnum.DRAGON_TIGER.getGameName(), gameRate);
+        saveGameList(GameListEnum.SE_DIE.getGameId(), GameListEnum.SE_DIE.getGameName(), gameRate);
+        saveGameList(GameListEnum.ROULETTE.getGameId(), GameListEnum.ROULETTE.getGameName(), gameRate);
         log.info("游戏列表初始化完成");
     }
 
