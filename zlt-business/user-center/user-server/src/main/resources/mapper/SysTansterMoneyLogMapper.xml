@@ -26,7 +26,10 @@
                 and t.user_id like = #{u.userId}
             </if>
             <if test="u.orderType != null and u.orderType != ''">
-                and t.order_type = #{u.orderType}
+                and t.order_type in
+                <foreach  item="item" collection="u.orderType" index="index"  open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
             <if test="u.startTime != null and u.endTime != null">
                 and t.create_time >= #{u.startTime} and t.create_time = #{u.endTime}
@@ -35,13 +38,13 @@
     </sql>
 
     <select id="findList" resultType="com.central.common.model.SysTansterMoneyLog">
-        select 
+        select
             <include refid="UnionColumns">
-                <property name="alias" value="b"/>
+                <property name="alias" value="t"/>
             </include>
-        from sys_tanster_money_log b
+        from sys_tanster_money_log t
         <include refid="where" />
-        order by b.id desc
+        order by t.id desc
     </select>
 
 </mapper>
