@@ -1,12 +1,11 @@
 package com.central.game.constants;
 
-import lombok.Data;
 
 public enum GameListEnum {
     BACCARAT(1L, "百家乐", "BAC"),
     DRAGON_TIGER(2L, "龙虎", "DGTG"),
     SE_DIE(3L, "色碟", "SEDIE"),
-    ROULETTE(4L, "百家乐", "ROU"),
+    ROULETTE(4L, "轮盘", "ROU"),
     ;
 
     private Long gameId;
