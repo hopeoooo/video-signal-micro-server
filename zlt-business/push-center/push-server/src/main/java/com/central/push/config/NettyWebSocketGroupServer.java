@@ -20,12 +20,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * https://blog.csdn.net/qq_38089964/article/details/81541846
  */
 @Slf4j
-@ServerEndpoint(path = "/ws/room/{roomId}/{userName}", host = "${ws.host}", port = "${ws.port}")
+@ServerEndpoint(path = "/ws/group/{roomId}/{userName}", host = "${ws.host}", port = "${ws.port}")
 @Component
 @Data
-public class NettyWebSocketRoomServer {
+public class NettyWebSocketGroupServer {
 
-    private static final Map<String, CopyOnWriteArraySet<NettyWebSocketRoomServer>> rooms = new HashMap<>();
+    private static final Map<String, CopyOnWriteArraySet<NettyWebSocketGroupServer>> rooms = new HashMap<>();
 
     private Session session;
 
@@ -39,7 +39,7 @@ public class NettyWebSocketRoomServer {
         this.session = session;
         this.roomId = roomId;
         this.userName = userName;
-        CopyOnWriteArraySet<NettyWebSocketRoomServer> friends = rooms.get(roomId);
+        CopyOnWriteArraySet<NettyWebSocketGroupServer> friends = rooms.get(roomId);
         if (friends == null) {
             synchronized (rooms) {
                 if (!rooms.containsKey(roomId)) {
@@ -49,7 +49,7 @@ public class NettyWebSocketRoomServer {
             }
         }
         //同名的后面的连接会覆盖前面的
-        for (NettyWebSocketRoomServer item : friends) {
+        for (NettyWebSocketGroupServer item : friends) {
             if (item.getUserName().equals(userName)) {
                 friends.remove(item);
                 break;
@@ -60,7 +60,7 @@ public class NettyWebSocketRoomServer {
 
     @OnClose
     public void onClose() {
-        CopyOnWriteArraySet<NettyWebSocketRoomServer> friends = rooms.get(roomId);
+        CopyOnWriteArraySet<NettyWebSocketGroupServer> friends = rooms.get(roomId);
         if (friends != null) {
             friends.remove(this);
         }
@@ -116,11 +116,11 @@ public class NettyWebSocketRoomServer {
      * @throws IOException
      */
     public static String sendMessageByRoomId(String roomId, String message) {
-        CopyOnWriteArraySet<NettyWebSocketRoomServer> friends = rooms.get(roomId);
+        CopyOnWriteArraySet<NettyWebSocketGroupServer> friends = rooms.get(roomId);
         if (friends == null) {
             return "消息推送失败,没有找到指定会话";
         }
-        for (NettyWebSocketRoomServer item : friends) {
+        for (NettyWebSocketGroupServer item : friends) {
             item.session.sendText(message);
         }
         return null;
