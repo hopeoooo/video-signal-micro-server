@@ -14,12 +14,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @Order(2)
-public class GamePlayConfigInitRunner implements CommandLineRunner {
+public class GamePlayConfigInitRunner{
 
     @Autowired
     private IGamePlayConfigService gamePlayConfigService;
 
-    @Override
+//    @Override
     public void run(String... args) throws Exception {
         log.info("启动项目初始化游戏玩法配置");
         saveGamePlayConfig(GameListInitRunner.BACCARAT, "庄", "1:0.95", 0);

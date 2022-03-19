@@ -1,15 +1,13 @@
 package com.central.game.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.PageResult;
-import com.central.common.model.SuperPage;
+import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.common.service.ISuperService;
 import com.central.game.dto.GameRecordDto;
-import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
-import org.apache.ibatis.annotations.Param;
+import com.central.game.model.co.GameRecordCo;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,5 +22,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
 
 
     GameRecordDto findGameRecordTotal(Map<String, Object> map);
+
+    Result saveRecord(GameRecordCo co, SysUser user, String ip);
 }
 
