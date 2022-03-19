@@ -20,7 +20,7 @@
     <sql id="where">
         <where>
             <if test="u.userName != null and u.userName != ''">
-                and t.user_name = #{u.username}
+                and t.user_name = #{u.userName}
             </if>
             <if test="u.userId != null and u.userId != ''">
                 and t.user_id like = #{u.userId}
