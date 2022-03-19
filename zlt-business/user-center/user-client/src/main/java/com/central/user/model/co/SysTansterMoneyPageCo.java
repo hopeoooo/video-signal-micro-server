@@ -18,7 +18,7 @@ public class SysTansterMoneyPageCo extends PageCo {
     private Long userId;
 
     @ApiModelProperty(value = "1:转入,2:转出,3:派彩,4:下注,5:手动入款,6:手动出款")
-    private Integer orderType;
+    private String[] orderType;
 
     @ApiModelProperty(value = "开始时间")
     private Date startTime;
