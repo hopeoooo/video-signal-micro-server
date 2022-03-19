@@ -1,6 +1,7 @@
 package com.central.push.controller;
 
 import com.central.common.model.Result;
+import com.central.push.config.NettyWebSocketGroupServer;
 import com.central.push.config.NettyWebSocketServer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/ws/api")
 @Api(tags = "webSocket消息推送")
 public class NettyWebSocketController {
-
 
     /**
      * 群发消息内容
@@ -42,6 +42,23 @@ public class NettyWebSocketController {
         String msg = NettyWebSocketServer.sendOneMessage(message, userName);
         if (StringUtils.isBlank(msg)) {
             return Result.succeed(userName + "消息推送成功");
+        }
+        return Result.failed(msg);
+    }
+
+    /**
+     * 指定房间发消息
+     *
+     * @param message 消息内容
+     * @param roomId  房间ID
+     * @return
+     */
+    @ApiOperation(value = "指定房间推发消息")
+    @PostMapping(value = "/sendMessageByRoomId")
+    public Result sendMessageByRoomId(@RequestParam("roomId") String roomId, @RequestParam("message") String message) {
+        String msg = NettyWebSocketGroupServer.sendMessageByRoomId(roomId, message);
+        if (StringUtils.isBlank(msg)) {
+            return Result.succeed(roomId + "号房间消息推送成功");
         }
         return Result.failed(msg);
     }
