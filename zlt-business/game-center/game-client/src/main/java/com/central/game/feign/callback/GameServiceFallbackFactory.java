@@ -1,6 +1,9 @@
 package com.central.game.feign.callback;
 
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.game.dto.GameRecordDto;
+import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameListCo;
 import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.GameService;
@@ -10,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 降级工场
@@ -89,6 +93,18 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             public Result<List<GameRoomList>> findRoomDetailByIds(String ids) {
                 log.error("findRoomDetailByIds查询房间详情失败ids:{}", ids);
                 return Result.failed("查询房间详情失败");
+            }
+
+            @Override
+            public Result<PageResult<GameRecord>> findList(Map<String, Object> params) {
+                log.error("findList查询下注记录失败:{}", params);
+                return Result.failed("查询下注记录失败");
+            }
+
+            @Override
+            public Result<GameRecordDto> findGameRecordTotal(Map<String, Object> params) {
+                log.error("findGameRecordTotal查询下注记录总计失败:{}", params);
+                return Result.failed("查询下注记录总计失败");
             }
 
         };
