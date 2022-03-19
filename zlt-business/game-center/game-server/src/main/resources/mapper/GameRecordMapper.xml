@@ -2,4 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.central.game.mapper.GameRecordMapper">
+
+    <sql id="where">
+        <where>
+            <if test="p.gameId != null and p.gameId != ''">
+                g.game_id = #{p.gameId}
+            </if>
+            <if test="p.startTime != null and p.startTime != ''">
+                g.create_time <![CDATA[>=]]> #{p.startTime}
+            </if>
+
+            <if test="p.endTime != null and p.endTime != ''">
+                g.create_time <![CDATA[<=]]> #{p.endTime}
+            </if>
+        </where>
+    </sql>
+
+
+    <select id="findGameRecordList"  resultType="com.central.game.model.GameRecord">
+        SELECT
+            g.bet_id,
+            g.bureau_num,
+            g.user_name,
+            g.game_name,
+            g.set_time,
+            g.bet_amount,
+            g.validbet,
+            g.win_Loss ,
+            CASE WHEN g.set_time is null then 0 else 1 end
+        FROM
+            game_record g
+        <include refid="where" />
+
+    </select>
+
+
+    <select id="findGameRecordTotal"  resultType="com.central.game.dto.GameRecordDto">
+        SELECT
+        SUM(g.bet_amount) as betAmount,
+        SUM(g.validbet)as validbet,
+        SUM(g.win_Loss)as winLoss
+        FROM
+        game_record g
+        <include refid="where" />
+    </select>
 </mapper>

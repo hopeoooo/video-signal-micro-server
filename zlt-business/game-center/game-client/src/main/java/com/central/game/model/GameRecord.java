@@ -46,6 +46,7 @@ public class GameRecord extends SuperEntity {
     private Date betTime;
 
     @ApiModelProperty(value = "结算时间")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date setTime;
 
     @ApiModelProperty(value = "下注金额")

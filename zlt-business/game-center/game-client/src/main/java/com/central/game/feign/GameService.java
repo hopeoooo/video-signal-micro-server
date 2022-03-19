@@ -1,7 +1,10 @@
 package com.central.game.feign;
 
 import com.central.common.constant.ServiceNameConstants;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.game.dto.GameRecordDto;
+import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameListCo;
 import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.callback.GameServiceFallbackFactory;
@@ -11,6 +14,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  */
@@ -103,4 +107,16 @@ public interface GameService {
      */
     @GetMapping("/gameRoomList/findRoomDetailByIds/{ids}")
     Result<List<GameRoomList>> findRoomDetailByIds(@PathVariable("ids") String ids);
+
+
+    /**
+     * 查询下注数据
+     * @param params
+     * @return
+     */
+    @GetMapping("/gameRecord/findList")
+     Result<PageResult<GameRecord>> findList(@RequestParam Map<String, Object> params) ;
+
+    @GetMapping("/gameRecord/findGameRecordTotal")
+    Result<GameRecordDto> findGameRecordTotal(@RequestParam Map<String, Object> params) ;
 }
