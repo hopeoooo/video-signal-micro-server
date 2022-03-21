@@ -14,7 +14,9 @@ import com.central.game.mapper.GameRecordMapper;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
 import com.central.game.model.GameRoomList;
+import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordBetDataCo;
+import com.central.game.model.co.GameRecordBetTotalCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.service.IGameListService;
 import com.central.game.service.IGameRecordService;
@@ -136,15 +138,15 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
      * @return
      */
     @Override
-    public PageResult<GameRecord> findList(Map<String, Object> map) {
-        Page<GameRecord> page = new Page<>(MapUtils.getInteger(map, "page"), MapUtils.getInteger(map, "limit"));
-        List<GameRecord> list = baseMapper.findGameRecordList(page, map);
+    public PageResult<GameRecord> findList(GameRecordBetCo params) {
+        Page<GameRecord> page = new Page<>(params.getPage(), params.getLimit());
+        List<GameRecord> list = baseMapper.findGameRecordList(page, params);
         return PageResult.<GameRecord>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override
-    public GameRecordDto findGameRecordTotal(Map<String, Object> map) {
-        return baseMapper.findGameRecordTotal(map);
+    public GameRecordDto findGameRecordTotal(GameRecordBetTotalCo params) {
+        return baseMapper.findGameRecordTotal( params);
     }
 
     @Override

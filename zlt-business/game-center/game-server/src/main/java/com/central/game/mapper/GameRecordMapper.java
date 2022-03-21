@@ -6,8 +6,9 @@ import com.central.common.model.SuperPage;
 import com.central.db.mapper.SuperMapper;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
-import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
+import com.central.game.model.co.GameRecordBetCo;
+import com.central.game.model.co.GameRecordBetTotalCo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,9 +25,9 @@ import java.util.Map;
 public interface GameRecordMapper extends SuperMapper<GameRecord> {
 
 
-    List<GameRecord> findGameRecordList(Page<GameRecord> page, @Param("p") Map<String, Object> params);
+    List<GameRecord> findGameRecordList(Page<GameRecord> page, @Param("p") GameRecordBetCo params);
 
-    GameRecordDto findGameRecordTotal( @Param("p") Map<String, Object> params);
+    GameRecordDto findGameRecordTotal( @Param("p") GameRecordBetTotalCo params);
 
     GameRecordReportDto findBetAmountTotal(@Param("p") Map<String, Object> params);
 

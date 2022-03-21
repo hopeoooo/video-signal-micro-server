@@ -6,14 +6,14 @@
     <sql id="where">
         <where>
             <if test="p.gameId != null and p.gameId != ''">
-                g.game_id = #{p.gameId}
+                and g.game_id = #{p.gameId}
             </if>
             <if test="p.startTime != null and p.startTime != ''">
-                g.create_time <![CDATA[>=]]> #{p.startTime}
+                and g.create_time <![CDATA[>=]]> #{p.startTime}
             </if>
 
             <if test="p.endTime != null and p.endTime != ''">
-                g.create_time <![CDATA[<=]]> #{p.endTime}
+                and g.create_time <![CDATA[<=]]> #{p.endTime}
             </if>
         </where>
     </sql>
@@ -39,9 +39,9 @@
 
     <select id="findGameRecordTotal"  resultType="com.central.game.dto.GameRecordDto">
         SELECT
-        SUM(g.bet_amount) as betAmount,
-        SUM(g.validbet)as validbet,
-        SUM(g.win_Loss)as winLoss
+        IFNULL(SUM(g.bet_amount) ,0) as betAmount,
+        IFNULL( SUM(g.validbet),0) as validbet,
+        IFNULL(SUM(g.win_Loss),0)   as winLoss
         FROM
         game_record g
         <include refid="where" />
