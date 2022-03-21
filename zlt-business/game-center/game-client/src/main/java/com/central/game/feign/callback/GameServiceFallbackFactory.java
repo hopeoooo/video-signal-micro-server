@@ -6,6 +6,8 @@ import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameListCo;
+import com.central.game.model.co.GameRecordBetCo;
+import com.central.game.model.co.GameRecordBetTotalCo;
 import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
@@ -97,13 +99,13 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
-            public Result<PageResult<GameRecord>> findList(Map<String, Object> params) {
+            public Result<PageResult<GameRecord>> findList(GameRecordBetCo params) {
                 log.error("findList查询下注记录失败:{}", params);
                 return Result.failed("查询下注记录失败");
             }
 
             @Override
-            public Result<GameRecordDto> findGameRecordTotal(Map<String, Object> params) {
+            public Result<GameRecordDto> findGameRecordTotal(GameRecordBetTotalCo params) {
                 log.error("findGameRecordTotal查询下注记录总计失败:{}", params);
                 return Result.failed("查询下注记录总计失败");
             }
