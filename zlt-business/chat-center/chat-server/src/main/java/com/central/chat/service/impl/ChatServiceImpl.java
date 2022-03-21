@@ -1,8 +1,7 @@
 package com.central.chat.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.central.chat.constants.ChatConstants;
+import com.central.chat.constant.ChatConstant;
 import com.central.chat.service.ChatService;
 import com.central.chat.vo.MessageVo;
 import com.central.common.redis.template.RedisRepository;
@@ -22,7 +21,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     @Async
     public void syncSaveChatMessage(String roomId, String message) {
-        String key = ChatConstants.CHAT_MESSAGE_KEY + roomId;
+        String key = ChatConstant.CHAT_MESSAGE_KEY + roomId;
         redisRepository.in(key, message);
         System.out.println("aaa" + Thread.currentThread().getId());
     }
@@ -30,11 +29,11 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public List<MessageVo> getChatMessageByRoomId(String roomId) {
         List<MessageVo> list = new ArrayList<>();
-        Long length = redisRepository.length(ChatConstants.CHAT_MESSAGE_KEY + roomId);
+        Long length = redisRepository.length(ChatConstant.CHAT_MESSAGE_KEY + roomId);
         if (length == 0) {
             return list;
         }
-        List<Object> redisList = redisRepository.getList(ChatConstants.CHAT_MESSAGE_KEY + roomId, 0, length.intValue());
+        List<Object> redisList = redisRepository.getList(ChatConstant.CHAT_MESSAGE_KEY + roomId, 0, length.intValue());
         list = JSON.parseArray(redisList.toString(), MessageVo.class);
         return list;
     }
