@@ -9,6 +9,7 @@ import com.central.common.model.SysUser;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.game.constants.GameListEnum;
 import com.central.game.dto.GameRecordDto;
+import com.central.game.dto.GameRecordReportDto;
 import com.central.game.mapper.GameRecordMapper;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
@@ -146,4 +147,18 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         return baseMapper.findGameRecordTotal(map);
     }
 
+    @Override
+    public GameRecordReportDto findBetAmountTotal(Map<String, Object> params) {
+        return baseMapper.findBetAmountTotal(params);
+    }
+
+    @Override
+    public GameRecordReportDto findValidbetTotal(Map<String, Object> params) {
+        return baseMapper.findValidbetTotal(params);
+    }
+
+    @Override
+    public GameRecordReportDto findWinningAmountTotal(Map<String, Object> params) {
+        return baseMapper.findWinningAmountTotal(params);
+    }
 }

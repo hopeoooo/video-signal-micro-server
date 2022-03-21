@@ -4,6 +4,7 @@ import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.game.dto.GameRecordDto;
+import com.central.game.dto.GameRecordReportDto;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameListCo;
 import com.central.game.model.co.GameRoomListCo;
@@ -119,4 +120,13 @@ public interface GameService {
 
     @GetMapping("/gameRecord/findGameRecordTotal")
     Result<GameRecordDto> findGameRecordTotal(@RequestParam Map<String, Object> params) ;
+
+    @GetMapping("/gameRecord/findBetAmountTotal")
+    Result<GameRecordReportDto> findBetAmountTotal(@RequestParam Map<String, Object> params) ;
+
+    @GetMapping("/gameRecord/findValidbetTotal")
+    Result<GameRecordReportDto> findValidbetTotal(@RequestParam Map<String, Object> params) ;
+
+    @GetMapping("/gameRecord/findWinningAmountTotal")
+    Result<GameRecordReportDto> findWinningAmountTotal(@RequestParam Map<String, Object> params) ;
 }

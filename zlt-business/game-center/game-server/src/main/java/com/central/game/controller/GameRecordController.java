@@ -6,6 +6,7 @@ import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.utils.AddrUtil;
 import com.central.game.dto.GameRecordDto;
+import com.central.game.dto.GameRecordReportDto;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.service.IGameRecordService;
@@ -78,4 +79,39 @@ public class GameRecordController {
         return result;
     }
 
+    @ResponseBody
+    @ApiOperation(value = "投注报表")
+    @GetMapping("/findBetAmountTotal")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false, dataType = "Long"),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false, dataType = "Long"),
+    })
+    public Result<GameRecordReportDto> findBetAmountTotal(@RequestParam Map<String, Object> params) {
+        GameRecordReportDto gameRecordReportDto = gameRecordService.findBetAmountTotal(params);
+        return Result.succeed(gameRecordReportDto);
+    }
+
+    @ResponseBody
+    @ApiOperation(value = "有效投注报表")
+    @GetMapping("/findValidbetTotal")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false, dataType = "Long"),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false, dataType = "Long"),
+    })
+    public Result<GameRecordReportDto> findValidbetTotal(@RequestParam Map<String, Object> params) {
+        GameRecordReportDto gameRecordReportDto = gameRecordService.findValidbetTotal(params);
+        return Result.succeed(gameRecordReportDto);
+    }
+
+    @ResponseBody
+    @ApiOperation(value = "派彩报表")
+    @GetMapping("/findWinningAmountTotal")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false, dataType = "Long"),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false, dataType = "Long"),
+    })
+    public Result<GameRecordReportDto> findWinningAmountTotal(@RequestParam Map<String, Object> params) {
+        GameRecordReportDto gameRecordReportDto = gameRecordService.findWinningAmountTotal(params);
+        return Result.succeed(gameRecordReportDto);
+    }
 }
