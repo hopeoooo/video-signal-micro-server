@@ -54,4 +54,8 @@ public interface ServiceNameConstants {
      * 消息推送服务
      */
     String TRANSLATE_SERVICE = "translate-center";
+    /**
+     * 聊天服务
+     */
+    String CHAT_SERVICE = "chat-center";
 }

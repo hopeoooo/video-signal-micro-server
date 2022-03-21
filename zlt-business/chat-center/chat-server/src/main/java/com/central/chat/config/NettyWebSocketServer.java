@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.yeauty.annotation.*;
 import org.yeauty.pojo.Session;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -102,6 +103,24 @@ public class NettyWebSocketServer {
         data.put("message", 1);
         data.put("date", 1);
         System.out.println(JSONObject.toJSONString(data));
+    }
+
+    /**
+     * 通过房间ID群发消息
+     *
+     * @param roomId
+     * @param message
+     * @throws IOException
+     */
+    public static String sendMessageByRoomId(String roomId, String message) {
+        CopyOnWriteArraySet<NettyWebSocketServer> friends = rooms.get(roomId);
+        if (friends == null) {
+            return "消息推送失败,没有找到指定会话";
+        }
+        for (NettyWebSocketServer item : friends) {
+            item.session.sendText(message);
+        }
+        return null;
     }
 }
 

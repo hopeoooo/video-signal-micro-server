@@ -1,4 +1,4 @@
-package com.central.chat.constants;
+package com.central.chat.constant;
 
 /**
  * 配置项常量
@@ -6,7 +6,7 @@ package com.central.chat.constants;
  * @author zlt
  * @date 2019/9/3
  */
-public interface ChatConstants {
+public interface ChatConstant {
     /**
      * redis key
      */
