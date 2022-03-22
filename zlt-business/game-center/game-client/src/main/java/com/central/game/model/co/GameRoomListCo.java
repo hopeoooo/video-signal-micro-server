@@ -12,6 +12,7 @@ import java.util.Date;
 @ApiModel
 public class GameRoomListCo {
 
+    private Long id;
     @ApiModelProperty(value = "游戏表id")
     private Long gameId;
 
