@@ -31,8 +31,11 @@
                     #{item}
                 </foreach>
             </if>
-            <if test="u.startTime != null and u.endTime != null">
-                and t.create_time >= #{u.startTime} and t.create_time = #{u.endTime}
+            <if test="u.startTime != null and u.startTime != null">
+                and t.create_time <![CDATA[>=]]> #{u.startTime}
+            </if>
+            <if test="u.endTime != null and u.endTime != null">
+                and t.create_time <![CDATA[<=]]>#{u.endTime}
             </if>
         </where>
     </sql>

@@ -4,11 +4,11 @@
 <mapper namespace="com.central.user.mapper.OnlineUserMapper">
 	<sql id="where">
 		<where>
-			<if test="p.startTime != null">
-				and t.create_time >= #{p.startTime,jdbcType=TIMESTAMP}
+			<if test="p.start != null">
+				and t.create_time <![CDATA[>=]]>#{p.start,jdbcType=TIMESTAMP}
 			</if>
 			<if test="p.endTime != null">
-				and t.create_time&lt;= #{p.endTime,jdbcType=TIMESTAMP}
+				and t.create_time <![CDATA[<=]]> #{p.endTime,jdbcType=TIMESTAMP}
 			</if>
 		</where>
 	</sql>
