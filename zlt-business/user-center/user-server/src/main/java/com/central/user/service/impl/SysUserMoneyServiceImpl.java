@@ -85,7 +85,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         } else if (transterType == 0 || transterType == 3) {
             //扣减金额大于本地余额时，最多只能扣减剩余的
             money = money.compareTo(sysUserMoney.getMoney()) == 1 ? sysUserMoney.getMoney() : money;
-            sysUserMoney.setMoney(money);
+            sysUserMoney.setMoney(sysUserMoney.getMoney().subtract(money));
         }
         baseMapper.updateById(sysUserMoney);
         SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, traceId, transterType, sysUserMoney.getMoney());
