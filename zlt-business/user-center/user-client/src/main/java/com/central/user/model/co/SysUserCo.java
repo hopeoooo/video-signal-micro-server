@@ -54,4 +54,7 @@ public class SysUserCo {
 
     @ApiModelProperty(value = "是否验证 1：是，其他：否")
     private Integer verify;
+
+    @ApiModelProperty(value = "父级")
+    private String parent;
 }

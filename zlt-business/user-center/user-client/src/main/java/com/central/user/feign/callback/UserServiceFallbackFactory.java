@@ -164,8 +164,8 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) {
-                log.error("人工上下分:{}",userId,throwable);
+            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType,String traceId) {
+                log.error("人工上下分:{},transterType={}",userId,transterType,throwable);
                 return Result.failed("上下分错误");
             }
             @Override
