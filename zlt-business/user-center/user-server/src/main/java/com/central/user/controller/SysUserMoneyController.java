@@ -58,6 +58,44 @@ public class SysUserMoneyController {
         return Result.succeed(vo);
     }
 
+    @ApiOperation(value = "上下分")
+    @PostMapping("/transterMoney")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "money", value = "金额", required = true, dataType = "BigDecimal"),
+            @ApiImplicitParam(name = "transterType", value = "0：人工下分,1：人工上分，2:商户API加点，3:商户API扣点", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "remark", value = "备注", dataType = "String"),
+            @ApiImplicitParam(name = "traceId", value = "第三方交易编号", dataType = "String"),
+    })
+    public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType,String traceId) throws Exception {
+        if(money.compareTo(BigDecimal.ZERO) <= 0){
+            return Result.failed("参数错误");
+        }
+        String redisKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK  + userId;
+        boolean moneyLock = RedissLockUtil.tryLock(redisKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
+        try {
+            if(moneyLock){
+                SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
+                SysUser sysUser = iSysUserService.selectById(userId);
+                if (sysUserMoney == null || sysUser == null) {
+                    return Result.failed("用户不存在或钱包错误");
+                }
+                if (transterType == 3 && money.compareTo(sysUserMoney.getMoney()) == 1) {
+                    return Result.failed("扣点金额不能大于剩余金额");
+                }
+                SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId,sysUser);
+                userMoneyService.syncPushMoneyToWebApp(userId,sysUser.getUsername());
+                return Result.succeed(saveSysUserMoney);
+            }else{
+                return Result.failed("上下分请求太过频繁");
+            }
+        }catch (Exception e){
+            throw new Exception("用户上下分异常，param = {" + userId + "}, error = {" + e.getMessage() + "}");
+        }finally {
+            RedissLockUtil.unlock(redisKey);
+        }
+    }
+
     @ApiOperation(value = "设置玩家金额")
     @PostMapping("/playerMoney")
     public Result<Boolean> updateMoney(@RequestBody SysMoneyVO sysMoneyVO){
@@ -84,40 +122,6 @@ public class SysUserMoneyController {
     public Result<SysUserMoney> save(@RequestBody SysUserMoney sysUserMoney) {
         SysUserMoney saveSysUserMoney = userMoneyService.saveCache(sysUserMoney);
         return Result.succeed(saveSysUserMoney);
-    }
-
-    @ApiOperation(value = "上下分")
-    @PostMapping("/transterMoney")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Long"),
-            @ApiImplicitParam(name = "money", value = "金额", required = true, dataType = "BigDecimal"),
-            @ApiImplicitParam(name = "remark", value = "备注", dataType = "String"),
-            @ApiImplicitParam(name = "transterType", value = "1：人工上分，0：人工下分", required = true, dataType = "Boolean")
-    })
-    public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) throws Exception {
-        if(money.compareTo(BigDecimal.ZERO) <= 0){
-            return Result.failed("参数错误");
-        }
-        String redisKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK  + userId;
-        boolean moneyLock = RedissLockUtil.tryLock(redisKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
-        try {
-            if(moneyLock){
-                SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
-                SysUser sysUser = iSysUserService.selectById(userId);
-                if (sysUserMoney == null || sysUser == null) {
-                    return Result.failed("用户不存在或钱包错误");
-                }
-                SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, sysUser);
-                userMoneyService.syncPushMoneyToWebApp(userId,sysUser.getUsername());
-                return Result.succeed(saveSysUserMoney);
-            }else{
-                return Result.failed("上下分请求太过频繁");
-            }
-        }catch (Exception e){
-            throw new Exception("用户上下分异常，param = {" + userId + "}, error = {" + e.getMessage() + "}");
-        }finally {
-            RedissLockUtil.unlock(redisKey);
-        }
     }
 
 

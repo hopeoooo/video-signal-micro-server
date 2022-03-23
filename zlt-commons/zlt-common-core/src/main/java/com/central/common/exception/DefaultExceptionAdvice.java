@@ -16,6 +16,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,6 +154,16 @@ public class DefaultExceptionAdvice {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Result missingServletRequestParameterException(MissingServletRequestParameterException e) {
         return defHandler("参数名填写错误", e);
+    }
+
+    /**
+     * 数据库唯一索引异常
+     * 返回状态码:200
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public Result SQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
+        return defHandler("数据库唯一索引异常", e);
     }
 
     /**
