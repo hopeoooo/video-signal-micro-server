@@ -158,6 +158,9 @@ public interface UserService {
     @GetMapping(value = "/sysTansterMoney/findList", params = "params")
     PageResult<SysTansterMoneyLogVo> findTransterMoneyList(@SpringQueryMap SysTansterMoneyPageCo params);
 
+    @PostMapping(value = "/sysTansterMoney/findAllByParent")
+    Result<List<SysTansterMoneyLogVo>> findAllByParent(@RequestBody SysTansterMoneyPageCo params);
+
 
     @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
      Result< List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable("userId") Long userId) ;

@@ -14,6 +14,7 @@
         ${alias}.create_time,
         ${alias}.update_time,
         ${alias}.remark,
+        ${alias}.trace_id,
         ${alias}.order_type
     </sql>
 
@@ -31,11 +32,17 @@
                     #{item}
                 </foreach>
             </if>
-            <if test="u.startTime != null and u.startTime != null">
+            <if test="u.startTime != null and u.startTime != ''">
                 and t.create_time <![CDATA[>=]]> #{u.startTime}
             </if>
-            <if test="u.endTime != null and u.endTime != null">
+            <if test="u.endTime != null and u.endTime != ''">
                 and t.create_time <![CDATA[<=]]>#{u.endTime}
+            </if>
+            <if test="u.traceId != null and u.traceId != ''">
+                and t.trace_id = #{u.traceId}
+            </if>
+            <if test="u.parent != null and u.parent != ''">
+                and t.parent = #{u.parent}
             </if>
         </where>
     </sql>
@@ -45,6 +52,16 @@
             <include refid="UnionColumns">
                 <property name="alias" value="t"/>
             </include>
+        from sys_tanster_money_log t
+        <include refid="where" />
+        order by t.id desc
+    </select>
+
+    <select id="findAllByParent" resultType="com.central.common.model.SysTansterMoneyLog">
+        select
+        <include refid="UnionColumns">
+            <property name="alias" value="t"/>
+        </include>
         from sys_tanster_money_log t
         <include refid="where" />
         order by t.id desc

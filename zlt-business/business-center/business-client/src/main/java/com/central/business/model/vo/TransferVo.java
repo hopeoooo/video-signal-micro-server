@@ -1,32 +1,24 @@
-package com.central.common.vo;
+package com.central.business.model.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-@ApiModel("会员账变记录")
-public class SysTansterMoneyLogVo implements Serializable {
-
-    @ApiModelProperty(value = "表id")
-    private Long id;
+@ApiModel("转账记录")
+public class TransferVo {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
-
-    @ApiModelProperty(value = "用户ID")
-    private Long userId;
 
     @ApiModelProperty(value = "用户名")
     private String userName;
@@ -49,9 +41,6 @@ public class SysTansterMoneyLogVo implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remark;
 
-    @ApiModelProperty(value = "订单类型")
+    @ApiModelProperty(value = "账变类型：8.加点，9.扣点")
     private Integer orderType;
-
-    @ApiModelProperty(value = "订单类型名称")
-    private String orderTypeName;
 }

@@ -174,6 +174,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 return new PageResult();
             }
 
+            @Override
+            public Result<List<SysTansterMoneyLogVo>> findAllByParent(SysTansterMoneyPageCo params) {
+                log.error("findAllByParent根据父级查询转账记录异常:{}", params, throwable);
+                return Result.failed("查询转账记录异常");
+            }
+
             @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
             @Override
             public Result< List<UserWashCodeConfig>> findUserWashCodeConfigList(Long userId) {

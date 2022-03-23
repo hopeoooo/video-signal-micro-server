@@ -26,4 +26,10 @@ public class SysTansterMoneyPageCo extends PageCo {
     @ApiModelProperty(value = "结束时间")
     private String endTime;
 
+    @ApiModelProperty(value = "父级")
+    private String parent;
+
+    @ApiModelProperty(value = "第三方交易编号")
+    private String traceId;
+
 }
