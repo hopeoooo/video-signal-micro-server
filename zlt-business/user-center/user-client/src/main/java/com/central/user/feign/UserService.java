@@ -153,10 +153,13 @@ public interface UserService {
 
     @PostMapping(value = "/userMoney/transterMoney")
     Result<SysUserMoney> transterMoney(@RequestParam("userId") Long userId, @RequestParam("money") BigDecimal money,
-                                       @RequestParam("remark") String remark, @RequestParam("transterType") Boolean transterType);
+                                       @RequestParam("remark") String remark, @RequestParam("transterType") Integer transterType,@RequestParam("traceId") String traceId);
 
     @GetMapping(value = "/sysTansterMoney/findList", params = "params")
     PageResult<SysTansterMoneyLogVo> findTransterMoneyList(@SpringQueryMap SysTansterMoneyPageCo params);
+
+    @PostMapping(value = "/sysTansterMoney/findAllByParent")
+    Result<List<SysTansterMoneyLogVo>> findAllByParent(@RequestBody SysTansterMoneyPageCo params);
 
 
     @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")

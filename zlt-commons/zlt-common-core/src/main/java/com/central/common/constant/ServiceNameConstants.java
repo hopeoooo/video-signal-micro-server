@@ -11,6 +11,10 @@ public interface ServiceNameConstants {
      */
     String USER_SERVICE = "user-center";
     /**
+     * 认证服务
+     */
+    String UAA_SERVICE = "uaa-server";
+    /**
      * 搜索中心服务
      */
     String SEARCH_SERVICE = "search-center";
@@ -58,4 +62,8 @@ public interface ServiceNameConstants {
      * 聊天服务
      */
     String CHAT_SERVICE = "chat-center";
+    /**
+     * 商户服务
+     */
+    String BUSINESS_SERVICE = "business-center";
 }

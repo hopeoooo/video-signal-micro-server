@@ -15,6 +15,8 @@ public enum CapitalEnum {
     ARTIFICIALIN(5, "手动入款"),
     ARTIFICIALOUT(6, "手动出款"),
     WASH_CODE(7, "领取洗码"),
+    BUSINESS_ADD(8, "商户API加点"),
+    BUSINESS_SUB(9, "商户API扣点"),
     DEFAULT(-1, "未知");
 
     @Getter

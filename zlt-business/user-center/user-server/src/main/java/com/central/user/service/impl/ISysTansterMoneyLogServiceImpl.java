@@ -52,4 +52,10 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
     public void syncSave(SysTansterMoneyLog sysTansterMoneyLog) {
         baseMapper.insert(sysTansterMoneyLog);
     }
+
+    @Override
+    public List<SysTansterMoneyLogVo> findAllByParent(SysTansterMoneyPageCo params) {
+        List<SysTansterMoneyLogVo> list = baseMapper.findAllByParent(params);
+        return list;
+    }
 }

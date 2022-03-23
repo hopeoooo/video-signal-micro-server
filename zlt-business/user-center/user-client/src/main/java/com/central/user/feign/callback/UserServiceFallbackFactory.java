@@ -164,14 +164,20 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) {
-                log.error("人工上下分:{}",userId,throwable);
+            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType,String traceId) {
+                log.error("人工上下分:{},transterType={}",userId,transterType,throwable);
                 return Result.failed("上下分错误");
             }
             @Override
             public PageResult<SysTansterMoneyLogVo> findTransterMoneyList(SysTansterMoneyPageCo params) {
                 log.error("findTransterMoneyList查询会员账变异常:{}", params, throwable);
                 return new PageResult();
+            }
+
+            @Override
+            public Result<List<SysTansterMoneyLogVo>> findAllByParent(SysTansterMoneyPageCo params) {
+                log.error("findAllByParent根据父级查询转账记录异常:{}", params, throwable);
+                return Result.failed("查询转账记录异常");
             }
 
             @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")

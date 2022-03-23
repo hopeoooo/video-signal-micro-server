@@ -381,6 +381,11 @@
                 <artifactId>translate-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>business-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- 业务逻辑模块版本管理（Business）  End -->
 
             <dependency>

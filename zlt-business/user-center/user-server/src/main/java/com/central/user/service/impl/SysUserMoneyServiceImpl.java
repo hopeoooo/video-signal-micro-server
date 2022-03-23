@@ -78,15 +78,17 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     @Override
     @Transactional
     @CachePut(key="#sysUserMoney.userId")
-    public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Boolean transterType, String remark, SysUser sysUser) {
+    public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Integer transterType, String remark, String traceId, SysUser sysUser) {
         BigDecimal userMoery = sysUserMoney.getMoney()==null?BigDecimal.ZERO:sysUserMoney.getMoney();
-        if(transterType){//上分
+        if (transterType == 1 || transterType == 2) {//上分
             sysUserMoney.setMoney(sysUserMoney.getMoney().add(money));
-        }else{
-            sysUserMoney.setMoney(sysUserMoney.getMoney().subtract(money));
+        } else if (transterType == 0 || transterType == 3) {
+            //扣减金额大于本地余额时，最多只能扣减剩余的
+            money = money.compareTo(sysUserMoney.getMoney()) == 1 ? sysUserMoney.getMoney() : money;
+            sysUserMoney.setMoney(money);
         }
         baseMapper.updateById(sysUserMoney);
-        SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, transterType, sysUserMoney.getMoney());
+        SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, traceId, transterType, sysUserMoney.getMoney());
         iSysTansterMoneyLogService.save(sysTansterMoneyLog);
         return sysUserMoney;
     }
@@ -115,17 +117,25 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     }
 
     private SysTansterMoneyLog getSysTansterMoneyLog(BigDecimal beforeMoery, BigDecimal money, SysUser sysUser,
-                                                     String remark, Boolean transterType, BigDecimal afterMoney) {
+                                                     String remark, String traceId, Integer transterType, BigDecimal afterMoney) {
         SysTansterMoneyLog sysTansterMoneyLog = new SysTansterMoneyLog();
         sysTansterMoneyLog.setUserId(sysUser.getId());
         sysTansterMoneyLog.setUserName(sysUser.getUsername());
+        sysTansterMoneyLog.setParent(sysUser.getParent());
         sysTansterMoneyLog.setMoney(money);
         sysTansterMoneyLog.setBeforeMoney(beforeMoery);
         sysTansterMoneyLog.setAfterMoney(afterMoney);
-        if(transterType){
-            sysTansterMoneyLog.setOrderType(CapitalEnum.ARTIFICIALIN.getType());
-        }else{
+        if (transterType == 0) {
             sysTansterMoneyLog.setOrderType(CapitalEnum.ARTIFICIALOUT.getType());
+        } else if (transterType == 1) {
+            sysTansterMoneyLog.setOrderType(CapitalEnum.ARTIFICIALIN.getType());
+        } else if (transterType == 2) {
+            sysTansterMoneyLog.setOrderType(CapitalEnum.BUSINESS_ADD.getType());
+        } else if (transterType == 3) {
+            sysTansterMoneyLog.setOrderType(CapitalEnum.BUSINESS_SUB.getType());
+        }
+        if(StringUtils.isNotBlank(traceId)){
+            sysTansterMoneyLog.setTraceId(traceId);
         }
         if(StringUtils.isNotBlank(remark)){
             sysTansterMoneyLog.setRemark(remark);

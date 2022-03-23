@@ -34,6 +34,9 @@ public class SysTansterMoneyLogVo implements Serializable {
     @ApiModelProperty(value = "订单号")
     private String orderNo;
 
+    @ApiModelProperty(value = "第三方交易编号")
+    private String traceId;
+
     @ApiModelProperty(value = "账变金额")
     private BigDecimal money;
 

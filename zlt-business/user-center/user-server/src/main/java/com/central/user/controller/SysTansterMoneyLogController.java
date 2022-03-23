@@ -1,6 +1,7 @@
 package com.central.user.controller;
 
 import com.central.common.model.PageResult;
+import com.central.common.model.Result;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.model.co.SysTansterMoneyPageCo;
 import com.central.user.service.ISysTansterMoneyLogService;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,5 +40,12 @@ public class SysTansterMoneyLogController {
     @GetMapping("/findList")
     public PageResult<SysTansterMoneyLogVo> findSysTansterMoneyList(@Valid @ModelAttribute SysTansterMoneyPageCo params) {
         return sysTansterMoneyLogService.findSysTansterMoneyList(params);
+    }
+
+    @ApiOperation(value = "根据父级查询转账记录")
+    @PostMapping("/findAllByParent")
+    public Result<List<SysTansterMoneyLogVo>> findAllByParent(@RequestBody SysTansterMoneyPageCo params) {
+        List<SysTansterMoneyLogVo> list = sysTansterMoneyLogService.findAllByParent(params);
+        return Result.succeed(list);
     }
 }
