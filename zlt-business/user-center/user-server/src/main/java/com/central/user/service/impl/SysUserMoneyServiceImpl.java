@@ -116,6 +116,11 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         return userMoney;
     }
 
+    @Override
+    public BigDecimal getSumMoneyByParent(String parent) {
+        return baseMapper.getSumMoneyByParent(parent);
+    }
+
     private SysTansterMoneyLog getSysTansterMoneyLog(BigDecimal beforeMoery, BigDecimal money, SysUser sysUser,
                                                      String remark, String traceId, Integer transterType, BigDecimal afterMoney) {
         SysTansterMoneyLog sysTansterMoneyLog = new SysTansterMoneyLog();

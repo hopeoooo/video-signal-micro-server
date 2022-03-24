@@ -34,4 +34,6 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     GameRecordReportDto findValidbetTotal(@Param("p") Map<String, Object> params);
 
     GameRecordReportDto findWinningAmountTotal(@Param("p") Map<String, Object> params);
+
+    List<GameRecord> getGameRecordByParent(@Param("p") GameRecordBetCo params);
 }

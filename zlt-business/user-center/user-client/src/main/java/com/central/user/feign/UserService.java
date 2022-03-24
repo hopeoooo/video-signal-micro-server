@@ -158,13 +158,11 @@ public interface UserService {
     @GetMapping(value = "/sysTansterMoney/findList", params = "params")
     PageResult<SysTansterMoneyLogVo> findTransterMoneyList(@SpringQueryMap SysTansterMoneyPageCo params);
 
-    @PostMapping(value = "/sysTansterMoney/findAllByParent")
-    Result<List<SysTansterMoneyLogVo>> findAllByParent(@RequestBody SysTansterMoneyPageCo params);
-
+    @GetMapping(value = "/sysTansterMoney/findAllByParent")
+    Result<List<SysTansterMoneyLogVo>> findAllByParent(@SpringQueryMap SysTansterMoneyPageCo params);
 
     @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
      Result< List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable("userId") Long userId) ;
-
 
     @PostMapping("/userWashCode/saveUserWashCodeConfig")
     Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfigCo> list) ;
@@ -177,6 +175,12 @@ public interface UserService {
 
     @GetMapping("/userMoney/getMoney")
     Result<SysUserMoneyVo> getMoney();
+
+    @GetMapping("/userMoney/getMoneyByUserName")
+    Result<SysUserMoneyVo> getMoneyByUserName(@RequestParam("userName") String userName);
+
+    @GetMapping("/userMoney/getSumMoneyByParent")
+    Result<BigDecimal> getSumMoneyByParent(@RequestParam(value = "parent") String parent);
 
     @GetMapping("/userMoney/receiveWashCode")
     Result<String> receiveWashCode();

@@ -208,7 +208,19 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             @Override
             public Result<SysUserMoneyVo> getMoney() {
                 log.error("getMoney error");
-                return null;
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result<SysUserMoneyVo> getMoneyByUserName(String userName) {
+                log.error("getMoneyByUserName error,userName={}",userName);
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result<BigDecimal> getSumMoneyByParent(String parent) {
+                log.error("getSumMoneyByParent 查询失败,parent={}", parent);
+                return Result.failed("查询失败");
             }
 
             @Override

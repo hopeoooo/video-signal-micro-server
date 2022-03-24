@@ -105,6 +105,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
+            public Result<List<GameRecord>> getGameRecordByParent(GameRecordBetCo params) {
+                log.error("getGameRecordByParent查询下注记录失败:{}", params);
+                return Result.failed("查询下注记录失败");
+            }
+
+            @Override
             public Result<GameRecordDto> findGameRecordTotal(GameRecordBetTotalCo params) {
                 log.error("findGameRecordTotal查询下注记录总计失败:{}", params);
                 return Result.failed("查询下注记录总计失败");

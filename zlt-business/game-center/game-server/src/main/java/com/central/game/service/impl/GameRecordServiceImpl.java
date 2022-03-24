@@ -95,6 +95,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             gameRecord.setBureauNum(co.getBureauNum());
             gameRecord.setUserId(user.getId());
             gameRecord.setUserName(user.getUsername());
+            gameRecord.setParent(user.getParent());
             gameRecord.setGameId(gameId.toString());
             gameRecord.setGameName(gameList.getName());
             gameRecord.setBetCode(betDataCo.getBetCode());
@@ -162,5 +163,10 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     public GameRecordReportDto findWinningAmountTotal(Map<String, Object> params) {
         return baseMapper.findWinningAmountTotal(params);
+    }
+
+    @Override
+    public List<GameRecord> getGameRecordByParent(GameRecordBetCo params) {
+        return gameRecordMapper.getGameRecordByParent(params);
     }
 }

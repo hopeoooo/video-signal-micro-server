@@ -6,6 +6,7 @@ import com.central.db.mapper.SuperMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -24,4 +25,6 @@ public interface SysUserMoneyMapper extends SuperMapper<SysUserMoney> {
      * @return
      */
     List<SysUserMoney> findList(Page<SysUserMoney> page, @Param("p") Map<String, Object> params);
+
+    BigDecimal getSumMoneyByParent(@Param("parent") String parent);
 }

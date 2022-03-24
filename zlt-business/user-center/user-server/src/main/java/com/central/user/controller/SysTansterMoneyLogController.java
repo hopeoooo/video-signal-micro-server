@@ -43,8 +43,8 @@ public class SysTansterMoneyLogController {
     }
 
     @ApiOperation(value = "根据父级查询转账记录")
-    @PostMapping("/findAllByParent")
-    public Result<List<SysTansterMoneyLogVo>> findAllByParent(@RequestBody SysTansterMoneyPageCo params) {
+    @GetMapping("/findAllByParent")
+    public Result<List<SysTansterMoneyLogVo>> findAllByParent(@ModelAttribute SysTansterMoneyPageCo params) {
         List<SysTansterMoneyLogVo> list = sysTansterMoneyLogService.findAllByParent(params);
         return Result.succeed(list);
     }
