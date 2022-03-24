@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * https://blog.csdn.net/qq_38089964/article/details/81541846
  */
 @Slf4j
-@ServerEndpoint(path = "/ws/chat/{roomId}/{userName}", host = "${ws.host}", port = "${ws.port}")
+@ServerEndpoint(path = "/ws/chat/{groupId}/{userName}", host = "${ws.host}", port = "${ws.port}")
 @Component
 @Data
 public class NettyWebSocketServer {
@@ -31,26 +31,26 @@ public class NettyWebSocketServer {
     @Autowired
     private ChatService chatService;
 
-    private static final Map<String, CopyOnWriteArraySet<NettyWebSocketServer>> rooms = new HashMap<>();
+    private static final Map<String, CopyOnWriteArraySet<NettyWebSocketServer>> groups = new HashMap<>();
 
     private Session session;
 
-    private String roomId;
+    private String groupId;
 
     private String userName;
 
 
     @OnOpen
-    public void onOpen(Session session, @PathVariable String roomId, @PathVariable String userName) {
+    public void onOpen(Session session, @PathVariable String groupId, @PathVariable String userName) {
         this.session = session;
-        this.roomId = roomId;
+        this.groupId = groupId;
         this.userName = userName;
-        CopyOnWriteArraySet<NettyWebSocketServer> friends = rooms.get(roomId);
+        CopyOnWriteArraySet<NettyWebSocketServer> friends = groups.get(groupId);
         if (friends == null) {
-            synchronized (rooms) {
-                if (!rooms.containsKey(roomId)) {
+            synchronized (groups) {
+                if (!groups.containsKey(groupId)) {
                     friends = new CopyOnWriteArraySet<>();
-                    rooms.put(roomId, friends);
+                    groups.put(groupId, friends);
                 }
             }
         }
@@ -66,7 +66,7 @@ public class NettyWebSocketServer {
 
     @OnClose
     public void onClose() {
-        CopyOnWriteArraySet<NettyWebSocketServer> friends = rooms.get(roomId);
+        CopyOnWriteArraySet<NettyWebSocketServer> friends = groups.get(groupId);
         if (friends != null) {
             friends.remove(this);
         }
@@ -74,7 +74,7 @@ public class NettyWebSocketServer {
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        CopyOnWriteArraySet<NettyWebSocketServer> friends = rooms.get(roomId);
+        CopyOnWriteArraySet<NettyWebSocketServer> friends = groups.get(groupId);
         if (friends != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dateTime = sdf.format(new Date());
@@ -84,7 +84,7 @@ public class NettyWebSocketServer {
             vo.setDateTime(dateTime);
             String msg = JSONObject.toJSONString(vo);
             //异步保存用户聊天信息
-            //chatService.syncSaveChatMessage(roomId, msg);
+            //chatService.syncSaveChatMessage(groupId, msg);
             for (NettyWebSocketServer item : friends) {
                 item.session.sendText(msg);
             }
@@ -108,12 +108,12 @@ public class NettyWebSocketServer {
     /**
      * 通过房间ID群发消息
      *
-     * @param roomId
+     * @param groupId
      * @param message
      * @throws IOException
      */
-    public static String sendMessageByRoomId(String roomId, String message) {
-        CopyOnWriteArraySet<NettyWebSocketServer> friends = rooms.get(roomId);
+    public static String sendMessageByGroupId(String groupId, String message) {
+        CopyOnWriteArraySet<NettyWebSocketServer> friends = groups.get(groupId);
         if (friends == null) {
             return "消息推送失败,没有找到指定会话";
         }

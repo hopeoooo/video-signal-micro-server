@@ -15,9 +15,9 @@ public class ChatServiceFallbackFactory implements FallbackFactory<ChatService> 
     public ChatService create(Throwable throwable) {
         return new ChatService() {
             @Override
-            public Result sendMessageByRoomId(String roomId, String message) {
-                log.error("sendMessageByRoomId给房间:{}推送消息异常",roomId);
-                return Result.failed("推送房间消息失败");
+            public Result sendMessageByGroupId(String groupId, String message) {
+                log.error("sendMessageByGroupId给群组:{}推送消息异常",groupId);
+                return Result.failed("推送群组消息失败");
             }
         };
     }

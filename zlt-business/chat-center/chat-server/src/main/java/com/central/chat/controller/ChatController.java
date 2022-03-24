@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/com/central/chat")
+@RequestMapping("/chat")
 @Api(tags = "聊天信息")
 public class ChatController {
 
     @Autowired
     private ChatService chatService;
 
-    @GetMapping(value = "/getChatMessageByRoomId/{roomId}")
+    @GetMapping(value = "/getChatMessageByGroupId/{groupId}")
     @ApiOperation(value = "根据房间ID查询聊天信息")
-    public Result<List<MessageVo>> getChatMessageByRoomId(@PathVariable String roomId) {
-        List<MessageVo> list = chatService.getChatMessageByRoomId(roomId);
+    public Result<List<MessageVo>> getChatMessageByGroupId(@PathVariable String groupId) {
+        List<MessageVo> list = chatService.getChatMessageByGroupId(groupId);
         return Result.succeed(list);
     }
 
@@ -32,15 +32,15 @@ public class ChatController {
      * 指定房间发消息
      *
      * @param message 消息内容
-     * @param roomId  房间ID
+     * @param groupId  群组ID
      * @return
      */
     @ApiOperation(value = "指定房间推发消息")
-    @PostMapping(value = "/sendMessageByRoomId")
-    public Result sendMessageByRoomId(@RequestParam("roomId") String roomId, @RequestParam("message") String message) {
-        String msg = NettyWebSocketServer.sendMessageByRoomId(roomId, message);
+    @PostMapping(value = "/sendMessageByGroupId")
+    public Result sendMessageByGroupId(@RequestParam("groupId") String groupId, @RequestParam("message") String message) {
+        String msg = NettyWebSocketServer.sendMessageByGroupId(groupId, message);
         if (StringUtils.isBlank(msg)) {
-            return Result.succeed(roomId + "号房间消息推送成功");
+            return Result.succeed(groupId + "号群组消息推送成功");
         }
         return Result.failed(msg);
     }

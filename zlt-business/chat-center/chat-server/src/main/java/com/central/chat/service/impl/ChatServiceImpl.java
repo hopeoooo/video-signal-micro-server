@@ -20,20 +20,20 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     @Async
-    public void syncSaveChatMessage(String roomId, String message) {
-        String key = ChatConstant.CHAT_MESSAGE_KEY + roomId;
+    public void syncSaveChatMessage(String groupId, String message) {
+        String key = ChatConstant.CHAT_MESSAGE_KEY + groupId;
         redisRepository.in(key, message);
         System.out.println("aaa" + Thread.currentThread().getId());
     }
 
     @Override
-    public List<MessageVo> getChatMessageByRoomId(String roomId) {
+    public List<MessageVo> getChatMessageByGroupId(String groupId) {
         List<MessageVo> list = new ArrayList<>();
-        Long length = redisRepository.length(ChatConstant.CHAT_MESSAGE_KEY + roomId);
+        Long length = redisRepository.length(ChatConstant.CHAT_MESSAGE_KEY + groupId);
         if (length == 0) {
             return list;
         }
-        List<Object> redisList = redisRepository.getList(ChatConstant.CHAT_MESSAGE_KEY + roomId, 0, length.intValue());
+        List<Object> redisList = redisRepository.getList(ChatConstant.CHAT_MESSAGE_KEY + groupId, 0, length.intValue());
         list = JSON.parseArray(redisList.toString(), MessageVo.class);
         return list;
     }

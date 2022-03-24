@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ChatService {
     
-    void syncSaveChatMessage(String roomId,String message);
+    void syncSaveChatMessage(String groupId,String message);
 
-    List<MessageVo> getChatMessageByRoomId(String roomId);
+    List<MessageVo> getChatMessageByGroupId(String groupId);
 }
