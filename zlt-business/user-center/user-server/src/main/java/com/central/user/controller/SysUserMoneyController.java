@@ -20,8 +20,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -35,6 +37,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/userMoney")
 @Api(tags = "用户钱包")
+@Validated
 public class SysUserMoneyController {
     @Autowired
     private ISysUserMoneyService userMoneyService;
@@ -49,6 +52,22 @@ public class SysUserMoneyController {
     @ApiOperation(value = "查询当前登录用户的钱包")
     @GetMapping("/getMoney")
     public Result<SysUserMoneyVo> getMoney(@LoginUser SysUser user) {
+        SysUserMoney sysUserMoney = userMoneyService.findByUserId(user.getId());
+        if (sysUserMoney == null) {
+            sysUserMoney = new SysUserMoney();
+        }
+        SysUserMoneyVo vo = new SysUserMoneyVo();
+        BeanUtils.copyProperties(sysUserMoney, vo);
+        return Result.succeed(vo);
+    }
+
+    @ApiOperation(value = "查询当前登录用户的钱包")
+    @GetMapping("/getMoneyByUserName")
+    public Result<SysUserMoneyVo> getMoneyByUserName(@RequestParam("userName") String userName) {
+        SysUser user = iSysUserService.selectByUsername(userName);
+        if (user == null) {
+            return Result.failed("用户不存在");
+        }
         SysUserMoney sysUserMoney = userMoneyService.findByUserId(user.getId());
         if (sysUserMoney == null) {
             sysUserMoney = new SysUserMoney();
@@ -184,5 +203,13 @@ public class SysUserMoneyController {
         Result<String> push = pushService.sendOneMessage(user.getUsername(), JSONObject.toJSONString(pushResult));
         log.info("用户钱包userName:{},推送结果:{}", user.getUsername(), push);
         return pushResult;
+    }
+
+    @ApiOperation(value = "查询商户下所有用户的余额")
+    @GetMapping("/getSumMoneyByParent")
+    @ApiImplicitParam(name = "parent", value = "父级", required = true, dataType = "String")
+    public Result<BigDecimal> getSumMoneyByParent(@NotBlank(message = "parent不允许为空") @RequestParam(value = "parent") String parent) {
+        BigDecimal sumMoney = userMoneyService.getSumMoneyByParent(parent);
+        return Result.succeed(sumMoney);
     }
 }

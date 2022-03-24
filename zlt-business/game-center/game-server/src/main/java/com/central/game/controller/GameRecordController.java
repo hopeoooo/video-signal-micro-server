@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,6 +64,13 @@ public class GameRecordController {
     public Result<GameRecordDto> findGameRecordTotal(@Valid @ModelAttribute GameRecordBetTotalCo params) {
         GameRecordDto gameRecordTotal = gameRecordService.findGameRecordTotal(params);
         return Result.succeed(gameRecordTotal);
+    }
+
+    @ApiOperation(value = "根据父级查询下注记录")
+    @GetMapping("/getGameRecordByParent")
+    public Result<List<GameRecord>> getGameRecordByParent(@ModelAttribute GameRecordBetCo params) {
+        List<GameRecord> list = gameRecordService.getGameRecordByParent(params);
+        return Result.succeed(list);
     }
 
 

@@ -11,6 +11,7 @@ import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordBetTotalCo;
 import com.central.game.model.co.GameRecordCo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,5 +34,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     GameRecordReportDto findValidbetTotal(Map<String, Object> params);
 
     GameRecordReportDto findWinningAmountTotal(Map<String, Object> params);
+
+    List<GameRecord> getGameRecordByParent(GameRecordBetCo params);
 }
 

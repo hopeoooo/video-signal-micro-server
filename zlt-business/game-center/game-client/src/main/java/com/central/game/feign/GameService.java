@@ -119,7 +119,10 @@ public interface GameService {
      * @return
      */
     @GetMapping("/gameRecord/findList")
-     Result<PageResult<GameRecord>> findList(@SpringQueryMap GameRecordBetCo params ) ;
+    Result<PageResult<GameRecord>> findList(@SpringQueryMap GameRecordBetCo params ) ;
+
+    @GetMapping("/gameRecord/getGameRecordByParent")
+    Result<List<GameRecord>> getGameRecordByParent(@SpringQueryMap GameRecordBetCo params ) ;
 
     @GetMapping("/gameRecord/findGameRecordTotal")
     Result<GameRecordDto> findGameRecordTotal(@SpringQueryMap GameRecordBetTotalCo params) ;

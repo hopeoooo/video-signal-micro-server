@@ -34,5 +34,7 @@ public interface ISysUserMoneyService extends ISuperService<SysUserMoney> {
     void syncPushMoneyToWebApp(Long userId,String userName);
 
     SysUserMoney receiveWashCode(SysUserMoney userMoney);
+
+    BigDecimal getSumMoneyByParent(String parent);
 }
 

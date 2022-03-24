@@ -1,16 +1,9 @@
-package com.central.game.model;
+package com.central.business.model.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.central.common.model.SuperEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,12 +12,9 @@ import java.util.Date;
  * @author zlt
  * @date 2022-01-04 14:14:35
  */
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = false)
-@TableName("game_record")
+@Data
 @ApiModel("游戏下注记录")
-public class GameRecord extends SuperEntity {
+public class GameRecordVo {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "游戏ID")
@@ -32,9 +22,6 @@ public class GameRecord extends SuperEntity {
 
     @ApiModelProperty(value = "游戏名称")
     private String gameName;
-
-    @ApiModelProperty(value = "用户ID")
-    private Long userId;
 
     @ApiModelProperty(value = "用户名")
     private String userName;
@@ -82,8 +69,12 @@ public class GameRecord extends SuperEntity {
     @ApiModelProperty(value = "牌型ex:庄:♦3♦3 闲:♥9♣10")
     private String gameResult;
 
-    @ApiModelProperty(value = "父级")
-    private String parent;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "更新时间")
+    private Date updateTime;
 
 }

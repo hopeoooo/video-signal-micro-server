@@ -4,6 +4,7 @@ import com.central.business.constant.BusinessConstants;
 import com.central.business.model.co.RegisterCo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -65,8 +66,12 @@ public class CheckSignatureUtil {
         String signatureKey = "";
         for (Map.Entry entry : treeMap.entrySet()) {
             String name = entry.getKey().toString();
-            String value = entry.getValue().toString();
-            signatureKey = signatureKey + name + "=" + value + "&";
+            if (ObjectUtils.isEmpty(entry.getValue())) {
+                signatureKey = signatureKey + name + "=" + "&";
+            } else {
+                String value = entry.getValue().toString();
+                signatureKey = signatureKey + name + "=" + value + "&";
+            }
         }
         if (StringUtils.isNotBlank(signatureKey)) {
             signatureKey = signatureKey.substring(0, signatureKey.length() - 1);
