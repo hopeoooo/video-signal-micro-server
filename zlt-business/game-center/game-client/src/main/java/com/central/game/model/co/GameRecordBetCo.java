@@ -12,7 +12,10 @@ public class GameRecordBetCo extends PageCo {
     @ApiModelProperty(value = "游戏Id", required = false)
     private Long gameId;
 
-    @ApiModelProperty(value = "父级", required = true)
+    @ApiModelProperty(value = "用户名", required = false)
+    private String userName;
+
+    @ApiModelProperty(value = "父级", required = false)
     private String  parent;
 
     @ApiModelProperty(value = "开始时间", required = false)

@@ -11,6 +11,9 @@ import javax.validation.constraints.NotBlank;
 @ApiModel("下注结果入参")
 public class GameRecordCo extends PageCo {
 
+    @ApiModelProperty(value = "用户名", required = true)
+    private String userName;
+
     @ApiModelProperty(value = "开始时间,格式yyyy-MM-dd HH:mm:ss,GMT+8,开始时间不能超过当前时间60天")
     @NotBlank(message = "开始时间不能为空")
     private String startTime;

@@ -8,6 +8,9 @@
             <if test="p.gameId != null and p.gameId != ''">
                 and g.game_id = #{p.gameId}
             </if>
+            <if test="p.userName != null and p.userName != ''">
+                and g.user_name = #{p.userName}
+            </if>
             <if test="p.parent != null and p.parent != ''">
                 and g.parent = #{p.parent}
             </if>
