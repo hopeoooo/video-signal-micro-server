@@ -1,6 +1,5 @@
 package com.central.business.model.co;
 
-import com.central.common.model.co.PageCo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @ApiModel("下注结果入参")
-public class GameRecordCo extends PageCo {
+public class GameRecordCo {
 
     @ApiModelProperty(value = "用户名", required = true)
     private String userName;
