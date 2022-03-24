@@ -18,11 +18,11 @@ public interface ChatService {
      * 私发消息
      *
      * @param message
-     * @param roomId
+     * @param groupId
      * @return
      */
-    @PostMapping(value = "/sendMessageByRoomId")
-    Result sendMessageByRoomId(@RequestParam("roomId") String roomId, @RequestParam("message") String message);
+    @PostMapping(value = "/sendMessageByGroupId")
+    Result sendMessageByGroupId(@RequestParam("groupId") String groupId, @RequestParam("message") String message);
 
 
 }
