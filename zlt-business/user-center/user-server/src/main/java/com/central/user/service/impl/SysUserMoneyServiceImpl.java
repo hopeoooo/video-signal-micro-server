@@ -72,7 +72,8 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     @CachePut(key="#sysUserMoney.userId")
     public SysUserMoney saveCache(SysUserMoney sysUserMoney) {
         baseMapper.insert(sysUserMoney);
-        return sysUserMoney;
+        //金额设置的时候实体默认是null,缓存保存null,后面计算的时候会NPE,要查询一次缓存中保存0，后面计算的时候才不会有问题
+        return baseMapper.selectById(sysUserMoney.getId());
     }
 
     @Override
