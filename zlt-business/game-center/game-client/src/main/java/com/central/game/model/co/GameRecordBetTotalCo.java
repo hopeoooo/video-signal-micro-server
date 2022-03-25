@@ -17,4 +17,12 @@ public class GameRecordBetTotalCo {
     @ApiModelProperty(value = "结束时间", required = false)
     private String endTime;
 
+
+    @ApiModelProperty(value = "用户名", required = false)
+    private String userName;
+
+    @ApiModelProperty(value = "父级", required = false)
+    private String  parent;
+
+
 }
