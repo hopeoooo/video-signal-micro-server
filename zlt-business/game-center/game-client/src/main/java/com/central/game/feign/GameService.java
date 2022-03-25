@@ -8,6 +8,9 @@ import com.central.game.dto.GameRecordReportDto;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.*;
+import com.central.game.model.co.GameListCo;
+import com.central.game.model.co.GameRecordBetCo;
+import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.callback.GameServiceFallbackFactory;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
@@ -126,7 +129,7 @@ public interface GameService {
     Result<List<GameLotteryResult>> getLotteryResultList(@SpringQueryMap GameLotteryResultCo params ) ;
 
     @GetMapping("/gameRecord/findGameRecordTotal")
-    Result<GameRecordDto> findGameRecordTotal(@SpringQueryMap GameRecordBetTotalCo params) ;
+    Result<GameRecordDto> findGameRecordTotal(@SpringQueryMap GameRecordBetCo params) ;
 
     @GetMapping("/gameRecord/findBetAmountTotal")
     Result<GameRecordReportDto> findBetAmountTotal(@RequestParam Map<String, Object> params) ;
