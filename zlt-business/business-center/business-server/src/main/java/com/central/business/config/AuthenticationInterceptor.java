@@ -53,10 +53,22 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         if (!checkSignature) {
             return checkSignature;
         }
+        //商户账号秘钥判断
         String[] businessList = businessProperties.getBusinessList();
         for (String str : businessList) {
             String[] business = str.split("/");
             if (vendorId.equals(business[0]) && secretKey.equals(business[1])) {
+                BusinessContextHolder.setBusiness(vendorId);
+                return true;
+            }
+        }
+        //允许查询赛果的账号秘钥判断
+        String[] allowLotteryDataList = businessProperties.getAllowLotteryDataList();
+        for (String str : allowLotteryDataList) {
+            String[] allow = str.split("/");
+            String requestURI = request.getRequestURI();
+            //只允许访问指定接口
+            if (vendorId.equals(allow[0]) && secretKey.equals(allow[1]) && requestURI.contains(BusinessConstants.LOTTER_DATA_API_URL)) {
                 BusinessContextHolder.setBusiness(vendorId);
                 return true;
             }

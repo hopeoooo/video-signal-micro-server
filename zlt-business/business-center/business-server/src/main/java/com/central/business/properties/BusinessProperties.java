@@ -29,5 +29,8 @@ public class BusinessProperties {
     @ApiModelProperty(value = "商户数组")
     private String[] businessList = {};
 
+    @ApiModelProperty(value = "允许拉取赛果数据的用户数组")
+    private String[] allowLotteryDataList = {};
+
 
 }

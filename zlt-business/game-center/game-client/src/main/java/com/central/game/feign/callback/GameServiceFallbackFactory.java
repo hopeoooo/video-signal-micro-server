@@ -4,11 +4,9 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
+import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
-import com.central.game.model.co.GameListCo;
-import com.central.game.model.co.GameRecordBetCo;
-import com.central.game.model.co.GameRecordBetTotalCo;
-import com.central.game.model.co.GameRoomListCo;
+import com.central.game.model.co.*;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
@@ -108,6 +106,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             public Result<List<GameRecord>> getGameRecordByParent(GameRecordBetCo params) {
                 log.error("getGameRecordByParent查询下注记录失败:{}", params);
                 return Result.failed("查询下注记录失败");
+            }
+
+            @Override
+            public Result<List<GameLotteryResult>> getLotteryResultList(GameLotteryResultCo params) {
+                log.error("getLotteryResultList 查询开奖结果记录失败:{}", params);
+                return Result.failed("查询开奖结果失败");
             }
 
             @Override
