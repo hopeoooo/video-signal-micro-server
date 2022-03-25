@@ -16,13 +16,11 @@ import com.central.game.model.GameRecord;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordBetDataCo;
-import com.central.game.model.co.GameRecordBetTotalCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.service.IGameListService;
 import com.central.game.service.IGameRecordService;
 import com.central.game.service.IGameRoomListService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -146,7 +144,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     @Override
-    public GameRecordDto findGameRecordTotal(GameRecordBetTotalCo params) {
+    public GameRecordDto findGameRecordTotal(GameRecordBetCo params) {
         return baseMapper.findGameRecordTotal( params);
     }
 

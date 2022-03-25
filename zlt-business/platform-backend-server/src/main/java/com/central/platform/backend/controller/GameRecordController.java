@@ -6,7 +6,6 @@ import com.central.game.dto.GameRecordDto;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetCo;
-import com.central.game.model.co.GameRecordBetTotalCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -53,7 +52,7 @@ public class GameRecordController {
             @ApiImplicitParam(name = "startTime", value = "开始时间", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "endTime", value = "结束时间", required = false, dataType = "Long"),
     })
-    public Result<GameRecordDto> findGameRecordTotal(@Valid @ModelAttribute GameRecordBetTotalCo params) {
+    public Result<GameRecordDto> findGameRecordTotal(@Valid @ModelAttribute GameRecordBetCo params) {
         return gameService.findGameRecordTotal(params);
     }
 

@@ -8,7 +8,6 @@ import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetCo;
-import com.central.game.model.co.GameRecordBetTotalCo;
 import com.central.game.model.co.GameRecordCo;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     PageResult<GameRecord> findList(GameRecordBetCo map);
 
 
-    GameRecordDto findGameRecordTotal(GameRecordBetTotalCo params);
+    GameRecordDto findGameRecordTotal(GameRecordBetCo params);
 
     Result saveRecord(GameRecordCo co, SysUser user, String ip);
 
