@@ -165,10 +165,10 @@ public class BusinessApiController {
         if (!CheckSignatureUtil.checkSignature(co)) {
             return Result.failed("参数签名校验失败");
         }
-        Result resultDateTime = checkDateTime(co.getStartTime(), co.getEndTime());
+   /*     Result resultDateTime = checkDateTime(co.getStartTime(), co.getEndTime());
         if (resultDateTime.getResp_code() != CodeEnum.SUCCESS.getCode()) {
             return resultDateTime;
-        }
+        }*/
         GameRecordBetCo params = new GameRecordBetCo();
         BeanUtils.copyProperties(co, params);
         params.setParent(BusinessContextHolder.getBusiness());

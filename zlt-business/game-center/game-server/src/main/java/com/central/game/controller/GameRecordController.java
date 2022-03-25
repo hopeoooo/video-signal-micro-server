@@ -9,7 +9,6 @@ import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetCo;
-import com.central.game.model.co.GameRecordBetTotalCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.service.IGameRecordService;
 import io.swagger.annotations.Api;
@@ -18,7 +17,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +59,7 @@ public class GameRecordController {
     @ResponseBody
     @ApiOperation(value = "总投注记录-总计")
     @GetMapping("/findGameRecordTotal")
-    public Result<GameRecordDto> findGameRecordTotal(@Valid @ModelAttribute GameRecordBetTotalCo params) {
+    public Result<GameRecordDto> findGameRecordTotal(@Valid @ModelAttribute GameRecordBetCo params) {
         GameRecordDto gameRecordTotal = gameRecordService.findGameRecordTotal(params);
         return Result.succeed(gameRecordTotal);
     }

@@ -7,11 +7,8 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@ApiModel("下注结果入参")
-public class GameRecordCo {
-
-    @ApiModelProperty(value = "用户名", required = true)
-    private String userName;
+@ApiModel("开奖结果入参")
+public class GameLotteryResultCo {
 
     @ApiModelProperty(value = "开始时间,格式yyyy-MM-dd HH:mm:ss,GMT+8,开始时间不能超过当前时间60天")
     @NotBlank(message = "开始时间不能为空")

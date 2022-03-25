@@ -17,4 +17,8 @@ public interface BusinessConstants {
      * 认证模式 账号密码
      */
     String AUTHENTICATION_MODE = "password_code";
+    /**
+     * 比赛数据接口url
+     */
+    String LOTTER_DATA_API_URL = "lotterDataApi";
 }

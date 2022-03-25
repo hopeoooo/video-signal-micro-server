@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.central.game.mapper.GameLotteryResultMapper">
+
+    <sql id="where">
+        <where>
+            <if test="p.startTime != null and p.startTime != ''">
+                and g.create_time <![CDATA[>=]]> #{p.startTime}
+            </if>
+
+            <if test="p.endTime != null and p.endTime != ''">
+                and g.create_time <![CDATA[<=]]> #{p.endTime}
+            </if>
+        </where>
+    </sql>
+
+
+    <select id="getLotteryResultList"  resultType="com.central.game.model.GameLotteryResult">
+        SELECT g.*
+        FROM
+        game_lottery_result g
+        <where>
+            <if test="p.startTime != null and p.startTime != ''">
+                and g.lottery_time <![CDATA[>=]]> #{p.startTime}
+            </if>
+
+            <if test="p.endTime != null and p.endTime != ''">
+                and g.lottery_time <![CDATA[<=]]> #{p.endTime}
+            </if>
+        </where>
+    </select>
+</mapper>
