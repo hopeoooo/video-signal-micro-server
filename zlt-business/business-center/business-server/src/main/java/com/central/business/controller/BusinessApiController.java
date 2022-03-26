@@ -97,7 +97,7 @@ public class BusinessApiController {
         if (!CheckSignatureUtil.checkSignature(co)) {
             return Result.failed("参数签名校验失败");
         }
-        if (co.getType() != 2 && co.getType() != 3) {
+        if (co.getType() != 8 && co.getType() != 9) {
             return Result.failed("加扣点类型错误");
         }
         if (co.getMoney().compareTo(BigDecimal.ZERO) < 1) {
@@ -107,7 +107,7 @@ public class BusinessApiController {
         if (sysUser == null) {
             return Result.failed("用户不存在");
         }
-        Result<SysUserMoney> result = userService.transterMoney(sysUser.getId(), co.getMoney(), null, co.getType(), co.getTraceId());
+        Result<SysUserMoney> result = userService.transterMoney(sysUser.getId(), co.getMoney(), null, co.getType(), co.getTraceId(),null);
         if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
             return result;
         }

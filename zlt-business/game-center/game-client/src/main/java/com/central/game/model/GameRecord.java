@@ -8,6 +8,7 @@ import com.central.common.model.SuperEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +20,7 @@ import java.util.Date;
  * @author zlt
  * @date 2022-01-04 14:14:35
  */
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("game_record")
 @ApiModel("游戏下注记录")
@@ -79,11 +79,17 @@ public class GameRecord extends SuperEntity {
     @ApiModelProperty(value = "局号")
     private String bureauNum;
 
-    @ApiModelProperty(value = "牌型ex:庄:♦3♦3 闲:♥9♣10")
+    @ApiModelProperty(value = "开奖结果代码")
     private String gameResult;
+
+    @ApiModelProperty(value = "开奖结果名称")
+    private String gameResultName;
 
     @ApiModelProperty(value = "父级")
     private String parent;
+
+    @ApiModelProperty(value = "盈利后是否加回本地钱包，1.是")
+    private Integer addMoneyStatus;
 
 
 }

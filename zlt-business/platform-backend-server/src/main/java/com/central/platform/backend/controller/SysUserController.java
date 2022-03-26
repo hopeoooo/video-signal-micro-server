@@ -120,13 +120,13 @@ public class SysUserController {
             @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "money", value = "金额", required = true, dataType = "BigDecimal"),
             @ApiImplicitParam(name = "remark", value = "备注", dataType = "String"),
-            @ApiImplicitParam(name = "transterType", value = "0：人工下分,1：人工上分，2:商户API加点，3:商户API扣点", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "transterType", value = "6：人工下分,5：人工上分", required = true, dataType = "Integer")
     })
     public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType){
 
         if(money.compareTo(UserConstant.maxTransterMoney) >= 0){
             return Result.failed("用户上分金额太大");
         }
-        return userService.transterMoney(userId, money, remark, transterType,null);
+        return userService.transterMoney(userId, money, remark, transterType,null,null);
     }
 }

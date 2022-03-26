@@ -79,17 +79,18 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     @Override
     @Transactional
     @CachePut(key="#sysUserMoney.userId")
-    public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Integer transterType, String remark, String traceId, SysUser sysUser) {
-        BigDecimal userMoery = sysUserMoney.getMoney()==null?BigDecimal.ZERO:sysUserMoney.getMoney();
-        if (transterType == 1 || transterType == 2) {//上分
+    public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Integer transterType, String remark, String traceId, SysUser sysUser, String betId) {
+        BigDecimal userMoery = sysUserMoney.getMoney() == null ? BigDecimal.ZERO : sysUserMoney.getMoney();
+        CapitalEnum capitalEnum = CapitalEnum.fingCapitalEnumType(transterType);
+        if (capitalEnum.getAddOrSub() == 0) {//上分
             sysUserMoney.setMoney(sysUserMoney.getMoney().add(money));
-        } else if (transterType == 0 || transterType == 3) {
+        } else if (capitalEnum.getAddOrSub() == 1) {
             //扣减金额大于本地余额时，最多只能扣减剩余的
             money = money.compareTo(sysUserMoney.getMoney()) == 1 ? sysUserMoney.getMoney() : money;
             sysUserMoney.setMoney(sysUserMoney.getMoney().subtract(money));
         }
         baseMapper.updateById(sysUserMoney);
-        SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, traceId, transterType, sysUserMoney.getMoney());
+        SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, traceId, transterType, sysUserMoney.getMoney(), betId);
         iSysTansterMoneyLogService.save(sysTansterMoneyLog);
         return sysUserMoney;
     }
@@ -123,7 +124,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     }
 
     private SysTansterMoneyLog getSysTansterMoneyLog(BigDecimal beforeMoery, BigDecimal money, SysUser sysUser,
-                                                     String remark, String traceId, Integer transterType, BigDecimal afterMoney) {
+                                                     String remark, String traceId, Integer transterType, BigDecimal afterMoney,String betId) {
         SysTansterMoneyLog sysTansterMoneyLog = new SysTansterMoneyLog();
         sysTansterMoneyLog.setUserId(sysUser.getId());
         sysTansterMoneyLog.setUserName(sysUser.getUsername());
@@ -131,20 +132,15 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         sysTansterMoneyLog.setMoney(money);
         sysTansterMoneyLog.setBeforeMoney(beforeMoery);
         sysTansterMoneyLog.setAfterMoney(afterMoney);
-        if (transterType == 0) {
-            sysTansterMoneyLog.setOrderType(CapitalEnum.ARTIFICIALOUT.getType());
-        } else if (transterType == 1) {
-            sysTansterMoneyLog.setOrderType(CapitalEnum.ARTIFICIALIN.getType());
-        } else if (transterType == 2) {
-            sysTansterMoneyLog.setOrderType(CapitalEnum.BUSINESS_ADD.getType());
-        } else if (transterType == 3) {
-            sysTansterMoneyLog.setOrderType(CapitalEnum.BUSINESS_SUB.getType());
-        }
+        sysTansterMoneyLog.setOrderType(transterType);
         if(StringUtils.isNotBlank(traceId)){
             sysTansterMoneyLog.setTraceId(traceId);
         }
         if(StringUtils.isNotBlank(remark)){
             sysTansterMoneyLog.setRemark(remark);
+        }
+        if(StringUtils.isNotBlank(betId)){
+            sysTansterMoneyLog.setBetId(betId);
         }
         sysTansterMoneyLog.setOrderNo("SXF" + DateUtil.format(new Date(), "yyyyMMddHHmmssSSS"));
         return sysTansterMoneyLog;

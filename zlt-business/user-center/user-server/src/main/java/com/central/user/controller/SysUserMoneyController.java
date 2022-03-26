@@ -82,35 +82,45 @@ public class SysUserMoneyController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "money", value = "金额", required = true, dataType = "BigDecimal"),
-            @ApiImplicitParam(name = "transterType", value = "0：人工下分,1：人工上分，2:商户API加点，3:商户API扣点", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "transterType", value = "6：人工下分,5：人工上分，3:派彩，4:下注，8:商户API加点，9:商户API扣点", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "remark", value = "备注", dataType = "String"),
             @ApiImplicitParam(name = "traceId", value = "第三方交易编号", dataType = "String"),
+            @ApiImplicitParam(name = "betId", value = "注单号", dataType = "String"),
     })
-    public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType,String traceId) throws Exception {
-        if(money.compareTo(BigDecimal.ZERO) <= 0){
+    public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType, String traceId, String betId) {
+        if (money.compareTo(BigDecimal.ZERO) <= 0) {
             return Result.failed("参数错误");
         }
-        String redisKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK  + userId;
+        CapitalEnum capitalEnum = CapitalEnum.fingCapitalEnumType(transterType);
+        if (capitalEnum == CapitalEnum.DEFAULT) {
+            return Result.failed("操作类型错误");
+        }
+        String redisKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK + userId;
         boolean moneyLock = RedissLockUtil.tryLock(redisKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
         try {
-            if(moneyLock){
-                SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
-                SysUser sysUser = iSysUserService.selectById(userId);
-                if (sysUserMoney == null || sysUser == null) {
-                    return Result.failed("用户不存在或钱包错误");
-                }
-                if (transterType == 3 && money.compareTo(sysUserMoney.getMoney()) == 1) {
-                    return Result.failed("扣点金额不能大于剩余金额");
-                }
-                SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId,sysUser);
-                userMoneyService.syncPushMoneyToWebApp(userId,sysUser.getUsername());
-                return Result.succeed(saveSysUserMoney);
-            }else{
+            if (!moneyLock) {
                 return Result.failed("上下分请求太过频繁");
             }
-        }catch (Exception e){
-            throw new Exception("用户上下分异常，param = {" + userId + "}, error = {" + e.getMessage() + "}");
-        }finally {
+            SysUser sysUser = iSysUserService.selectById(userId);
+            if (sysUser == null) {
+                return Result.failed("用户不存在");
+            }
+            SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
+            if (sysUserMoney == null) {
+                return Result.failed("用户钱包不存在");
+            }
+            if (transterType == 9 && money.compareTo(sysUserMoney.getMoney()) == 1) {
+                return Result.failed("扣点金额不能大于剩余金额");
+            } else if (transterType == 4 && money.compareTo(sysUserMoney.getMoney()) == 1) {
+                return Result.failed("下注金额不能大于剩余金额");
+            }
+            SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId, sysUser, betId);
+            userMoneyService.syncPushMoneyToWebApp(userId, sysUser.getUsername());
+            return Result.succeed(saveSysUserMoney);
+        } catch (Exception e) {
+            log.error("用户上下分异常,userId:{},money:{},remark:{},transterType{},traceId{},betId:{}", userId, money, remark, transterType, traceId, betId);
+            return Result.failed("操作失败");
+        } finally {
             RedissLockUtil.unlock(redisKey);
         }
     }
