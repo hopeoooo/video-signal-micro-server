@@ -3,11 +3,10 @@ package com.central.game.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.central.common.model.PageResult;
-import com.central.common.model.Result;
-import com.central.common.model.SysUser;
+import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.game.constants.GameListEnum;
+import com.central.game.constants.PlayEnum;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
 import com.central.game.mapper.GameRecordMapper;
@@ -20,6 +19,7 @@ import com.central.game.model.co.GameRecordCo;
 import com.central.game.service.IGameListService;
 import com.central.game.service.IGameRecordService;
 import com.central.game.service.IGameRoomListService;
+import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +46,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     private IGameRoomListService gameRoomListService;
     @Autowired
     private IGameListService gameListService;
+    @Autowired
+    private UserService userService;
 
     @Override
     @Transactional
@@ -71,42 +73,84 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         }
         List<GameRecordBetDataCo> betResult = co.getBetResult();
         for (GameRecordBetDataCo betDataCo : betResult) {
+            PlayEnum playEnum = PlayEnum.getPlayByCode(betDataCo.getBetCode());
+            if (playEnum == null) {
+                return Result.failed(betDataCo.getBetName() + "玩法不支持");
+            }
             BigDecimal betAmount = new BigDecimal(betDataCo.getBetAmount());
             if (betAmount.compareTo(BigDecimal.ZERO) < 1) {
                 return Result.failed(betDataCo.getBetName() + "下注金额必须大于0");
             }
         }
-        //先删除之前用户本局保存的注单数据
+        //先查询上次用户本局保存的注单数据
         LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
         lqw.eq(GameRecord::getUserId, user.getId());
         lqw.eq(GameRecord::getGameId, gameId);
         lqw.eq(GameRecord::getTableNum, co.getTableNum());
         lqw.eq(GameRecord::getBootNum, co.getBootNum());
         lqw.eq(GameRecord::getBureauNum, co.getBureauNum());
-        gameRecordMapper.delete(lqw);
-        //再新增
-        GameRecord gameRecord = null;
+        List<GameRecord> gameRecords = gameRecordMapper.selectList(lqw);
+        //同一种玩法投注额变化时更新
         for (GameRecordBetDataCo betDataCo : betResult) {
-            gameRecord = new GameRecord();
-            gameRecord.setTableNum(co.getTableNum());
-            gameRecord.setBootNum(co.getBootNum());
-            gameRecord.setBureauNum(co.getBureauNum());
-            gameRecord.setUserId(user.getId());
-            gameRecord.setUserName(user.getUsername());
-            gameRecord.setParent(user.getParent());
-            gameRecord.setGameId(gameId.toString());
-            gameRecord.setGameName(gameList.getName());
-            gameRecord.setBetCode(betDataCo.getBetCode());
-            gameRecord.setBetName(betDataCo.getBetName());
-            gameRecord.setBetAmount(new BigDecimal(betDataCo.getBetAmount()));
-            gameRecord.setBetTime(new Date());
-            gameRecord.setIp(ip);
-            //注单号
-            String betId = getBetId(gameId, co.getTableNum(), co.getBootNum(), co.getBureauNum());
-            gameRecord.setBetId(betId);
-            gameRecordMapper.insert(gameRecord);
+            boolean flag = false;
+            for (GameRecord record : gameRecords) {
+                BigDecimal newBetAmount = new BigDecimal(betDataCo.getBetAmount());
+                if (record.getGameId().equals(gameId) && record.getBetCode().equals(betDataCo.getBetCode())) {
+                    //与之前投注额相等不更新
+                    if (newBetAmount.compareTo(record.getBetAmount()) == 0) {
+                        flag = true;
+                        break;
+                    }
+                    //新旧投注额差
+                    BigDecimal diffBetAmount = newBetAmount.subtract(record.getBetAmount());
+                    record.setBetAmount(newBetAmount);
+                    //扣减本地余额
+                    Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), diffBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId());
+                    //本地余额扣减成功，更新投注记录
+                    if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
+                        gameRecordMapper.updateById(record);
+                    } else {
+                        log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
+                    }
+                    flag = true;
+                    break;
+                }
+            }
+            //之前没有保存的新增
+            if (!flag) {
+                //先扣减本地余额
+                GameRecord record = getGameRecord(co, betDataCo, user, gameId, gameList.getName(), ip);
+                Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), record.getBetAmount(), null, CapitalEnum.BET.getType(), null, record.getBetId());
+                //本地余额扣减成功，保存投注记录
+                if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
+                    gameRecordMapper.insert(record);
+                } else {
+                    log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
+                }
+            }
         }
         return Result.succeed();
+    }
+
+    public GameRecord getGameRecord(GameRecordCo co, GameRecordBetDataCo betDataCo, SysUser user, Long gameId, String gameName, String ip) {
+        GameRecord gameRecord = new GameRecord();
+        gameRecord.setTableNum(co.getTableNum());
+        gameRecord.setBootNum(co.getBootNum());
+        gameRecord.setBureauNum(co.getBureauNum());
+        gameRecord.setUserId(user.getId());
+        gameRecord.setUserName(user.getUsername());
+        gameRecord.setParent(user.getParent());
+        gameRecord.setGameId(gameId.toString());
+        gameRecord.setGameName(gameName);
+        gameRecord.setBetCode(betDataCo.getBetCode());
+        gameRecord.setBetName(betDataCo.getBetName());
+        gameRecord.setBetAmount(new BigDecimal(betDataCo.getBetAmount()));
+        gameRecord.setBetTime(new Date());
+        gameRecord.setIp(ip);
+        //注单号
+        String betId = getBetId(gameId, co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        gameRecord.setBetId(betId);
+        return gameRecord;
     }
 
     /**
@@ -145,7 +189,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
 
     @Override
     public GameRecordDto findGameRecordTotal(GameRecordBetCo params) {
-        return baseMapper.findGameRecordTotal( params);
+        return baseMapper.findGameRecordTotal(params);
     }
 
     @Override

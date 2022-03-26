@@ -72,11 +72,12 @@ public class GameRecordController {
     }
 
 
-    @ApiOperation(value = "保存")
+    @ApiOperation(value = "保存下注记录")
     @PostMapping("/save")
     public Result save(@Valid @RequestBody GameRecordCo co, @LoginUser SysUser user, HttpServletRequest request) {
         String ip = AddrUtil.getRemoteAddr(request);
         Result result = gameRecordService.saveRecord(co, user, ip);
+        //异步推送本局下注汇总数据（按玩法汇总）
         return result;
     }
 
