@@ -27,6 +27,9 @@ public class SysTansterMoneyLog extends SuperEntity {
     @ApiModelProperty(value = "第三方交易编号")
     private String traceId;
 
+    @ApiModelProperty(value = "注单编号")
+    private String betId;
+
     @ApiModelProperty(value = "账变金额")
     private BigDecimal money;
 
