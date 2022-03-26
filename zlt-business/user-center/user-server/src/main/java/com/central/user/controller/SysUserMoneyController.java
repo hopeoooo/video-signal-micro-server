@@ -82,7 +82,7 @@ public class SysUserMoneyController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "money", value = "金额", required = true, dataType = "BigDecimal"),
-            @ApiImplicitParam(name = "transterType", value = "0：人工下分,1：人工上分，3:派彩，4:下注，8:商户API加点，9:商户API扣点", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "transterType", value = "6：人工下分,5：人工上分，3:派彩，4:下注，8:商户API加点，9:商户API扣点", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "remark", value = "备注", dataType = "String"),
             @ApiImplicitParam(name = "traceId", value = "第三方交易编号", dataType = "String"),
             @ApiImplicitParam(name = "betId", value = "注单号", dataType = "String"),
