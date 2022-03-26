@@ -127,6 +127,6 @@ public class SysUserController {
         if(money.compareTo(UserConstant.maxTransterMoney) >= 0){
             return Result.failed("用户上分金额太大");
         }
-        return userService.transterMoney(userId, money, remark, transterType,null);
+        return userService.transterMoney(userId, money, remark, transterType,null,null);
     }
 }

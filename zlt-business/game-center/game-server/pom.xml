@@ -21,6 +21,10 @@
             <groupId>com.zlt</groupId>
             <artifactId>game-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>user-client</artifactId>
+        </dependency>
 
         <!-- @FeiginClients的负载均衡，不使用UserService不需要引用 -->
         <dependency>
@@ -73,6 +77,10 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
     </dependencies>

@@ -15,5 +15,13 @@ import java.util.List;
 public interface IGameLotteryResultService extends ISuperService<GameLotteryResult> {
 
     List<GameLotteryResult> getLotteryResultList(GameLotteryResultCo co);
+
+    /**
+     * 计算下注结果
+     * @param result
+     */
+    void calculateBetResult(GameLotteryResult result);
+
+
 }
 

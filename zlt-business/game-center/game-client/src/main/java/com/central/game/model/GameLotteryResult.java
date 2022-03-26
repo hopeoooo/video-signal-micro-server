@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.central.common.model.SuperEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +15,7 @@ import lombok.Setter;
  * @author zlt
  * @date 2022-01-04 14:14:35
  */
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("game_lottery_result")
 @ApiModel("游戏开奖结果")

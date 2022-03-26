@@ -107,7 +107,7 @@ public class BusinessApiController {
         if (sysUser == null) {
             return Result.failed("用户不存在");
         }
-        Result<SysUserMoney> result = userService.transterMoney(sysUser.getId(), co.getMoney(), null, co.getType(), co.getTraceId());
+        Result<SysUserMoney> result = userService.transterMoney(sysUser.getId(), co.getMoney(), null, co.getType(), co.getTraceId(),null);
         if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
             return result;
         }
