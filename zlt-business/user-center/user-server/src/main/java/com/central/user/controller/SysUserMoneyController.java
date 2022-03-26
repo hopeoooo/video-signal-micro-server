@@ -91,6 +91,10 @@ public class SysUserMoneyController {
         if (money.compareTo(BigDecimal.ZERO) <= 0) {
             return Result.failed("参数错误");
         }
+        CapitalEnum capitalEnum = CapitalEnum.fingCapitalEnumType(transterType);
+        if (capitalEnum == CapitalEnum.DEFAULT) {
+            return Result.failed("操作类型错误");
+        }
         String redisKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK + userId;
         boolean moneyLock = RedissLockUtil.tryLock(redisKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
         try {
