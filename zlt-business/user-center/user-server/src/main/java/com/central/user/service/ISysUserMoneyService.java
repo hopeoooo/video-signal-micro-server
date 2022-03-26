@@ -26,7 +26,7 @@ public interface ISysUserMoneyService extends ISuperService<SysUserMoney> {
 
     SysUserMoney saveCache(SysUserMoney sysUserMoney);
 
-    SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Integer transterType, String remark, String traceId, SysUser sysUse);
+    SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Integer transterType, String remark, String traceId, SysUser sysUser,String betId);
 
     /**
      * 异步推送消息到前端

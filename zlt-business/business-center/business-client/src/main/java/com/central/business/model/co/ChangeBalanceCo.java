@@ -20,7 +20,7 @@ public class ChangeBalanceCo {
     @NotNull(message = "金额不能为空")
     private BigDecimal money;
 
-    @ApiModelProperty(value = "加扣点类型：2.加点，3.扣点", required = true)
+    @ApiModelProperty(value = "加扣点类型：8.加点，9.扣点", required = true)
     @NotNull(message = "加扣点类型不能为空")
     private Integer type;
 

@@ -97,7 +97,7 @@ public class BusinessApiController {
         if (!CheckSignatureUtil.checkSignature(co)) {
             return Result.failed("参数签名校验失败");
         }
-        if (co.getType() != 2 && co.getType() != 3) {
+        if (co.getType() != 8 && co.getType() != 9) {
             return Result.failed("加扣点类型错误");
         }
         if (co.getMoney().compareTo(BigDecimal.ZERO) < 1) {
