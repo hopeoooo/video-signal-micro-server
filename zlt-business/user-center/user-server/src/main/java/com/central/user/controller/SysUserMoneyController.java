@@ -5,13 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.UserConstant;
 import com.central.common.model.*;
+import com.central.common.redis.constant.RedisLockKeyConstant;
+import com.central.common.redis.lock.RedissLockUtil;
 import com.central.common.vo.SysMoneyVO;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
-import com.central.user.util.RedissLockUtil;
 import com.central.user.model.vo.SysUserMoneyVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -95,8 +96,8 @@ public class SysUserMoneyController {
         if (capitalEnum == CapitalEnum.DEFAULT) {
             return Result.failed("操作类型错误");
         }
-        String redisKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK + userId;
-        boolean moneyLock = RedissLockUtil.tryLock(redisKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
+        String redisKey = RedisLockKeyConstant.SYS_USER_MONEY_MONEY_LOCK + userId;
+        boolean moneyLock = RedissLockUtil.tryLock(redisKey, RedisLockKeyConstant.WAIT_TIME, RedisLockKeyConstant.LEASE_TIME);
         try {
             if (!moneyLock) {
                 return Result.failed("上下分请求太过频繁");
@@ -159,10 +160,10 @@ public class SysUserMoneyController {
     public Result<String> receiveWashCode(@LoginUser SysUser user) {
         //获取登陆用户
         Long userId = user.getId();
-        String moneyKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK + userId;
-        boolean moneyLock = RedissLockUtil.tryLock(moneyKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
-        String washCodeKey = UserConstant.redisKey.SYS_USER_MONEY_WASH_CODE_LOCK + userId;
-        boolean washCodeLock = RedissLockUtil.tryLock(washCodeKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
+        String moneyKey = RedisLockKeyConstant.SYS_USER_MONEY_MONEY_LOCK + userId;
+        boolean moneyLock = RedissLockUtil.tryLock(moneyKey, RedisLockKeyConstant.WAIT_TIME, RedisLockKeyConstant.LEASE_TIME);
+        String washCodeKey = RedisLockKeyConstant.SYS_USER_MONEY_WASH_CODE_LOCK + userId;
+        boolean washCodeLock = RedissLockUtil.tryLock(washCodeKey, RedisLockKeyConstant.WAIT_TIME, RedisLockKeyConstant.LEASE_TIME);
         if (!moneyLock || !washCodeLock) {
             return Result.failed("领取失败");
         }

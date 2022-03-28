@@ -1,6 +1,7 @@
 package com.central.game.rabbitMq;
 
 import com.alibaba.fastjson.JSONObject;
+import com.central.game.constants.GameListEnum;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.co.GameLotteryResultCo;
 import com.central.game.service.IGameLotteryResultService;
@@ -15,7 +16,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 /**
- * 开奖数据消费者
+ * 百家乐开奖数据消费者
  */
 @Component
 @RabbitListener(queues = "DataCatch.resultQueue")
@@ -41,10 +42,12 @@ public class GameLotterResulyConsumer {
                 try {
                     result = new GameLotteryResult();
                     BeanUtils.copyProperties(resultCo, result);
+                    result.setGameId(GameListEnum.BACCARAT.getGameId().toString());
+                    result.setGameName(GameListEnum.BACCARAT.getGameName());
                     result.setLotteryId(resultCo.getId());
                     result.setLotteryTime(resultCo.getCreateTime());
                     gameLotteryResultService.save(result);
-                    gameLotteryResultService.calculateBetResult(result);
+//                    gameLotteryResultService.calculateBetResult(result);
                 } catch (Exception e) {
                     log.error("开奖数据保存失败,data={},msg={}", result.toString(), e.getMessage());
                 }

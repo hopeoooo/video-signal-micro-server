@@ -3,6 +3,7 @@ package com.central.game.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.central.common.constant.UserConstant;
 import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.game.constants.GameListEnum;
@@ -152,6 +153,19 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         gameRecord.setBetId(betId);
         return gameRecord;
     }
+
+    /**
+     * 下注完毕异步汇总本局即时彩池数据
+     * @param tableNum 桌号
+     * @param bootNum 靴号
+     * @param bureauNum 局数
+     */
+    public void syncSummaryLivePot(String tableNum,String bootNum,String bureauNum){
+//        String moneyKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK + userId;
+//        boolean moneyLock = RedissLockUtil.tryLock(moneyKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
+    }
+
+
 
     /**
      * 注单号生成规则：游戏拼音缩写+日期+桌号+靴号+第几局+十位随机数  必须是唯一值
