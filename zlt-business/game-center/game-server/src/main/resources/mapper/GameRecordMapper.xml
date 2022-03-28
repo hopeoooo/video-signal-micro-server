@@ -70,11 +70,11 @@
     <select id="findValidbetTotal"  resultType="com.central.game.dto.GameRecordReportDto">
         select count(1) as num,IFNULL(sum(a.validbet),0) as amount from (select SUM(g.validbet) validbet  from game_record g where g.validbet > 0
         <if test="p.startTime != null and p.startTime != ''">
-            g.create_time <![CDATA[>=]]> #{p.startTime}
+            and g.create_time <![CDATA[>=]]> #{p.startTime}
         </if>
 
         <if test="p.endTime != null and p.endTime != ''">
-            g.create_time <![CDATA[<=]]> #{p.endTime}
+            and g.create_time <![CDATA[<=]]> #{p.endTime}
         </if>
          GROUP BY g.user_id) a
     </select>
@@ -82,12 +82,24 @@
     <select id="findWinningAmountTotal"  resultType="com.central.game.dto.GameRecordReportDto">
         select count(1) as num,IFNULL(sum(a.winningamount),0) as amount from (select SUM(g.winning_amount) winningamount from game_record g where g.winning_amount > 0
         <if test="p.startTime != null and p.startTime != ''">
-            g.create_time <![CDATA[>=]]> #{p.startTime}
+            and  g.create_time <![CDATA[>=]]> #{p.startTime}
         </if>
 
         <if test="p.endTime != null and p.endTime != ''">
-            g.create_time <![CDATA[<=]]> #{p.endTime}
+            and g.create_time <![CDATA[<=]]> #{p.endTime}
         </if>
          GROUP BY g.user_id) a
+    </select>
+
+    <select id="findHomePageDto"  resultType="com.central.game.dto.HomePageDto">
+        select COUNT(1) betAmountNum,SUM(validbet) validbet,SUM(win_Loss) profitAndLoss from
+         (select COUNT(0) num,IFNULL(SUM(g.validbet),0) validbet,IFNULL(SUM(g.win_Loss),0) win_Loss from
+          game_record g
+        <where>
+            <if test="parent != null and parent != ''">
+                and g.parent = #{parent}
+            </if>
+        </where>
+          GROUP BY g.user_id) a;
     </select>
 </mapper>
