@@ -34,8 +34,7 @@
             g.set_time,
             g.bet_amount,
             g.validbet,
-            g.win_Loss ,
-            CASE WHEN g.set_time is null then 0 else 1 end
+            g.win_Loss
         FROM
             game_record g
         <include refid="where" />

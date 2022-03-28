@@ -128,6 +128,11 @@ public interface GameService {
     @GetMapping("/gameLotteryResult/getLotteryResultList")
     Result<List<GameLotteryResult>> getLotteryResultList(@SpringQueryMap GameLotteryResultCo params ) ;
 
+
+    @GetMapping("/gameLotteryResult/findList")
+    Result<PageResult<GameLotteryResult>> findList(@SpringQueryMap GameLotteryResultBackstageCo params ) ;
+
+
     @GetMapping("/gameRecord/findGameRecordTotal")
     Result<GameRecordDto> findGameRecordTotal(@SpringQueryMap GameRecordBetCo params) ;
 
