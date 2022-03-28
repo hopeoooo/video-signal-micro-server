@@ -118,6 +118,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
+            public Result<PageResult<GameLotteryResult>> findList(GameLotteryResultBackstageCo params) {
+                log.error("findList查询开奖记录失败:{}", params);
+                return Result.failed("查询开奖记录失败");
+            }
+
+            @Override
             public Result<GameRecordDto> findGameRecordTotal(GameRecordBetCo params) {
                 log.error("findGameRecordTotal查询下注记录总计失败:{}", params);
                 return Result.failed("查询下注记录总计失败");

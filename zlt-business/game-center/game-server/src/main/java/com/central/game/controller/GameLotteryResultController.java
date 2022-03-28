@@ -1,20 +1,24 @@
 package com.central.game.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.game.model.GameLotteryResult;
+import com.central.game.model.GameRecord;
+import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
+import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.service.IGameLotteryResultService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -40,6 +44,19 @@ public class GameLotteryResultController {
         List<GameLotteryResult> list = gameLotteryResultService.getLotteryResultList(co);
         return Result.succeed(list);
     }
+
+    @ResponseBody
+    @ApiOperation(value = "查询开奖结果-后台")
+    @GetMapping("/findList")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
+    })
+    public Result<PageResult<GameLotteryResult>> findList(@Valid @ModelAttribute GameLotteryResultBackstageCo params) {
+        PageResult<GameLotteryResult> list = gameLotteryResultService.findList(params);
+        return Result.succeed(list);
+    }
+
 
 
     @GetMapping("/sendDirectMessage")
