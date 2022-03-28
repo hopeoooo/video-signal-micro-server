@@ -1,4 +1,4 @@
-package com.central.user.util;
+package com.central.common.redis.lock;
 
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
