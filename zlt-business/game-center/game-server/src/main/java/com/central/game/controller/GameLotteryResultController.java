@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -44,12 +41,12 @@ public class GameLotteryResultController {
 
     @GetMapping("/sendDirectMessage")
     @ApiOperation(value = "发送开奖结果MQ")
-    public Result sendDirectMessage() {
+    public Result sendDirectMessage(@RequestParam("bureauNum") String bureauNum) {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
         map.put("tableNum", "1");
         map.put("bootNum", "1");
-        map.put("bureauNum", "1");
+        map.put("bureauNum", bureauNum);
         map.put("createTime", "2022-03-25 20:38:55");
         map.put("id", 1);
         map.put("machineCode", "1");

@@ -61,10 +61,10 @@ public class GameRecord extends SuperEntity {
     @ApiModelProperty(value = "输赢金额")
     private BigDecimal winLoss;
 
-    @ApiModelProperty(value = "下注代码")
+    @ApiModelProperty(value = "玩法代码")
     private String betCode;
 
-    @ApiModelProperty(value = "下注内容")
+    @ApiModelProperty(value = "玩法名称")
     private String betName;
 
     @ApiModelProperty(value = "ip")

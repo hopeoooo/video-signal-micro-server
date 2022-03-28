@@ -85,6 +85,11 @@ public class RedisRepository {
     public void setExpire(final String key, final Object value, final long time) {
         this.setExpire(key, value, time, TimeUnit.SECONDS);
     }
+    public void setExpire(final String key,final long time) {
+        if (time > 0) {
+            redisTemplate.expire(key, time, TimeUnit.SECONDS);
+        }
+    }
     public void setExpire(final String key, final Object value, final long time, final TimeUnit timeUnit, RedisSerializer<Object> valueSerializer) {
         byte[] rawKey = rawKey(key);
         byte[] rawValue = rawValue(value, valueSerializer);
