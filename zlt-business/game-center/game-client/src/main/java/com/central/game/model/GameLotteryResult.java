@@ -22,6 +22,12 @@ import lombok.Setter;
 public class GameLotteryResult extends SuperEntity {
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "游戏ID")
+    private String gameId;
+
+    @ApiModelProperty(value = "游戏名称")
+    private String gameName;
+
     @ApiModelProperty(value = "机器编号")
     private String machineCode;
 
