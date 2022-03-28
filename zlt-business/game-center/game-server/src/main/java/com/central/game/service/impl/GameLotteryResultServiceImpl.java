@@ -1,20 +1,21 @@
 package com.central.game.service.impl;
 
-import com.central.common.model.CapitalEnum;
-import com.central.common.model.CodeEnum;
-import com.central.common.model.Result;
-import com.central.common.model.SysUserMoney;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.central.common.dto.LoginLogPageDto;
+import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
 import com.central.game.constants.PlayEnum;
 import com.central.game.mapper.GameLotteryResultMapper;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
+import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
 import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
 import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,14 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
     public List<GameLotteryResult> getLotteryResultList(GameLotteryResultCo co) {
         return gameLotteryResultMapper.getLotteryResultList(co);
     }
+
+    @Override
+    public PageResult<GameLotteryResult> findList(GameLotteryResultBackstageCo map){
+        Page<GameLotteryResult> page = new Page<>(map.getPage(),  map.getLimit());
+        List<GameLotteryResult> list  =   gameLotteryResultMapper.findList(page,map);
+        return PageResult.<GameLotteryResult>builder().data(list).count(page.getTotal()).build();
+    }
+
 
     @Override
     @Transactional

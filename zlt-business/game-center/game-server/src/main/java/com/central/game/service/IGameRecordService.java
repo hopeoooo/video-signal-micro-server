@@ -9,6 +9,7 @@ import com.central.game.dto.GameRecordReportDto;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordCo;
+import com.central.game.model.vo.LivePotVo;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
 
     GameRecordDto findGameRecordTotal(GameRecordBetCo params);
 
-    Result saveRecord(GameRecordCo co, SysUser user, String ip);
+    Result<List<LivePotVo>> saveRecord(GameRecordCo co, SysUser user, String ip);
 
     GameRecordReportDto findBetAmountTotal(Map<String, Object> params);
 
@@ -35,5 +36,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     GameRecordReportDto findWinningAmountTotal(Map<String, Object> params);
 
     List<GameRecord> getGameRecordByParent(GameRecordBetCo params);
+
+    void syncLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> list);
 }
 

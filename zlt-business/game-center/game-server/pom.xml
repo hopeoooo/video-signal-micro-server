@@ -25,6 +25,10 @@
             <groupId>com.zlt</groupId>
             <artifactId>user-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.zlt</groupId>
+            <artifactId>push-client</artifactId>
+        </dependency>
 
         <!-- @FeiginClients的负载均衡，不使用UserService不需要引用 -->
         <dependency>

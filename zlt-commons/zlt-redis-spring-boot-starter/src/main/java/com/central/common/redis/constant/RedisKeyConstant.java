@@ -1,6 +1,6 @@
 package com.central.common.redis.constant;
 
-public interface RedisLockKeyConstant {
+public interface RedisKeyConstant {
 
     /**
      * 锁等待时间
@@ -19,4 +19,8 @@ public interface RedisLockKeyConstant {
      * 即时彩池
      */
     String GAME_RECORD_LIVE_POT_LOCK = "lock::game_record::livePot::";
+    /**
+     * 即时彩池下注数据汇总
+     */
+    String GAME_RECORD_LIVE_POT_DATA = "cache::livePot::";
 }

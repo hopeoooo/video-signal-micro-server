@@ -1,9 +1,16 @@
 package com.central.game.service;
 
+import com.central.common.model.PageResult;
+import com.central.common.model.Result;
 import com.central.common.service.ISuperService;
 import com.central.game.model.GameLotteryResult;
+import com.central.game.model.GameRecord;
+import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
+import com.central.game.model.co.GameRecordBetCo;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -21,6 +28,9 @@ public interface IGameLotteryResultService extends ISuperService<GameLotteryResu
      * @param result
      */
     void calculateBetResult(GameLotteryResult result);
+
+    PageResult<GameLotteryResult> findList(GameLotteryResultBackstageCo map);
+
 
 
 }
