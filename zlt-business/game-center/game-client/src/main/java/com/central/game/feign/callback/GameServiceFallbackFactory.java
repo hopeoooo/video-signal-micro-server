@@ -4,6 +4,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
+import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.*;
@@ -132,19 +133,25 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             @Override
             public Result<GameRecordReportDto> findBetAmountTotal(Map<String, Object> params) {
                 log.error("findBetAmountTotal查询投注报表失败:{}", params);
-                return Result.failed("查询下注记录总计失败");
+                return Result.failed("查询投注报表失败");
             }
 
             @Override
             public Result<GameRecordReportDto> findValidbetTotal(Map<String, Object> params) {
                 log.error("findValidbetTotal查询有效投注报表失败:{}", params);
-                return Result.failed("查询下注记录总计失败");
+                return Result.failed("查询有效投注报表失败");
             }
 
             @Override
             public Result<GameRecordReportDto> findWinningAmountTotal(Map<String, Object> params) {
                 log.error("findWinningAmountTotal查询派彩报表失败:{}", params);
-                return Result.failed("查询下注记录总计失败");
+                return Result.failed("查询派彩报表失败");
+            }
+
+            @Override
+            public Result<HomePageDto> findHomePageDto(String parent) {
+                log.error("findHomePageDto查询首页报表失败:{}", parent);
+                return Result.failed("查询首页报表失败");
             }
         };
     }

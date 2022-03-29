@@ -12,6 +12,7 @@ import com.central.game.constants.GameListEnum;
 import com.central.game.constants.PlayEnum;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
+import com.central.game.dto.HomePageDto;
 import com.central.game.mapper.GameRecordMapper;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
@@ -289,5 +290,10 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     public List<GameRecord> getGameRecordByParent(GameRecordBetCo params) {
         return gameRecordMapper.getGameRecordByParent(params);
+    }
+
+    @Override
+    public HomePageDto findHomePageDto(String parent) {
+        return gameRecordMapper.findHomePageDto(parent);
     }
 }

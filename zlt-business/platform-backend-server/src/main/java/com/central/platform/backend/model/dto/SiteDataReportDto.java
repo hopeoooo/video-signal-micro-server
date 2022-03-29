@@ -3,10 +3,13 @@ package com.central.platform.backend.model.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-public class SiteDataReportDto {
+public class SiteDataReportDto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "转入金额")
     private BigDecimal shiftAmount;
