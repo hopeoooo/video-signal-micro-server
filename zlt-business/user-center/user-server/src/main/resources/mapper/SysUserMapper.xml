@@ -62,4 +62,26 @@
 		</where>
 		order by t.id desc
 	</select>
+
+
+	<select id="findUserNum" resultType="java.lang.Integer">
+		select COUNT(1) from sys_user u
+		<where>
+			<if test="p.startTime != null and p.startTime != ''">
+				and u.create_time <![CDATA[>=]]> #{p.startTime}
+			</if>
+
+			<if test="p.endTime != null and p.endTime != ''">
+				and u.create_time <![CDATA[<=]]> #{p.endTime}
+			</if>
+
+			<if test="p.type != null and p.type != ''">
+				and u.type = #{p.type}
+			</if>
+
+			<if test="p.parent != null and p.parent != ''">
+				and u.parent = #{p.parent}
+			</if>
+		</where>;
+	</select>
 </mapper>

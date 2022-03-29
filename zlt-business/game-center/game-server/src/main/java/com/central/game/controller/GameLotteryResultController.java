@@ -61,14 +61,14 @@ public class GameLotteryResultController {
 
     @GetMapping("/sendDirectMessage")
     @ApiOperation(value = "发送开奖结果MQ")
-    public Result sendDirectMessage(@RequestParam("bureauNum") String bureauNum) {
+    public Result sendDirectMessage(@RequestParam("id") String id) {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
         map.put("tableNum", "1");
         map.put("bootNum", "1");
-        map.put("bureauNum", bureauNum);
+        map.put("bureauNum", "1");
         map.put("createTime", "2022-03-25 20:38:55");
-        map.put("id", 1);
+        map.put("id", id);
         map.put("machineCode", "1");
         map.put("result", "189");
         map.put("resultName", "闲庄对大");

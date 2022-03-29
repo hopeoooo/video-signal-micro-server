@@ -246,6 +246,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("getWashCodeRecord error: {}", roomId);
                 return null;
             }
+
+            @Override
+            public Result findUserNum(Map<String, Object> params) {
+                log.error("findUserNum error");
+                return Result.failed("查询失败");
+            }
         };
     }
 }

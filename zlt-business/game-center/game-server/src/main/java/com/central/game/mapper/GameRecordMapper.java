@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.db.mapper.SuperMapper;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
+import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetCo;
 import org.apache.ibatis.annotations.Mapper;
@@ -33,4 +34,6 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     GameRecordReportDto findWinningAmountTotal(@Param("p") Map<String, Object> params);
 
     List<GameRecord> getGameRecordByParent(@Param("p") GameRecordBetCo params);
+
+    HomePageDto findHomePageDto(@Param("parent")String parent);
 }

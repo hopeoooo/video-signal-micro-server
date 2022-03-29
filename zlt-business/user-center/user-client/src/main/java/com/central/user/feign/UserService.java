@@ -193,4 +193,7 @@ public interface UserService {
 
     @PostMapping("/followList/addOrRemoveFollow/{roomId}")
     Result addFollow(@PathVariable("roomId") Long roomId);
+
+    @GetMapping("/users/findUserNum")
+    Result findUserNum(@RequestParam Map<String, Object> params);
 }

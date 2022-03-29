@@ -5,14 +5,18 @@ import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
+import com.central.common.redis.constant.RedisKeyConstant;
+import com.central.common.redis.template.RedisRepository;
 import com.central.common.utils.AddrUtil;
 import com.central.game.constants.GameListEnum;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
+import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordCo;
+import com.central.game.model.co.GameRecordLivePotCo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameRecordService;
 import io.swagger.annotations.Api;
@@ -83,17 +87,24 @@ public class GameRecordController {
         Result<List<LivePotVo>> result = gameRecordService.saveRecord(co, user, ip);
         if (result.getResp_code() == CodeEnum.SUCCESS.getCode()) {
             //异步推送本局下注汇总数据（按玩法汇总）
-            gameRecordService.syncLivePot(GameListEnum.BACCARAT.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum(), result.getDatas());
+            gameRecordService.syncLivePot(co.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum(), result.getDatas());
         }
         return result;
+    }
+
+    @ApiOperation(value = "查询本局即时彩池数据")
+    @GetMapping("/getLivePot")
+    public Result<List<LivePotVo>> getLivePot(@ModelAttribute GameRecordLivePotCo co) {
+        List<LivePotVo> list = gameRecordService.getLivePot(co.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        return Result.succeed(list);
     }
 
     @ResponseBody
     @ApiOperation(value = "投注报表")
     @GetMapping("/findBetAmountTotal")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false, dataType = "Long"),
-        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false, dataType = "Long"),
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false),
     })
     public Result<GameRecordReportDto> findBetAmountTotal(@RequestParam Map<String, Object> params) {
         GameRecordReportDto gameRecordReportDto = gameRecordService.findBetAmountTotal(params);
@@ -104,8 +115,8 @@ public class GameRecordController {
     @ApiOperation(value = "有效投注报表")
     @GetMapping("/findValidbetTotal")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false, dataType = "Long"),
-        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false, dataType = "Long"),
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false),
     })
     public Result<GameRecordReportDto> findValidbetTotal(@RequestParam Map<String, Object> params) {
         GameRecordReportDto gameRecordReportDto = gameRecordService.findValidbetTotal(params);
@@ -116,11 +127,22 @@ public class GameRecordController {
     @ApiOperation(value = "派彩报表")
     @GetMapping("/findWinningAmountTotal")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false, dataType = "Long"),
-        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false, dataType = "Long"),
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false),
     })
     public Result<GameRecordReportDto> findWinningAmountTotal(@RequestParam Map<String, Object> params) {
         GameRecordReportDto gameRecordReportDto = gameRecordService.findWinningAmountTotal(params);
         return Result.succeed(gameRecordReportDto);
+    }
+
+    @ResponseBody
+    @ApiOperation(value = "查询首页报表")
+    @GetMapping("/findHomePageDto")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "parent", value = "父级", required = false),
+    })
+    public Result<HomePageDto> findHomePageDto(@PathVariable("parent") String parent) {
+        HomePageDto homePageDto = gameRecordService.findHomePageDto(parent);
+        return Result.succeed(homePageDto);
     }
 }

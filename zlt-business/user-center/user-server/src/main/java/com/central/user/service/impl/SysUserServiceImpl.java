@@ -309,6 +309,11 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
         return i > 0 ? Result.succeed(appUser, "更新成功") : Result.failed("更新失败");
     }
 
+    @Override
+    public Integer findUserNum(Map<String, Object> params) {
+        return baseMapper.findUserNum(params);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Result saveOrUpdateUser(SysUser sysUser) throws Exception {
