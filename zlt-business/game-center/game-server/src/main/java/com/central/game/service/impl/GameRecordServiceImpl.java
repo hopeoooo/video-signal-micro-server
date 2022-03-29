@@ -199,16 +199,20 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
         boolean livePotLock = RedissLockUtil.tryLock(livePotLockKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
         if (livePotLock) {
-            for (LivePotVo vo : newAddBetList) {
-                LivePotVo livePotVo = (LivePotVo) redisRepository.getHashValues(redisDataKey, vo.getBetCode());
-                if (ObjectUtils.isEmpty(livePotVo)) {
-                    livePotVo = new LivePotVo();
-                    BeanUtils.copyProperties(vo, livePotVo);
-                } else {
-                    livePotVo.setBetAmount(livePotVo.getBetAmount().add(vo.getBetAmount()));
+            try {
+                for (LivePotVo vo : newAddBetList) {
+                    LivePotVo livePotVo = (LivePotVo) redisRepository.getHashValues(redisDataKey, vo.getBetCode());
+                    if (ObjectUtils.isEmpty(livePotVo)) {
+                        livePotVo = new LivePotVo();
+                        BeanUtils.copyProperties(vo, livePotVo);
+                    } else {
+                        livePotVo.setBetAmount(livePotVo.getBetAmount().add(vo.getBetAmount()));
+                    }
+                    redisRepository.putHashValue(redisDataKey, vo.getBetCode(), livePotVo);
+                    redisRepository.setExpire(redisDataKey, 60 * 60);
                 }
-                redisRepository.putHashValue(redisDataKey, vo.getBetCode(), livePotVo);
-                redisRepository.setExpire(redisDataKey, 60 * 60);
+            }finally {
+                RedissLockUtil.unlock(livePotLockKey);
             }
         }
         //查询汇总后的数据
