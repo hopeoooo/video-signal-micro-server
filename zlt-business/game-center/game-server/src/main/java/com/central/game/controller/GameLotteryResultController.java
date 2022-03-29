@@ -74,7 +74,7 @@ public class GameLotteryResultController {
         map.put("resultName", "闲庄对大");
         list.add(map);
         list.add(map);
-        rabbitTemplate.convertAndSend("DataCatch.resultQueue1", JSONObject.toJSONString(list));
+        rabbitTemplate.convertAndSend("DataCatch.resultQueue", JSONObject.toJSONString(list));
         return Result.succeed(list);
     }
 }
