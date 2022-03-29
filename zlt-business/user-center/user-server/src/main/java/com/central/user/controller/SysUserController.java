@@ -543,6 +543,19 @@ public class SysUserController {
     }
 
 
+    @ResponseBody
+    @ApiOperation(value = "查询注册会员数量")
+    @GetMapping("/users/findUserNum")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false),
+        @ApiImplicitParam(name = "type", value = "账号类型：APP：前端app用户，APP_GUEST：前端app游客用户，BACKEND：后端管理用户", required = false),
+        @ApiImplicitParam(name = "parent", value = "所属平台", required = false),
+    })
+    public Result<Integer> findUserNum(@RequestParam Map<String, Object> params) {
+        Integer userNum = appUserService.findUserNum(params);
+        return Result.succeed(userNum);
+    }
 
     /**
      * 清除缓存

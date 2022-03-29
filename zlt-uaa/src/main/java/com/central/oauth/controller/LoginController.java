@@ -1,10 +1,7 @@
 package com.central.oauth.controller;
 
 import io.swagger.annotations.*;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 登陆【参考接口】
@@ -79,6 +76,10 @@ public class LoginController {
             @PathVariable String username, @PathVariable String password, @PathVariable String deviceId) {
     }
 
+    @PostMapping("/test")
+    public void test(@RequestParam("userName") String userName) {
+        System.out.println(userName);
+    }
 
     /**
      * 视讯后台管理系统登陆登陆

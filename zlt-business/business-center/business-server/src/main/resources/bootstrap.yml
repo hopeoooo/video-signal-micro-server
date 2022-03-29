@@ -1,0 +1,12 @@
+server:
+  port: 7900
+
+spring:
+  application:
+    name: business-center
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${zlt.naocs.server.namespace}
+#        metadata:
+#          version: zlt

@@ -10,4 +10,6 @@ public interface IGameRoomListService  extends ISuperService<GameRoomList> {
     List<GameRoomList> findGameRoomList(Long gameId);
 
     Boolean updateRoomStatus(Long id, Integer roomStatus,String maintainStart,String maintainEnd);
+
+    GameRoomList findById(String id);
 }

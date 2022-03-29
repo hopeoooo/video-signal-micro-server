@@ -24,6 +24,12 @@ public class SysTansterMoneyLog extends SuperEntity {
     @ApiModelProperty(value = "订单号")
     private String orderNo;
 
+    @ApiModelProperty(value = "第三方交易编号")
+    private String traceId;
+
+    @ApiModelProperty(value = "注单编号")
+    private String betId;
+
     @ApiModelProperty(value = "账变金额")
     private BigDecimal money;
 
@@ -38,4 +44,7 @@ public class SysTansterMoneyLog extends SuperEntity {
 
     @ApiModelProperty(value = "订单类型")
     private Integer orderType;
+
+    @ApiModelProperty(value = "父级")
+    private String parent;
 }

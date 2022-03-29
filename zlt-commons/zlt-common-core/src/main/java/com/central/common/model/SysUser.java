@@ -68,6 +68,9 @@ public class SysUser extends SuperEntity {
 	@ApiModelProperty(value = "是否验证 1：是，其他：否")
 	private Integer verify;
 
+	@ApiModelProperty(value = "父级")
+	private String parent;
+
 	@TableField(exist = false)
 	private List<SysRole> roles;
 	@TableField(exist = false)

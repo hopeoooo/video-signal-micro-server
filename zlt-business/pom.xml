@@ -38,5 +38,7 @@
         <module>translate-center</module>
         <!-- 聊天中心 -->
         <module>chat-center</module>
+        <!-- 商戶中心 -->
+        <module>business-center</module>
     </modules>
 </project>

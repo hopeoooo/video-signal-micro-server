@@ -28,5 +28,10 @@ public interface SocketTypeConstant {
      */
     String ONLINE_NUMS = "online_nums";
 
+    /**
+     * 即时彩池
+     */
+    String LIVE_POT = "livePot";
+
 
 }

@@ -43,7 +43,45 @@
 	<select id="findList" resultType="com.central.common.model.SysUser">
 		select t.*,IFNULL(m.money,0) as currentBalance from sys_user t
 		LEFT JOIN sys_user_money m on m.user_id=t.id
-		<include refid="where" />
+		<where>
+		t.is_del=0
+			<if test="u.username != null and u.username != ''">
+				<if test="u.isOpen==1">
+					and t.username like concat('%', #{u.username}, '%')
+				</if>
+				<if test="u.isOpen!=1">
+					and t.username = #{u.username}
+				</if>
+			</if>
+			<if test="u.enabled != null and u.enabled != ''">
+				and t.enabled = #{u.enabled}
+			</if>
+			<if test="u.type != null and u.type != ''">
+				and t.type = #{u.type}
+			</if>
+		</where>
 		order by t.id desc
+	</select>
+
+
+	<select id="findUserNum" resultType="java.lang.Integer">
+		select COUNT(1) from sys_user u
+		<where>
+			<if test="p.startTime != null and p.startTime != ''">
+				and u.create_time <![CDATA[>=]]> #{p.startTime}
+			</if>
+
+			<if test="p.endTime != null and p.endTime != ''">
+				and u.create_time <![CDATA[<=]]> #{p.endTime}
+			</if>
+
+			<if test="p.type != null and p.type != ''">
+				and u.type = #{p.type}
+			</if>
+
+			<if test="p.parent != null and p.parent != ''">
+				and u.parent = #{p.parent}
+			</if>
+		</where>;
 	</select>
 </mapper>

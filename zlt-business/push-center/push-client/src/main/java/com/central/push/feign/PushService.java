@@ -33,5 +33,14 @@ public interface PushService {
     @PostMapping(value = "/ws/api/sendOne")
     Result sendOneMessage(@RequestParam("userName") String userName, @RequestParam("message") String message);
 
+    /**
+     * 指定群组推送消息
+     * @param groupId
+     * @param message
+     * @return
+     */
+    @PostMapping(value = "/sendMessageByGroupId")
+    Result sendMessageByGroupId(@RequestParam("groupId") String groupId, @RequestParam("message") String message);
+
 
 }

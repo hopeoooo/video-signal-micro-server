@@ -5,4 +5,11 @@
     <select id="findList" resultType="com.central.common.model.SysUserMoney">
         select * from user_money t
     </select>
+
+    <select id="getSumMoneyByParent" resultType="java.math.BigDecimal">
+        SELECT sum(a.money) money
+        from sys_user_money a
+        LEFT JOIN sys_user b on a.user_id = b.id
+        where b.parent = #{parent}
+    </select>
 </mapper>

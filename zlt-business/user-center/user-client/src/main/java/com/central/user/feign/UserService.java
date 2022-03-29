@@ -153,15 +153,16 @@ public interface UserService {
 
     @PostMapping(value = "/userMoney/transterMoney")
     Result<SysUserMoney> transterMoney(@RequestParam("userId") Long userId, @RequestParam("money") BigDecimal money,
-                                       @RequestParam("remark") String remark, @RequestParam("transterType") Boolean transterType);
+                                       @RequestParam("remark") String remark, @RequestParam("transterType") Integer transterType,@RequestParam("traceId") String traceId,@RequestParam("betId") String betId);
 
     @GetMapping(value = "/sysTansterMoney/findList", params = "params")
     PageResult<SysTansterMoneyLogVo> findTransterMoneyList(@SpringQueryMap SysTansterMoneyPageCo params);
 
+    @GetMapping(value = "/sysTansterMoney/findAllByParent")
+    Result<List<SysTansterMoneyLogVo>> findAllByParent(@SpringQueryMap SysTansterMoneyPageCo params);
 
     @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
      Result< List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable("userId") Long userId) ;
-
 
     @PostMapping("/userWashCode/saveUserWashCodeConfig")
     Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfigCo> list) ;
@@ -175,6 +176,12 @@ public interface UserService {
     @GetMapping("/userMoney/getMoney")
     Result<SysUserMoneyVo> getMoney();
 
+    @GetMapping("/userMoney/getMoneyByUserName")
+    Result<SysUserMoneyVo> getMoneyByUserName(@RequestParam("userName") String userName);
+
+    @GetMapping("/userMoney/getSumMoneyByParent")
+    Result<BigDecimal> getSumMoneyByParent(@RequestParam(value = "parent") String parent);
+
     @GetMapping("/userMoney/receiveWashCode")
     Result<String> receiveWashCode();
 
@@ -186,4 +193,7 @@ public interface UserService {
 
     @PostMapping("/followList/addOrRemoveFollow/{roomId}")
     Result addFollow(@PathVariable("roomId") Long roomId);
+
+    @GetMapping("/users/findUserNum")
+    Result findUserNum(@RequestParam Map<String, Object> params);
 }

@@ -27,6 +27,12 @@ public class PushServiceFallbackFactory implements FallbackFactory<PushService> 
                 log.error("sendOneMessage给用户:{}推送消息异常",userName);
                 return Result.failed("私发消息失败");
             }
+
+            @Override
+            public Result sendMessageByGroupId(String groupId, String message) {
+                log.error("sendMessageByGroupId指定群组推送消息异常,groupId={},message={}",groupId,message);
+                return Result.failed("消息推送失败");
+            }
         };
     }
 }

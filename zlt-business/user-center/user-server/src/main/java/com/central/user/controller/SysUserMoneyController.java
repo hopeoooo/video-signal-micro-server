@@ -3,15 +3,15 @@ package com.central.user.controller;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.central.common.annotation.LoginUser;
-import com.central.common.constant.UserConstant;
 import com.central.common.model.*;
+import com.central.common.redis.constant.RedisKeyConstant;
+import com.central.common.redis.lock.RedissLockUtil;
 import com.central.common.vo.SysMoneyVO;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
-import com.central.user.util.RedissLockUtil;
 import com.central.user.model.vo.SysUserMoneyVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -20,8 +20,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -35,6 +37,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/userMoney")
 @Api(tags = "用户钱包")
+@Validated
 public class SysUserMoneyController {
     @Autowired
     private ISysUserMoneyService userMoneyService;
@@ -56,6 +59,70 @@ public class SysUserMoneyController {
         SysUserMoneyVo vo = new SysUserMoneyVo();
         BeanUtils.copyProperties(sysUserMoney, vo);
         return Result.succeed(vo);
+    }
+
+    @ApiOperation(value = "查询当前登录用户的钱包")
+    @GetMapping("/getMoneyByUserName")
+    public Result<SysUserMoneyVo> getMoneyByUserName(@RequestParam("userName") String userName) {
+        SysUser user = iSysUserService.selectByUsername(userName);
+        if (user == null) {
+            return Result.failed("用户不存在");
+        }
+        SysUserMoney sysUserMoney = userMoneyService.findByUserId(user.getId());
+        if (sysUserMoney == null) {
+            sysUserMoney = new SysUserMoney();
+        }
+        SysUserMoneyVo vo = new SysUserMoneyVo();
+        BeanUtils.copyProperties(sysUserMoney, vo);
+        return Result.succeed(vo);
+    }
+
+    @ApiOperation(value = "上下分")
+    @PostMapping("/transterMoney")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "money", value = "金额", required = true, dataType = "BigDecimal"),
+            @ApiImplicitParam(name = "transterType", value = "6：人工下分,5：人工上分，3:派彩，4:下注，8:商户API加点，9:商户API扣点", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "remark", value = "备注", dataType = "String"),
+            @ApiImplicitParam(name = "traceId", value = "第三方交易编号", dataType = "String"),
+            @ApiImplicitParam(name = "betId", value = "注单号", dataType = "String"),
+    })
+    public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType, String traceId, String betId) {
+        if (money.compareTo(BigDecimal.ZERO) <= 0) {
+            return Result.failed("参数错误");
+        }
+        CapitalEnum capitalEnum = CapitalEnum.fingCapitalEnumType(transterType);
+        if (capitalEnum == CapitalEnum.DEFAULT) {
+            return Result.failed("操作类型错误");
+        }
+        String redisKey = RedisKeyConstant.SYS_USER_MONEY_MONEY_LOCK + userId;
+        boolean moneyLock = RedissLockUtil.tryLock(redisKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
+        try {
+            if (!moneyLock) {
+                return Result.failed("上下分请求太过频繁");
+            }
+            SysUser sysUser = iSysUserService.selectById(userId);
+            if (sysUser == null) {
+                return Result.failed("用户不存在");
+            }
+            SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
+            if (sysUserMoney == null) {
+                return Result.failed("用户钱包不存在");
+            }
+            if (transterType == 9 && money.compareTo(sysUserMoney.getMoney()) == 1) {
+                return Result.failed("扣点金额不能大于剩余金额");
+            } else if (transterType == 4 && money.compareTo(sysUserMoney.getMoney()) == 1) {
+                return Result.failed("下注金额不能大于剩余金额");
+            }
+            SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId, sysUser, betId);
+            userMoneyService.syncPushMoneyToWebApp(userId, sysUser.getUsername());
+            return Result.succeed(saveSysUserMoney);
+        } catch (Exception e) {
+            log.error("用户上下分异常,userId:{},money:{},remark:{},transterType{},traceId{},betId:{}", userId, money, remark, transterType, traceId, betId);
+            return Result.failed("操作失败");
+        } finally {
+            RedissLockUtil.unlock(redisKey);
+        }
     }
 
     @ApiOperation(value = "设置玩家金额")
@@ -86,50 +153,16 @@ public class SysUserMoneyController {
         return Result.succeed(saveSysUserMoney);
     }
 
-    @ApiOperation(value = "上下分")
-    @PostMapping("/transterMoney")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "Long"),
-            @ApiImplicitParam(name = "money", value = "金额", required = true, dataType = "BigDecimal"),
-            @ApiImplicitParam(name = "remark", value = "备注", dataType = "String"),
-            @ApiImplicitParam(name = "transterType", value = "1：人工上分，0：人工下分", required = true, dataType = "Boolean")
-    })
-    public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) throws Exception {
-        if(money.compareTo(BigDecimal.ZERO) <= 0){
-            return Result.failed("参数错误");
-        }
-        String redisKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK  + userId;
-        boolean moneyLock = RedissLockUtil.tryLock(redisKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
-        try {
-            if(moneyLock){
-                SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
-                SysUser sysUser = iSysUserService.selectById(userId);
-                if (sysUserMoney == null || sysUser == null) {
-                    return Result.failed("用户不存在或钱包错误");
-                }
-                SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, sysUser);
-                userMoneyService.syncPushMoneyToWebApp(userId,sysUser.getUsername());
-                return Result.succeed(saveSysUserMoney);
-            }else{
-                return Result.failed("上下分请求太过频繁");
-            }
-        }catch (Exception e){
-            throw new Exception("用户上下分异常，param = {" + userId + "}, error = {" + e.getMessage() + "}");
-        }finally {
-            RedissLockUtil.unlock(redisKey);
-        }
-    }
-
 
     @ApiOperation("登录用户领取洗码")
     @GetMapping("/receiveWashCode")
     public Result<String> receiveWashCode(@LoginUser SysUser user) {
         //获取登陆用户
         Long userId = user.getId();
-        String moneyKey = UserConstant.redisKey.SYS_USER_MONEY_MONEY_LOCK + userId;
-        boolean moneyLock = RedissLockUtil.tryLock(moneyKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
-        String washCodeKey = UserConstant.redisKey.SYS_USER_MONEY_WASH_CODE_LOCK + userId;
-        boolean washCodeLock = RedissLockUtil.tryLock(washCodeKey, UserConstant.redisKey.WAIT_TIME, UserConstant.redisKey.LEASE_TIME);
+        String moneyKey = RedisKeyConstant.SYS_USER_MONEY_MONEY_LOCK + userId;
+        boolean moneyLock = RedissLockUtil.tryLock(moneyKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
+        String washCodeKey = RedisKeyConstant.SYS_USER_MONEY_WASH_CODE_LOCK + userId;
+        boolean washCodeLock = RedissLockUtil.tryLock(washCodeKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
         if (!moneyLock || !washCodeLock) {
             return Result.failed("领取失败");
         }
@@ -180,5 +213,13 @@ public class SysUserMoneyController {
         Result<String> push = pushService.sendOneMessage(user.getUsername(), JSONObject.toJSONString(pushResult));
         log.info("用户钱包userName:{},推送结果:{}", user.getUsername(), push);
         return pushResult;
+    }
+
+    @ApiOperation(value = "查询商户下所有用户的余额")
+    @GetMapping("/getSumMoneyByParent")
+    @ApiImplicitParam(name = "parent", value = "父级", required = true, dataType = "String")
+    public Result<BigDecimal> getSumMoneyByParent(@NotBlank(message = "parent不允许为空") @RequestParam(value = "parent") String parent) {
+        BigDecimal sumMoney = userMoneyService.getSumMoneyByParent(parent);
+        return Result.succeed(sumMoney);
     }
 }

@@ -75,7 +75,7 @@ public class GameRoomListController {
     @ApiOperation(value = "新增/更新")
     @PostMapping("/save")
     public Result save(@RequestBody GameRoomList gameRoomList) {
-        iGameRoomListService.saveOrUpdate(gameRoomList);
+          iGameRoomListService.saveOrUpdate(gameRoomList);
         return Result.succeed();
     }
 

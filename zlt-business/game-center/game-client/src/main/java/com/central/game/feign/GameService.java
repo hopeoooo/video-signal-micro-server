@@ -4,13 +4,19 @@ import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.game.dto.GameRecordDto;
+import com.central.game.dto.GameRecordReportDto;
+import com.central.game.dto.HomePageDto;
+import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
+import com.central.game.model.co.*;
 import com.central.game.model.co.GameListCo;
+import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.callback.GameServiceFallbackFactory;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -115,8 +121,31 @@ public interface GameService {
      * @return
      */
     @GetMapping("/gameRecord/findList")
-     Result<PageResult<GameRecord>> findList(@RequestParam Map<String, Object> params) ;
+    Result<PageResult<GameRecord>> findList(@SpringQueryMap GameRecordBetCo params ) ;
+
+    @GetMapping("/gameRecord/getGameRecordByParent")
+    Result<List<GameRecord>> getGameRecordByParent(@SpringQueryMap GameRecordBetCo params ) ;
+
+    @GetMapping("/gameLotteryResult/getLotteryResultList")
+    Result<List<GameLotteryResult>> getLotteryResultList(@SpringQueryMap GameLotteryResultCo params ) ;
+
+
+    @GetMapping("/gameLotteryResult/findList")
+    Result<PageResult<GameLotteryResult>> findList(@SpringQueryMap GameLotteryResultBackstageCo params ) ;
+
 
     @GetMapping("/gameRecord/findGameRecordTotal")
-    Result<GameRecordDto> findGameRecordTotal(@RequestParam Map<String, Object> params) ;
+    Result<GameRecordDto> findGameRecordTotal(@SpringQueryMap GameRecordBetCo params) ;
+
+    @GetMapping("/gameRecord/findBetAmountTotal")
+    Result<GameRecordReportDto> findBetAmountTotal(@RequestParam Map<String, Object> params) ;
+
+    @GetMapping("/gameRecord/findValidbetTotal")
+    Result<GameRecordReportDto> findValidbetTotal(@RequestParam Map<String, Object> params) ;
+
+    @GetMapping("/gameRecord/findWinningAmountTotal")
+    Result<GameRecordReportDto> findWinningAmountTotal(@RequestParam Map<String, Object> params) ;
+
+    @GetMapping("/gameRecord/findHomePageDto")
+    Result<HomePageDto> findHomePageDto(@PathVariable("parent") String parent) ;
 }

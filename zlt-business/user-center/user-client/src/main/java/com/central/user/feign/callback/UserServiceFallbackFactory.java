@@ -164,14 +164,20 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Boolean transterType) {
-                log.error("人工上下分:{}",userId,throwable);
+            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType,String traceId,String betId) {
+                log.error("人工上下分:{},transterType={}",userId,transterType,throwable);
                 return Result.failed("上下分错误");
             }
             @Override
             public PageResult<SysTansterMoneyLogVo> findTransterMoneyList(SysTansterMoneyPageCo params) {
                 log.error("findTransterMoneyList查询会员账变异常:{}", params, throwable);
                 return new PageResult();
+            }
+
+            @Override
+            public Result<List<SysTansterMoneyLogVo>> findAllByParent(SysTansterMoneyPageCo params) {
+                log.error("findAllByParent根据父级查询转账记录异常:{}", params, throwable);
+                return Result.failed("查询转账记录异常");
             }
 
             @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
@@ -202,7 +208,19 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             @Override
             public Result<SysUserMoneyVo> getMoney() {
                 log.error("getMoney error");
-                return null;
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result<SysUserMoneyVo> getMoneyByUserName(String userName) {
+                log.error("getMoneyByUserName error,userName={}",userName);
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result<BigDecimal> getSumMoneyByParent(String parent) {
+                log.error("getSumMoneyByParent 查询失败,parent={}", parent);
+                return Result.failed("查询失败");
             }
 
             @Override
@@ -227,6 +245,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public Result addFollow(Long roomId) {
                 log.error("getWashCodeRecord error: {}", roomId);
                 return null;
+            }
+
+            @Override
+            public Result findUserNum(Map<String, Object> params) {
+                log.error("findUserNum error");
+                return Result.failed("查询失败");
             }
         };
     }

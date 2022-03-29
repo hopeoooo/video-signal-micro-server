@@ -1,13 +1,16 @@
 package com.central.game.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.PageResult;
-import com.central.common.model.SuperPage;
+import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.common.service.ISuperService;
 import com.central.game.dto.GameRecordDto;
-import com.central.game.model.GameList;
+import com.central.game.dto.GameRecordReportDto;
+import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameRecord;
-import org.apache.ibatis.annotations.Param;
+import com.central.game.model.co.GameRecordBetCo;
+import com.central.game.model.co.GameRecordCo;
+import com.central.game.model.vo.LivePotVo;
 
 import java.util.List;
 import java.util.Map;
@@ -20,9 +23,23 @@ import java.util.Map;
  */
 public interface IGameRecordService extends ISuperService<GameRecord> {
 
-    PageResult<GameRecord> findList(Map<String, Object> map);
+    PageResult<GameRecord> findList(GameRecordBetCo map);
 
 
-    GameRecordDto findGameRecordTotal(Map<String, Object> map);
+    GameRecordDto findGameRecordTotal(GameRecordBetCo params);
+
+    Result<List<LivePotVo>> saveRecord(GameRecordCo co, SysUser user, String ip);
+
+    GameRecordReportDto findBetAmountTotal(Map<String, Object> params);
+
+    GameRecordReportDto findValidbetTotal(Map<String, Object> params);
+
+    GameRecordReportDto findWinningAmountTotal(Map<String, Object> params);
+
+    List<GameRecord> getGameRecordByParent(GameRecordBetCo params);
+
+    void syncLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> list);
+
+    HomePageDto findHomePageDto(String parent);
 }
 
