@@ -139,10 +139,7 @@ public class GameRecordController {
     @ResponseBody
     @ApiOperation(value = "查询首页报表")
     @GetMapping("/findHomePageDto")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "parent", value = "父级", required = false),
-    })
-    public Result<HomePageDto> findHomePageDto(@PathVariable("parent") String parent) {
+    public Result<HomePageDto> findHomePageDto(@RequestParam(value = "parent", required = false)String parent) {
         HomePageDto homePageDto = gameRecordService.findHomePageDto(parent);
         return Result.succeed(homePageDto);
     }
