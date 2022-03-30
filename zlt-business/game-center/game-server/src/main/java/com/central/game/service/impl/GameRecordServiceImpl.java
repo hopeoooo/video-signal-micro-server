@@ -119,6 +119,12 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                     //新旧投注额差
                     BigDecimal diffBetAmount = newBetAmount.subtract(record.getBetAmount());
                     record.setBetAmount(newBetAmount);
+                    //设置限红范围
+                    List<BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betDataCo.getBetCode());
+                    if(!CollectionUtils.isEmpty(minMaxLimitRed)){
+                        record.setMinLimitRed(minMaxLimitRed.get(0));
+                        record.setMaxLimitRed(minMaxLimitRed.get(1));
+                    }
                     //扣减本地余额
                     Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), diffBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId());
                     //本地余额扣减成功，更新投注记录
@@ -136,7 +142,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             //之前没有保存的新增
             if (!flag) {
                 //先扣减本地余额
-                GameRecord record = getGameRecord(co, betDataCo, user, gameId, gameList.getName(), ip);
+                GameRecord record = getGameRecord(co, gameRoomList, betDataCo, user, gameId, gameList.getName(), ip);
                 Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), record.getBetAmount(), null, CapitalEnum.BET.getType(), null, record.getBetId());
                 //本地余额扣减成功，保存投注记录
                 if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
@@ -151,6 +157,27 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         return Result.succeed(newAddBetList);
     }
 
+    /**
+     * 根据玩法获取限红范围
+     * @return
+     */
+    public List<BigDecimal> getMinMaxLimitRed(GameRoomList gameRoomList, String betCode) {
+        List<BigDecimal> list = new ArrayList<>();
+        //庄，闲，大，小
+        if (betCode == PlayEnum.BAC_BANKER.getCode() || betCode == PlayEnum.BAC_PLAYER.getCode() || betCode == PlayEnum.BAC_BIG.getCode() || betCode == PlayEnum.BAC_SMALL.getCode()) {
+            list.add(gameRoomList.getMinBankerPlayer());
+            list.add(gameRoomList.getMaxBankerPlayer());
+        } else if (betCode == PlayEnum.BAC_TIE.getCode()) {
+            list.add(gameRoomList.getMinSum());
+            list.add(gameRoomList.getMinSum());
+        } else if (betCode == PlayEnum.BAC_BPAIR.getCode() || betCode == PlayEnum.BAC_PPAIR.getCode()) {
+            list.add(gameRoomList.getMinTwain());
+            list.add(gameRoomList.getMaxTwain());
+        }
+        return list;
+    }
+
+
     public LivePotVo getLivePotVo(String betDataCo, String betName, BigDecimal newAddBetAmount) {
         LivePotVo livePotVo = new LivePotVo();
         livePotVo.setBetCode(betDataCo);
@@ -159,7 +186,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         return livePotVo;
     }
 
-    public GameRecord getGameRecord(GameRecordCo co, GameRecordBetDataCo betDataCo, SysUser user, Long gameId, String gameName, String ip) {
+    public GameRecord getGameRecord(GameRecordCo co, GameRoomList gameRoomList, GameRecordBetDataCo betDataCo, SysUser user, Long gameId, String gameName, String ip) {
         GameRecord gameRecord = new GameRecord();
         gameRecord.setTableNum(co.getTableNum());
         gameRecord.setBootNum(co.getBootNum());
@@ -177,6 +204,12 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         //注单号
         String betId = getBetId(gameId, co.getTableNum(), co.getBootNum(), co.getBureauNum());
         gameRecord.setBetId(betId);
+        //设置限红范围
+        List<BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betDataCo.getBetCode());
+        if (!CollectionUtils.isEmpty(minMaxLimitRed)) {
+            gameRecord.setMinLimitRed(minMaxLimitRed.get(0));
+            gameRecord.setMaxLimitRed(minMaxLimitRed.get(1));
+        }
         return gameRecord;
     }
 
