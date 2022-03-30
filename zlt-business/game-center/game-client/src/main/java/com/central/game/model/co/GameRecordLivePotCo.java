@@ -5,13 +5,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @ApiModel("即时彩池入参")
 public class GameRecordLivePotCo {
 
     @ApiModelProperty(value = "游戏ID", required = true)
-    @NotBlank(message = "游戏ID不能为空")
+    @NotNull(message = "游戏ID不能为空")
     private Long gameId;
 
     @ApiModelProperty(value = "桌台编号", required = true)

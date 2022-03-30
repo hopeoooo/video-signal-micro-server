@@ -7,7 +7,7 @@ import lombok.Data;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -15,7 +15,7 @@ import java.util.List;
 public class GameRecordCo {
 
     @ApiModelProperty(value = "游戏ID", required = true)
-    @NotBlank(message = "游戏ID不能为空")
+    @NotNull(message = "游戏ID不能为空")
     private Long gameId;
 
     @ApiModelProperty(value = "桌台编号", required = true)
