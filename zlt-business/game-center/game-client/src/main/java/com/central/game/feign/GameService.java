@@ -148,7 +148,7 @@ public interface GameService {
     Result<GameRecordReportDto> findWinningAmountTotal(@RequestParam Map<String, Object> params) ;
 
     @GetMapping("/gameRecord/findHomePageDto")
-    Result<HomePageDto> findHomePageDto(@PathVariable("parent") String parent) ;
+    Result<HomePageDto> findHomePageDto(@RequestParam(value = "parent", required = false) String parent) ;
 
     @GetMapping("/gameRecord/findHomeHistogramDto")
     Result<HomeHistogramDto> findHomeHistogramDto(@RequestParam Map<String, Object> params) ;
