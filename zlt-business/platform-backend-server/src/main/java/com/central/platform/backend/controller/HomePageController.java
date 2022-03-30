@@ -1,8 +1,10 @@
 package com.central.platform.backend.controller;
 
 import com.central.common.model.Result;
+import com.central.game.dto.HomeHistogramDto;
 import com.central.game.dto.HomePageDto;
 import com.central.game.feign.GameService;
+import com.central.platform.backend.model.vo.HomeHistogramVo;
 import com.central.platform.backend.model.vo.HomePageVo;
 import com.central.platform.backend.util.DateUtil;
 import com.central.user.feign.OnlineUserService;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -37,12 +41,9 @@ public class HomePageController {
     @Autowired
     private OnlineUserService onlineUserService;
 
-    @ApiOperation(value = "会员报表查询")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "parent", value = "所属平台", required = false),
-    })
+    @ApiOperation(value = "首页")
     @GetMapping("/find")
-    public Result<HomePageVo> find(@RequestParam("parent")String parent){
+    public Result<HomePageVo> find(@RequestParam(value = "parent", required = false)String parent){
         HomePageVo homePageVo = new HomePageVo();
         Result<HomePageDto> result = gameService.findHomePageDto(parent);
         HomePageDto homePageDto = result.getDatas();
@@ -63,5 +64,40 @@ public class HomePageController {
         homePageVo.setOnlineUsers(integerResult.getDatas()==null?0:Integer.parseInt(integerResult.getDatas().toString()));
 
         return Result.succeed(homePageVo);
+    }
+
+    @ApiOperation(value = "首页报表柱状图")
+    @GetMapping("/findHistogram")
+    public Result<List<HomeHistogramVo>> findHistogram(){
+        List<HomeHistogramVo> homeHistogramVos = new ArrayList<>();
+
+        HomeHistogramVo profitAndLoss = new HomeHistogramVo();
+        profitAndLoss.setType(1);
+        HomeHistogramVo validbet = new HomeHistogramVo();
+        validbet.setType(2);
+        Result<HomeHistogramDto> today = gameService.findHomeHistogramDto(DateUtil.getToday());
+        profitAndLoss.setToday(today.getDatas().getProfitAndLoss());
+        validbet.setToday(today.getDatas().getValidbet());
+        Result<HomeHistogramDto> yesterday = gameService.findHomeHistogramDto(DateUtil.getYesterday());
+        profitAndLoss.setYesterday(yesterday.getDatas().getProfitAndLoss());
+        validbet.setYesterday(yesterday.getDatas().getValidbet());
+        Result<HomeHistogramDto> week = gameService.findHomeHistogramDto(DateUtil.getWeek());
+        profitAndLoss.setThisWeek(week.getDatas().getProfitAndLoss());
+        validbet.setThisWeek(week.getDatas().getValidbet());
+        Result<HomeHistogramDto> lastWeek = gameService.findHomeHistogramDto(DateUtil.getLastWeek());
+        profitAndLoss.setLastWeek(lastWeek.getDatas().getProfitAndLoss());
+        validbet.setLastWeek(lastWeek.getDatas().getValidbet());
+        Result<HomeHistogramDto> month = gameService.findHomeHistogramDto(DateUtil.getMonth());
+        profitAndLoss.setCurrentMonth(month.getDatas().getProfitAndLoss());
+        validbet.setCurrentMonth(month.getDatas().getValidbet());
+        Result<HomeHistogramDto> lastMonth = gameService.findHomeHistogramDto(DateUtil.getLastMonth());
+        profitAndLoss.setLastMonth(lastMonth.getDatas().getProfitAndLoss());
+        validbet.setLastMonth(lastMonth.getDatas().getValidbet());
+        Result<HomeHistogramDto> nearlyTwoMonths = gameService.findHomeHistogramDto(DateUtil.getNearlyTwoMonths());
+        profitAndLoss.setNearlyTwoMonths(nearlyTwoMonths.getDatas().getProfitAndLoss());
+        validbet.setNearlyTwoMonths(nearlyTwoMonths.getDatas().getValidbet());
+        homeHistogramVos.add(profitAndLoss);
+        homeHistogramVos.add(validbet);
+        return Result.succeed(homeHistogramVos);
     }
 }

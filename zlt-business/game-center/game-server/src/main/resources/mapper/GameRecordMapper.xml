@@ -102,4 +102,9 @@
         </where>
           GROUP BY g.user_id) a;
     </select>
+
+    <select id="findHomeHistogramDto"  resultType="com.central.game.dto.HomeHistogramDto">
+        select IFNULL(SUM(g.validbet),0) as validbet,IFNULL(SUM(g.win_Loss),0) as profitAndLoss from game_record g
+        <include refid="where" />
+    </select>
 </mapper>

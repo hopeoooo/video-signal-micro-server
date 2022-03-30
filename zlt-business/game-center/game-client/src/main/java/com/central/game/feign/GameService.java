@@ -5,6 +5,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
+import com.central.game.dto.HomeHistogramDto;
 import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
@@ -147,5 +148,8 @@ public interface GameService {
     Result<GameRecordReportDto> findWinningAmountTotal(@RequestParam Map<String, Object> params) ;
 
     @GetMapping("/gameRecord/findHomePageDto")
-    Result<HomePageDto> findHomePageDto(@PathVariable("parent") String parent) ;
+    Result<HomePageDto> findHomePageDto(@RequestParam(value = "parent", required = false) String parent) ;
+
+    @GetMapping("/gameRecord/findHomeHistogramDto")
+    Result<HomeHistogramDto> findHomeHistogramDto(@RequestParam Map<String, Object> params) ;
 }

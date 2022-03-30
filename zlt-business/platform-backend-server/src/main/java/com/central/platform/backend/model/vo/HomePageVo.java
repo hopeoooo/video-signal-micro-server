@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 public class HomePageVo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -6875715939817195379L;
     //公司总盈亏
     @ApiModelProperty(value = "公司总盈亏")
     private BigDecimal profitAndLoss = BigDecimal.ZERO;

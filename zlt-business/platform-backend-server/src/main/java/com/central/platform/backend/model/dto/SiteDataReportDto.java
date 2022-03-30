@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 public class SiteDataReportDto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -6875784399814895179L;
 
     @ApiModelProperty(value = "转入金额")
     private BigDecimal shiftAmount;
