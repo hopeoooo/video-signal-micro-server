@@ -11,6 +11,7 @@ import com.central.common.utils.AddrUtil;
 import com.central.game.constants.GameListEnum;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
+import com.central.game.dto.HomeHistogramDto;
 import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
@@ -145,4 +146,17 @@ public class GameRecordController {
         HomePageDto homePageDto = gameRecordService.findHomePageDto(parent);
         return Result.succeed(homePageDto);
     }
+
+    @ResponseBody
+    @ApiOperation(value = "admin首页柱状图查询")
+    @GetMapping("/findHomeHistogramDto")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false),
+    })
+    public Result<HomeHistogramDto> findHomeHistogramDto(@RequestParam Map<String, Object> params) {
+        HomeHistogramDto homeHistogramDto = gameRecordService.findHomeHistogramDto(params);
+        return Result.succeed(homeHistogramDto);
+    }
+
 }
