@@ -42,11 +42,8 @@ public class HomePageController {
     private OnlineUserService onlineUserService;
 
     @ApiOperation(value = "首页")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "parent", value = "所属平台", required = false),
-    })
     @GetMapping("/find")
-    public Result<HomePageVo> find(@RequestParam("parent")String parent){
+    public Result<HomePageVo> find(@RequestParam(value = "parent", required = false)String parent){
         HomePageVo homePageVo = new HomePageVo();
         Result<HomePageDto> result = gameService.findHomePageDto(parent);
         HomePageDto homePageDto = result.getDatas();
