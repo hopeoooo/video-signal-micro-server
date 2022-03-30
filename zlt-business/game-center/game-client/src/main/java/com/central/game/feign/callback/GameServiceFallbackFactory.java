@@ -4,6 +4,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
+import com.central.game.dto.HomeHistogramDto;
 import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
@@ -152,6 +153,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             public Result<HomePageDto> findHomePageDto(String parent) {
                 log.error("findHomePageDto查询首页报表失败:{}", parent);
                 return Result.failed("查询首页报表失败");
+            }
+
+            @Override
+            public Result<HomeHistogramDto> findHomeHistogramDto(Map<String, Object> params) {
+                log.error("findHomePageDto查询首页柱状图失败:{}", params);
+                return Result.failed("查询首页柱状图失败");
             }
         };
     }
