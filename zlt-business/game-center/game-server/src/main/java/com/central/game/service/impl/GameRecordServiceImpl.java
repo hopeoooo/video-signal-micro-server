@@ -195,7 +195,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         if (CollectionUtils.isEmpty(newAddBetList)) {
             return;
         }
-        String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
+        String groupId = "livePot-" + gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
         String livePotLockKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_LOCK + groupId;
         String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
         boolean livePotLock = RedissLockUtil.tryLock(livePotLockKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
