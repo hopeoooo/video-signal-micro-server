@@ -37,7 +37,7 @@ public class NettyWebSocketGroupServer {
     @OnOpen
     public void onOpen(Session session, @PathVariable String groupId, @PathVariable String userName) {
         this.session = session;
-        this.groupId = this.groupId;
+        this.groupId = groupId;
         this.userName = userName;
         CopyOnWriteArraySet<NettyWebSocketGroupServer> friends = groups.get(this.groupId);
         if (friends == null) {

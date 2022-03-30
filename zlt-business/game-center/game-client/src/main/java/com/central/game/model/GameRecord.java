@@ -88,6 +88,12 @@ public class GameRecord extends SuperEntity {
     @ApiModelProperty(value = "父级")
     private String parent;
 
+    @ApiModelProperty(value = "最小限红")
+    private BigDecimal minLimitRed;
+
+    @ApiModelProperty(value = "最大限红")
+    private BigDecimal maxLimitRed;
+
     @ApiModelProperty(value = "盈利后是否加回本地钱包，1.是")
     private Integer addMoneyStatus;
 
