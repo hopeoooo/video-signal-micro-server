@@ -41,5 +41,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     void syncLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> list);
 
     HomePageDto findHomePageDto(String parent);
+
+    List<LivePotVo> getLivePot(Long gameId, String tableNum, String bootNum, String bureauNum);
 }
 

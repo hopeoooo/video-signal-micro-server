@@ -5,6 +5,8 @@ import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
+import com.central.common.redis.constant.RedisKeyConstant;
+import com.central.common.redis.template.RedisRepository;
 import com.central.common.utils.AddrUtil;
 import com.central.game.constants.GameListEnum;
 import com.central.game.dto.GameRecordDto;
@@ -14,6 +16,7 @@ import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordCo;
+import com.central.game.model.co.GameRecordLivePotCo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameRecordService;
 import io.swagger.annotations.Api;
@@ -84,9 +87,16 @@ public class GameRecordController {
         Result<List<LivePotVo>> result = gameRecordService.saveRecord(co, user, ip);
         if (result.getResp_code() == CodeEnum.SUCCESS.getCode()) {
             //异步推送本局下注汇总数据（按玩法汇总）
-            gameRecordService.syncLivePot(GameListEnum.BACCARAT.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum(), result.getDatas());
+            gameRecordService.syncLivePot(co.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum(), result.getDatas());
         }
         return result;
+    }
+
+    @ApiOperation(value = "查询本局即时彩池数据")
+    @GetMapping("/getLivePot")
+    public Result<List<LivePotVo>> getLivePot(@ModelAttribute GameRecordLivePotCo co) {
+        List<LivePotVo> list = gameRecordService.getLivePot(co.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        return Result.succeed(list);
     }
 
     @ResponseBody

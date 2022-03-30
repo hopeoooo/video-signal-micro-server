@@ -199,38 +199,29 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
         boolean livePotLock = RedissLockUtil.tryLock(livePotLockKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
         if (livePotLock) {
-            for (LivePotVo vo : newAddBetList) {
-                LivePotVo livePotVo = (LivePotVo) redisRepository.getHashValues(redisDataKey, vo.getBetCode());
-                if (ObjectUtils.isEmpty(livePotVo)) {
-                    livePotVo = new LivePotVo();
-                    BeanUtils.copyProperties(vo, livePotVo);
-                } else {
-                    livePotVo.setBetAmount(livePotVo.getBetAmount().add(vo.getBetAmount()));
+            try {
+                for (LivePotVo vo : newAddBetList) {
+                    LivePotVo livePotVo = (LivePotVo) redisRepository.getHashValues(redisDataKey, vo.getBetCode());
+                    if (ObjectUtils.isEmpty(livePotVo)) {
+                        livePotVo = new LivePotVo();
+                        BeanUtils.copyProperties(vo, livePotVo);
+                    } else {
+                        livePotVo.setBetAmount(livePotVo.getBetAmount().add(vo.getBetAmount()));
+                    }
+                    redisRepository.putHashValue(redisDataKey, vo.getBetCode(), livePotVo);
+                    redisRepository.setExpire(redisDataKey, 60 * 60);
                 }
-                redisRepository.putHashValue(redisDataKey, vo.getBetCode(), livePotVo);
-                redisRepository.setExpire(redisDataKey, 60 * 60);
+            } finally {
+                RedissLockUtil.unlock(livePotLockKey);
             }
         }
-        //查询汇总后的数据
-        Map<String, Object> totalBet = redisRepository.getHashValue(redisDataKey);
-        if (!CollectionUtils.isEmpty(totalBet)) {
-            List<LivePotVo> list = new ArrayList<>();
-            //所有玩法
-            List<PlayEnum> playList = PlayEnum.getPlayListByGameId(gameId);
-            for (PlayEnum playEnum : playList) {
-                LivePotVo livePotVo = (LivePotVo) totalBet.get(playEnum.getCode());
-                if (livePotVo == null) {
-                    livePotVo = new LivePotVo();
-                    livePotVo.setBetCode(playEnum.getCode());
-                    livePotVo.setBetName(playEnum.getName());
-                    livePotVo.setBetAmount(BigDecimal.ZERO);
-                }
-                list.add(livePotVo);
-            }
-            PushResult<List<LivePotVo>> pushResult = PushResult.succeed(list, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
-            Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
-            log.info("即时彩池数据推送结果:groupId={},result={}", groupId, push);
+        List<LivePotVo> livePot = getLivePot(gameId, tableNum, bootNum, bureauNum);
+        if (CollectionUtils.isEmpty(livePot)) {
+            return;
         }
+        PushResult<List<LivePotVo>> pushResult = PushResult.succeed(livePot, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
+        Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+        log.info("即时彩池数据推送结果:groupId={},result={}", groupId, push);
     }
 
     /**
@@ -295,5 +286,28 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     public HomePageDto findHomePageDto(String parent) {
         return gameRecordMapper.findHomePageDto(parent);
+    }
+
+    @Override
+    public List<LivePotVo> getLivePot(Long gameId, String tableNum, String bootNum, String bureauNum) {
+        String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
+        String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
+        Map<String, Object> totalBet = redisRepository.getHashValue(redisDataKey);
+        List<LivePotVo> list = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(totalBet)) {
+            //所有玩法
+            List<PlayEnum> playList = PlayEnum.getPlayListByGameId(gameId);
+            for (PlayEnum playEnum : playList) {
+                LivePotVo livePotVo = (LivePotVo) totalBet.get(playEnum.getCode());
+                if (livePotVo == null) {
+                    livePotVo = new LivePotVo();
+                    livePotVo.setBetCode(playEnum.getCode());
+                    livePotVo.setBetName(playEnum.getName());
+                    livePotVo.setBetAmount(BigDecimal.ZERO);
+                }
+                list.add(livePotVo);
+            }
+        }
+        return list;
     }
 }
