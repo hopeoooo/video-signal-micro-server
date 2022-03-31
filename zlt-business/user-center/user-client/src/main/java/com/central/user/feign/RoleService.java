@@ -27,7 +27,7 @@ public interface RoleService {
      * @return
      */
     @GetMapping("/roles")
-    PageResult<SysRole> findRoles(@SpringQueryMap RolePageCo params);
+    Result<PageResult<SysRole>> findRoles(@SpringQueryMap RolePageCo params);
 
 
 
