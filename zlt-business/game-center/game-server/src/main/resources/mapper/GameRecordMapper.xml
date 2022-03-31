@@ -27,17 +27,7 @@
 
     <select id="findGameRecordList"  resultType="com.central.game.model.GameRecord">
         SELECT
-            g.bet_id,
-            g.bureau_num,
-            g.user_name,
-            g.game_name,
-            g.set_time,
-            g.bet_amount,
-            g.winning_amount,
-            g.validbet,
-            g.win_Loss,
-            g.min_limit_red,
-            g.max_limit_red
+        g.*
         FROM
             game_record g
         <include refid="where" />
