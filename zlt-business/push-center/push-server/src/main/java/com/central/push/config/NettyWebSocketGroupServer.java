@@ -56,6 +56,8 @@ public class NettyWebSocketGroupServer {
             }
         }
         friends.add(this);
+        log.info("群组:{},用户:{} 加入连接，当前连接数为：{}", groupId, userName, friends.size());
+        onMessage(session, "连接成功");
     }
 
     @OnClose
@@ -63,11 +65,12 @@ public class NettyWebSocketGroupServer {
         CopyOnWriteArraySet<NettyWebSocketGroupServer> friends = groups.get(groupId);
         if (friends != null) {
             friends.remove(this);
+            log.info("群组:{},用户:{} 关闭连接，当前连接数为：{}", groupId, userName, friends.size());
         }
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public void onMessage(Session session, String message) {
         log.info("来自客户端的消息：{}", message);
         PushResult pushResult = PushResult.succeed(message, "heartbeat", "客户端消息接收成功");
         session.sendText(JSONObject.toJSONString(pushResult));
@@ -75,7 +78,7 @@ public class NettyWebSocketGroupServer {
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.info("发生错误{}", error.getMessage());
+        log.info("群组:{},用户:{}连接发生错误{}", groupId, userName, error.getMessage());
         error.printStackTrace();
     }
 
