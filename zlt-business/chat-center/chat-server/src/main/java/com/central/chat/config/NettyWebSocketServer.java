@@ -62,6 +62,8 @@ public class NettyWebSocketServer {
             }
         }
         friends.add(this);
+        log.info("群组:{},用户:{} 加入连接，当前连接数为：{}", groupId, userName, friends.size());
+        onMessage(session, "连接成功");
     }
 
     @OnClose
@@ -69,11 +71,12 @@ public class NettyWebSocketServer {
         CopyOnWriteArraySet<NettyWebSocketServer> friends = groups.get(groupId);
         if (friends != null) {
             friends.remove(this);
+            log.info("群组:{},用户:{} 关闭连接，当前连接数为：{}", groupId, userName, friends.size());
         }
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public void onMessage(Session session,String message) {
         CopyOnWriteArraySet<NettyWebSocketServer> friends = groups.get(groupId);
         if (friends != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -93,7 +96,7 @@ public class NettyWebSocketServer {
 
     @OnError
     public void onError(Session session, Throwable error) {
-        log.info("发生错误{}", error.getMessage());
+        log.info("群组:{},用户:{}连接发生错误{}", groupId, userName, error.getMessage());
         error.printStackTrace();
     }
 
