@@ -20,4 +20,7 @@ public class LivePotVo {
     @ApiModelProperty(value = "本局累计下注额")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal betAmount;
+
+    @ApiModelProperty(value = "在线人数")
+    private Integer onlineNum = 0;
 }
