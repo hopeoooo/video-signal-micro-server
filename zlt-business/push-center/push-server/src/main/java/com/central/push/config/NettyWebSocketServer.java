@@ -3,6 +3,7 @@ package com.central.push.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.central.common.model.PushResult;
+import com.central.push.constant.SocketTypeConstant;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +52,7 @@ public class NettyWebSocketServer {
     @OnMessage
     public void onMessage(Session session, String message) {
         log.info("来自客户端的消息：{}", message);
-        PushResult pushResult = PushResult.succeed(message, "heartbeat","客户端消息接收成功");
+        PushResult pushResult = PushResult.succeed(message, SocketTypeConstant.HEARTBEAT,"客户端消息接收成功");
         session.sendText(JSONObject.toJSONString(pushResult));
     }
 

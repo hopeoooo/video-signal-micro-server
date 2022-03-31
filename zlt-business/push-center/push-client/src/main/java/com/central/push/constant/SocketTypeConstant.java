@@ -9,6 +9,11 @@ package com.central.push.constant;
 public interface SocketTypeConstant {
 
     /**
+     * 客户端发送消息心跳
+     */
+    String HEARTBEAT = "heartbeat";
+
+    /**
      * 用户金额
      */
     String MONEY = "money";
