@@ -53,7 +53,7 @@ public class GameRecordController {
      * @return
      */
     @ResponseBody
-    @ApiOperation(value = "查询游戏下注数据")
+    @ApiOperation(value = "查询游戏下注数据-后台")
     @GetMapping("/findList")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
@@ -66,7 +66,7 @@ public class GameRecordController {
 
 
     @ResponseBody
-    @ApiOperation(value = "总投注记录-总计")
+    @ApiOperation(value = "总投注记录-总计-后台")
     @GetMapping("/findGameRecordTotal")
     public Result<GameRecordDto> findGameRecordTotal(@Valid @ModelAttribute GameRecordBetCo params) {
         GameRecordDto gameRecordTotal = gameRecordService.findGameRecordTotal(params);
