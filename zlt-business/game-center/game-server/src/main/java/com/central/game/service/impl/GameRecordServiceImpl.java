@@ -230,7 +230,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         if (CollectionUtils.isEmpty(newAddBetList)) {
             return;
         }
-        String groupId = "livePot-" + gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
+        String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
         String livePotLockKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_LOCK + groupId;
         String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
         boolean livePotLock = RedissLockUtil.tryLock(livePotLockKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
@@ -331,19 +331,17 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
         Map<String, Object> totalBet = redisRepository.getHashValue(redisDataKey);
         List<LivePotVo> list = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(totalBet)) {
-            //所有玩法
-            List<PlayEnum> playList = PlayEnum.getPlayListByGameId(gameId);
-            for (PlayEnum playEnum : playList) {
-                LivePotVo livePotVo = (LivePotVo) totalBet.get(playEnum.getCode());
-                if (livePotVo == null) {
-                    livePotVo = new LivePotVo();
-                    livePotVo.setBetCode(playEnum.getCode());
-                    livePotVo.setBetName(playEnum.getName());
-                    livePotVo.setBetAmount(BigDecimal.ZERO);
-                }
-                list.add(livePotVo);
+        //所有玩法
+        List<PlayEnum> playList = PlayEnum.getPlayListByGameId(gameId);
+        for (PlayEnum playEnum : playList) {
+            LivePotVo livePotVo = (LivePotVo) totalBet.get(playEnum.getCode());
+            if (livePotVo == null) {
+                livePotVo = new LivePotVo();
+                livePotVo.setBetCode(playEnum.getCode());
+                livePotVo.setBetName(playEnum.getName());
+                livePotVo.setBetAmount(BigDecimal.ZERO);
             }
+            list.add(livePotVo);
         }
         return list;
     }
