@@ -12,4 +12,6 @@ public class RolePageCo extends PageCo {
     @ApiModelProperty(value = "角色名称", required = false)
     private String name;
 
+    private String searchKey;
+
 }

@@ -32,8 +32,9 @@ public class SysRoleController {
      */
     @ApiOperation(value = "后台管理查询角色")
     @GetMapping("/roles")
-    public PageResult<SysRole> findRoles(@ModelAttribute RolePageCo params) {
-        return sysRoleService.findRoles(params);
+    public Result<PageResult<SysRole>> findRoles(@ModelAttribute RolePageCo params) {
+        PageResult<SysRole> roles = sysRoleService.findRoles(params);
+        return Result.succeed(roles);
     }
 
     /**
