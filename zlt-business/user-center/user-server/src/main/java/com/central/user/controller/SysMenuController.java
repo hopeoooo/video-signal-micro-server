@@ -16,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -125,7 +126,8 @@ public class SysMenuController {
     @GetMapping("/findAlls")
     public PageResult<SysMenu> findAlls() {
         List<SysMenu> list = menuService.findAll();
-        return PageResult.<SysMenu>builder().data(list).count((long) list.size()).build();
+        List<SysMenu> sysMenus = treeBuilder(list);
+        return PageResult.<SysMenu>builder().data(sysMenus).count((long) list.size()).build();
     }
 
     @ApiOperation(value = "获取菜单以及顶级菜单")
