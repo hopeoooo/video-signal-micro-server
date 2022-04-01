@@ -20,7 +20,7 @@ public class MenuServiceFallbackFactory implements FallbackFactory<MenuService> 
         return new MenuService() {
 
             @Override
-            public List<Map<String, Object>> findMenusByRoleId(Long roleId) {
+            public List<SysMenu> findMenusByRoleId(Long roleId) {
                 log.error("findMenusByRoleId查询菜单异常:{}", roleId, throwable);
                 return new ArrayList<>();
             }

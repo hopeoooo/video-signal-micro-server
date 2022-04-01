@@ -13,13 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 百家乐开奖数据消费者
  */
 @Component
-@RabbitListener(queues = "DataCatch.resultQueue")
+//@RabbitListener(queues = "DataCatch.resultQueue")
 @Slf4j
 public class GameLotterResulyConsumer {
 
@@ -34,23 +35,29 @@ public class GameLotterResulyConsumer {
     }
 
     public void saveData(String data) {
-        List<GameLotteryResultCo> list = JSONObject.parseArray(data, GameLotteryResultCo.class);
-        if (!CollectionUtils.isEmpty(list)) {
-            GameLotteryResult result = null;
-            //数据单条保存，防止批量保存时单条数据异常导致全部数据保存失败
-            for (GameLotteryResultCo resultCo : list) {
-                try {
-                    result = new GameLotteryResult();
-                    BeanUtils.copyProperties(resultCo, result);
-                    result.setGameId(GameListEnum.BACCARAT.getGameId().toString());
-                    result.setGameName(GameListEnum.BACCARAT.getGameName());
-                    result.setLotteryId(resultCo.getId());
-                    result.setLotteryTime(resultCo.getCreateTime());
-                    gameLotteryResultService.save(result);
-//                    gameLotteryResultService.calculateBetResult(result);
-                } catch (Exception e) {
-                    log.error("开奖数据保存失败,data={},msg={}", result.toString(), e.getMessage());
-                }
+        List<GameLotteryResultCo> list = new ArrayList<>();
+        try {
+            list = JSONObject.parseArray(data, GameLotteryResultCo.class);
+        } catch (Exception e) {
+            log.error("开奖数据解析失败,data={},msg={}", data, e.getMessage());
+        }
+        if (CollectionUtils.isEmpty(list)) {
+            log.error("开奖数据解析结果为空,data={}", data);
+        }
+        GameLotteryResult result = null;
+        //数据单条保存，防止批量保存时单条数据异常导致全部数据保存失败
+        for (GameLotteryResultCo resultCo : list) {
+            try {
+                result = new GameLotteryResult();
+                BeanUtils.copyProperties(resultCo, result);
+                result.setGameId(GameListEnum.BACCARAT.getGameId().toString());
+                result.setGameName(GameListEnum.BACCARAT.getGameName());
+                result.setLotteryId(resultCo.getId());
+                result.setLotteryTime(resultCo.getCreateTime());
+                gameLotteryResultService.save(result);
+                gameLotteryResultService.calculateBetResult(result);
+            } catch (Exception e) {
+                log.error("开奖数据保存失败,data={},msg={}", result.toString(), e.getMessage());
             }
         }
     }

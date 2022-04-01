@@ -21,7 +21,7 @@ public interface MenuService {
 
 
     @GetMapping("/menus/{roleId}/menus")
-    List<Map<String, Object>> findMenusByRoleId(@PathVariable("roleId")   Long roleId);
+    List<SysMenu> findMenusByRoleId(@PathVariable("roleId")   Long roleId);
 
     /**
      * 给角色分配菜单
