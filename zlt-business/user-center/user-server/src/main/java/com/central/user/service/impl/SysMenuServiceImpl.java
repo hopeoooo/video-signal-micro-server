@@ -28,7 +28,7 @@ public class SysMenuServiceImpl extends SuperServiceImpl<SysMenuMapper, SysMenu>
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void setMenuToRole(Long roleId, Set<Long> menuIds) {
+	public void setMenuToRole(Long roleId, List<Long> menuIds) {
 		roleMenuService.delete(roleId, null);
 
 		if (!CollectionUtils.isEmpty(menuIds)) {
