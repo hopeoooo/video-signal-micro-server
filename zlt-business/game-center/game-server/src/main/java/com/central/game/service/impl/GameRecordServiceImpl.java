@@ -25,6 +25,7 @@ import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameListService;
 import com.central.game.service.IGameRecordService;
 import com.central.game.service.IGameRoomListService;
+import com.central.push.constant.GroupTypeConstant;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.feign.UserService;
@@ -256,6 +257,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         if (CollectionUtils.isEmpty(livePot)) {
             return;
         }
+        groupId = GroupTypeConstant.LIVE_POT + groupId;
         PushResult<List<LivePotVo>> pushResult = PushResult.succeed(livePot, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("即时彩池数据推送结果:groupId={},result={}", groupId, push);

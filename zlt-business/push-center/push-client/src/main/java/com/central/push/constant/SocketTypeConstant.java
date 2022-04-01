@@ -38,5 +38,10 @@ public interface SocketTypeConstant {
      */
     String LIVE_POT = "livePot";
 
+    /**
+     * 房间配置信息
+     */
+    String ROOM_INFO = "roomInfo";
+
 
 }
