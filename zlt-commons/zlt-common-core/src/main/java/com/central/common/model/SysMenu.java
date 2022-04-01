@@ -1,5 +1,6 @@
 package com.central.common.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ public class SysMenu extends SuperEntity {
 	private String pathMethod;
 
 	@TableField(exist = false)
-	private List<SysMenu> subMenus;
+	private List<SysMenu> subMenus= new ArrayList<>();
 	@TableField(exist = false)
 	private Long roleId;
 	@TableField(exist = false)

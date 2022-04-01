@@ -16,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -124,8 +125,36 @@ public class SysMenuController {
     @ApiOperation(value = "查询所有菜单")
     @GetMapping("/findAlls")
     public PageResult<SysMenu> findAlls() {
+/*        List<SysMenu> list = menuService.findAll();
+        return PageResult.<SysMenu>builder().data(list).count((long) list.size()).build();*/
+
         List<SysMenu> list = menuService.findAll();
-        return PageResult.<SysMenu>builder().data(list).count((long) list.size()).build();
+        //第一层
+        List<SysMenu> sysPermissions = list.stream().filter(SysMenu -> SysMenu.getParentId() == -1).collect(Collectors.toList());
+
+        //第二层
+        List<SysMenu> subList = list.stream().filter(SysMenu -> SysMenu.getParentId() != -1 &&  SysMenu.getType() !=2).collect(Collectors.toList());
+
+        //第三层
+        List<SysMenu> threeList = list.stream().filter(SysMenu ->  SysMenu.getType() ==2).collect(Collectors.toList());
+        for (SysMenu sysTwoInfo : subList) {
+            for (SysMenu threeInfo : threeList) {
+                if(sysTwoInfo.getId().intValue() == threeInfo.getParentId().intValue()){
+                    sysTwoInfo.getSubMenus().add(threeInfo);
+                }
+            }
+        }
+
+     /*  Map<Long, SysMenu> menusMap = subList.stream().collect(Collectors.toMap(SysMenu::getParentId, a -> a, (k1, k2) -> k1));*/
+
+        for (SysMenu sysTwo : sysPermissions) {
+            for (SysMenu sysThrid : subList) {
+                if(sysTwo.getId().intValue() == sysThrid.getParentId().intValue()){
+                    sysTwo.getSubMenus().add(sysThrid);
+                }
+            }
+        }
+        return PageResult.<SysMenu>builder().data(sysPermissions).count((long) list.size()).build();
     }
 
     @ApiOperation(value = "获取菜单以及顶级菜单")
