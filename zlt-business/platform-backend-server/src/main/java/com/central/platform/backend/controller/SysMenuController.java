@@ -32,7 +32,7 @@ public class SysMenuController {
      */
     @ApiOperation(value = "根据roleId获取对应的菜单")
     @GetMapping("/menus/{roleId}/menus")
-    public Result<List<Map<String, Object>>> findMenusByRoleId(@PathVariable Long roleId) {
+    public Result<List<SysMenu>> findMenusByRoleId(@PathVariable Long roleId) {
         return Result.succeed(menuService.findMenusByRoleId(roleId));
     }
 
