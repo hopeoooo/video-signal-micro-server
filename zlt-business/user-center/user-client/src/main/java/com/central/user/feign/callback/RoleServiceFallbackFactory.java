@@ -19,9 +19,9 @@ public class RoleServiceFallbackFactory implements FallbackFactory<RoleService> 
     public RoleService create(Throwable throwable) {
         return new RoleService() {
             @Override
-            public PageResult<SysRole> findRoles(RolePageCo params) {
+            public  Result<PageResult<SysRole>> findRoles(RolePageCo params) {
                 log.error("findRoles查询角色异常:{}", params, throwable);
-                return new PageResult();
+                return Result.failed("查询角色失败");
             }
 
             @Override

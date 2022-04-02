@@ -25,7 +25,7 @@ public interface ISysMenuService extends ISuperService<SysMenu> {
 	 * @param roleId
 	 * @param menuIds
 	 */
-	void setMenuToRole(Long roleId, Set<Long> menuIds);
+	void setMenuToRole(Long roleId, List<Long> menuIds);
 
 	/**
 	 * 角色菜单列表

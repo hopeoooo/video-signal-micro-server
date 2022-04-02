@@ -23,4 +23,8 @@ public interface RedisKeyConstant {
      * 即时彩池下注数据汇总
      */
     String GAME_RECORD_LIVE_POT_DATA = "cache::livePot::";
+    /**
+     * 现场版房间信息
+     */
+    String GAME_ROOM_INFO_OFFLINE_DATA = "cache::roomInfo::";
 }

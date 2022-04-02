@@ -5,6 +5,7 @@ import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.user.feign.MenuService;
 import com.central.user.model.co.SysMenuCo;
+import com.central.user.model.co.SysMenuDistributionCo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
@@ -20,13 +21,13 @@ public class MenuServiceFallbackFactory implements FallbackFactory<MenuService> 
         return new MenuService() {
 
             @Override
-            public List<Map<String, Object>> findMenusByRoleId(Long roleId) {
+            public List<SysMenu> findMenusByRoleId(Long roleId) {
                 log.error("findMenusByRoleId查询菜单异常:{}", roleId, throwable);
                 return new ArrayList<>();
             }
 
             @Override
-            public Result setMenuToRole(SysMenuCo sysMenu) {
+            public Result setMenuToRole(SysMenuDistributionCo sysMenu) {
                 log.error("setMenuToRole分配菜单异常:{}", sysMenu, throwable);
                 return Result.failed("分配菜单失败");
             }
