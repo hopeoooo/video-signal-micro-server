@@ -43,9 +43,11 @@ public class GameRoomInfoOfflineConsumer {
             po = JSONObject.parseObject(data, GameRoomInfoOffline.class);
         } catch (Exception e) {
             log.error("桌台配置信息数据解析失败,data={},msg={}", data, e.getMessage());
+            return;
         }
         if (po == null) {
             log.error("桌台配置信息数据解析结果为空,data={}", data);
+            return;
         }
         po.setGameId(GameListEnum.BACCARAT.getGameId().toString());
         po.setGameName(GameListEnum.BACCARAT.getGameName());
