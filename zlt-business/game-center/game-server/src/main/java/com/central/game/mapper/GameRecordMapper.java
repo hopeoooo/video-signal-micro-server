@@ -7,7 +7,9 @@ import com.central.game.dto.GameRecordReportDto;
 import com.central.game.dto.HomeHistogramDto;
 import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameRecord;
+import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
+import com.central.game.model.vo.GameRecordVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,4 +41,6 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     HomePageDto findHomePageDto(@Param("parent")String parent);
 
     HomeHistogramDto findHomeHistogramDto(@Param("p") Map<String, Object> params);
+
+    List<GameRecordVo> findBetList(Page<GameRecordVo> page, @Param("p") GameRecordBetPageCo params);
 }

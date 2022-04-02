@@ -195,4 +195,44 @@ public class DateUtil {
         calendar.add(Calendar.DAY_OF_WEEK, 6);
         return calendar.getTime();
     }
+
+
+    /**
+     *  获取上周一时间
+     * @return
+     */
+    public static String getLastWeekMonday() {
+        Calendar  cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        if (1 == cal.get(Calendar.DAY_OF_WEEK)) {//判断当前日期是否为周末，因为周末是本周第一天，如果不向后推迟一天的到的将是下周一的零点，而不是本周周一零点
+            cal.add(Calendar.DATE, -1);
+        }
+        cal.add(Calendar.DAY_OF_MONTH, -7);//时间减去7天
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);//Calendar.MONDAY 这个是周一的意思      想获取周几就更换这个
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        String time = getSimpleDateFormat().format(cal.getTime());
+        return time;
+    }
+
+    /**
+     * 获取上周周天时间
+     * @return
+     */
+    public static String getLastWeekSunday() {
+        Calendar  cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        if (1 == cal.get(Calendar.DAY_OF_WEEK)) {//判断当前日期是否为周末，因为周末是本周第一天，如果不向后推迟一天的到的将是下周一的零点，而不是本周周一零点
+            cal.add(Calendar.DATE, -1);
+        }
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);//Calendar.SUNDAY 周天想获取周几就更换这个
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        String time = getSimpleDateFormat().format(cal.getTime());
+        return time;
+    }
 }

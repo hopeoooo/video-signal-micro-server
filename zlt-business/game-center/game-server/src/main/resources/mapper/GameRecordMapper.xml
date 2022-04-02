@@ -99,4 +99,10 @@
         select IFNULL(SUM(g.validbet),0) as validbet,IFNULL(SUM(g.win_Loss),0) as profitAndLoss from game_record g
         <include refid="where" />
     </select>
+
+    <select id="findBetList"  resultType="com.central.game.model.vo.GameRecordVo">
+        SELECT set_time setTime,bureau_num bureauNum,game_name gameName,sum(bet_amount) betAmount,SUM(validbet) validbet,SUM(win_Loss) winLoss
+        from game_record where user_id=#{p.userId} and create_time between #{p.startTime} and #{p.endTime}
+        GROUP BY game_id,bureau_num
+    </select>
 </mapper>

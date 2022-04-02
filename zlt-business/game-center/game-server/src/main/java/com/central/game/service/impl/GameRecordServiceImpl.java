@@ -8,6 +8,7 @@ import com.central.common.redis.constant.RedisKeyConstant;
 import com.central.common.redis.lock.RedissLockUtil;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.common.utils.DateUtil;
 import com.central.game.constants.GameListEnum;
 import com.central.game.constants.PlayEnum;
 import com.central.game.dto.GameRecordDto;
@@ -19,15 +20,16 @@ import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
+import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordBetDataCo;
 import com.central.game.model.co.GameRecordCo;
+import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameListService;
 import com.central.game.service.IGameRecordService;
 import com.central.game.service.IGameRoomInfoOfflineService;
 import com.central.game.service.IGameRoomListService;
-import com.central.push.constant.GroupTypeConstant;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.feign.UserService;
@@ -301,7 +303,6 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         if (CollectionUtils.isEmpty(livePot)) {
             return;
         }
-        groupId = GroupTypeConstant.LIVE_POT + groupId;
         PushResult<List<LivePotVo>> pushResult = PushResult.succeed(livePot, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("即时彩池数据推送结果:groupId={},result={}", groupId, push);
@@ -395,5 +396,24 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     public HomeHistogramDto findHomeHistogramDto(Map<String, Object> params) {
         return gameRecordMapper.findHomeHistogramDto(params);
+    }
+
+    @Override
+    public PageResult<GameRecordVo> findBetList(GameRecordBetPageCo params) {
+        String startTime = DateUtil.getStartTime(0);
+        String endTime = DateUtil.getEndTime(0);
+        String type = params.getType();
+        if ("1".equals(type)) {
+            startTime = DateUtil.getSimpleDateFormat().format(DateUtil.getWeekStartDate());
+            endTime = DateUtil.getSimpleDateFormat().format(DateUtil.getWeekEndDate());
+        } else if ("2".equals(type)) {
+            startTime = DateUtil.getLastWeekMonday();
+            endTime = DateUtil.getLastWeekSunday();
+        }
+        params.setStartTime(startTime);
+        params.setEndTime(endTime);
+        Page<GameRecordVo> page = new Page<>(params.getPage(), params.getLimit());
+        List<GameRecordVo> list = gameRecordMapper.findBetList(page, params);
+        return PageResult.<GameRecordVo>builder().data(list).count(page.getTotal()).build();
     }
 }

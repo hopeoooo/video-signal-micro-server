@@ -1,7 +1,6 @@
 package com.central.game.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
@@ -15,7 +14,6 @@ import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
 import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,9 +45,9 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
     }
 
     @Override
-    public PageResult<GameLotteryResult> findList(GameLotteryResultBackstageCo map){
-        Page<GameLotteryResult> page = new Page<>(map.getPage(),  map.getLimit());
-        List<GameLotteryResult> list  =   gameLotteryResultMapper.findList(page,map);
+    public PageResult<GameLotteryResult> findList(GameLotteryResultBackstageCo map) {
+        Page<GameLotteryResult> page = new Page<>(map.getPage(), map.getLimit());
+        List<GameLotteryResult> list = gameLotteryResultMapper.findList(page, map);
         return PageResult.<GameLotteryResult>builder().data(list).count(page.getTotal()).build();
     }
 
@@ -72,7 +70,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
         String result = lotteryResult.getResult();
         for (GameRecord record : gameRecordList) {
             BigDecimal betAmount = record.getBetAmount();
-            record.setGameResult(lotteryResult.getResult());
+            record.setGameResult(result);
             record.setGameResultName(lotteryResult.getResultName());
             //包含则说明中奖
             if (result.contains(record.getBetCode())) {
@@ -101,8 +99,60 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
                     log.error("用户钱包加派彩金额失败,moneyResult={},gameRecord={}", moneyResult.toString(), record.toString());
                 }
             }
+            //计算有效投注额
+            BigDecimal validbet = calculateValidbet(record);
+            record.setValidbet(validbet);
             //更新下注记录
             gameRecordService.updateById(record);
         }
+    }
+
+    /**
+     * 计算有效投注额
+     *
+     * @param record 下注记录
+     */
+    public BigDecimal calculateValidbet(GameRecord record) {
+        String lotteryResult = record.getGameResult();
+        //庄闲玩法特殊处理
+        if (record.getBetCode().equals(PlayEnum.BAC_BANKER.getCode()) || record.getBetCode().equals(PlayEnum.BAC_PLAYER.getCode())) {
+            //查询本局庄闲玩法投注记录
+            List<GameRecord> recordList = gameRecordService.lambdaQuery().eq(GameRecord::getUserId, record.getUserId()).eq(GameRecord::getGameId, record.getGameId())
+                    .eq(GameRecord::getTableNum, record.getTableNum()).eq(GameRecord::getBootNum, record.getBootNum())
+                    .eq(GameRecord::getBureauNum, record.getBureauNum()).in(GameRecord::getBetCode, PlayEnum.BAC_BANKER.getCode(), PlayEnum.BAC_PLAYER.getCode())
+                    .orderByAsc(GameRecord::getBetCode).list();
+            int size = recordList.size();
+            if (size == 1) {//只下了一个玩法，非对冲
+                BigDecimal winLoss = record.getWinLoss();
+                if (winLoss.compareTo(BigDecimal.ZERO) == 1) {//输赢大于0，有效投注额=输赢
+                    return winLoss;
+                } else if (winLoss.compareTo(BigDecimal.ZERO) == -1) {//输赢小于0，有效投注=投注金额
+                    return record.getBetAmount();
+                } else if (lotteryResult.contains(PlayEnum.BAC_TIE.getCode())) { //游戏结果是和局，游戏投注额=0
+                    return BigDecimal.ZERO;
+                }
+            } else if (size == 2) {//同时下了庄闲，对冲
+                //闲下注记录
+                GameRecord player = recordList.get(0);
+                //庄下注记录
+                GameRecord banker = recordList.get(0);
+                BigDecimal validbet = BigDecimal.ZERO;
+                //闲赢 有效投注=（闲投注金额-庄投注金额的绝对值）X闲的赔率
+                if (lotteryResult.contains(PlayEnum.BAC_PLAYER.getCode())) {
+                    validbet = player.getBetAmount().subtract(banker.getBetAmount()).abs().multiply(PlayEnum.BAC_PLAYER.getOdds());
+                    return validbet;
+                    //庄赢 有效投注=（闲投注金额-庄投注金额的绝对值）X庄的赔率
+                } else if (lotteryResult.contains(PlayEnum.BAC_BANKER.getCode())) {
+                    validbet = player.getBetAmount().subtract(banker.getBetAmount()).abs().multiply(PlayEnum.BAC_BANKER.getOdds());
+                    return validbet;
+                } else if (lotteryResult.contains(PlayEnum.BAC_TIE.getCode())) {
+                    return BigDecimal.ZERO;
+                }
+            }
+        } else { //其他玩法    有效投注额=输赢绝对值，不超过投注（若超过投注，则=投注)
+            BigDecimal validbet = record.getWinLoss().abs().compareTo(record.getBetAmount()) == -1 ? record.getWinLoss().abs() : record.getBetAmount();
+            return validbet;
+        }
+        return BigDecimal.ZERO;
     }
 }

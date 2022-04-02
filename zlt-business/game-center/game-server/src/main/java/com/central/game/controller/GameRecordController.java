@@ -5,19 +5,17 @@ import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
-import com.central.common.redis.constant.RedisKeyConstant;
-import com.central.common.redis.template.RedisRepository;
 import com.central.common.utils.AddrUtil;
-import com.central.game.constants.GameListEnum;
 import com.central.game.dto.GameRecordDto;
 import com.central.game.dto.GameRecordReportDto;
 import com.central.game.dto.HomeHistogramDto;
 import com.central.game.dto.HomePageDto;
-import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
+import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.co.GameRecordLivePotCo;
+import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameRecordService;
 import io.swagger.annotations.Api;
@@ -61,6 +59,14 @@ public class GameRecordController {
     })
     public Result<PageResult<GameRecord>> findList(@Valid @ModelAttribute GameRecordBetCo params) {
         PageResult<GameRecord> list = gameRecordService.findList(params);
+        return Result.succeed(list);
+    }
+
+    @ApiOperation(value = "查询当前用户投注记录-前台")
+    @GetMapping("/findBetList")
+    public Result<PageResult<GameRecordVo>> findList(@Valid @ModelAttribute GameRecordBetPageCo params, @LoginUser SysUser user) {
+        params.setUserId(user.getId());
+        PageResult<GameRecordVo> list = gameRecordService.findBetList(params);
         return Result.succeed(list);
     }
 

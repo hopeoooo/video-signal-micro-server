@@ -6,7 +6,6 @@ import com.central.common.model.Result;
 import com.central.game.constants.GameListEnum;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.service.IGameRoomInfoOfflineService;
-import com.central.push.constant.GroupTypeConstant;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * 百家乐房间信息详情
+ * 百家乐桌台信息详情
  */
 @Component
 @RabbitListener(queues = "DataCatch.configQueue")
@@ -33,9 +32,9 @@ public class GameRoomInfoOfflineConsumer {
 
     @RabbitHandler
     public void process(String data) {
-        log.info("接收到房间配置详情数据,data={}", data);
+        log.info("接收到桌台配置详情数据,data={}", data);
         saveOrUpdateData(data);
-        log.info("房间配置详细信息处理完成,data={}", data);
+        log.info("桌台配置详细信息处理完成,data={}", data);
     }
 
     public void saveOrUpdateData(String data) {
@@ -43,10 +42,10 @@ public class GameRoomInfoOfflineConsumer {
         try {
             po = JSONObject.parseObject(data, GameRoomInfoOffline.class);
         } catch (Exception e) {
-            log.error("房间配置信息数据解析失败,data={},msg={}", data, e.getMessage());
+            log.error("桌台配置信息数据解析失败,data={},msg={}", data, e.getMessage());
         }
         if (po == null) {
-            log.error("房间配置信息数据解析结果为空,data={}", data);
+            log.error("桌台配置信息数据解析结果为空,data={}", data);
         }
         po.setGameId(GameListEnum.BACCARAT.getGameId().toString());
         po.setGameName(GameListEnum.BACCARAT.getGameName());
@@ -69,11 +68,11 @@ public class GameRoomInfoOfflineConsumer {
             BeanUtils.copyProperties(po, detailOffline);
             gameRoomInfoOfflineService.updateById(detailOffline);
         }
-        log.info("房间配置信息数据更新完成，data={}", data);
+        log.info("桌台配置信息数据更新完成，data={}", data);
         //推送客户端消息
-        String groupId = GroupTypeConstant.ROOM_INFO + po.getGameId() + "-" + po.getTableNum() + "-" + po.getBootNum() + "-" + po.getBureauNum();
-        PushResult<GameRoomInfoOffline> pushResult = PushResult.succeed(po, SocketTypeConstant.ROOM_INFO, "房间配置信息推送成功");
+        String groupId = po.getGameId() + "-" + po.getTableNum() + "-" + po.getBootNum() + "-" + po.getBureauNum();
+        PushResult<GameRoomInfoOffline> pushResult = PushResult.succeed(po, SocketTypeConstant.TABLE_INFO, "桌台配置信息推送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
-        log.info("房间配置信息推送结果:groupId={},result={}", groupId, push);
+        log.info("桌台配置信息推送结果:groupId={},result={}", groupId, push);
     }
 }

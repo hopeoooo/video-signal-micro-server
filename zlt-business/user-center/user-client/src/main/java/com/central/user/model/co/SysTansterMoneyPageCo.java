@@ -32,4 +32,7 @@ public class SysTansterMoneyPageCo extends PageCo {
     @ApiModelProperty(value = "第三方交易编号")
     private String traceId;
 
+    @ApiModelProperty(value = "日期类型：0.今天，1.本周，2.上周")
+    private String type;
+
 }
