@@ -5,6 +5,7 @@ import com.central.common.model.CapitalEnum;
 import com.central.common.model.PageResult;
 import com.central.common.model.SysTansterMoneyLog;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.common.utils.DateUtil;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.mapper.SysTansterMoneyLogMapper;
 import com.central.user.model.co.SysTansterMoneyPageCo;
@@ -57,5 +58,23 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
     public List<SysTansterMoneyLogVo> findAllByParent(SysTansterMoneyPageCo params) {
         List<SysTansterMoneyLogVo> list = baseMapper.findAllByParent(params);
         return list;
+    }
+
+    @Override
+    public PageResult<SysTansterMoneyLogVo> findAmountChangeList(SysTansterMoneyPageCo params) {
+        String startTime = DateUtil.getStartTime(0);
+        String endTime = DateUtil.getEndTime(0);
+        String type = params.getType();
+        if ("1".equals(type)) {
+            startTime = DateUtil.getSimpleDateFormat().format(DateUtil.getWeekStartDate());
+            endTime = DateUtil.getSimpleDateFormat().format(DateUtil.getWeekEndDate());
+        } else if ("2".equals(type)) {
+            startTime = DateUtil.getLastWeekMonday();
+            endTime = DateUtil.getLastWeekSunday();
+        }
+        params.setStartTime(startTime);
+        params.setEndTime(endTime);
+        PageResult<SysTansterMoneyLogVo> sysTansterMoneyList = findSysTansterMoneyList(params);
+        return sysTansterMoneyList;
     }
 }

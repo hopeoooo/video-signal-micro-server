@@ -1,7 +1,9 @@
 package com.central.user.controller;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.model.co.SysTansterMoneyPageCo;
 import com.central.user.service.ISysTansterMoneyLogService;
@@ -48,4 +50,13 @@ public class SysTansterMoneyLogController {
         List<SysTansterMoneyLogVo> list = sysTansterMoneyLogService.findAllByParent(params);
         return Result.succeed(list);
     }
+
+    @ApiOperation(value = "用户账变列表-前台")
+    @GetMapping("/findAmountChangeList")
+    public PageResult<SysTansterMoneyLogVo> findAmountChangeList(@Valid @ModelAttribute SysTansterMoneyPageCo params, @LoginUser SysUser user) {
+        params.setUserId(user.getId());
+        return sysTansterMoneyLogService.findAmountChangeList(params);
+    }
+
+
 }

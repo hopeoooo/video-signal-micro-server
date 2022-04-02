@@ -24,7 +24,7 @@
                 and t.user_name = #{u.userName}
             </if>
             <if test="u.userId != null and u.userId != ''">
-                and t.user_id like = #{u.userId}
+                and t.user_id  = #{u.userId}
             </if>
             <if test="u.orderType != null and u.orderType != ''">
                 and t.order_type in

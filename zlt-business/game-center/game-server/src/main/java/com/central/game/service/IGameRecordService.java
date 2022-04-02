@@ -9,10 +9,11 @@ import com.central.game.dto.GameRecordReportDto;
 import com.central.game.dto.HomeHistogramDto;
 import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameRecord;
+import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordCo;
+import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.LivePotVo;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -47,5 +48,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     List<LivePotVo> getLivePot(Long gameId, String tableNum, String bootNum, String bureauNum);
 
     HomeHistogramDto findHomeHistogramDto(Map<String, Object> params);
+
+    PageResult<GameRecordVo> findBetList(GameRecordBetPageCo params);
 }
 

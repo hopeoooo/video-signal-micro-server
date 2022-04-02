@@ -22,7 +22,7 @@ import java.util.List;
 @Component
 //@RabbitListener(queues = "DataCatch.resultQueue")
 @Slf4j
-public class GameLotterResulyConsumer {
+public class GameLotterResultConsumer {
 
     @Autowired
     private IGameLotteryResultService gameLotteryResultService;

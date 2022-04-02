@@ -20,4 +20,6 @@ public interface ISysTansterMoneyLogService extends ISuperService<SysTansterMone
     void syncSave(SysTansterMoneyLog sysTansterMoneyLog);
 
     List<SysTansterMoneyLogVo> findAllByParent(SysTansterMoneyPageCo params);
+
+    PageResult<SysTansterMoneyLogVo> findAmountChangeList(SysTansterMoneyPageCo params);
 }

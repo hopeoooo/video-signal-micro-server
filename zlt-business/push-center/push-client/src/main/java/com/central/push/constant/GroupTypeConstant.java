@@ -14,9 +14,9 @@ public interface GroupTypeConstant {
     String LIVE_POT = "livePot";
 
     /**
-     * 房间配置信息
+     * 桌台配置信息
      */
-    String ROOM_INFO = "roomInfo";
+    String TABLE_INFO = "tableInfo";
 
 
 }
