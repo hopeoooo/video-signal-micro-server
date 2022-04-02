@@ -21,4 +21,15 @@ public class GameRoomInfoOfflineServiceImpl extends SuperServiceImpl<GameRoomInf
 
     @Autowired
     private GameRoomInfoOfflineMapper gameRoomInfoOfflineMapper;
+
+    @Override
+    public GameRoomInfoOffline findByGameIdAndTableNumAndBootNumAndBureauNum(String gameId, String tableNum, String bootNum, String bureauNum) {
+        LambdaQueryWrapper<GameRoomInfoOffline> qw = Wrappers.lambdaQuery();
+        qw.eq(GameRoomInfoOffline::getGameId, gameId)
+                .eq(GameRoomInfoOffline::getTableNum, tableNum)
+                .eq(GameRoomInfoOffline::getBootNum, bootNum)
+                .eq(GameRoomInfoOffline::getBureauNum, bureauNum);
+        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineMapper.selectOne(qw);
+        return infoOffline;
+    }
 }

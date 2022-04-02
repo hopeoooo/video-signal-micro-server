@@ -3,6 +3,7 @@ package com.central.game.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.central.common.model.SuperEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -44,22 +45,28 @@ public class GameRoomInfoOffline extends SuperEntity {
     @ApiModelProperty(value = "倒计时")
     private Integer second;
 
-    @ApiModelProperty(value = "庄闲限红小")
+    @ApiModelProperty(value = "庄闲限红小", hidden = true)
+    @JsonIgnore
     private Integer bankerAndPlayerSmall;
 
-    @ApiModelProperty(value = "庄闲限红大")
+    @ApiModelProperty(value = "庄闲限红大", hidden = true)
+    @JsonIgnore
     private Integer bankerAndPlayerMax;
 
-    @ApiModelProperty(value = "和限红小")
+    @ApiModelProperty(value = "和限红小", hidden = true)
+    @JsonIgnore
     private Integer drawSmall;
 
-    @ApiModelProperty(value = "和限红大")
+    @ApiModelProperty(value = "和限红大", hidden = true)
+    @JsonIgnore
     private Integer drawMax;
 
-    @ApiModelProperty(value = "对子限红小")
+    @ApiModelProperty(value = "对子限红小", hidden = true)
+    @JsonIgnore
     private Integer doubleSmall;
 
-    @ApiModelProperty(value = "对子限红大")
+    @ApiModelProperty(value = "对子限红大", hidden = true)
+    @JsonIgnore
     private Integer doubleMax;
 
     @ApiModelProperty(value = "牌局状态 0洗牌中 1开始下注 2停止下注 3结算中 4结算完成")
@@ -72,5 +79,6 @@ public class GameRoomInfoOffline extends SuperEntity {
     private Date endTime;
 
     @TableField(exist = false)
+    @ApiModelProperty(value = "数据修改时间，时间戳", hidden = true)
     private Long times;
 }

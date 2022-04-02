@@ -17,6 +17,7 @@ import com.central.game.dto.HomePageDto;
 import com.central.game.mapper.GameRecordMapper;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
+import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordBetDataCo;
@@ -24,11 +25,13 @@ import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameListService;
 import com.central.game.service.IGameRecordService;
+import com.central.game.service.IGameRoomInfoOfflineService;
 import com.central.game.service.IGameRoomListService;
 import com.central.push.constant.GroupTypeConstant;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.feign.UserService;
+import com.central.user.model.vo.SysUserMoneyVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,30 +65,30 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     private PushService pushService;
     @Autowired
     private RedisRepository redisRepository;
+    @Autowired
+    private IGameRoomInfoOfflineService gameRoomInfoOfflineService;
 
     @Override
     @Transactional
     public Result<List<LivePotVo>> saveRecord(GameRecordCo co, SysUser user, String ip) {
+        Long gameId = co.getGameId();
+        Result checkGameResult = checkGame(gameId);
+        if (checkGameResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            return checkGameResult;
+        }
+        GameList gameList = (GameList) checkGameResult.getDatas();
         String tableNum = co.getTableNum();
-        GameRoomList gameRoomList = gameRoomListService.findById(tableNum);
-        if (gameRoomList == null) {
-            return Result.failed("当前桌台不存在");
+        Result checkTableResult = checkTable(gameId, tableNum);
+        if (checkTableResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            return checkTableResult;
         }
-        if (gameRoomList.getRoomStatus() == 0) {
-            return Result.failed("当前桌台已被禁用");
-        }
-        if (gameRoomList.getRoomStatus() == 2) {
-            return Result.failed("当前桌台正在维护");
-        }
-        Long gameId = gameRoomList.getGameId();
-        GameList gameList = gameListService.getById(gameId);
-        if (gameList.getGameStatus() == 0) {
-            return Result.failed("当前游戏已被禁用");
-        }
-        if (gameList.getGameStatus() == 2) {
-            return Result.failed("当前游戏正在维护");
+        GameRoomList gameRoomList = (GameRoomList) checkTableResult.getDatas();
+        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.findByGameIdAndTableNumAndBootNumAndBureauNum(co.getGameId().toString(), co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        if (infoOffline == null || infoOffline.getStatus() != 1) {
+            return Result.failed("已停止下注");
         }
         List<GameRecordBetDataCo> betResult = co.getBetResult();
+        BigDecimal totalBetAmount = BigDecimal.ZERO;
         for (GameRecordBetDataCo betDataCo : betResult) {
             PlayEnum playEnum = PlayEnum.getPlayByCode(betDataCo.getBetCode());
             if (playEnum == null) {
@@ -95,16 +98,20 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             if (betAmount.compareTo(BigDecimal.ZERO) < 1) {
                 return Result.failed(betDataCo.getBetName() + "下注金额必须大于0");
             }
+            totalBetAmount = totalBetAmount.add(betAmount);
+        }
+        //校验本次总下注额是否超过本地剩余额度
+        Result<SysUserMoneyVo> totalMoneyResult = userService.getMoneyByUserName(user.getUsername());
+        if (totalMoneyResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            return Result.failed("下注失败");
+        }
+        SysUserMoneyVo userMoneyVo = totalMoneyResult.getDatas();
+        if (totalBetAmount.compareTo(userMoneyVo.getMoney()) == 1) {
+            return Result.failed("下注金额大于剩余额度");
         }
         //先查询上次用户本局保存的注单数据
-        LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
-        lqw.eq(GameRecord::getUserId, user.getId());
-        lqw.eq(GameRecord::getGameId, gameId);
-        lqw.eq(GameRecord::getTableNum, co.getTableNum());
-        lqw.eq(GameRecord::getBootNum, co.getBootNum());
-        lqw.eq(GameRecord::getBureauNum, co.getBureauNum());
-        List<GameRecord> gameRecords = gameRecordMapper.selectList(lqw);
-        //本次下注下注数据
+        List<GameRecord> gameRecords = getBeforeBureauNum(user.getId(), gameId, co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        //本次下注成功的数据
         List<LivePotVo> newAddBetList = new ArrayList<>();
         //同一种玩法投注额变化时更新
         for (GameRecordBetDataCo betDataCo : betResult) {
@@ -112,14 +119,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             for (GameRecord record : gameRecords) {
                 BigDecimal newBetAmount = new BigDecimal(betDataCo.getBetAmount());
                 if (record.getGameId().equals(gameId.toString()) && record.getBetCode().equals(betDataCo.getBetCode())) {
-                    //与之前投注额相等不更新
-                    if (newBetAmount.compareTo(record.getBetAmount()) == 0) {
-                        flag = true;
-                        break;
-                    }
-                    //新旧投注额差
-                    BigDecimal diffBetAmount = newBetAmount.subtract(record.getBetAmount());
-                    record.setBetAmount(newBetAmount);
+                    record.setBetAmount(record.getBetAmount().add(newBetAmount));
                     //设置限红范围
                     List<BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betDataCo.getBetCode());
                     if (!CollectionUtils.isEmpty(minMaxLimitRed)) {
@@ -127,12 +127,12 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                         record.setMaxLimitRed(minMaxLimitRed.get(1));
                     }
                     //扣减本地余额
-                    Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), diffBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId());
+                    Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), newBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId());
                     //本地余额扣减成功，更新投注记录
                     if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
                         gameRecordMapper.updateById(record);
                         //汇总新增的下注额
-                        newAddBetList.add(getLivePotVo(betDataCo.getBetCode(), betDataCo.getBetName(), diffBetAmount, 0));
+                        newAddBetList.add(getLivePotVo(betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
                     } else {
                         log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
                     }
@@ -187,6 +187,50 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         livePotVo.setBetAmount(newAddBetAmount);
         livePotVo.setOnlineNum(onlineNum);
         return livePotVo;
+    }
+
+    /**
+     * 查询本局之前的下注记录
+     *
+     * @return
+     */
+    public List<GameRecord> getBeforeBureauNum(Long userId, Long gameId, String tableNum, String bootNum, String bureauNum) {
+        LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
+        lqw.eq(GameRecord::getUserId, userId);
+        lqw.eq(GameRecord::getGameId, gameId);
+        lqw.eq(GameRecord::getTableNum, tableNum);
+        lqw.eq(GameRecord::getBootNum, bootNum);
+        lqw.eq(GameRecord::getBureauNum, bureauNum);
+        List<GameRecord> gameRecords = gameRecordMapper.selectList(lqw);
+        return gameRecords;
+    }
+
+    public Result checkGame(Long gameId) {
+        GameList gameList = gameListService.getById(gameId);
+        if (gameList == null) {
+            return Result.failed("当前游戏不存在");
+        }
+        if (gameList.getGameStatus() == 0) {
+            return Result.failed("当前游戏已被禁用");
+        }
+        if (gameList.getGameStatus() == 2) {
+            return Result.failed("当前游戏正在维护");
+        }
+        return Result.succeed(gameList);
+    }
+
+    public Result checkTable(Long gameId, String tableNum) {
+        GameRoomList gameRoomList = gameRoomListService.lambdaQuery().eq(GameRoomList::getGameId, gameId).eq(GameRoomList::getGameRoomName, tableNum).one();
+        if (gameRoomList == null) {
+            return Result.failed("当前桌台不存在");
+        }
+        if (gameRoomList.getRoomStatus() == 0) {
+            return Result.failed("当前桌台已被禁用");
+        }
+        if (gameRoomList.getRoomStatus() == 2) {
+            return Result.failed("当前桌台正在维护");
+        }
+        return Result.succeed(gameRoomList);
     }
 
     public GameRecord getGameRecord(GameRecordCo co, GameRoomList gameRoomList, GameRecordBetDataCo betDataCo, SysUser user, Long gameId, String gameName, String ip) {

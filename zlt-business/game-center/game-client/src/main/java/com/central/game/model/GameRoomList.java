@@ -62,4 +62,8 @@ public class GameRoomList extends SuperEntity {
     @ApiModelProperty(value = "维护结束时间")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Date maintainEnd;
+
+    @ApiModelProperty(value = "牌局状态 0洗牌中 1开始下注 2停止下注 3结算中 4结算完成")
+    @TableField(exist = false)
+    private Integer status;
 }
