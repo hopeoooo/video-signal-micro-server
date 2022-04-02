@@ -6,6 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.CommonConstant;
 import com.central.common.model.*;
+import com.central.user.model.co.SysMenuDistributionCo;
 import com.central.user.service.ISysMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -73,8 +74,16 @@ public class SysMenuController {
 
     @ApiOperation(value = "根据roleId获取对应的菜单")
     @GetMapping("/{roleId}/menus")
-    public List<Map<String, Object>> findMenusByRoleId(@PathVariable Long roleId) {
+    public List<SysMenu> findMenusByRoleId(@PathVariable Long roleId) {
         Set<Long> roleIds = new HashSet<>();
+        roleIds.add(roleId);
+        //获取该角色对应的菜单
+        List<SysMenu> roleMenus = menuService.findByRoles(roleIds);
+        return treeBuilder(roleMenus);
+
+
+
+      /*  Set<Long> roleIds = new HashSet<>();
         roleIds.add(roleId);
         //获取该角色对应的菜单
         List<SysMenu> roleMenus = menuService.findByRoles(roleIds);
@@ -96,7 +105,7 @@ public class SysMenuController {
             }
             authTrees.add(authTree);
         }
-        return authTrees;
+        return authTrees;*/
     }
 
     @ApiOperation(value = "根据roleCodes获取对应的权限")
@@ -117,7 +126,7 @@ public class SysMenuController {
      */
     @ApiOperation(value = "角色分配菜单")
     @PostMapping("/granted")
-    public Result setMenuToRole(@RequestBody SysMenu sysMenu) {
+    public Result setMenuToRole(@RequestBody SysMenuDistributionCo sysMenu) {
         menuService.setMenuToRole(sysMenu.getRoleId(), sysMenu.getMenuIds());
         return Result.succeed("操作成功");
     }
