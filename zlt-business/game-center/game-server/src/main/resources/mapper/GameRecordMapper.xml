@@ -25,11 +25,13 @@
     </sql>
 
 
-    <select id="findGameRecordList"  resultType="com.central.game.model.GameRecord">
+    <select id="findGameRecordList"  resultType="com.central.game.model.vo.GameRecordBackstageVo">
         SELECT
-        g.*
+        g.*,o.start_time as startTime,o.end_time as endTime
         FROM
             game_record g
+        LEFT JOIN game_room_info_offline o on g.table_num=o.table_num
+        and g.boot_num=o.boot_num and g.bureau_num=o.bureau_num
         <include refid="where" />
 
     </select>

@@ -40,9 +40,11 @@ public class GameLotterResultConsumer {
             list = JSONObject.parseArray(data, GameLotteryResultCo.class);
         } catch (Exception e) {
             log.error("开奖数据解析失败,data={},msg={}", data, e.getMessage());
+            return;
         }
         if (CollectionUtils.isEmpty(list)) {
             log.error("开奖数据解析结果为空,data={}", data);
+            return;
         }
         GameLotteryResult result = null;
         //数据单条保存，防止批量保存时单条数据异常导致全部数据保存失败

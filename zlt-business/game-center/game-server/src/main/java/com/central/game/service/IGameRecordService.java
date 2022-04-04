@@ -13,6 +13,7 @@ import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.vo.GameRecordVo;
+import com.central.game.model.vo.GameRecordBackstageVo;
 import com.central.game.model.vo.LivePotVo;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.Map;
  */
 public interface IGameRecordService extends ISuperService<GameRecord> {
 
-    PageResult<GameRecord> findList(GameRecordBetCo map);
+    PageResult<GameRecordBackstageVo> findList(GameRecordBetCo map);
 
 
     GameRecordDto findGameRecordTotal(GameRecordBetCo params);

@@ -16,6 +16,7 @@ import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.callback.GameServiceFallbackFactory;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
+import com.central.game.model.vo.GameRecordBackstageVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
@@ -122,7 +123,7 @@ public interface GameService {
      * @return
      */
     @GetMapping("/gameRecord/findList")
-    Result<PageResult<GameRecord>> findList(@SpringQueryMap GameRecordBetCo params ) ;
+    Result<PageResult<GameRecordBackstageVo>> findList(@SpringQueryMap GameRecordBetCo params ) ;
 
     @GetMapping("/gameRecord/getGameRecordByParent")
     Result<List<GameRecord>> getGameRecordByParent(@SpringQueryMap GameRecordBetCo params ) ;

@@ -10,6 +10,7 @@ import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.vo.GameRecordVo;
+import com.central.game.model.vo.GameRecordBackstageVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,7 +27,7 @@ import java.util.Map;
 public interface GameRecordMapper extends SuperMapper<GameRecord> {
 
 
-    List<GameRecord> findGameRecordList(Page<GameRecord> page, @Param("p") GameRecordBetCo params);
+    List<GameRecordBackstageVo> findGameRecordList(Page<GameRecordBackstageVo> page, @Param("p") GameRecordBetCo params);
 
     GameRecordDto findGameRecordTotal( @Param("p") GameRecordBetCo params);
 

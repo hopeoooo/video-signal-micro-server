@@ -16,6 +16,7 @@ import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.co.GameRecordLivePotCo;
 import com.central.game.model.vo.GameRecordVo;
+import com.central.game.model.vo.GameRecordBackstageVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameRecordService;
 import io.swagger.annotations.Api;
@@ -57,8 +58,8 @@ public class GameRecordController {
             @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
     })
-    public Result<PageResult<GameRecord>> findList(@Valid @ModelAttribute GameRecordBetCo params) {
-        PageResult<GameRecord> list = gameRecordService.findList(params);
+    public Result<PageResult<GameRecordBackstageVo>> findList(@Valid @ModelAttribute GameRecordBetCo params) {
+        PageResult<GameRecordBackstageVo> list = gameRecordService.findList(params);
         return Result.succeed(list);
     }
 
