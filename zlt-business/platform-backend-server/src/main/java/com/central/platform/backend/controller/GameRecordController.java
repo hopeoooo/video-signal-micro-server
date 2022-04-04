@@ -6,6 +6,7 @@ import com.central.game.dto.GameRecordDto;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetCo;
+import com.central.game.model.vo.GameRecordBackstageVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,7 +39,7 @@ public class GameRecordController {
             @ApiImplicitParam(name = "page", value = "分页起始位置", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "limit", value = "分页结束位置", required = true, dataType = "Integer")
     })
-    public Result<PageResult<GameRecord>> findList(@Valid @ModelAttribute GameRecordBetCo params) {
+    public Result<PageResult<GameRecordBackstageVo>> findList(@Valid @ModelAttribute GameRecordBetCo params) {
         return gameService.findList(params);
     }
 

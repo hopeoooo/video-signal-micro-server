@@ -15,6 +15,7 @@ import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
+import com.central.game.model.vo.GameRecordBackstageVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 
@@ -102,7 +103,7 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
-            public Result<PageResult<GameRecord>> findList(GameRecordBetCo params) {
+            public Result<PageResult<GameRecordBackstageVo>> findList(GameRecordBetCo params) {
                 log.error("findList查询下注记录失败:{}", params);
                 return Result.failed("查询下注记录失败");
             }

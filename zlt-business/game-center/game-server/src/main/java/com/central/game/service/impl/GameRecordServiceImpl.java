@@ -25,6 +25,7 @@ import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordBetDataCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.vo.GameRecordVo;
+import com.central.game.model.vo.GameRecordBackstageVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameListService;
 import com.central.game.service.IGameRecordService;
@@ -336,10 +337,10 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
      * @return
      */
     @Override
-    public PageResult<GameRecord> findList(GameRecordBetCo params) {
-        Page<GameRecord> page = new Page<>(params.getPage(), params.getLimit());
-        List<GameRecord> list = baseMapper.findGameRecordList(page, params);
-        return PageResult.<GameRecord>builder().data(list).count(page.getTotal()).build();
+    public PageResult<GameRecordBackstageVo> findList(GameRecordBetCo params) {
+        Page<GameRecordBackstageVo> page = new Page<>(params.getPage(), params.getLimit());
+        List<GameRecordBackstageVo> list = baseMapper.findGameRecordList(page, params);
+        return PageResult.<GameRecordBackstageVo>builder().data(list).count(page.getTotal()).build();
     }
 
     @Override
