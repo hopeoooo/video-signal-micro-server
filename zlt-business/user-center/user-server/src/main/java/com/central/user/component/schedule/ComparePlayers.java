@@ -25,7 +25,7 @@ public class ComparePlayers {
     private RedisTemplate redisTemplate;
 
 
-//    @Scheduled(cron = "*/10 * * * * * ")
+    @Scheduled(cron = "*/10 * * * * * ")
     public void scheduledTask(){
         if (!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE)) return ;
         List<SysUser> sysUserList = appUserService.lambdaQuery().eq(SysUser::getType,CommonConstant.USER_TYPE_APP_GUEST).list();
