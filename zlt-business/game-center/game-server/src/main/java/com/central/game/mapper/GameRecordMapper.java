@@ -44,4 +44,6 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     HomeHistogramDto findHomeHistogramDto(@Param("p") Map<String, Object> params);
 
     List<GameRecordVo> findBetList(Page<GameRecordVo> page, @Param("p") GameRecordBetPageCo params);
+
+    List<GameRecord> getPayoutResult(@Param("gameId") String gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 }

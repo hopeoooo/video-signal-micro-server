@@ -31,6 +31,8 @@ public interface IGameLotteryResultService extends ISuperService<GameLotteryResu
 
     PageResult<GameLotteryResult> findList(GameLotteryResultBackstageCo map);
 
+    void syncPushPayoutResult(GameLotteryResult result);
+
 
 
 }

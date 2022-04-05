@@ -42,5 +42,14 @@ public interface PushService {
     @PostMapping(value = "/sendMessageByGroupId")
     Result sendMessageByGroupId(@RequestParam("groupId") String groupId, @RequestParam("message") String message);
 
+    /**
+     * 指定群组和用户推送消息
+     * @param groupId
+     * @param message
+     * @return
+     */
+    @PostMapping(value = "/sendMessageByGroupIdAndUserName")
+    Result sendMessageByGroupIdAndUserName(@RequestParam("groupId") String groupId, @RequestParam("userName") String userName, @RequestParam("message") String message);
+
 
 }
