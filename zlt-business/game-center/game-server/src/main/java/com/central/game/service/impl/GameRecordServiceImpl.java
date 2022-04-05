@@ -424,4 +424,10 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         List<GameRecord> gameRecords = gameRecordMapper.selectList(lqw);
         return gameRecords;
     }
+
+    @Override
+    public List<GameRecord> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum) {
+        return gameRecordMapper.getPayoutResult(gameId, tableNum, bootNum, bureauNum);
+
+    }
 }

@@ -55,5 +55,6 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum);
 
 
+    List<GameRecord> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum);
 }
 

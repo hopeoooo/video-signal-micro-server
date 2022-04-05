@@ -67,10 +67,12 @@ public class GameLotterResultConsumer {
                 result.setLotteryId(resultCo.getId());
                 result.setLotteryTime(resultCo.getCreateTime());
                 gameLotteryResultService.save(result);
-                //推送客户端消息
+                //推送开奖结果
                 pushLotterResult(result);
                 //计算派彩，有效投注额，输赢
                 gameLotteryResultService.calculateBetResult(result);
+                //异步推送派彩结果
+                gameLotteryResultService.syncPushPayoutResult(result);
             } catch (Exception e) {
                 log.error("开奖数据保存失败,data={},msg={}", result.toString(), e.getMessage());
             }

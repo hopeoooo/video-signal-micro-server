@@ -48,5 +48,10 @@ public interface SocketTypeConstant {
      */
     String LOTTER_RESULT = "lotterResult";
 
+    /**
+     * 派彩结果
+     */
+    String PAYOUT_RESULT = "payoutResult";
+
 
 }

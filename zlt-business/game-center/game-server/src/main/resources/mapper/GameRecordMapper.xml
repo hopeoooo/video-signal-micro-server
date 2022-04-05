@@ -107,4 +107,9 @@
         from game_record where user_id=#{p.userId} and create_time between #{p.startTime} and #{p.endTime}
         GROUP BY game_id,bureau_num
     </select>
+
+    <select id="getPayoutResult" resultType="com.central.game.model.GameRecord">
+        SELECT sum(winning_amount) winningAmount,user_name userName
+        from game_record where game_Id=#{gameId} and table_num=#{tableNum} and boot_num=#{bootNum} and bureau_num=#{bureauNum} GROUP BY user_id
+    </select>
 </mapper>
