@@ -107,6 +107,13 @@ public class GameRecordController {
         return Result.succeed(list);
     }
 
+    @ApiOperation(value = "查询本局筹码区注单数据")
+    @GetMapping("/getChipArea")
+    public Result<List<GameRecord>> getChipArea(@ModelAttribute GameRecordLivePotCo co) {
+        List<GameRecord> list = gameRecordService.getGameRecordByBureauNum(co.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        return Result.succeed(list);
+    }
+
     @ResponseBody
     @ApiOperation(value = "投注报表")
     @GetMapping("/findBetAmountTotal")

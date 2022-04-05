@@ -105,6 +105,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
             //更新下注记录
             gameRecordService.updateById(record);
         }
+        //推送派彩结果
     }
 
     /**
@@ -155,4 +156,14 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
         }
         return BigDecimal.ZERO;
     }
+
+    /**
+     * 推送派彩结果到客户端
+     * @param lotteryResult
+     */
+    public void pushLotteryResult(GameLotteryResult lotteryResult){
+
+    }
+
+
 }

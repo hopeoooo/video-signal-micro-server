@@ -43,5 +43,10 @@ public interface SocketTypeConstant {
      */
     String TABLE_INFO = "tableInfo";
 
+    /**
+     * 下注开奖结果
+     */
+    String LOTTER_RESULT = "lotterResult";
+
 
 }

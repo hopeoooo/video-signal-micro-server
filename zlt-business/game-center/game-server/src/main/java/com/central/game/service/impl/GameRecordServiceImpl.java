@@ -110,7 +110,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         }
         SysUserMoneyVo userMoneyVo = totalMoneyResult.getDatas();
         if (totalBetAmount.compareTo(userMoneyVo.getMoney()) == 1) {
-            return Result.failed("下注金额大于剩余额度");
+            return Result.failed("余额不足");
         }
         //先查询上次用户本局保存的注单数据
         List<GameRecord> gameRecords = getBeforeBureauNum(user.getId(), gameId, co.getTableNum(), co.getBootNum(), co.getBureauNum());
@@ -300,11 +300,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                 RedissLockUtil.unlock(livePotLockKey);
             }
         }
-        List<LivePotVo> livePot = getLivePot(gameId, tableNum, bootNum, bureauNum);
-        if (CollectionUtils.isEmpty(livePot)) {
-            return;
-        }
-        PushResult<List<LivePotVo>> pushResult = PushResult.succeed(livePot, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
+        PushResult<List<LivePotVo>> pushResult = PushResult.succeed(newAddBetList, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("即时彩池数据推送结果:groupId={},result={}", groupId, push);
     }
@@ -416,5 +412,16 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         Page<GameRecordVo> page = new Page<>(params.getPage(), params.getLimit());
         List<GameRecordVo> list = gameRecordMapper.findBetList(page, params);
         return PageResult.<GameRecordVo>builder().data(list).count(page.getTotal()).build();
+    }
+
+    @Override
+    public List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum) {
+        LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
+        lqw.eq(GameRecord::getGameId, gameId);
+        lqw.eq(GameRecord::getTableNum, tableNum);
+        lqw.eq(GameRecord::getBootNum, bootNum);
+        lqw.eq(GameRecord::getBureauNum, bureauNum);
+        List<GameRecord> gameRecords = gameRecordMapper.selectList(lqw);
+        return gameRecords;
     }
 }

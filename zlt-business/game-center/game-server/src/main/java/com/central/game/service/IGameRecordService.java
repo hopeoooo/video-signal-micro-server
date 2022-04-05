@@ -51,5 +51,9 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     HomeHistogramDto findHomeHistogramDto(Map<String, Object> params);
 
     PageResult<GameRecordVo> findBetList(GameRecordBetPageCo params);
+
+    List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum);
+
+
 }
 
