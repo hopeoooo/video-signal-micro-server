@@ -36,7 +36,7 @@ public class NettyWebSocketController {
      * @param userName 用户名
      * @return
      */
-    @ApiOperation(value = "指定用户推发消息")
+    @ApiOperation(value = "指定用户推送消息")
     @PostMapping(value = "/sendOne")
     public Result sendOneMessage(@RequestParam("userName") String userName, @RequestParam("message") String message) {
         String msg = NettyWebSocketServer.sendOneMessage(message, userName);
@@ -53,12 +53,30 @@ public class NettyWebSocketController {
      * @param groupId  群组ID
      * @return
      */
-    @ApiOperation(value = "指定群组推发消息")
+    @ApiOperation(value = "指定群组推送消息")
     @PostMapping(value = "/sendMessageByGroupId")
     public Result sendMessageByGroupId(@RequestParam("groupId") String groupId, @RequestParam("message") String message) {
         String msg = NettyWebSocketGroupServer.sendMessageByGroupId(groupId, message);
         if (StringUtils.isBlank(msg)) {
             return Result.succeed(groupId + "号群组消息推送成功");
+        }
+        return Result.failed(msg);
+    }
+
+    /**
+     * 指定群组和用户发消息
+     *
+     * @param message 消息内容
+     * @param groupId  群组ID
+     * @param userName  用户名
+     * @return
+     */
+    @ApiOperation(value = "指定群组和用户推送消息")
+    @PostMapping(value = "/sendMessageByGroupIdAndUserName")
+    public Result sendMessageByGroupIdAndUserName(@RequestParam("groupId") String groupId, @RequestParam("userName") String userName, @RequestParam("message") String message) {
+        String msg = NettyWebSocketGroupServer.sendMessageByGroupIdAndUserName(groupId, userName, message);
+        if (StringUtils.isBlank(msg)) {
+            return Result.succeed(groupId + "号群组" + userName + "消息推送成功");
         }
         return Result.failed(msg);
     }

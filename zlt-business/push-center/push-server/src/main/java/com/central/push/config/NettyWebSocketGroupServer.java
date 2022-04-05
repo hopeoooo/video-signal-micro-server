@@ -129,5 +129,33 @@ public class NettyWebSocketGroupServer {
         }
         return null;
     }
+
+
+    /**
+     * 通过群组ID和用户名推送消息
+     *
+     * @param groupId
+     * @param userName
+     * @param message
+     * @throws IOException
+     */
+    public static String sendMessageByGroupIdAndUserName(String groupId, String userName, String message) {
+        CopyOnWriteArraySet<NettyWebSocketGroupServer> friends = groups.get(groupId);
+        if (friends == null) {
+            return "消息推送失败,没有找到指定群组会话";
+        }
+        boolean flag = false;
+        for (NettyWebSocketGroupServer item : friends) {
+            if (item.getUserName().equals(userName)) {
+                item.session.sendText(message);
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            return "消息推送失败,没有找到指定用户会话";
+        }
+        return null;
+    }
 }
 

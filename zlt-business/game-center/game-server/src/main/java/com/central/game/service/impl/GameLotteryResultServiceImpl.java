@@ -12,9 +12,12 @@ import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
 import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
+import com.central.push.constant.SocketTypeConstant;
+import com.central.push.feign.PushService;
 import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +41,8 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
     private IGameRecordService gameRecordService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PushService pushService;
 
     @Override
     public List<GameLotteryResult> getLotteryResultList(GameLotteryResultCo co) {
@@ -49,6 +54,18 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
         Page<GameLotteryResult> page = new Page<>(map.getPage(), map.getLimit());
         List<GameLotteryResult> list = gameLotteryResultMapper.findList(page, map);
         return PageResult.<GameLotteryResult>builder().data(list).count(page.getTotal()).build();
+    }
+
+    @Override
+    @Async
+    public void syncPushPayoutResult(GameLotteryResult result) {
+        String groupId = result.getGameId() + "-" + result.getTableNum() + "-" + result.getBootNum() + "-" + result.getBureauNum();
+        List<GameRecord> payoutResult = gameRecordService.getPayoutResult(result.getGameId(), result.getTableNum(), result.getBootNum(), result.getBureauNum());
+        for (GameRecord gameRecord : payoutResult) {
+            PushResult<BigDecimal> pushResult = PushResult.succeed(gameRecord.getWinningAmount(), SocketTypeConstant.PAYOUT_RESULT, "派彩结果信息推送成功");
+            Result<String> push = pushService.sendMessageByGroupIdAndUserName(groupId, gameRecord.getUserName(), com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+            log.info("派彩结果信息推送结果:groupId={},userName={},result={}", groupId, gameRecord.getUserName(), push);
+        }
     }
 
 
