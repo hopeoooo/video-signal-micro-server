@@ -72,6 +72,13 @@ public class GameRoomInfoOfflineConsumer {
         }
         log.info("桌台配置信息数据更新完成，data={}", data);
         //推送客户端消息
+        //计算实时倒计时
+        if (po != null && po.getTimes() != null && po.getSecond() != null) {
+            long second = (System.currentTimeMillis() - po.getTimes()) / 1000;
+            long differ = po.getSecond() - second;
+            Long currentSecond = differ > 0 ? differ : 0;
+            po.setCurrentSecond(currentSecond.intValue());
+        }
         String groupId = po.getGameId() + "-" + po.getTableNum() + "-" + po.getBootNum() + "-" + po.getBureauNum();
         PushResult<GameRoomInfoOffline> pushResult = PushResult.succeed(po, SocketTypeConstant.TABLE_INFO, "桌台配置信息推送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
