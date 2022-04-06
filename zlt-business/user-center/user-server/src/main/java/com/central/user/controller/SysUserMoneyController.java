@@ -9,6 +9,7 @@ import com.central.common.redis.lock.RedissLockUtil;
 import com.central.common.vo.SysMoneyVO;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
+import com.central.user.model.vo.RankingListVo;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户钱包表
@@ -221,5 +223,12 @@ public class SysUserMoneyController {
     public Result<BigDecimal> getSumMoneyByParent(@NotBlank(message = "parent不允许为空") @RequestParam(value = "parent") String parent) {
         BigDecimal sumMoney = userMoneyService.getSumMoneyByParent(parent);
         return Result.succeed(sumMoney);
+    }
+
+    @ApiOperation(value = "今日排行-富豪榜")
+    @GetMapping("/getRichList")
+    public Result<List<RankingListVo>> getRichList() {
+        List<RankingListVo> list = userMoneyService.getRichList();
+        return Result.succeed(list);
     }
 }

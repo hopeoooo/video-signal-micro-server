@@ -4,8 +4,10 @@ import com.central.common.model.PageResult;
 import com.central.common.model.SysUser;
 import com.central.common.model.SysUserMoney;
 import com.central.common.service.ISuperService;
+import com.central.user.model.vo.RankingListVo;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,5 +38,7 @@ public interface ISysUserMoneyService extends ISuperService<SysUserMoney> {
     SysUserMoney receiveWashCode(SysUserMoney userMoney);
 
     BigDecimal getSumMoneyByParent(String parent);
+
+    List<RankingListVo> getRichList();
 }
 
