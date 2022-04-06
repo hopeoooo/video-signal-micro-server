@@ -12,4 +12,10 @@
         LEFT JOIN sys_user b on a.user_id = b.id
         where b.parent = #{parent}
     </select>
+
+    <select id="getRichList" resultType="com.central.user.model.vo.RankingListVo">
+        SELECT b.username userName,FORMAT(a.money,2) money from sys_user_money a
+        LEFT JOIN sys_user b on a.user_id=b.id
+        where b.type='APP' and b.is_Del=0 and enabled=1 ORDER BY a.money desc LIMIT 20
+    </select>
 </mapper>

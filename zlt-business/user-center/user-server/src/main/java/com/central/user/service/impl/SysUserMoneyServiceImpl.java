@@ -10,6 +10,7 @@ import com.central.common.service.impl.SuperServiceImpl;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.mapper.SysUserMoneyMapper;
+import com.central.user.model.vo.RankingListVo;
 import com.central.user.service.ISysTansterMoneyLogService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.model.vo.SysUserMoneyVo;
@@ -121,6 +122,11 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     @Override
     public BigDecimal getSumMoneyByParent(String parent) {
         return baseMapper.getSumMoneyByParent(parent);
+    }
+
+    @Override
+    public List<RankingListVo> getRichList() {
+        return baseMapper.getRichList();
     }
 
     private SysTansterMoneyLog getSysTansterMoneyLog(BigDecimal beforeMoery, BigDecimal money, SysUser sysUser,

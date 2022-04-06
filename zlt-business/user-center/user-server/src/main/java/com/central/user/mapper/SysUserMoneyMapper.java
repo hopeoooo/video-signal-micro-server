@@ -3,6 +3,7 @@ package com.central.user.mapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.SysUserMoney;
 import com.central.db.mapper.SuperMapper;
+import com.central.user.model.vo.RankingListVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +28,6 @@ public interface SysUserMoneyMapper extends SuperMapper<SysUserMoney> {
     List<SysUserMoney> findList(Page<SysUserMoney> page, @Param("p") Map<String, Object> params);
 
     BigDecimal getSumMoneyByParent(@Param("parent") String parent);
+
+    List<RankingListVo> getRichList();
 }
