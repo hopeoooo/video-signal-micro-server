@@ -57,4 +57,7 @@ public class SysUserCo {
 
     @ApiModelProperty(value = "父级")
     private String parent;
+
+    @ApiModelProperty(value = "角色id")
+    private String roleId;
 }
