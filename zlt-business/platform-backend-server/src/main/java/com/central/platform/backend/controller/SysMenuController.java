@@ -1,8 +1,10 @@
 package com.central.platform.backend.controller;
 
+import com.central.common.annotation.LoginUser;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
+import com.central.common.model.SysUser;
 import com.central.user.feign.MenuService;
 import com.central.user.model.co.SysMenuCo;
 import com.central.user.model.co.SysMenuDistributionCo;
@@ -83,4 +85,16 @@ public class SysMenuController {
         return menuService.saveOrUpdate(menu);
     }
 
+
+
+    /**
+     * 当前登录用户的菜单
+     *
+     * @return
+     */
+    @PostMapping("/menus/current")
+    @ApiOperation(value = "查询当前用户菜单")
+    public Result<List<SysMenu> >findMyMenu(@LoginUser SysUser user) {
+        return menuService.findMyMenu(user);
+    }
 }
