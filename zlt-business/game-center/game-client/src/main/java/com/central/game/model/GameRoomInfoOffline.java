@@ -45,6 +45,10 @@ public class GameRoomInfoOffline extends SuperEntity {
     @ApiModelProperty(value = "倒计时")
     private Integer second;
 
+    @ApiModelProperty(value = "实时倒计时")
+    @TableField(exist = false)
+    private Integer currentSecond = 0;
+
     @ApiModelProperty(value = "庄闲限红小", hidden = true)
     @JsonIgnore
     private Integer bankerAndPlayerSmall;
@@ -78,7 +82,6 @@ public class GameRoomInfoOffline extends SuperEntity {
     @ApiModelProperty(value = "开奖结束时间")
     private Date endTime;
 
-    @TableField(exist = false)
     @ApiModelProperty(value = "数据修改时间，时间戳", hidden = true)
     private Long times;
 }
