@@ -223,10 +223,13 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
             List<Long> userIds = list.stream().map(SysUser::getId).collect(Collectors.toList());
 
             List<SysRole> sysRoles = roleUserService.findRolesByUserIds(userIds);
+            Map<Long, List<SysRole>> sysRolesMap = sysRoles.stream().collect(Collectors.groupingBy(SysRole::getUserId));
             list.forEach(info ->{
-                info.setRoles(sysRoles.stream().filter(r -> !ObjectUtils.notEqual(info.getId(), r.getUserId()))
-                        .collect(Collectors.toList()));
-                info.setRoleId(sysRoles.get(0).getId().toString());
+                List<SysRole> proxyHomes = sysRolesMap.get(info.getId());
+                if (proxyHomes!=null){
+                    info.setRoles(proxyHomes);
+                    info.setRoleId(proxyHomes.get(0).getId().toString());
+                }
             });
         }
         return PageResult.<SysUser>builder().data(list).count(total).build();
