@@ -59,10 +59,10 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
     @Override
     @Async
     public void syncPushPayoutResult(GameLotteryResult result) {
-        String groupId = result.getGameId() + "-" + result.getTableNum() + "-" + result.getBootNum() + "-" + result.getBureauNum();
+        String groupId = result.getGameId() + "-" + result.getTableNum();
         List<GameRecord> payoutResult = gameRecordService.getPayoutResult(result.getGameId(), result.getTableNum(), result.getBootNum(), result.getBureauNum());
         for (GameRecord gameRecord : payoutResult) {
-            PushResult<BigDecimal> pushResult = PushResult.succeed(gameRecord.getWinningAmount(), SocketTypeConstant.PAYOUT_RESULT, "派彩结果信息推送成功");
+            PushResult<GameRecord> pushResult = PushResult.succeed(gameRecord, SocketTypeConstant.PAYOUT_RESULT, "派彩结果信息推送成功");
             Result<String> push = pushService.sendMessageByGroupIdAndUserName(groupId, gameRecord.getUserName(), com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
             log.info("派彩结果信息推送结果:groupId={},userName={},result={}", groupId, gameRecord.getUserName(), push);
         }

@@ -19,6 +19,7 @@ import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.GameRecordBackstageVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameRecordService;
+import com.central.user.model.vo.RankingListVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -168,6 +169,20 @@ public class GameRecordController {
     public Result<HomeHistogramDto> findHomeHistogramDto(@RequestParam Map<String, Object> params) {
         HomeHistogramDto homeHistogramDto = gameRecordService.findHomeHistogramDto(params);
         return Result.succeed(homeHistogramDto);
+    }
+
+    @ApiOperation(value = "今日排行-赢家榜")
+    @GetMapping("/getRichList")
+    public Result<List<RankingListVo>> getTodayLotteryList() {
+        List<RankingListVo> list = gameRecordService.getTodayLotteryList();
+        return Result.succeed(list);
+    }
+
+    @ApiOperation(value = "今日排行-投注榜")
+    @GetMapping("/getBetList")
+    public Result<List<RankingListVo>> getTodayBetList() {
+        List<RankingListVo> list = gameRecordService.getTodayBetList();
+        return Result.succeed(list);
     }
 
 }

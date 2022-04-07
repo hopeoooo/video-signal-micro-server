@@ -169,14 +169,16 @@ public class SysMenuController {
      *
      * @return
      */
-    @GetMapping("/current")
+    @PostMapping("/current")
     @ApiOperation(value = "查询当前用户菜单")
-    public List<SysMenu> findMyMenu(@LoginUser SysUser user) {
+    public Result<List<SysMenu> >findMyMenu(@RequestBody SysUser user) {
         List<SysRole> roles = user.getRoles();
         if (CollectionUtil.isEmpty(roles)) {
-            return Collections.emptyList();
+            return Result.failed("数据为空");
         }
         List<SysMenu> menus = menuService.findByRoleCodes(roles.parallelStream().map(SysRole::getCode).collect(Collectors.toSet()), CommonConstant.MENU);
-        return treeBuilder(menus);
+        List<SysMenu> sysMenus = treeBuilder(menus);
+        return Result.succeed(sysMenus);
     }
+
 }

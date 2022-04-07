@@ -4,6 +4,7 @@ import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
+import com.central.common.model.SysUser;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
 import com.central.user.model.co.SysMenuCo;
 import com.central.user.model.co.SysMenuDistributionCo;
@@ -65,4 +66,6 @@ public interface MenuService {
     @PostMapping("/menus/saveOrUpdate")
      Result saveOrUpdate(@RequestBody SysMenuCo menu) ;
 
+    @PostMapping("/menus/current")
+    Result<List<SysMenu>> findMyMenu(SysUser user);
 }

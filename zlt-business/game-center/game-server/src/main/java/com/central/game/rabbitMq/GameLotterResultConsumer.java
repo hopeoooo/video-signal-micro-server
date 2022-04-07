@@ -80,7 +80,7 @@ public class GameLotterResultConsumer {
     }
 
     public void pushLotterResult(GameLotteryResult result){
-        String groupId = result.getGameId() + "-" + result.getTableNum() + "-" + result.getBootNum() + "-" + result.getBureauNum();
+        String groupId = result.getGameId() + "-" + result.getTableNum();
         Map<String, Object> pushData=new HashMap<>();
         pushData.put("resultBetCode", result.getResult());
         pushData.put("resultBetName", result.getResultName());

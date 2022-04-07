@@ -3,6 +3,7 @@ package com.central.user.feign.callback;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
+import com.central.common.model.SysUser;
 import com.central.user.feign.MenuService;
 import com.central.user.model.co.SysMenuCo;
 import com.central.user.model.co.SysMenuDistributionCo;
@@ -55,6 +56,13 @@ public class MenuServiceFallbackFactory implements FallbackFactory<MenuService> 
                 log.error("saveOrUpdate编辑菜单异常:{}", menu, throwable);
                 return Result.failed("编辑菜单失败");
             }
+
+            @Override
+            public   Result<List<SysMenu>> findMyMenu(SysUser user) {
+                log.error("findMyMenu查询当前登录用户菜单异常", throwable);
+                return Result.failed("查询当前登录用户菜单失败");
+            }
+
         };
     }
 }

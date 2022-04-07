@@ -112,4 +112,14 @@
         SELECT sum(winning_amount) winningAmount,user_name userName
         from game_record where game_Id=#{gameId} and table_num=#{tableNum} and boot_num=#{bootNum} and bureau_num=#{bureauNum} GROUP BY user_id
     </select>
+
+    <select id="getTodayLotteryList" resultType="com.central.user.model.vo.RankingListVo">
+        SELECT user_name userName,sum(winning_amount) amount,FORMAT(sum(winning_amount),2) money from game_record
+        where bet_time BETWEEN #{startTime} and #{endTime} GROUP BY user_id ORDER BY amount desc
+    </select>
+
+    <select id="getTodayBetList" resultType="com.central.user.model.vo.RankingListVo">
+        SELECT user_name userName,sum(bet_amount) amount,FORMAT(sum(bet_amount),2) money from game_record
+        where bet_time BETWEEN #{startTime} and #{endTime} GROUP BY user_id ORDER BY amount desc
+    </select>
 </mapper>

@@ -34,6 +34,7 @@ import com.central.game.service.IGameRoomListService;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.feign.UserService;
+import com.central.user.model.vo.RankingListVo;
 import com.central.user.model.vo.SysUserMoneyVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -429,5 +430,19 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     public List<GameRecord> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum) {
         return gameRecordMapper.getPayoutResult(gameId, tableNum, bootNum, bureauNum);
 
+    }
+
+    @Override
+    public List<RankingListVo> getTodayLotteryList() {
+        String startTime = DateUtil.getStartTime(0);
+        String endTime = DateUtil.getEndTime(0);
+        return gameRecordMapper.getTodayLotteryList(startTime, endTime);
+    }
+
+    @Override
+    public List<RankingListVo> getTodayBetList() {
+        String startTime = DateUtil.getStartTime(0);
+        String endTime = DateUtil.getEndTime(0);
+        return gameRecordMapper.getTodayBetList(startTime, endTime);
     }
 }
