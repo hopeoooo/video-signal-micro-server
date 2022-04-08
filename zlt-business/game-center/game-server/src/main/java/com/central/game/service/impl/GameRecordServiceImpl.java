@@ -62,8 +62,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     private IGameListService gameListService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private IPushGameDataToClientService pushGameDataToClientService;
+//    @Autowired
+//    private IPushGameDataToClientService pushGameDataToClientService;
     @Autowired
     private RedisRepository redisRepository;
     @Autowired
@@ -179,7 +179,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             }
         }
         //异步推送新增 投注记录
-        pushGameDataToClientService.syncLivePot(gameId,tableNum,bootNum,bureauNum,newAddBetList);
+//        pushGameDataToClientService.syncLivePot(gameId,tableNum,bootNum,bureauNum,newAddBetList);
         return Result.succeed(newAddBetList);
     }
 
