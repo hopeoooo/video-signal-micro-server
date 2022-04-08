@@ -10,6 +10,7 @@ import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
+import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
 import com.central.push.constant.SocketTypeConstant;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.text.ParseException;

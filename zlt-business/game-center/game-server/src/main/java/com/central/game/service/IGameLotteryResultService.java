@@ -8,6 +8,7 @@ import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
 import com.central.game.model.co.GameRecordBetCo;
+import com.central.game.model.vo.LivePotVo;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.validation.Valid;
@@ -32,8 +33,5 @@ public interface IGameLotteryResultService extends ISuperService<GameLotteryResu
     PageResult<GameLotteryResult> findList(GameLotteryResultBackstageCo map);
 
     void syncPushPayoutResult(GameLotteryResult result);
-
-
-
 }
 

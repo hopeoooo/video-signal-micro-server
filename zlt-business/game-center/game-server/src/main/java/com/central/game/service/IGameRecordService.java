@@ -30,7 +30,6 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
 
     PageResult<GameRecordBackstageVo> findList(GameRecordBetCo map);
 
-
     GameRecordDto findGameRecordTotal(GameRecordBetCo params);
 
     Result<List<LivePotVo>> saveRecord(GameRecordCo co, SysUser user, String ip);
@@ -42,8 +41,6 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     GameRecordReportDto findWinningAmountTotal(Map<String, Object> params);
 
     List<GameRecord> getGameRecordByParent(GameRecordBetCo params);
-
-    void syncLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> list);
 
     HomePageDto findHomePageDto(String parent);
 
@@ -61,5 +58,9 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     List<RankingListVo> getTodayLotteryList();
 
     List<RankingListVo> getTodayBetList();
+
+    String getTodayValidbet(Long userId);
+
+    String getTotalValidbet(Long userId);
 }
 

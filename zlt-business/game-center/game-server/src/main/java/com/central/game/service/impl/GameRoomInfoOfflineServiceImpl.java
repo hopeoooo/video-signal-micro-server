@@ -32,4 +32,15 @@ public class GameRoomInfoOfflineServiceImpl extends SuperServiceImpl<GameRoomInf
         GameRoomInfoOffline infoOffline = gameRoomInfoOfflineMapper.selectOne(qw);
         return infoOffline;
     }
+
+    @Override
+    public GameRoomInfoOffline getNewestTableInfo(Long gameId, String tableNum) {
+        LambdaQueryWrapper<GameRoomInfoOffline> qw = Wrappers.lambdaQuery();
+        qw.eq(GameRoomInfoOffline::getGameId, gameId)
+                .eq(GameRoomInfoOffline::getTableNum, tableNum)
+                .orderByDesc(GameRoomInfoOffline::getCreateTime)
+                .last("limit 1");
+        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineMapper.selectOne(qw);
+        return infoOffline;
+    }
 }

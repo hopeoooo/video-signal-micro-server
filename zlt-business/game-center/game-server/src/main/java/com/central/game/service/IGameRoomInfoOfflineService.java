@@ -10,5 +10,7 @@ import com.central.game.model.GameRoomInfoOffline;
 public interface IGameRoomInfoOfflineService extends ISuperService<GameRoomInfoOffline> {
 
     GameRoomInfoOffline findByGameIdAndTableNumAndBootNumAndBureauNum(String gameId, String tableNum, String bootNum, String bureauNum);
+
+    GameRoomInfoOffline getNewestTableInfo(Long gameId, String tableNum);
 }
 

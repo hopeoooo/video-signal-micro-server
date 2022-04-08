@@ -25,9 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -226,8 +223,14 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
             List<Long> userIds = list.stream().map(SysUser::getId).collect(Collectors.toList());
 
             List<SysRole> sysRoles = roleUserService.findRolesByUserIds(userIds);
-            list.forEach(u -> u.setRoles(sysRoles.stream().filter(r -> !ObjectUtils.notEqual(u.getId(), r.getUserId()))
-                    .collect(Collectors.toList())));
+            Map<Long, List<SysRole>> sysRolesMap = sysRoles.stream().collect(Collectors.groupingBy(SysRole::getUserId));
+            list.forEach(info ->{
+                List<SysRole> proxyHomes = sysRolesMap.get(info.getId());
+                if (proxyHomes!=null){
+                    info.setRoles(proxyHomes);
+                    info.setRoleId(proxyHomes.get(0).getId().toString());
+                }
+            });
         }
         return PageResult.<SysUser>builder().data(list).count(total).build();
     }
