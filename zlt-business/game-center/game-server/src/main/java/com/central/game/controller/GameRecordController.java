@@ -94,10 +94,6 @@ public class GameRecordController {
     public Result save(@Valid @RequestBody GameRecordCo co, @LoginUser SysUser user, HttpServletRequest request) {
         String ip = AddrUtil.getRemoteAddr(request);
         Result<List<LivePotVo>> result = gameRecordService.saveRecord(co, user, ip);
-        if (result.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-            //异步推送本局下注汇总数据（按玩法汇总）
-            gameRecordService.syncLivePot(co.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum(), result.getDatas());
-        }
         return result;
     }
 
@@ -183,6 +179,20 @@ public class GameRecordController {
     public Result<List<RankingListVo>> getTodayBetList() {
         List<RankingListVo> list = gameRecordService.getTodayBetList();
         return Result.succeed(list);
+    }
+
+    @ApiOperation(value = "登录用户今日有效投注")
+    @GetMapping("/getTodayValidbet")
+    public Result<String> getTodayValidbet(@LoginUser SysUser user) {
+        String todayValidbet = gameRecordService.getTodayValidbet(user.getId());
+        return Result.succeed(todayValidbet,"查询成功");
+    }
+
+    @ApiOperation(value = "登录用户累计有效投注")
+    @GetMapping("/getTotalValidbet")
+    public Result<String> getTotalValidbet(@LoginUser SysUser user) {
+        String todayValidbet = gameRecordService.getTotalValidbet(user.getId());
+        return Result.succeed(todayValidbet,"查询成功");
     }
 
 }

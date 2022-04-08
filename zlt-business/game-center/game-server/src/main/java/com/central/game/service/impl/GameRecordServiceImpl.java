@@ -27,10 +27,7 @@ import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.GameRecordBackstageVo;
 import com.central.game.model.vo.LivePotVo;
-import com.central.game.service.IGameListService;
-import com.central.game.service.IGameRecordService;
-import com.central.game.service.IGameRoomInfoOfflineService;
-import com.central.game.service.IGameRoomListService;
+import com.central.game.service.*;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.feign.UserService;
@@ -66,7 +63,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Autowired
     private UserService userService;
     @Autowired
-    private PushService pushService;
+    private IPushGameDataToClientService pushGameDataToClientService;
     @Autowired
     private RedisRepository redisRepository;
     @Autowired
@@ -181,6 +178,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                 RedissLockUtil.unlock(livePotLockKey);
             }
         }
+        //异步推送新增 投注记录
+        pushGameDataToClientService.syncLivePot(gameId,tableNum,bootNum,bureauNum,newAddBetList);
         return Result.succeed(newAddBetList);
     }
 
@@ -408,27 +407,6 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     /**
-     * 推送新增的投注数据
-     *
-     * @param gameId
-     * @param tableNum
-     * @param bootNum
-     * @param bureauNum
-     * @param newAddBetList
-     */
-    @Override
-    @Async
-    public void syncLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> newAddBetList) {
-        if (CollectionUtils.isEmpty(newAddBetList)) {
-            return;
-        }
-        String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
-        PushResult<List<LivePotVo>> pushResult = PushResult.succeed(newAddBetList, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
-        Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
-        log.info("即时彩池数据推送结果:groupId={},result={}", groupId, push);
-    }
-
-    /**
      * 注单号生成规则：游戏拼音缩写+日期+桌号+靴号+第几局+十位随机数  必须是唯一值
      *
      * @param gameId    游戏ID
@@ -566,5 +544,23 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         String startTime = DateUtil.getStartTime(0);
         String endTime = DateUtil.getEndTime(0);
         return gameRecordMapper.getTodayBetList(startTime, endTime);
+    }
+
+    @Override
+    public String getTodayValidbet(Long userId) {
+        String startTime = DateUtil.getStartTime(0);
+        String endTime = DateUtil.getEndTime(0);
+        BigDecimal todayValidbet = gameRecordMapper.getTodayValidbet(userId, startTime, endTime);
+        return keepDecimal(todayValidbet).toString();
+    }
+
+    @Override
+    public String getTotalValidbet(Long userId) {
+        BigDecimal totalValidbet = gameRecordMapper.getTotalValidbet(userId);
+        return keepDecimal(totalValidbet).toString();
+    }
+
+    private BigDecimal keepDecimal(BigDecimal val) {
+        return val == null ? BigDecimal.ZERO.setScale(2) : val.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 }

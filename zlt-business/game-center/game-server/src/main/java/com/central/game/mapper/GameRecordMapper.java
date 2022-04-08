@@ -15,6 +15,7 @@ import com.central.user.model.vo.RankingListVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,11 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
 
     List<GameRecord> getPayoutResult(@Param("gameId") String gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 
-    List<RankingListVo> getTodayLotteryList(@Param("startTime") String startTime,@Param("endTime")  String endTime);
+    List<RankingListVo> getTodayLotteryList(@Param("startTime") String startTime,@Param("endTime") String endTime);
 
-    List<RankingListVo> getTodayBetList(@Param("startTime") String startTime,@Param("endTime")  String endTime);
+    List<RankingListVo> getTodayBetList(@Param("startTime") String startTime,@Param("endTime") String endTime);
+
+    BigDecimal getTodayValidbet(@Param("userId") Long userId, @Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    BigDecimal getTotalValidbet(@Param("userId") Long userId);
 }

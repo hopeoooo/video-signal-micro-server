@@ -122,4 +122,14 @@
         SELECT user_name userName,sum(bet_amount) amount,FORMAT(sum(bet_amount),2) money from game_record
         where bet_time BETWEEN #{startTime} and #{endTime} GROUP BY user_id ORDER BY amount desc
     </select>
+
+    <select id="getTodayValidbet" resultType="java.math.BigDecimal">
+        SELECT sum(validbet) validbet from game_record
+        where bet_time BETWEEN #{startTime} and #{endTime} and user_id=#{userId}
+    </select>
+
+    <select id="getTotalValidbet" resultType="java.math.BigDecimal">
+        SELECT sum(validbet) validbet from game_record
+        where user_id=#{userId}
+    </select>
 </mapper>
