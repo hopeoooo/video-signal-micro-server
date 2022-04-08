@@ -20,23 +20,23 @@ import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
-import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordBetDataCo;
+import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordCo;
-import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.GameRecordBackstageVo;
+import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.LivePotVo;
-import com.central.game.service.*;
-import com.central.push.constant.SocketTypeConstant;
-import com.central.push.feign.PushService;
+import com.central.game.service.IGameListService;
+import com.central.game.service.IGameRecordService;
+import com.central.game.service.IGameRoomInfoOfflineService;
+import com.central.game.service.IGameRoomListService;
 import com.central.user.feign.UserService;
 import com.central.user.model.vo.RankingListVo;
 import com.central.user.model.vo.SysUserMoneyVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -62,7 +62,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     private IGameListService gameListService;
     @Autowired
     private UserService userService;
-//    @Autowired
+    //    @Autowired
 //    private IPushGameDataToClientService pushGameDataToClientService;
     @Autowired
     private RedisRepository redisRepository;
@@ -350,7 +350,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         return absAmount;
     }
 
-    public GameRecord getGameRecord(GameRecordCo co, GameRoomList gameRoomList, GameRecordBetDataCo betDataCo, SysUser user, Long gameId, String gameName, String bootNum,String bureauNum,String ip) {
+    public GameRecord getGameRecord(GameRecordCo co, GameRoomList gameRoomList, GameRecordBetDataCo betDataCo, SysUser user, Long gameId, String gameName, String bootNum, String bureauNum, String ip) {
         GameRecord gameRecord = new GameRecord();
         gameRecord.setTableNum(co.getTableNum());
         gameRecord.setBootNum(bootNum);
