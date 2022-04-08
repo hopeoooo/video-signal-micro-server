@@ -27,10 +27,7 @@ import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.vo.GameRecordBackstageVo;
 import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.LivePotVo;
-import com.central.game.service.IGameListService;
-import com.central.game.service.IGameRecordService;
-import com.central.game.service.IGameRoomInfoOfflineService;
-import com.central.game.service.IGameRoomListService;
+import com.central.game.service.*;
 import com.central.user.feign.UserService;
 import com.central.user.model.vo.RankingListVo;
 import com.central.user.model.vo.SysUserMoneyVo;
@@ -62,8 +59,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     private IGameListService gameListService;
     @Autowired
     private UserService userService;
-    //    @Autowired
-//    private IPushGameDataToClientService pushGameDataToClientService;
+    @Autowired
+    private IPushGameDataToClientService pushGameDataToClientService;
     @Autowired
     private RedisRepository redisRepository;
     @Autowired
@@ -179,7 +176,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             }
         }
         //异步推送新增 投注记录
-//        pushGameDataToClientService.syncLivePot(gameId,tableNum,bootNum,bureauNum,newAddBetList);
+        pushGameDataToClientService.syncLivePot(gameId,tableNum,bootNum,bureauNum,newAddBetList);
         return Result.succeed(newAddBetList);
     }
 

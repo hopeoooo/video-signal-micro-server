@@ -14,6 +14,7 @@ import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -29,6 +30,7 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     @Autowired
     private PushService pushService;
     @Autowired
+    @Lazy
     private IGameRecordService gameRecordService;
 
     /**
