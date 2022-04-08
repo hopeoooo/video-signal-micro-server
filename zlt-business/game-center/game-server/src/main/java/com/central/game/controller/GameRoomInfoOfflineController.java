@@ -38,12 +38,7 @@ public class GameRoomInfoOfflineController {
     @ApiOperation(value = "查询桌台最新动态信息")
     @GetMapping("/getTableInfo")
     public Result<GameRoomInfoOffline> getTableInfo(@ModelAttribute GameRoomInfoOfflineCo co) {
-        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.lambdaQuery()
-                .eq(GameRoomInfoOffline::getGameId,co.getGameId())
-                .eq(GameRoomInfoOffline::getTableNum,co.getTableNum())
-                .orderByDesc(GameRoomInfoOffline::getCreateTime)
-                .last("limit 1")
-                .one();
+        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.getNewestTableInfo(co.getGameId(),co.getTableNum());
         //计算实时倒计时
         if (infoOffline != null && infoOffline.getTimes() != null && infoOffline.getSecond() != null) {
             //数据修改后距离当前时间过了多少秒

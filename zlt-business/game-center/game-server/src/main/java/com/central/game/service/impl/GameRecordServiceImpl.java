@@ -72,6 +72,9 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Autowired
     private IGameRoomInfoOfflineService gameRoomInfoOfflineService;
 
+    private static final String minLimitRed = "minLimitRed";
+    private static final String maxLimitRed = "maxLimitRed";
+
     @Override
     @Transactional
     public Result<List<LivePotVo>> saveRecord(GameRecordCo co, SysUser user, String ip) {
@@ -87,10 +90,12 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             return checkTableResult;
         }
         GameRoomList gameRoomList = (GameRoomList) checkTableResult.getDatas();
-        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.findByGameIdAndTableNumAndBootNumAndBureauNum(co.getGameId().toString(), co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.getNewestTableInfo(gameId, tableNum);
         if (infoOffline == null || infoOffline.getStatus() != 1) {
             return Result.failed("已停止下注");
         }
+        String bootNum = infoOffline.getBootNum();
+        String bureauNum = infoOffline.getBureauNum();
         List<GameRecordBetDataCo> betResult = co.getBetResult();
         BigDecimal totalBetAmount = BigDecimal.ZERO;
         for (GameRecordBetDataCo betDataCo : betResult) {
@@ -113,50 +118,67 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         if (totalBetAmount.compareTo(userMoneyVo.getMoney()) == 1) {
             return Result.failed("余额不足");
         }
-        //先查询上次用户本局保存的注单数据
-        List<GameRecord> gameRecords = getBeforeBureauNum(user.getId(), gameId, co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        String livePotLockKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_LOCK + gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
+        boolean livePotLock = RedissLockUtil.tryLock(livePotLockKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
         //本次下注成功的数据
         List<LivePotVo> newAddBetList = new ArrayList<>();
-        //同一种玩法投注额变化时更新
-        for (GameRecordBetDataCo betDataCo : betResult) {
-            boolean flag = false;
-            for (GameRecord record : gameRecords) {
-                BigDecimal newBetAmount = new BigDecimal(betDataCo.getBetAmount());
-                if (record.getGameId().equals(gameId.toString()) && record.getBetCode().equals(betDataCo.getBetCode())) {
-                    record.setBetAmount(record.getBetAmount().add(newBetAmount));
-                    //设置限红范围
-                    List<BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betDataCo.getBetCode());
-                    if (!CollectionUtils.isEmpty(minMaxLimitRed)) {
-                        record.setMinLimitRed(minMaxLimitRed.get(0));
-                        record.setMaxLimitRed(minMaxLimitRed.get(1));
+        if (livePotLock) {
+            try {
+                //限红校验
+                for (GameRecordBetDataCo betDataCo : betResult) {
+                    Result checkLimitRedResult = checkLimitRed(gameRoomList, betDataCo, gameId, tableNum, bootNum, bureauNum);
+                    if (checkLimitRedResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+                        return checkLimitRedResult;
                     }
-                    //扣减本地余额
-                    Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), newBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId());
-                    //本地余额扣减成功，更新投注记录
-                    if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-                        gameRecordMapper.updateById(record);
-                        //汇总新增的下注额
-                        newAddBetList.add(getLivePotVo(betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
-                    } else {
-                        log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
+                }
+                //先查询上次用户本局保存的注单数据
+                List<GameRecord> gameRecords = getBeforeBureauNum(user.getId(), gameId, co.getTableNum(), bootNum, bureauNum);
+                //同一种玩法投注额变化时更新
+                for (GameRecordBetDataCo betDataCo : betResult) {
+                    boolean flag = false;
+                    for (GameRecord record : gameRecords) {
+                        BigDecimal newBetAmount = new BigDecimal(betDataCo.getBetAmount());
+                        if (record.getGameId().equals(gameId.toString()) && record.getBetCode().equals(betDataCo.getBetCode())) {
+                            record.setBetAmount(record.getBetAmount().add(newBetAmount));
+                            //设置限红范围
+                            Map<String, BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betDataCo.getBetCode());
+                            if (!CollectionUtils.isEmpty(minMaxLimitRed)) {
+                                record.setMinLimitRed(minMaxLimitRed.get(minLimitRed));
+                                record.setMaxLimitRed(minMaxLimitRed.get(maxLimitRed));
+                            }
+                            //扣减本地余额
+                            Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), newBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId());
+                            //本地余额扣减成功，更新投注记录
+                            if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
+                                gameRecordMapper.updateById(record);
+                                //汇总新增的下注额
+                                newAddBetList.add(getLivePotVo(betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
+                            } else {
+                                log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
+                            }
+                            flag = true;
+                            break;
+                        }
                     }
-                    flag = true;
-                    break;
+                    //之前没有保存的新增
+                    if (!flag) {
+                        //先扣减本地余额
+                        GameRecord record = getGameRecord(co, gameRoomList, betDataCo, user, gameId, gameList.getName(), bootNum, bureauNum, ip);
+                        Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), record.getBetAmount(), null, CapitalEnum.BET.getType(), null, record.getBetId());
+                        //本地余额扣减成功，保存投注记录
+                        if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
+                            gameRecordMapper.insert(record);
+                            //汇总新增的下注额
+                            newAddBetList.add(getLivePotVo(betDataCo.getBetCode(), betDataCo.getBetName(), record.getBetAmount(), 1));
+                        } else {
+                            log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
+                        }
+                    }
                 }
-            }
-            //之前没有保存的新增
-            if (!flag) {
-                //先扣减本地余额
-                GameRecord record = getGameRecord(co, gameRoomList, betDataCo, user, gameId, gameList.getName(), ip);
-                Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), record.getBetAmount(), null, CapitalEnum.BET.getType(), null, record.getBetId());
-                //本地余额扣减成功，保存投注记录
-                if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-                    gameRecordMapper.insert(record);
-                    //汇总新增的下注额
-                    newAddBetList.add(getLivePotVo(betDataCo.getBetCode(), betDataCo.getBetName(), record.getBetAmount(), 1));
-                } else {
-                    log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
-                }
+                //汇总即时彩池
+                summaryLivePot(gameId, tableNum, bootNum, bureauNum, newAddBetList);
+            } finally {
+                RedissLockUtil.unlock(livePotLockKey);
             }
         }
         return Result.succeed(newAddBetList);
@@ -167,20 +189,20 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
      *
      * @return
      */
-    public List<BigDecimal> getMinMaxLimitRed(GameRoomList gameRoomList, String betCode) {
-        List<BigDecimal> list = new ArrayList<>();
+    public Map<String, BigDecimal> getMinMaxLimitRed(GameRoomList gameRoomList, String betCode) {
+        Map<String, BigDecimal> limitRed = new HashMap<>();
         //庄，闲，大，小
-        if (betCode == PlayEnum.BAC_BANKER.getCode() || betCode == PlayEnum.BAC_PLAYER.getCode() || betCode == PlayEnum.BAC_BIG.getCode() || betCode == PlayEnum.BAC_SMALL.getCode()) {
-            list.add(gameRoomList.getMinBankerPlayer());
-            list.add(gameRoomList.getMaxBankerPlayer());
-        } else if (betCode == PlayEnum.BAC_TIE.getCode()) {
-            list.add(gameRoomList.getMinSum());
-            list.add(gameRoomList.getMinSum());
-        } else if (betCode == PlayEnum.BAC_BPAIR.getCode() || betCode == PlayEnum.BAC_PPAIR.getCode()) {
-            list.add(gameRoomList.getMinTwain());
-            list.add(gameRoomList.getMaxTwain());
+        if (PlayEnum.BAC_BANKER.getCode().equals(betCode) || PlayEnum.BAC_PLAYER.getCode().equals(betCode) || PlayEnum.BAC_BIG.getCode().equals(betCode) || PlayEnum.BAC_SMALL.getCode().equals(betCode)) {
+            limitRed.put(minLimitRed, gameRoomList.getMinBankerPlayer());
+            limitRed.put(maxLimitRed, gameRoomList.getMaxBankerPlayer());
+        } else if (PlayEnum.BAC_TIE.getCode().equals(betCode)) {
+            limitRed.put(minLimitRed, gameRoomList.getMinSum());
+            limitRed.put(maxLimitRed, gameRoomList.getMaxSum());
+        } else if (PlayEnum.BAC_BPAIR.getCode().equals(betCode) || PlayEnum.BAC_PPAIR.getCode().equals(betCode)) {
+            limitRed.put(minLimitRed, gameRoomList.getMinTwain());
+            limitRed.put(maxLimitRed, gameRoomList.getMaxTwain());
         }
-        return list;
+        return limitRed;
     }
 
 
@@ -237,11 +259,103 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         return Result.succeed(gameRoomList);
     }
 
-    public GameRecord getGameRecord(GameRecordCo co, GameRoomList gameRoomList, GameRecordBetDataCo betDataCo, SysUser user, Long gameId, String gameName, String ip) {
+    /**
+     * 限红算法
+     * 1.实际上庄闲（大小）就看一局中所有玩家这两种玩法的下注总额差的绝对值在限红范围就行，
+     * 2.和只有他自己，所有玩家下注值累计起来在限红范围就行，
+     * 3.庄对，闲对是所有玩家这两种玩法的累计下注和在限红范围就行，
+     *
+     * @param gameRoomList
+     * @param betDataCo
+     * @param gameId
+     * @param tableNum
+     * @param bootNum
+     * @param bureauNum
+     * @return
+     */
+    public Result checkLimitRed(GameRoomList gameRoomList, GameRecordBetDataCo betDataCo, Long gameId, String tableNum, String bootNum, String bureauNum) {
+        String betCode = betDataCo.getBetCode();
+        //获取本地设置的限红值
+        Map<String, BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betCode);
+        if (CollectionUtils.isEmpty(minMaxLimitRed)) {
+            return Result.succeed();
+        }
+        BigDecimal minLimitRedAmount = minMaxLimitRed.get(minLimitRed);
+        BigDecimal maxLimitRedAmount = minMaxLimitRed.get(maxLimitRed);
+        if (minLimitRedAmount == null || maxLimitRedAmount == null) {
+            return Result.succeed();
+        }
+        //本局累计投注额
+        BigDecimal limitBetAmount = getBureauNumLimitBetAmount(gameId, tableNum, bootNum, bureauNum, betCode);
+        BigDecimal betAmount = new BigDecimal(betDataCo.getBetAmount());
+        BigDecimal totalBetAmount = limitBetAmount.add(betAmount);
+        //大于等于最小，小于等于最大
+        if (totalBetAmount.compareTo(minLimitRedAmount) > -1 && totalBetAmount.compareTo(maxLimitRedAmount) < 1) {
+            return Result.succeed();
+        }
+        return Result.failed(betDataCo.getBetName() + "玩法下注金额超过限红值");
+
+    }
+
+    /**
+     * 获取本局累计投注
+     *
+     * @param betCode
+     * @param gameId
+     * @param tableNum
+     * @param bootNum
+     * @param bureauNum
+     * @return
+     */
+    public BigDecimal getBureauNumLimitBetAmount(Long gameId, String tableNum, String bootNum, String bureauNum, String betCode) {
+        String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
+        String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
+        //庄，闲
+        if (PlayEnum.BAC_BANKER.getCode().equals(betCode) || PlayEnum.BAC_PLAYER.getCode().equals(betCode)) {
+            Object banker = redisRepository.getHashValues(redisDataKey, PlayEnum.BAC_BANKER.getCode());
+            Object player = redisRepository.getHashValues(redisDataKey, PlayEnum.BAC_PLAYER.getCode());
+            BigDecimal absBetAmount = getAbsBetAmount(banker, player);
+            return absBetAmount;
+            //大小
+        } else if (PlayEnum.BAC_BIG.getCode().equals(betCode) || PlayEnum.BAC_SMALL.getCode().equals(betCode)) {
+            Object big = redisRepository.getHashValues(redisDataKey, PlayEnum.BAC_BIG.getCode());
+            Object small = redisRepository.getHashValues(redisDataKey, PlayEnum.BAC_SMALL.getCode());
+            BigDecimal absBetAmount = getAbsBetAmount(big, small);
+            return absBetAmount;
+        } else if (PlayEnum.BAC_TIE.getCode().equals(betCode)) {
+            Object tie = redisRepository.getHashValues(redisDataKey, PlayEnum.BAC_TIE.getCode());
+            if (ObjectUtils.isEmpty(tie)) {
+                return BigDecimal.ZERO;
+            }
+            return ((LivePotVo) tie).getBetAmount();
+        } else if (PlayEnum.BAC_BPAIR.getCode().equals(betCode) || PlayEnum.BAC_PPAIR.getCode().equals(betCode)) {
+            Object bpairPpair = redisRepository.getHashValues(redisDataKey, betCode);
+            if (ObjectUtils.isEmpty(bpairPpair)) {
+                return BigDecimal.ZERO;
+            }
+            return ((LivePotVo) bpairPpair).getBetAmount();
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getAbsBetAmount(Object bankerBig, Object playerSmall) {
+        BigDecimal bankerBigBetAmount = BigDecimal.ZERO;
+        BigDecimal playerSmallBetAmount = BigDecimal.ZERO;
+        if (!ObjectUtils.isEmpty(bankerBig)) {
+            bankerBigBetAmount = ((LivePotVo) bankerBig).getBetAmount();
+        }
+        if (!ObjectUtils.isEmpty(playerSmall)) {
+            playerSmallBetAmount = ((LivePotVo) playerSmall).getBetAmount();
+        }
+        BigDecimal absAmount = bankerBigBetAmount.subtract(playerSmallBetAmount).abs();
+        return absAmount;
+    }
+
+    public GameRecord getGameRecord(GameRecordCo co, GameRoomList gameRoomList, GameRecordBetDataCo betDataCo, SysUser user, Long gameId, String gameName, String bootNum,String bureauNum,String ip) {
         GameRecord gameRecord = new GameRecord();
         gameRecord.setTableNum(co.getTableNum());
-        gameRecord.setBootNum(co.getBootNum());
-        gameRecord.setBureauNum(co.getBureauNum());
+        gameRecord.setBootNum(bootNum);
+        gameRecord.setBureauNum(bureauNum);
         gameRecord.setUserId(user.getId());
         gameRecord.setUserName(user.getUsername());
         gameRecord.setParent(user.getParent());
@@ -253,25 +367,54 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         gameRecord.setBetTime(new Date());
         gameRecord.setIp(ip);
         //注单号
-        String betId = getBetId(gameId, co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        String betId = getBetId(gameId, co.getTableNum(), bootNum, bureauNum);
         gameRecord.setBetId(betId);
         //设置限红范围
-        List<BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betDataCo.getBetCode());
+        Map<String, BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betDataCo.getBetCode());
         if (!CollectionUtils.isEmpty(minMaxLimitRed)) {
-            gameRecord.setMinLimitRed(minMaxLimitRed.get(0));
-            gameRecord.setMaxLimitRed(minMaxLimitRed.get(1));
+            gameRecord.setMinLimitRed(minMaxLimitRed.get(minLimitRed));
+            gameRecord.setMaxLimitRed(minMaxLimitRed.get(maxLimitRed));
         }
         return gameRecord;
     }
 
     /**
-     * 下注完毕异步汇总本局即时彩池数据
+     * 计算即时彩池数据
      *
      * @param gameId        游戏
      * @param tableNum      桌号
      * @param bootNum       靴号
      * @param bureauNum     局数
      * @param newAddBetList 本次下注新增的数据
+     */
+    public void summaryLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> newAddBetList) {
+        if (CollectionUtils.isEmpty(newAddBetList)) {
+            return;
+        }
+        String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
+        String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
+        for (LivePotVo vo : newAddBetList) {
+            LivePotVo livePotVo = (LivePotVo) redisRepository.getHashValues(redisDataKey, vo.getBetCode());
+            if (ObjectUtils.isEmpty(livePotVo)) {
+                livePotVo = new LivePotVo();
+                BeanUtils.copyProperties(vo, livePotVo);
+            } else {
+                livePotVo.setBetAmount(livePotVo.getBetAmount().add(vo.getBetAmount()));
+                livePotVo.setOnlineNum(livePotVo.getOnlineNum() + vo.getOnlineNum());
+            }
+            redisRepository.putHashValue(redisDataKey, vo.getBetCode(), livePotVo);
+            redisRepository.setExpire(redisDataKey, 60 * 60);
+        }
+    }
+
+    /**
+     * 推送新增的投注数据
+     *
+     * @param gameId
+     * @param tableNum
+     * @param bootNum
+     * @param bureauNum
+     * @param newAddBetList
      */
     @Override
     @Async
@@ -280,27 +423,6 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             return;
         }
         String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
-        String livePotLockKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_LOCK + groupId;
-        String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
-        boolean livePotLock = RedissLockUtil.tryLock(livePotLockKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
-        if (livePotLock) {
-            try {
-                for (LivePotVo vo : newAddBetList) {
-                    LivePotVo livePotVo = (LivePotVo) redisRepository.getHashValues(redisDataKey, vo.getBetCode());
-                    if (ObjectUtils.isEmpty(livePotVo)) {
-                        livePotVo = new LivePotVo();
-                        BeanUtils.copyProperties(vo, livePotVo);
-                    } else {
-                        livePotVo.setBetAmount(livePotVo.getBetAmount().add(vo.getBetAmount()));
-                        livePotVo.setOnlineNum(livePotVo.getOnlineNum() + vo.getOnlineNum());
-                    }
-                    redisRepository.putHashValue(redisDataKey, vo.getBetCode(), livePotVo);
-                    redisRepository.setExpire(redisDataKey, 60 * 60);
-                }
-            } finally {
-                RedissLockUtil.unlock(livePotLockKey);
-            }
-        }
         PushResult<List<LivePotVo>> pushResult = PushResult.succeed(newAddBetList, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("即时彩池数据推送结果:groupId={},result={}", groupId, push);
