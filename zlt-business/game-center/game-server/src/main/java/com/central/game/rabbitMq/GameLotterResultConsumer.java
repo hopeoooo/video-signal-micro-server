@@ -8,6 +8,7 @@ import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.co.GameLotteryResultCo;
 import com.central.game.service.IGameLotteryResultService;
+import com.central.game.service.IPushGameDataToClientService;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.sun.corba.se.spi.ior.ObjectKey;
@@ -36,6 +37,8 @@ public class GameLotterResultConsumer {
     private IGameLotteryResultService gameLotteryResultService;
     @Autowired
     private PushService pushService;
+    @Autowired
+    private IPushGameDataToClientService pushGameDataToClientService;
 
     @RabbitHandler
     public void process(String data) {
@@ -68,24 +71,14 @@ public class GameLotterResultConsumer {
                 result.setLotteryTime(resultCo.getCreateTime());
                 gameLotteryResultService.save(result);
                 //推送开奖结果
-                pushLotterResult(result);
+                pushGameDataToClientService.pushLotterResult(result);
                 //计算派彩，有效投注额，输赢
                 gameLotteryResultService.calculateBetResult(result);
                 //异步推送派彩结果
-                gameLotteryResultService.syncPushPayoutResult(result);
+                pushGameDataToClientService.syncPushPayoutResult(result);
             } catch (Exception e) {
                 log.error("开奖数据保存失败,data={},msg={}", result.toString(), e.getMessage());
             }
         }
-    }
-
-    public void pushLotterResult(GameLotteryResult result){
-        String groupId = result.getGameId() + "-" + result.getTableNum();
-        Map<String, Object> pushData=new HashMap<>();
-        pushData.put("resultBetCode", result.getResult());
-        pushData.put("resultBetName", result.getResultName());
-        PushResult<Map<String, Object>> pushResult = PushResult.succeed(pushData, SocketTypeConstant.LOTTER_RESULT, "桌台开奖信息推送成功");
-        Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
-        log.info("桌台开奖信息推送结果:groupId={},result={}", groupId, push);
     }
 }

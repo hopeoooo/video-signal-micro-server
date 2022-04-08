@@ -6,6 +6,7 @@ import com.central.common.model.Result;
 import com.central.game.constants.GameListEnum;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.service.IGameRoomInfoOfflineService;
+import com.central.game.service.IPushGameDataToClientService;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class GameRoomInfoOfflineConsumer {
     @Autowired
     private IGameRoomInfoOfflineService gameRoomInfoOfflineService;
     @Autowired
-    private PushService pushService;
+    private IPushGameDataToClientService pushGameDataToClientService;
 
     @RabbitHandler
     public void process(String data) {
@@ -79,9 +80,6 @@ public class GameRoomInfoOfflineConsumer {
             Long currentSecond = differ > 0 ? differ : 0;
             po.setCurrentSecond(currentSecond.intValue());
         }
-        String groupId = po.getGameId() + "-" + po.getTableNum();
-        PushResult<GameRoomInfoOffline> pushResult = PushResult.succeed(po, SocketTypeConstant.TABLE_INFO, "桌台配置信息推送成功");
-        Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
-        log.info("桌台配置信息推送结果:groupId={},result={}", groupId, push);
+        pushGameDataToClientService.syncPushGameRoomInfo(po);
     }
 }
