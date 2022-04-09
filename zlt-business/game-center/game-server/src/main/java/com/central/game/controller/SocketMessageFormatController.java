@@ -5,6 +5,7 @@ import com.central.game.model.GameRecord;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.vo.LotteryResultVo;
 import com.central.game.model.vo.NewAddLivePotVo;
+import com.central.game.model.vo.PayoutResultVo;
 import com.central.push.constant.SocketTypeConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,9 +35,9 @@ public class SocketMessageFormatController {
 
     @ApiOperation(value = "派彩结果Socket数据格式")
     @GetMapping("/getPayoutResult")
-    public PushResult<GameRecord> getPayoutResult() {
-        GameRecord gameRecord = new GameRecord();
-        PushResult<GameRecord> pushResult = PushResult.succeed(gameRecord, SocketTypeConstant.PAYOUT_RESULT, "派彩结果信息推送成功");
+    public PushResult<PayoutResultVo> getPayoutResult() {
+        PayoutResultVo payoutResultVo = new PayoutResultVo();
+        PushResult<PayoutResultVo> pushResult = PushResult.succeed(payoutResultVo, SocketTypeConstant.PAYOUT_RESULT, "派彩结果信息推送成功");
         return pushResult;
     }
 

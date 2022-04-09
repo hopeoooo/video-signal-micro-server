@@ -15,6 +15,7 @@ import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.GameRecordBackstageVo;
 import com.central.game.model.vo.LivePotVo;
+import com.central.game.model.vo.PayoutResultVo;
 import com.central.user.model.vo.RankingListVo;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum);
 
 
-    List<GameRecord> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum);
+    List<PayoutResultVo> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum);
 
     List<RankingListVo> getTodayLotteryList();
 

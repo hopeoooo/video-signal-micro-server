@@ -108,8 +108,8 @@
         GROUP BY game_id,bureau_num
     </select>
 
-    <select id="getPayoutResult" resultType="com.central.game.model.GameRecord">
-        SELECT sum(winning_amount) winningAmount,user_name userName
+    <select id="getPayoutResult" resultType="com.central.game.model.vo.PayoutResultVo">
+        SELECT sum(winning_amount) winningAmount,user_name userName,game_id gameId, game_name gameName,table_num tableNum,boot_num bootNum,bureau_num bureauNum
         from game_record where game_Id=#{gameId} and table_num=#{tableNum} and boot_num=#{bootNum} and bureau_num=#{bureauNum} GROUP BY user_id
     </select>
 
