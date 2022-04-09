@@ -19,11 +19,11 @@ public class GameRecordLivePotCo {
     @NotBlank(message = "桌台编号不能为空")
     private String tableNum;
 
-    @ApiModelProperty(value = "靴号", required = true)
+   /* @ApiModelProperty(value = "靴号", required = true)
     @NotBlank(message = "靴号不能为空")
     private String bootNum;
 
     @ApiModelProperty(value = "局号", required = true)
     @NotBlank(message = "局号不能为空")
-    private String bureauNum;
+    private String bureauNum;*/
 }

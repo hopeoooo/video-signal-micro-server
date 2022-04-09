@@ -25,7 +25,7 @@ public class GameRoomInfoOffline extends SuperEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "游戏ID")
-    private String gameId;
+    private Long gameId;
 
     @ApiModelProperty(value = "游戏名称")
     private String gameName;

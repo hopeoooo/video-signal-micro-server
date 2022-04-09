@@ -2,6 +2,7 @@ package com.central.game.service;
 
 import com.central.common.service.ISuperService;
 import com.central.game.model.GameRoomInfoOffline;
+import com.central.game.model.vo.GameRoomInfoOfflineVo;
 
 /**
  * @author zlt
@@ -10,6 +11,8 @@ import com.central.game.model.GameRoomInfoOffline;
 public interface IGameRoomInfoOfflineService extends ISuperService<GameRoomInfoOffline> {
 
     GameRoomInfoOffline findByGameIdAndTableNumAndBootNumAndBureauNum(String gameId, String tableNum, String bootNum, String bureauNum);
+
+    GameRoomInfoOfflineVo getNewestTableInfoVo(Long gameId, String tableNum);
 
     GameRoomInfoOffline getNewestTableInfo(Long gameId, String tableNum);
 }

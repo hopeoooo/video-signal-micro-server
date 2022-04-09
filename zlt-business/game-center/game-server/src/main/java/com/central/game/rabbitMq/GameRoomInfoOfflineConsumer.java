@@ -50,7 +50,7 @@ public class GameRoomInfoOfflineConsumer {
             log.error("桌台配置信息数据解析结果为空,data={}", data);
             return;
         }
-        po.setGameId(GameListEnum.BACCARAT.getGameId().toString());
+        po.setGameId(GameListEnum.BACCARAT.getGameId());
         po.setGameName(GameListEnum.BACCARAT.getGameName());
         GameRoomInfoOffline detailOffline = gameRoomInfoOfflineService.lambdaQuery().eq(GameRoomInfoOffline::getMachineCode, po.getMachineCode()).eq(GameRoomInfoOffline::getTableNum, po.getTableNum())
                 .eq(GameRoomInfoOffline::getBootNum, po.getBootNum()).eq(GameRoomInfoOffline::getBureauNum, po.getBureauNum()).one();
