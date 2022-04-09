@@ -22,7 +22,7 @@ import java.util.Date;
  * 百家乐桌台信息详情
  */
 @Component
-@RabbitListener(queues = "DataCatch.configQueue")
+//@RabbitListener(queues = "DataCatch.configQueue")
 @Slf4j
 public class GameRoomInfoOfflineConsumer {
 
