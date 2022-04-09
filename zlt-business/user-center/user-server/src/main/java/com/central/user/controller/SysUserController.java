@@ -385,7 +385,7 @@ public class SysUserController {
      * 用户自己修改密码
      */
     @PutMapping(value = "/users/password")
-    public Result resetPassword(@RequestBody SysUser sysUser) {
+    public Result updatePassword(@RequestBody SysUser sysUser) {
         if (checkAdmin(sysUser.getId())) {
             return Result.failed(ADMIN_CHANGE_MSG);
         }

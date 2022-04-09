@@ -80,6 +80,16 @@ public class AdminController {
         return userService.resetPassword(id);
     }
 
+
+
+
+    @ApiOperation(value = "修改密码")
+    @PutMapping(value = "/users/password")
+    public Result updatePassword(@RequestBody SysUser sysUser) {
+        return userService.updatePassword(sysUser);
+    }
+
+
     /**
      * 重置谷歌验证码
      */
