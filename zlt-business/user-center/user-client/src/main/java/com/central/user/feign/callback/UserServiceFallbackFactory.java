@@ -42,6 +42,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 return null;
             }
 
+            @Override
+            public Result<LoginAppUser> getLoginAppUser() {
+                log.error("服务器异常，getLoginAppUser根据access_token当前登录用户异常" ,throwable);
+                return Result.failed("查询当前登录用户失败");
+            }
+
             @GetMapping(value = "/users-anon/login", params = "username")
             @Override
             public LoginAppUser findByUsername(String username) {

@@ -37,6 +37,17 @@ public class SysUserController {
 
 
     /**
+     * 当前登录用户 LoginAppUser
+     *
+     * @return
+     */
+    @ApiOperation(value = "根据access_token当前登录用户")
+    @GetMapping("/users/current")
+    public Result<LoginAppUser> getLoginAppUser() {
+        return userService.getLoginAppUser();
+    }
+
+    /**
      * 用户列表查询。查询APP用户数据
      */
     @ApiOperation(value = "用户列表查询")
