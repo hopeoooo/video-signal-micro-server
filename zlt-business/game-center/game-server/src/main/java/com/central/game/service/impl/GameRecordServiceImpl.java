@@ -24,10 +24,7 @@ import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordBetDataCo;
 import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordCo;
-import com.central.game.model.vo.GameRecordBackstageVo;
-import com.central.game.model.vo.GameRecordVo;
-import com.central.game.model.vo.LivePotVo;
-import com.central.game.model.vo.PayoutResultVo;
+import com.central.game.model.vo.*;
 import com.central.game.service.*;
 import com.central.user.feign.UserService;
 import com.central.user.model.vo.RankingListVo;
@@ -43,6 +40,7 @@ import org.springframework.util.ObjectUtils;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author zlt
@@ -556,6 +554,32 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     public String getTotalValidbet(Long userId) {
         BigDecimal totalValidbet = gameRecordMapper.getTotalValidbet(userId);
         return keepDecimal(totalValidbet).toString();
+    }
+
+    @Override
+    public List<GameWinningRateVo> getGameWinningRate(Long userId) {
+        List<GameWinningRateVo> list = new ArrayList<>();
+        GameWinningRateVo vo = null;
+        for (GameListEnum gameListEnum : GameListEnum.values()) {
+            vo = new GameWinningRateVo();
+            vo.setGameId(gameListEnum.getGameId());
+            vo.setGameName(gameListEnum.getGameName());
+            list.add(vo);
+            List<BigDecimal> totalList = gameRecordMapper.getGameWinningRate(userId, gameListEnum.getGameId());
+            if (CollectionUtils.isEmpty(totalList)) {
+                vo.setRete("0");
+                continue;
+            }
+            //总局数
+            int totalNum = totalList.size();
+            //盈利的
+            List<BigDecimal> winList = totalList.stream().filter(t -> t.compareTo(BigDecimal.ZERO) == 1).collect(Collectors.toList());
+            int winNum = winList.size();
+            //胜率
+            BigDecimal rate = new BigDecimal(winNum).divide(new BigDecimal(totalNum)).multiply(new BigDecimal(100));
+            vo.setRete(keepDecimal(rate).toString());
+        }
+        return list;
     }
 
     private BigDecimal keepDecimal(BigDecimal val) {

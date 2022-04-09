@@ -17,6 +17,7 @@ import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.co.GameRecordLivePotCo;
 import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.GameRecordBackstageVo;
+import com.central.game.model.vo.GameWinningRateVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameRecordService;
 import com.central.user.model.vo.RankingListVo;
@@ -181,18 +182,25 @@ public class GameRecordController {
         return Result.succeed(list);
     }
 
-    @ApiOperation(value = "登录用户今日有效投注")
+    @ApiOperation(value = "个人资讯-今日有效投注")
     @GetMapping("/getTodayValidbet")
     public Result<String> getTodayValidbet(@LoginUser SysUser user) {
         String todayValidbet = gameRecordService.getTodayValidbet(user.getId());
         return Result.succeed(todayValidbet,"查询成功");
     }
 
-    @ApiOperation(value = "登录用户累计有效投注")
+    @ApiOperation(value = "个人资讯-累计有效投注")
     @GetMapping("/getTotalValidbet")
     public Result<String> getTotalValidbet(@LoginUser SysUser user) {
         String todayValidbet = gameRecordService.getTotalValidbet(user.getId());
         return Result.succeed(todayValidbet,"查询成功");
+    }
+
+    @ApiOperation(value = "个人资讯-游戏胜率")
+    @GetMapping("/getGameWinningRate")
+    public Result<List<GameWinningRateVo>> getGameWinningRate(@LoginUser SysUser user) {
+        List<GameWinningRateVo> gameWinningRate = gameRecordService.getGameWinningRate(user.getId());
+        return Result.succeed(gameWinningRate);
     }
 
 }

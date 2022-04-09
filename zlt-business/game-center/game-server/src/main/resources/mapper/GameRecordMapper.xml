@@ -128,8 +128,8 @@
         where bet_time BETWEEN #{startTime} and #{endTime} and user_id=#{userId}
     </select>
 
-    <select id="getTotalValidbet" resultType="java.math.BigDecimal">
-        SELECT sum(validbet) validbet from game_record
-        where user_id=#{userId}
+    <select id="getGameWinningRate" resultType="java.math.BigDecimal">
+        SELECT sum(win_Loss) winLoss from game_record
+        where user_id=#{userId} and game_id=#{gameId} GROUP BY table_num,boot_num,bureau_num
     </select>
 </mapper>
