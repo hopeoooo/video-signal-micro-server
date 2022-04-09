@@ -39,7 +39,7 @@ public interface PushService {
      * @param message
      * @return
      */
-    @PostMapping(value = "/sendMessageByGroupId")
+    @PostMapping(value = "/ws/api/sendMessageByGroupId")
     Result sendMessageByGroupId(@RequestParam("groupId") String groupId, @RequestParam("message") String message);
 
     /**
@@ -48,7 +48,7 @@ public interface PushService {
      * @param message
      * @return
      */
-    @PostMapping(value = "/sendMessageByGroupIdAndUserName")
+    @PostMapping(value = "/ws/api/sendMessageByGroupIdAndUserName")
     Result sendMessageByGroupIdAndUserName(@RequestParam("groupId") String groupId, @RequestParam("userName") String userName, @RequestParam("message") String message);
 
 

@@ -91,7 +91,11 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     public void syncPushGameRoomInfo(GameRoomInfoOffline po) {
         String groupId = po.getGameId() + "-" + po.getTableNum();
         PushResult<GameRoomInfoOffline> pushResult = PushResult.succeed(po, SocketTypeConstant.TABLE_INFO, "桌台配置信息推送成功");
+        //推送下注界面
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
-        log.info("桌台配置信息推送结果:groupId={},result={}", groupId, push);
+        log.info("下注界面桌台配置信息推送结果:groupId={},result={}", groupId, push);
+        //推送大厅
+        Result<String> hallPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+        log.info("大厅桌台配置信息推送结果,result={}", hallPush);
     }
 }
