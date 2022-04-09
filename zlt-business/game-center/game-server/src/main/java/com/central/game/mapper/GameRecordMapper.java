@@ -11,6 +11,7 @@ import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.GameRecordBackstageVo;
+import com.central.game.model.vo.PayoutResultVo;
 import com.central.user.model.vo.RankingListVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -47,7 +48,7 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
 
     List<GameRecordVo> findBetList(Page<GameRecordVo> page, @Param("p") GameRecordBetPageCo params);
 
-    List<GameRecord> getPayoutResult(@Param("gameId") String gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
+    List<PayoutResultVo> getPayoutResult(@Param("gameId") String gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 
     List<RankingListVo> getTodayLotteryList(@Param("startTime") String startTime,@Param("endTime") String endTime);
 

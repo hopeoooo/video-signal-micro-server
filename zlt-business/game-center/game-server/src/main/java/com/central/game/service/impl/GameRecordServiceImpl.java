@@ -27,6 +27,7 @@ import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.vo.GameRecordBackstageVo;
 import com.central.game.model.vo.GameRecordVo;
 import com.central.game.model.vo.LivePotVo;
+import com.central.game.model.vo.PayoutResultVo;
 import com.central.game.service.*;
 import com.central.user.feign.UserService;
 import com.central.user.model.vo.RankingListVo;
@@ -524,7 +525,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     @Override
-    public List<GameRecord> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum) {
+    public List<PayoutResultVo> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum) {
         return gameRecordMapper.getPayoutResult(gameId, tableNum, bootNum, bureauNum);
 
     }
