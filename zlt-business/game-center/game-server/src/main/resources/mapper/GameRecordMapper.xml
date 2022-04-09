@@ -132,4 +132,11 @@
         SELECT sum(win_Loss) winLoss from game_record
         where user_id=#{userId} and game_id=#{gameId} GROUP BY table_num,boot_num,bureau_num
     </select>
+
+
+    <select id="getLivePot" resultType="com.central.game.model.vo.LivePotVo">
+        SELECT bet_code betCode,bet_name betName,sum(bet_amount) betAmount,count(1) betNum
+        from game_record where game_id=#{gameId} and table_num=#{tableNum} and boot_num=#{bootNum} and bureau_num=#{bureauNum} GROUP BY bet_code
+    </select>
+
 </mapper>

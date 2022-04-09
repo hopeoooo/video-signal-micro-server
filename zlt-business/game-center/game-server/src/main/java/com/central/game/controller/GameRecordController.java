@@ -15,10 +15,7 @@ import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.co.GameRecordLivePotCo;
-import com.central.game.model.vo.GameRecordVo;
-import com.central.game.model.vo.GameRecordBackstageVo;
-import com.central.game.model.vo.GameWinningRateVo;
-import com.central.game.model.vo.LivePotVo;
+import com.central.game.model.vo.*;
 import com.central.game.service.IGameRecordService;
 import com.central.user.model.vo.RankingListVo;
 import io.swagger.annotations.Api;
@@ -98,17 +95,17 @@ public class GameRecordController {
         return result;
     }
 
-    @ApiOperation(value = "查询本局即时彩池数据")
+    @ApiOperation(value = "查询最新局即时彩池数据")
     @GetMapping("/getLivePot")
-    public Result<List<LivePotVo>> getLivePot(@ModelAttribute GameRecordLivePotCo co) {
-        List<LivePotVo> list = gameRecordService.getLivePot(co.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum());
+    public Result<NewAddLivePotVo> getLivePot(@ModelAttribute GameRecordLivePotCo co) {
+        NewAddLivePotVo list = gameRecordService.getLivePot(co.getGameId(), co.getTableNum());
         return Result.succeed(list);
     }
 
-    @ApiOperation(value = "查询本局筹码区注单数据")
+    @ApiOperation(value = "查询最新局筹码区注单数据")
     @GetMapping("/getChipArea")
     public Result<List<GameRecord>> getChipArea(@ModelAttribute GameRecordLivePotCo co) {
-        List<GameRecord> list = gameRecordService.getGameRecordByBureauNum(co.getGameId(), co.getTableNum(), co.getBootNum(), co.getBureauNum());
+        List<GameRecord> list = gameRecordService.getGameRecordByBureauNum(co.getGameId(), co.getTableNum());
         return Result.succeed(list);
     }
 

@@ -71,6 +71,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     @Transactional
     public Result<List<LivePotVo>> saveRecord(GameRecordCo co, SysUser user, String ip) {
+        String userName = user.getUsername();
         Long gameId = co.getGameId();
         Result checkGameResult = checkGame(gameId);
         if (checkGameResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
@@ -103,7 +104,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             totalBetAmount = totalBetAmount.add(betAmount);
         }
         //校验本次总下注额是否超过本地剩余额度
-        Result<SysUserMoneyVo> totalMoneyResult = userService.getMoneyByUserName(user.getUsername());
+        Result<SysUserMoneyVo> totalMoneyResult = userService.getMoneyByUserName(userName);
         if (totalMoneyResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
             return Result.failed("下注失败");
         }
@@ -115,6 +116,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         boolean livePotLock = RedissLockUtil.tryLock(livePotLockKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
         //本次下注成功的数据
         List<LivePotVo> newAddBetList = new ArrayList<>();
+        //本局新增下注人数(去重)
+//        NewAddLivePotVo newAddLivePotVo = null;
         if (livePotLock) {
             try {
                 //限红校验
@@ -145,7 +148,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                             if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
                                 gameRecordMapper.updateById(record);
                                 //汇总新增的下注额
-                                newAddBetList.add(getLivePotVo(betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
+                                newAddBetList.add(getLivePotVo(userName, betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
                             } else {
                                 log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
                             }
@@ -162,20 +165,20 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                         if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
                             gameRecordMapper.insert(record);
                             //汇总新增的下注额
-                            newAddBetList.add(getLivePotVo(betDataCo.getBetCode(), betDataCo.getBetName(), record.getBetAmount(), 1));
+                            newAddBetList.add(getLivePotVo(userName, betDataCo.getBetCode(), betDataCo.getBetName(), record.getBetAmount(), 1));
                         } else {
                             log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
                         }
                     }
                 }
                 //汇总即时彩池
-                summaryLivePot(gameId, tableNum, bootNum, bureauNum, newAddBetList);
+//                newAddLivePotVo = summaryLivePot(gameId, tableNum, bootNum, bureauNum, newAddBetList);
             } finally {
                 RedissLockUtil.unlock(livePotLockKey);
             }
         }
         //异步推送新增 投注记录
-        pushGameDataToClientService.syncLivePot(gameId,tableNum,bootNum,bureauNum,newAddBetList);
+        pushGameDataToClientService.syncLivePot(gameId, tableNum, bootNum, bureauNum, newAddBetList);
         return Result.succeed(newAddBetList);
     }
 
@@ -201,12 +204,13 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
 
-    public LivePotVo getLivePotVo(String betDataCo, String betName, BigDecimal newAddBetAmount, Integer onlineNum) {
+    public LivePotVo getLivePotVo(String userName, String betDataCo, String betName, BigDecimal newAddBetAmount, Integer onlineNum) {
         LivePotVo livePotVo = new LivePotVo();
+        livePotVo.setUserName(userName);
         livePotVo.setBetCode(betDataCo);
         livePotVo.setBetName(betName);
         livePotVo.setBetAmount(newAddBetAmount);
-        livePotVo.setOnlineNum(onlineNum);
+        livePotVo.setBetNum(onlineNum);
         return livePotVo;
     }
 
@@ -382,24 +386,43 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
      * @param bureauNum     局数
      * @param newAddBetList 本次下注新增的数据
      */
-    public void summaryLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> newAddBetList) {
+    public NewAddLivePotVo summaryLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> newAddBetList) {
         if (CollectionUtils.isEmpty(newAddBetList)) {
-            return;
+            return null;
         }
+        NewAddLivePotVo newAddLivePotVo = new NewAddLivePotVo();
+        newAddLivePotVo.setGameId(gameId);
+        newAddLivePotVo.setTableNum(tableNum);
+        newAddLivePotVo.setBootNum(bootNum);
+        newAddLivePotVo.setBureauNum(bureauNum);
+        newAddLivePotVo.setBetResult(newAddBetList);
         String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
         String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
+        //统计本局下注人数
+        String redisBetNumDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_BET_NUM_DATA + groupId;
+        long beforeBetNum = redisRepository.sGetSetSize(redisBetNumDataKey);
+        BigDecimal totalBetAmount = BigDecimal.ZERO;
         for (LivePotVo vo : newAddBetList) {
+            totalBetAmount = totalBetAmount.add(vo.getBetAmount());
             LivePotVo livePotVo = (LivePotVo) redisRepository.getHashValues(redisDataKey, vo.getBetCode());
             if (ObjectUtils.isEmpty(livePotVo)) {
                 livePotVo = new LivePotVo();
                 BeanUtils.copyProperties(vo, livePotVo);
             } else {
                 livePotVo.setBetAmount(livePotVo.getBetAmount().add(vo.getBetAmount()));
-                livePotVo.setOnlineNum(livePotVo.getOnlineNum() + vo.getOnlineNum());
+                livePotVo.setBetNum(livePotVo.getBetNum() + vo.getBetNum());
             }
+            //即时彩池数据不做保存仅在本局中有效
+            Long expire = 5 * 60L;
             redisRepository.putHashValue(redisDataKey, vo.getBetCode(), livePotVo);
-            redisRepository.setExpire(redisDataKey, 60 * 60);
+            redisRepository.setExpire(redisDataKey, expire);
+            redisRepository.sSetAndTime(redisBetNumDataKey, expire, vo.getUserName());
         }
+        long afterBetNum = redisRepository.sGetSetSize(redisBetNumDataKey);
+        Long newAddBetNum = afterBetNum - beforeBetNum;
+        newAddLivePotVo.setBetNum(newAddBetNum.intValue());
+        newAddLivePotVo.setBetAmount(totalBetAmount);
+        return newAddLivePotVo;
     }
 
     /**
@@ -467,24 +490,47 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     @Override
-    public List<LivePotVo> getLivePot(Long gameId, String tableNum, String bootNum, String bureauNum) {
-        String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
-        String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
-        Map<String, Object> totalBet = redisRepository.getHashValue(redisDataKey);
-        List<LivePotVo> list = new ArrayList<>();
+    public List<LivePotVo> getBureauNumLivePot(Long gameId, String tableNum, String bootNum, String bureauNum) {
+        return gameRecordMapper.getLivePot(gameId, tableNum, bootNum, bureauNum);
+    }
+
+    @Override
+    public NewAddLivePotVo getLivePot(Long gameId, String tableNum) {
+        NewAddLivePotVo vo = new NewAddLivePotVo();
+        GameRoomInfoOffline roomInfoOffline = gameRoomInfoOfflineService.getNewestTableInfo(gameId, tableNum);
+        String bootNum = null;
+        String bureauNum = null;
+        if (roomInfoOffline != null) {
+            bootNum = roomInfoOffline.getBootNum();
+            bureauNum = roomInfoOffline.getBureauNum();
+        }
+        vo.setGameId(gameId);
+        vo.setTableNum(tableNum);
+        vo.setBootNum(bootNum);
+        vo.setBureauNum(bureauNum);
+        List<LivePotVo> voList = new ArrayList<>();
+        if (roomInfoOffline != null) {
+            voList = gameRecordMapper.getLivePot(gameId, tableNum, bootNum, bureauNum);
+        }
         //所有玩法
         List<PlayEnum> playList = PlayEnum.getPlayListByGameId(gameId);
         for (PlayEnum playEnum : playList) {
-            LivePotVo livePotVo = (LivePotVo) totalBet.get(playEnum.getCode());
-            if (livePotVo == null) {
-                livePotVo = new LivePotVo();
-                livePotVo.setBetCode(playEnum.getCode());
-                livePotVo.setBetName(playEnum.getName());
-                livePotVo.setBetAmount(BigDecimal.ZERO);
+            boolean flag = false;
+            for (LivePotVo livePot : voList) {
+                if (playEnum.getCode().equals(livePot.getBetCode())) {
+                    flag = true;
+                }
             }
-            list.add(livePotVo);
+            //玩法不存在
+            if (!flag) {
+                LivePotVo livePot = new LivePotVo();
+                livePot.setBetCode(playEnum.getCode());
+                livePot.setBetName(playEnum.getName());
+                voList.add(livePot);
+            }
         }
-        return list;
+        vo.setBetResult(voList);
+        return vo;
     }
 
     @Override
@@ -512,12 +558,16 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     @Override
-    public List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum) {
+    public List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum) {
+        GameRoomInfoOffline roomInfoOffline = gameRoomInfoOfflineService.getNewestTableInfo(gameId, tableNum);
+        if (roomInfoOffline == null) {
+            return new ArrayList<>();
+        }
         LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
         lqw.eq(GameRecord::getGameId, gameId);
         lqw.eq(GameRecord::getTableNum, tableNum);
-        lqw.eq(GameRecord::getBootNum, bootNum);
-        lqw.eq(GameRecord::getBureauNum, bureauNum);
+        lqw.eq(GameRecord::getBootNum, roomInfoOffline.getBootNum());
+        lqw.eq(GameRecord::getBureauNum, roomInfoOffline.getBureauNum());
         List<GameRecord> gameRecords = gameRecordMapper.selectList(lqw);
         return gameRecords;
     }

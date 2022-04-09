@@ -1,6 +1,7 @@
 package com.central.game.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,6 +12,10 @@ import java.math.BigDecimal;
 @Data
 public class LivePotVo {
 
+    @ApiModelProperty(value = "用户名", hidden = true)
+    @JsonIgnore
+    private String userName;
+
     @ApiModelProperty(value = "玩法代码")
     private String betCode;
 
@@ -19,8 +24,8 @@ public class LivePotVo {
 
     @ApiModelProperty(value = "本局累计下注额")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigDecimal betAmount;
+    private BigDecimal betAmount = BigDecimal.ZERO;
 
-    @ApiModelProperty(value = "在线人数")
-    private Integer onlineNum = 0;
+    @ApiModelProperty(value = "下注人数")
+    private Integer betNum = 0;
 }

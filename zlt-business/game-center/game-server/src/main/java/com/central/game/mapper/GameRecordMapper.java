@@ -9,9 +9,7 @@ import com.central.game.dto.HomePageDto;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
-import com.central.game.model.vo.GameRecordVo;
-import com.central.game.model.vo.GameRecordBackstageVo;
-import com.central.game.model.vo.PayoutResultVo;
+import com.central.game.model.vo.*;
 import com.central.user.model.vo.RankingListVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -59,4 +57,6 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     BigDecimal getTotalValidbet(@Param("userId") Long userId);
 
     List<BigDecimal> getGameWinningRate(@Param("userId") Long userId,@Param("gameId") Long gameId);
+
+    List<LivePotVo> getLivePot(@Param("gameId") Long gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 }

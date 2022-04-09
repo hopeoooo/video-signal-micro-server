@@ -5,6 +5,7 @@ import com.central.common.model.Result;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.co.GameRecordLivePotCo;
 import com.central.game.model.co.GameRoomInfoOfflineCo;
+import com.central.game.model.vo.GameRoomInfoOfflineVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameRoomInfoOfflineService;
 import io.swagger.annotations.Api;
@@ -37,16 +38,8 @@ public class GameRoomInfoOfflineController {
 
     @ApiOperation(value = "查询桌台最新动态信息")
     @GetMapping("/getTableInfo")
-    public Result<GameRoomInfoOffline> getTableInfo(@ModelAttribute GameRoomInfoOfflineCo co) {
-        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.getNewestTableInfo(co.getGameId(),co.getTableNum());
-        //计算实时倒计时
-        if (infoOffline != null && infoOffline.getTimes() != null && infoOffline.getSecond() != null) {
-            //数据修改后距离当前时间过了多少秒
-            long second = (System.currentTimeMillis() - infoOffline.getTimes()) / 1000;
-            long differ = infoOffline.getSecond() - second;
-            Long currentSecond = differ > 0 ? differ : 0;
-            infoOffline.setCurrentSecond(currentSecond.intValue());
-        }
+    public Result<GameRoomInfoOfflineVo> getTableInfo(@ModelAttribute GameRoomInfoOfflineCo co) {
+        GameRoomInfoOfflineVo infoOffline = gameRoomInfoOfflineService.getNewestTableInfoVo(co.getGameId(),co.getTableNum());
         return Result.succeed(infoOffline);
     }
 

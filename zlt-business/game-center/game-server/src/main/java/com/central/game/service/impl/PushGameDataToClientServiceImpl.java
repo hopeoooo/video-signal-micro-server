@@ -2,8 +2,9 @@ package com.central.game.service.impl;
 
 import com.central.common.model.PushResult;
 import com.central.common.model.Result;
+import com.central.common.redis.constant.RedisKeyConstant;
+import com.central.common.redis.template.RedisRepository;
 import com.central.game.model.GameLotteryResult;
-import com.central.game.model.GameRecord;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.model.vo.LotteryResultVo;
@@ -20,9 +21,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -31,22 +31,18 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     @Autowired
     private PushService pushService;
     @Autowired
+    private RedisRepository redisRepository;
+    @Autowired
     @Lazy
     private IGameRecordService gameRecordService;
 
     /**
      * 推送新增的投注数据
-     *
-     * @param gameId
-     * @param tableNum
-     * @param bootNum
-     * @param bureauNum
-     * @param newAddBetList
      */
     @Override
     @Async
-    public void syncLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> newAddBetList) {
-        if (CollectionUtils.isEmpty(newAddBetList)) {
+    public void syncLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> list) {
+        if (CollectionUtils.isEmpty(list)) {
             return;
         }
         String groupId = gameId + "-" + tableNum;
@@ -55,10 +51,26 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
         newAddLivePotVo.setTableNum(tableNum);
         newAddLivePotVo.setBootNum(bootNum);
         newAddLivePotVo.setBureauNum(bureauNum);
-        newAddLivePotVo.setBetResult(newAddBetList);
+        newAddLivePotVo.setBetResult(list);
+        //统计本局下注人数
+        String redisBetNumDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_BET_NUM_DATA + groupId;
+        long beforeBetNum = redisRepository.sGetSetSize(redisBetNumDataKey);
+        BigDecimal totalBetAmount = BigDecimal.ZERO;
+        for (LivePotVo livePotVo : list) {
+            totalBetAmount = totalBetAmount.add(livePotVo.getBetAmount());
+            redisRepository.sSetAndTime(redisBetNumDataKey, 5 * 60, livePotVo.getUserName());
+        }
+        long afterBetNum = redisRepository.sGetSetSize(redisBetNumDataKey);
+        Long newAddBetNum = afterBetNum - beforeBetNum;
+        newAddLivePotVo.setBetNum(newAddBetNum.intValue());
+        newAddLivePotVo.setBetAmount(totalBetAmount);
         PushResult<NewAddLivePotVo> pushResult = PushResult.succeed(newAddLivePotVo, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
-        log.info("即时彩池数据推送结果:groupId={},result={}", groupId, push);
+        log.info("下注界面即时彩池数据推送结果:groupId={},result={}", groupId, push);
+        //推送大厅桌台数据变化
+        Result<String> hallPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+        log.info("大厅即时彩池数据推送结果:result={}", hallPush);
+
     }
 
 

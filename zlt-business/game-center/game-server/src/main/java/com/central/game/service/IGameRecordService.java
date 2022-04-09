@@ -42,14 +42,14 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
 
     HomePageDto findHomePageDto(String parent);
 
-    List<LivePotVo> getLivePot(Long gameId, String tableNum, String bootNum, String bureauNum);
+    List<LivePotVo> getBureauNumLivePot(Long gameId, String tableNum, String bootNum, String bureauNum);
+
+    NewAddLivePotVo getLivePot(Long gameId, String tableNum);
 
     HomeHistogramDto findHomeHistogramDto(Map<String, Object> params);
 
     PageResult<GameRecordVo> findBetList(GameRecordBetPageCo params);
-
-    List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum);
-
+    List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum);
 
     List<PayoutResultVo> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum);
 
