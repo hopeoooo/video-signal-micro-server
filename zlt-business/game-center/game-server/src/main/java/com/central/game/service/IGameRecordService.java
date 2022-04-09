@@ -12,10 +12,7 @@ import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordCo;
-import com.central.game.model.vo.GameRecordVo;
-import com.central.game.model.vo.GameRecordBackstageVo;
-import com.central.game.model.vo.LivePotVo;
-import com.central.game.model.vo.PayoutResultVo;
+import com.central.game.model.vo.*;
 import com.central.user.model.vo.RankingListVo;
 
 import java.util.List;
@@ -63,5 +60,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     String getTodayValidbet(Long userId);
 
     String getTotalValidbet(Long userId);
+
+    List<GameWinningRateVo> getGameWinningRate(Long userId);
 }
 

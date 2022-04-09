@@ -57,4 +57,6 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     BigDecimal getTodayValidbet(@Param("userId") Long userId, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
     BigDecimal getTotalValidbet(@Param("userId") Long userId);
+
+    List<BigDecimal> getGameWinningRate(@Param("userId") Long userId,@Param("gameId") Long gameId);
 }
