@@ -128,6 +128,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
+            public Result updatePassword(SysUser sysUser) {
+                log.error("updatePassword修改密码异常:{}", sysUser, throwable);
+                return Result.failed("修改密码失败");
+            }
+
+            @Override
             public  Result updateVerify(Long id) {
                 log.error("updateVerify修改Verify:{}", id, throwable);
                 return Result.failed("修改Verify失败");
