@@ -62,5 +62,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     String getTotalValidbet(Long userId);
 
     List<GameWinningRateVo> getGameWinningRate(Long userId);
+
+    List<GameRecord> getNewestBetListByGameId(Long gameId, Long userId);
 }
 

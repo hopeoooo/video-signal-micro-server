@@ -200,4 +200,11 @@ public class GameRecordController {
         return Result.succeed(gameWinningRate);
     }
 
+    @ApiOperation(value = "根据游戏ID查询最新投注记录")
+    @GetMapping("/getNewestBetListByGameId/{gameId}")
+    public Result<List<GameRecord>> getNewestBetListByGameId(@PathVariable Long gameId,@LoginUser SysUser user) {
+        List<GameRecord> gameRecordList = gameRecordService.getNewestBetListByGameId(gameId, user.getId());
+        return Result.succeed(gameRecordList);
+    }
+
 }

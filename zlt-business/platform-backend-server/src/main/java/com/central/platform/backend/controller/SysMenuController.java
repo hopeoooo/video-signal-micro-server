@@ -43,8 +43,8 @@ public class SysMenuController {
 
     @ApiOperation(value = "获取菜单以及顶级菜单")
     @GetMapping("/menus/findOnes")
-    public PageResult<SysMenu> findOnes() {
-        return menuService.findOnes();
+    public Result<PageResult<SysMenu>> findOnes() {
+        return Result.succeed( menuService.findOnes());
     }
 
 
