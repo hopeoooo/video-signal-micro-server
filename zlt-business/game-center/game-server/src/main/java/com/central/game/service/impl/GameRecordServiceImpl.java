@@ -67,6 +67,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
 
     private static final String minLimitRed = "minLimitRed";
     private static final String maxLimitRed = "maxLimitRed";
+    //禁用大小玩法的起始局
+    private static final Integer disableBigSmall = 31;
 
     @Override
     @Transactional
@@ -96,6 +98,10 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             PlayEnum playEnum = PlayEnum.getPlayByCode(betDataCo.getBetCode());
             if (playEnum == null) {
                 return Result.failed(betDataCo.getBetName() + "玩法不支持");
+            }
+            //每一靴从31局开始禁止大小玩法投注
+            if (Integer.parseInt(bureauNum) >= disableBigSmall && (PlayEnum.BAC_BIG.getCode().equals(betDataCo.getBetCode()) || PlayEnum.BAC_SMALL.getCode().equals(betDataCo.getBetCode()))) {
+                return Result.failed("本局大小玩法禁止下注");
             }
             BigDecimal betAmount = new BigDecimal(betDataCo.getBetAmount());
             if (betAmount.compareTo(BigDecimal.ZERO) < 1) {
@@ -630,6 +636,29 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             vo.setRete(keepDecimal(rate).toString());
         }
         return list;
+    }
+
+    @Override
+    public List<GameRecord> getNewestBetListByGameId(Long gameId, Long userId) {
+        //先查询最新投注的局数
+        LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
+        lqw.eq(GameRecord::getGameId, gameId);
+        lqw.eq(GameRecord::getUserId, userId);
+        lqw.orderByDesc(GameRecord::getCreateTime);
+        lqw.last("limit 1");
+        GameRecord gameRecord = gameRecordMapper.selectOne(lqw);
+        if (gameRecord == null) {
+            return null;
+        }
+        //再查询本局的所有投注记录
+        LambdaQueryWrapper<GameRecord> lqw1 = Wrappers.lambdaQuery();
+        lqw1.eq(GameRecord::getUserId, userId);
+        lqw1.eq(GameRecord::getGameId, gameId);
+        lqw1.eq(GameRecord::getTableNum, gameRecord.getTableNum());
+        lqw1.eq(GameRecord::getBootNum, gameRecord.getBootNum());
+        lqw1.eq(GameRecord::getBureauNum, gameRecord.getBureauNum());
+        List<GameRecord> gameRecordList = gameRecordMapper.selectList(lqw1);
+        return gameRecordList;
     }
 
     private BigDecimal keepDecimal(BigDecimal val) {
