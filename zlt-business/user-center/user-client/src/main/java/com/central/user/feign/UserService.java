@@ -36,6 +36,9 @@ public interface UserService {
     @GetMapping(value = "/users/name/{username}")
     SysUser selectByUsername(@PathVariable("username") String username);
 
+
+    @GetMapping("/users/current")
+    Result<LoginAppUser> getLoginAppUser() ;
     /**
      * feign rpc访问远程/users-anon/login接口
      *
