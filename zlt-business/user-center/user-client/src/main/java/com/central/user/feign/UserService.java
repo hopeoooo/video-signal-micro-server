@@ -128,6 +128,9 @@ public interface UserService {
     @PutMapping(value = "/users/{id}/password", params = "SysUser")
     Result resetPassword(@PathVariable("id") Long id) ;
 
+    @PutMapping(value = "/users/password", params = "SysUser")
+    Result updatePassword(@RequestBody SysUser sysUser) ;
+
     @PutMapping(value = "/users/{id}/updateVerify", params = "id")
     Result updateVerify(@PathVariable("id") Long id) ;
 
