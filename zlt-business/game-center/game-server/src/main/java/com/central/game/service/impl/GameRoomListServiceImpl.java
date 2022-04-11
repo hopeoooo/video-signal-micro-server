@@ -108,13 +108,16 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
             //桌台中心信息
             GameRoomInfoOffline tableCoreInfo = getTableCoreInfo(vo);
             if (tableCoreInfo != null) {
-                BeanUtils.copyProperties(tableCoreInfo, vo);
+                vo.setBootNum(tableCoreInfo.getBootNum());
+                vo.setBureauNum(tableCoreInfo.getBureauNum());
+                vo.setSecond(tableCoreInfo.getSecond());
+                vo.setCurrentSecond(tableCoreInfo.getCurrentSecond());
+                vo.setStatus(tableCoreInfo.getStatus());
                 //桌台上部分信息
                 getTableUpInfo(vo);
                 //桌台下部分信息
                 getTableLowerInfo(vo);
             }
-
             list.add(vo);
         }
         return list;

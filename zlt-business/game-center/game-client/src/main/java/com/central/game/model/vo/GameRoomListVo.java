@@ -25,17 +25,11 @@ public class GameRoomListVo{
     @ApiModelProperty(value = "游戏表id")
     private Long gameId;
 
-    @ApiModelProperty(value = "游戏名称")
-    private String gameName;
-
     @ApiModelProperty(value = "游戏桌号名称")
     private String gameRoomName;
 
     @ApiModelProperty(value = "游戏桌号状态 0禁用，1：正常，2：维护")
     private Integer roomStatus;
-
-    @ApiModelProperty(value = "机器编号")
-    private String machineCode;
 
     @ApiModelProperty(value = "桌台编号")
     private String tableNum;
@@ -50,7 +44,6 @@ public class GameRoomListVo{
     private Integer second;
 
     @ApiModelProperty(value = "实时倒计时")
-    @TableField(exist = false)
     private Integer currentSecond = 0;
 
     @ApiModelProperty(value = "牌局状态 0洗牌中 1开始下注 2停止下注 3结算中 4结算完成")
