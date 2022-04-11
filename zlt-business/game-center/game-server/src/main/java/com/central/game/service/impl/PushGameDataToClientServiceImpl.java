@@ -41,7 +41,7 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
      * 推送新增的投注数据
      */
     @Override
-//    @Async
+    @Async
     public void syncLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> list) {
         if (CollectionUtils.isEmpty(list)) {
             return;
