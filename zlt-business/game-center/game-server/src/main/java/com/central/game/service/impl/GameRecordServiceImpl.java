@@ -294,11 +294,15 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         BigDecimal limitBetAmount = getBureauNumLimitBetAmount(gameId, tableNum, bootNum, bureauNum, betCode);
         BigDecimal betAmount = new BigDecimal(betDataCo.getBetAmount());
         BigDecimal totalBetAmount = limitBetAmount.add(betAmount);
-        //大于等于最小，小于等于最大
-        if (totalBetAmount.compareTo(minLimitRedAmount) > -1 && totalBetAmount.compareTo(maxLimitRedAmount) < 1) {
-            return Result.succeed();
+        //小于最小限红
+        if (totalBetAmount.compareTo(minLimitRedAmount) == -1) {
+            return Result.failed(betDataCo.getBetName() + "玩法下注金额低于最低限红值");
         }
-        return Result.failed(betDataCo.getBetName() + "玩法下注金额超过限红值");
+        //大于最大限红
+        if (totalBetAmount.compareTo(minLimitRedAmount) == 1) {
+            return Result.failed(betDataCo.getBetName() + "玩法下注金额超过最高限红值");
+        }
+        return Result.succeed();
 
     }
 
