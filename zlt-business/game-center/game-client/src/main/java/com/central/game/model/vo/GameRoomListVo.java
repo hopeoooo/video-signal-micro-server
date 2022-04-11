@@ -1,37 +1,35 @@
 package com.central.game.model.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.central.common.model.SuperEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * 现场桌台信息详情
- *
- * @author zlt
- * @date 2022-01-04 14:14:35
- */
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = false)
-@ApiModel("现场桌台信息")
-public class GameRoomInfoOfflineVo {
+@ApiModel("桌号列表")
+public class GameRoomListVo{
 
-    @ApiModelProperty(value = "游戏ID")
+    private static final long serialVersionUID = 1L;
+    @TableId(value = "id", type = IdType.INPUT)
+    private Long id;
+
+    @ApiModelProperty(value = "游戏表id")
     private Long gameId;
 
-    @ApiModelProperty(value = "游戏名称")
-    private String gameName;
+    @ApiModelProperty(value = "游戏桌号名称")
+    private String gameRoomName;
 
-    @ApiModelProperty(value = "机器编号")
-    private String machineCode;
+    @ApiModelProperty(value = "游戏桌号状态 0禁用，1：正常，2：维护")
+    private Integer roomStatus;
 
     @ApiModelProperty(value = "桌台编号")
     private String tableNum;
@@ -46,7 +44,6 @@ public class GameRoomInfoOfflineVo {
     private Integer second;
 
     @ApiModelProperty(value = "实时倒计时")
-    @TableField(exist = false)
     private Integer currentSecond = 0;
 
     @ApiModelProperty(value = "牌局状态 0洗牌中 1开始下注 2停止下注 3结算中 4结算完成")

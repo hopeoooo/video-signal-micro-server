@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.Result;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
+import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.service.IGameRoomInfoOfflineService;
 import com.central.game.service.IGameRoomListService;
 import io.swagger.annotations.Api;
@@ -51,16 +52,8 @@ public class GameRoomListController {
 
     @ApiOperation(value = "根据游戏ID查询房间列表(前台用)")
     @GetMapping("/findRoomListByGameId/{gameId}")
-    public Result<List<GameRoomList>> findRoomListByGameId(@PathVariable("gameId") Long gameId) {
-        List<GameRoomList> gameRoomList = iGameRoomListService.lambdaQuery().eq(GameRoomList::getGameId, gameId).ne(GameRoomList::getRoomStatus, 0).list();
-        //查询现场最新状态
-        for (GameRoomList room : gameRoomList) {
-            GameRoomInfoOffline roomInfoOffline = gameRoomInfoOfflineService.lambdaQuery().eq(GameRoomInfoOffline::getGameId, gameId).eq(GameRoomInfoOffline::getTableNum, room.getGameRoomName())
-                    .orderByDesc(GameRoomInfoOffline::getCreateTime).last("limit 1").one();
-            if (roomInfoOffline != null) {
-                room.setStatus(roomInfoOffline.getStatus());
-            }
-        }
+    public Result<List<GameRoomListVo>> findRoomListByGameId(@PathVariable("gameId") Long gameId) {
+        List<GameRoomListVo> gameRoomList = iGameRoomListService.findRoomListByGameId(gameId);
         return Result.succeed(gameRoomList);
     }
 

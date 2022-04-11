@@ -3,10 +3,7 @@ package com.central.game.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.central.common.model.Result;
 import com.central.game.model.GameRoomInfoOffline;
-import com.central.game.model.co.GameRecordLivePotCo;
 import com.central.game.model.co.GameRoomInfoOfflineCo;
-import com.central.game.model.vo.GameRoomInfoOfflineVo;
-import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameRoomInfoOfflineService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,11 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author zlt
@@ -38,8 +30,8 @@ public class GameRoomInfoOfflineController {
 
     @ApiOperation(value = "查询桌台最新动态信息")
     @GetMapping("/getTableInfo")
-    public Result<GameRoomInfoOfflineVo> getTableInfo(@ModelAttribute GameRoomInfoOfflineCo co) {
-        GameRoomInfoOfflineVo infoOffline = gameRoomInfoOfflineService.getNewestTableInfoVo(co.getGameId(),co.getTableNum());
+    public Result<GameRoomInfoOffline> getTableInfo(@ModelAttribute GameRoomInfoOfflineCo co) {
+        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.getNewestTableInfo(co.getGameId(),co.getTableNum());
         return Result.succeed(infoOffline);
     }
 
