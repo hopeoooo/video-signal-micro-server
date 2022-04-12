@@ -8,6 +8,7 @@ import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
 import com.central.game.model.co.GameRecordBetCo;
+import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.model.vo.LivePotVo;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -31,5 +32,9 @@ public interface IGameLotteryResultService extends ISuperService<GameLotteryResu
     void calculateBetResult(GameLotteryResult result);
 
     PageResult<GameLotteryResult> findList(GameLotteryResultBackstageCo map);
+
+    void setLotteryNum(List<GameLotteryResult> lotteryResultList, GameRoomListVo vo);
+
+    List<GameLotteryResult> getBootNumResultList(Long gameId, String tableNum, String bootNum);
 }
 

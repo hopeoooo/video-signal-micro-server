@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.central.common.model.Result;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.co.GameRoomInfoOfflineCo;
+import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.service.IGameRoomInfoOfflineService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,9 +31,9 @@ public class GameRoomInfoOfflineController {
 
     @ApiOperation(value = "查询桌台最新动态信息")
     @GetMapping("/getTableInfo")
-    public Result<GameRoomInfoOffline> getTableInfo(@ModelAttribute GameRoomInfoOfflineCo co) {
-        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.getNewestTableInfo(co.getGameId(),co.getTableNum());
-        return Result.succeed(infoOffline);
+    public Result<GameRoomListVo> getTableInfo(@ModelAttribute GameRoomInfoOfflineCo co) {
+        GameRoomListVo gameRoomListVo = gameRoomInfoOfflineService.getNewestTableInfoVo(co.getGameId(),co.getTableNum());
+        return Result.succeed(gameRoomListVo);
     }
 
     @PostMapping("/sendDirectMessage")

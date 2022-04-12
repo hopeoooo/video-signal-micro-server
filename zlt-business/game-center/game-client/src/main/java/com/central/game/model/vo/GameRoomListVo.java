@@ -2,6 +2,7 @@ package com.central.game.model.vo;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.central.common.model.SuperEntity;
+import com.central.game.model.GameLotteryResult;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,6 +12,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -81,4 +83,13 @@ public class GameRoomListVo{
 
     @ApiModelProperty(value = "本靴开出和的次数")
     private Integer bootNumTieNum = 0;
+
+    @ApiModelProperty(value = "本靴开出庄对的次数")
+    private Integer bootNumBpairNum = 0;
+
+    @ApiModelProperty(value = "本靴开出闲对的次数")
+    private Integer bootNumPpairNum = 0;
+
+    @ApiModelProperty(value = "本靴赛果明细")
+    private List<GameLotteryResult>  bootNumResultList;
 }

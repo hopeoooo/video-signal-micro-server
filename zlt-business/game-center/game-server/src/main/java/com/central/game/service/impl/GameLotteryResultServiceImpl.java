@@ -1,5 +1,7 @@
 package com.central.game.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -8,8 +10,10 @@ import com.central.game.constants.PlayEnum;
 import com.central.game.mapper.GameLotteryResultMapper;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
+import com.central.game.model.GameRoomList;
 import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
+import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
@@ -160,5 +164,48 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
             return validbet;
         }
         return BigDecimal.ZERO;
+    }
+
+    @Override
+    public void setLotteryNum(List<GameLotteryResult> lotteryResultList, GameRoomListVo vo){
+        vo.setBootNumResultList(lotteryResultList);
+        vo.setBootNumTotalNum(lotteryResultList.size());
+        Integer bankerNum = 0;
+        Integer playerNum = 0;
+        Integer tieNum = 0;
+        Integer bpairNum = 0;
+        Integer ppairNum = 0;
+        for (GameLotteryResult result : lotteryResultList) {
+            if (result.getResult().contains(PlayEnum.BAC_BANKER.getCode())) {
+                bankerNum++;
+            }
+            if (result.getResult().contains(PlayEnum.BAC_PLAYER.getCode())) {
+                playerNum++;
+            }
+            if (result.getResult().contains(PlayEnum.BAC_TIE.getCode())) {
+                tieNum++;
+            }
+            if (result.getResult().contains(PlayEnum.BAC_BPAIR.getCode())) {
+                bpairNum++;
+            }
+            if (result.getResult().contains(PlayEnum.BAC_PPAIR.getCode())) {
+                ppairNum++;
+            }
+        }
+        vo.setBootNumBankerNum(bankerNum);
+        vo.setBootNumPlayerNum(playerNum);
+        vo.setBootNumTieNum(tieNum);
+        vo.setBootNumBpairNum(bpairNum);
+        vo.setBootNumPpairNum(ppairNum);
+    }
+
+    @Override
+    public List<GameLotteryResult> getBootNumResultList(Long gameId, String tableNum, String bootNum) {
+        LambdaQueryWrapper<GameLotteryResult> lqw = Wrappers.lambdaQuery();
+        lqw.eq(GameLotteryResult::getGameId, gameId);
+        lqw.eq(GameLotteryResult::getTableNum, tableNum);
+        lqw.eq(GameLotteryResult::getBootNum, bootNum);
+        List<GameLotteryResult> lotteryResultList = gameLotteryResultMapper.selectList(lqw);
+        return lotteryResultList;
     }
 }

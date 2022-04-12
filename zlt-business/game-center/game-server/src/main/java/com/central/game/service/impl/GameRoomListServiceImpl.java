@@ -99,14 +99,14 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         LambdaQueryWrapper<GameRoomList> lqw = Wrappers.lambdaQuery();
         lqw.eq(GameRoomList::getGameId, gameId).ne(GameRoomList::getRoomStatus, 0);
         List<GameRoomList> gameRoomLists = gameRoomListMapper.selectList(lqw);
-        //查询昨天列表上下两部分数据
+        //查询列表上下两部分数据
         List<GameRoomListVo> list = new ArrayList<>();
         for (GameRoomList roomList : gameRoomLists) {
             GameRoomListVo vo = new GameRoomListVo();
             BeanUtils.copyProperties(roomList, vo);
             vo.setTableNum(roomList.getGameRoomName());
             //桌台中心信息
-            GameRoomInfoOffline tableCoreInfo = getTableCoreInfo(vo);
+            GameRoomInfoOffline tableCoreInfo = gameRoomInfoOfflineService.getNewestTableInfo(vo.getGameId(),vo.getTableNum());
             if (tableCoreInfo != null) {
                 vo.setBootNum(tableCoreInfo.getBootNum());
                 vo.setBureauNum(tableCoreInfo.getBureauNum());
@@ -121,22 +121,6 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
             list.add(vo);
         }
         return list;
-    }
-
-    public GameRoomInfoOffline getTableCoreInfo(GameRoomListVo vo) {
-        GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.lambdaQuery().eq(GameRoomInfoOffline::getGameId, vo.getGameId())
-                .eq(GameRoomInfoOffline::getTableNum, vo.getTableNum())
-                .orderByDesc(GameRoomInfoOffline::getCreateTime)
-                .last("limit 1").one();
-        //计算实时倒计时
-        if (infoOffline != null && infoOffline.getTimes() != null && infoOffline.getSecond() != null) {
-            //数据修改后距离当前时间过了多少秒
-            long second = (System.currentTimeMillis() - infoOffline.getTimes()) / 1000;
-            long differ = infoOffline.getSecond() - second;
-            Long currentSecond = differ > 0 ? differ : 0;
-            infoOffline.setCurrentSecond(currentSecond.intValue());
-        }
-        return infoOffline;
     }
 
     public void getTableUpInfo(GameRoomListVo vo) {
@@ -165,28 +149,10 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
 
     public void getTableLowerInfo(GameRoomListVo vo) {
         //本靴牌开奖结果
-        List<GameLotteryResult> lotteryResultList = gameLotteryResultService.lambdaQuery()
-                .eq(GameLotteryResult::getGameId, vo.getGameId())
-                .eq(GameLotteryResult::getTableNum, vo.getTableNum())
-                .eq(GameLotteryResult::getBootNum, vo.getBootNum()).list();
+        List<GameLotteryResult> lotteryResultList = gameLotteryResultService.getBootNumResultList(vo.getGameId(), vo.getTableNum(), vo.getBootNum());
         if (CollectionUtils.isEmpty(lotteryResultList)) {
             return;
         }
-        vo.setBootNumTotalNum(lotteryResultList.size());
-        Integer bankerNum = 0;
-        Integer playerNum = 0;
-        Integer tieNum = 0;
-        for (GameLotteryResult result : lotteryResultList) {
-            if (result.getResult().contains(PlayEnum.BAC_BANKER.getCode())) {
-                bankerNum++;
-            } else if (result.getResult().contains(PlayEnum.BAC_PLAYER.getCode())) {
-                playerNum++;
-            } else if (result.getResult().contains(PlayEnum.BAC_TIE.getCode())) {
-                tieNum++;
-            }
-        }
-        vo.setBootNumBankerNum(bankerNum);
-        vo.setBootNumPlayerNum(playerNum);
-        vo.setBootNumTieNum(tieNum);
+        gameLotteryResultService.setLotteryNum(lotteryResultList, vo);
     }
 }
