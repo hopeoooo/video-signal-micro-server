@@ -30,6 +30,7 @@ import com.central.user.feign.UserService;
 import com.central.user.model.vo.RankingListVo;
 import com.central.user.model.vo.SysUserMoneyVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -123,7 +124,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         //本次下注成功的数据
         List<LivePotVo> newAddBetList = new ArrayList<>();
         //本局新增下注人数(去重)
-//        NewAddLivePotVo newAddLivePotVo = null;
+        NewAddLivePotVo newAddLivePotVo = null;
         if (livePotLock) {
             try {
                 //限红校验
@@ -178,13 +179,13 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                     }
                 }
                 //汇总即时彩池
-//                newAddLivePotVo = summaryLivePot(gameId, tableNum, bootNum, bureauNum, newAddBetList);
+                newAddLivePotVo = summaryLivePot(gameId, tableNum, bootNum, bureauNum, newAddBetList);
             } finally {
                 RedissLockUtil.unlock(livePotLockKey);
             }
         }
         //异步推送新增 投注记录
-        pushGameDataToClientService.syncLivePot(gameId, tableNum, bootNum, bureauNum, newAddBetList);
+        pushGameDataToClientService.syncLivePot(newAddLivePotVo);
         return Result.succeed(newAddBetList);
     }
 
@@ -299,7 +300,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             return Result.failed(betDataCo.getBetName() + "玩法下注金额低于最低限红值");
         }
         //大于最大限红
-        if (totalBetAmount.compareTo(minLimitRedAmount) == 1) {
+        if (totalBetAmount.compareTo(maxLimitRedAmount) == 1) {
             return Result.failed(betDataCo.getBetName() + "玩法下注金额超过最高限红值");
         }
         return Result.succeed();
@@ -519,25 +520,28 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         vo.setBootNum(bootNum);
         vo.setBureauNum(bureauNum);
         List<LivePotVo> voList = new ArrayList<>();
+        String redisDataKey = null;
         if (roomInfoOffline != null) {
-            voList = gameRecordMapper.getLivePot(gameId, tableNum, bootNum, bureauNum);
+            String groupId = gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
+            redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
         }
         //所有玩法
         List<PlayEnum> playList = PlayEnum.getPlayListByGameId(gameId);
         for (PlayEnum playEnum : playList) {
-            boolean flag = false;
-            for (LivePotVo livePot : voList) {
-                if (playEnum.getCode().equals(livePot.getBetCode())) {
-                    flag = true;
-                }
-            }
-            //玩法不存在
-            if (!flag) {
-                LivePotVo livePot = new LivePotVo();
+            LivePotVo livePot = new LivePotVo();
+            if (StringUtils.isBlank(redisDataKey)) {
                 livePot.setBetCode(playEnum.getCode());
                 livePot.setBetName(playEnum.getName());
-                voList.add(livePot);
+            } else {
+                Object redisLivePot = redisRepository.getHashValues(redisDataKey, playEnum.getCode());
+                if (ObjectUtils.isEmpty(redisLivePot)) {
+                    livePot.setBetCode(playEnum.getCode());
+                    livePot.setBetName(playEnum.getName());
+                } else {
+                    livePot = (LivePotVo) redisLivePot;
+                }
             }
+            voList.add(livePot);
         }
         vo.setBetResult(voList);
         return vo;
