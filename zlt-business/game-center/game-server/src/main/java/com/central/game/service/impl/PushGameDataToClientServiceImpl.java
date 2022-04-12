@@ -43,36 +43,17 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
      */
     @Override
     @Async
-    public void syncLivePot(Long gameId, String tableNum, String bootNum, String bureauNum, List<LivePotVo> list) {
-        if (CollectionUtils.isEmpty(list)) {
+    public void syncLivePot(NewAddLivePotVo newAddLivePotVo) {
+        if (newAddLivePotVo == null) {
             return;
         }
-        String groupId = gameId + "-" + tableNum;
-        NewAddLivePotVo newAddLivePotVo = new NewAddLivePotVo();
-        newAddLivePotVo.setGameId(gameId);
-        newAddLivePotVo.setTableNum(tableNum);
-        newAddLivePotVo.setBootNum(bootNum);
-        newAddLivePotVo.setBureauNum(bureauNum);
-        newAddLivePotVo.setBetResult(list);
-        //统计本局下注人数
-        String redisBetNumDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_BET_NUM_DATA + groupId;
-        long beforeBetNum = redisRepository.sGetSetSize(redisBetNumDataKey);
-        BigDecimal totalBetAmount = BigDecimal.ZERO;
-        for (LivePotVo livePotVo : list) {
-            totalBetAmount = totalBetAmount.add(livePotVo.getBetAmount());
-            redisRepository.sSetAndTime(redisBetNumDataKey, 5 * 60, livePotVo.getUserName());
-        }
-        long afterBetNum = redisRepository.sGetSetSize(redisBetNumDataKey);
-        Long newAddBetNum = afterBetNum - beforeBetNum;
-        newAddLivePotVo.setBetNum(newAddBetNum.intValue());
-        newAddLivePotVo.setBetAmount(totalBetAmount);
+        String groupId = newAddLivePotVo.getGameId() + "-" + newAddLivePotVo.getTableNum();
         PushResult<NewAddLivePotVo> pushResult = PushResult.succeed(newAddLivePotVo, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("下注界面即时彩池数据推送结果:groupId={},result={}", groupId, push);
         //推送大厅桌台数据变化
         Result<String> hallPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("大厅即时彩池数据推送结果:result={}", hallPush);
-
     }
 
 

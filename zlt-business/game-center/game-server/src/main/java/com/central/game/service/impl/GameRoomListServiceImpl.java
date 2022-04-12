@@ -21,6 +21,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -125,23 +126,32 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     }
 
     public void getTableUpInfo(GameRoomListVo vo) {
-        List<LivePotVo> livePotVoList = gameRecordService.getBureauNumLivePot(vo.getGameId(), vo.getTableNum(), vo.getBootNum(), vo.getBureauNum());
+        String groupId = vo.getGameId() + "-" + vo.getTableNum() + "-" + vo.getBootNum() + "-" + vo.getBureauNum();
+        String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
         BigDecimal totalBetAmount = BigDecimal.ZERO;
-        for (LivePotVo livePotVo : livePotVoList) {
-            totalBetAmount = totalBetAmount.add(livePotVo.getBetAmount());
-            //庄
-            if (PlayEnum.BAC_BANKER.getCode().equals(livePotVo.getBetCode())) {
-                vo.setBaccaratBetNum(livePotVo.getBetNum());
-                vo.setBaccaratBetAmount(livePotVo.getBetAmount());
+        //所有玩法
+        List<PlayEnum> playList = PlayEnum.getPlayListByGameId(vo.getGameId());
+        for (PlayEnum playEnum : playList) {
+            Integer betNum = 0;
+            BigDecimal betAmount = BigDecimal.ZERO;
+            Object redisLivePot = redisRepository.getHashValues(redisDataKey, playEnum.getCode());
+            if (!ObjectUtils.isEmpty(redisLivePot)) {
+                LivePotVo livePot = (LivePotVo) redisLivePot;
+                betNum = livePot.getBetNum();
+                betAmount = livePot.getBetAmount();
             }
-            //闲
-            if (PlayEnum.BAC_PLAYER.getCode().equals(livePotVo.getBetCode())) {
-                vo.setPlayerBetNum(livePotVo.getBetNum());
-                vo.setPlayerBetAmount(livePotVo.getBetAmount());
+            totalBetAmount = totalBetAmount.add(betAmount);
+            //庄
+            if (PlayEnum.BAC_BANKER.getCode().equals(playEnum.getCode())) {
+                vo.setBaccaratBetNum(betNum);
+                vo.setBaccaratBetAmount(betAmount);
+                //闲
+            } else if (PlayEnum.BAC_PLAYER.getCode().equals(playEnum.getCode())) {
+                vo.setPlayerBetNum(betNum);
+                vo.setPlayerBetAmount(betAmount);
             }
         }
         vo.setTotalBetAmount(totalBetAmount);
-        String groupId = vo.getGameId() + "-" + vo.getTableNum() + "-" + vo.getBootNum() + "-" + vo.getBureauNum();
         //统计本局下注人数(去重)
         String redisBetNumDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_BET_NUM_DATA + groupId;
         Long totalBetNum = redisRepository.sGetSetSize(redisBetNumDataKey);
