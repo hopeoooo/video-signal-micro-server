@@ -27,7 +27,7 @@
 		<if test="type != null">
 			and t.type = #{type}
 		</if>
-		ORDER BY id ASC
+		ORDER BY t.id ASC
 	</select>
 
     <select id="findMenusByRoleCodes" resultType="com.central.common.model.SysMenu">
@@ -44,6 +44,6 @@
 			and t.type = #{type}
 		</if>
 		and t.hidden = 0
-		ORDER BY id ASC
+		ORDER BY t.id ASC
 	</select>
 </mapper>
