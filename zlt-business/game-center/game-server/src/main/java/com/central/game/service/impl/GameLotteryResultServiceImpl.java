@@ -17,6 +17,7 @@ import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
+import com.central.game.service.IGameRecordSonService;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.feign.UserService;
@@ -48,7 +49,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
     @Autowired
     private UserService userService;
     @Autowired
-    private PushService pushService;
+    private IGameRecordSonService gameRecordSonService;
 
     @Override
     public List<GameLotteryResult> getLotteryResultList(GameLotteryResultCo co) {
@@ -63,7 +64,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public void calculateBetResult(GameLotteryResult lotteryResult) {
         SimpleDateFormat df = DateUtil.getSimpleDateFormat();
         Date setTime = null;
@@ -104,7 +105,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
             if (record.getWinLoss().compareTo(BigDecimal.ZERO) == 1) {
                 Result<SysUserMoney> moneyResult = userService.transterMoney(record.getUserId(), record.getWinLoss(), null, CapitalEnum.SETTLEMENTAMOUNT.getType(), null, record.getBetId());
                 if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-                    record.setAddMoneyStatus(1);
+                    gameRecordSonService.saveAddMoneyStatus(record.getId(),1);
                 } else {
                     log.error("用户钱包加派彩金额失败,moneyResult={},gameRecord={}", moneyResult.toString(), record.toString());
                 }
