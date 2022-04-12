@@ -59,8 +59,8 @@ public class GameRoomListController {
 
     @ApiOperation(value = "根据房间ID查询房间详情")
     @GetMapping("/findRoomDetailById/{id}")
-    public Result<GameRoomList> findRoomDetailById(@PathVariable("id") Long id) {
-        GameRoomList room = iGameRoomListService.getById(id);
+    public Result<GameRoomList> findRoomDetailById(@PathVariable("id") String id) {
+        GameRoomList room = iGameRoomListService.findById(id);
         return Result.succeed(room);
     }
 

@@ -1,8 +1,10 @@
 package com.central.game.controller;
 
 import com.central.common.model.PushResult;
+import com.central.common.model.Result;
 import com.central.game.model.GameRecord;
 import com.central.game.model.GameRoomInfoOffline;
+import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.LotteryResultVo;
 import com.central.game.model.vo.NewAddLivePotVo;
 import com.central.game.model.vo.PayoutResultVo;
@@ -54,6 +56,14 @@ public class SocketMessageFormatController {
     public PushResult<GameRoomInfoOffline> getTableInfo() {
         GameRoomInfoOffline po = new GameRoomInfoOffline();
         PushResult<GameRoomInfoOffline> pushResult = PushResult.succeed(po, SocketTypeConstant.TABLE_INFO, "桌台配置信息推送成功");
+        return pushResult;
+    }
+
+    @ApiOperation(value = "后台修改桌台状态信息Socket数据格式")
+    @GetMapping("/getTableStatus")
+    public PushResult<GameRoomList> getTableStatus() {
+        GameRoomList po = new GameRoomList();
+        PushResult<GameRoomList> pushResult = PushResult.succeed(po, SocketTypeConstant.UPDATE_TABLE_STATUS, "后台修改桌台状态信息推送成功");
         return pushResult;
     }
 

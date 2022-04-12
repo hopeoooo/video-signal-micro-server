@@ -53,5 +53,10 @@ public interface SocketTypeConstant {
      */
     String PAYOUT_RESULT = "payoutResult";
 
+    /**
+     * 后台修改桌台状态信息
+     */
+    String UPDATE_TABLE_STATUS = "updateTableStatus";
+
 
 }
