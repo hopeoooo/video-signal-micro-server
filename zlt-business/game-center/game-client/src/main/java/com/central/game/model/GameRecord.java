@@ -80,7 +80,7 @@ public class GameRecord extends SuperEntity {
     @ApiModelProperty(value = "局号")
     private String bureauNum;
 
-    @ApiModelProperty(value = "开奖结果代码")
+    @ApiModelProperty(value = "开奖结果编号,闲:1,庄:4,和:7,庄闲对:2,闲对:5,庄对:8,大:9,小:6")
     private String gameResult;
 
     @ApiModelProperty(value = "开奖结果名称")

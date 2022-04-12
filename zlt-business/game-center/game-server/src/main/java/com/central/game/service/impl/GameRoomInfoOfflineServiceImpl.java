@@ -5,13 +5,20 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.game.mapper.GameRoomInfoOfflineMapper;
+import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
+import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
 import com.central.game.service.IGameRoomInfoOfflineService;
+import com.central.game.service.IGameRoomListService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @author zlt
@@ -26,9 +33,7 @@ public class GameRoomInfoOfflineServiceImpl extends SuperServiceImpl<GameRoomInf
     @Autowired
     private IGameLotteryResultService gameLotteryResultService;
     @Autowired
-    private IGameRecordService gameRecordService;
-    @Autowired
-    private RedisRepository redisRepository;
+    private IGameRoomListService gameRoomListService;
 
     @Override
     public GameRoomInfoOffline findByGameIdAndTableNumAndBootNumAndBureauNum(String gameId, String tableNum, String bootNum, String bureauNum) {
@@ -58,5 +63,23 @@ public class GameRoomInfoOfflineServiceImpl extends SuperServiceImpl<GameRoomInf
             infoOffline.setCurrentSecond(currentSecond.intValue());
         }
         return infoOffline;
+    }
+
+    @Override
+    public GameRoomListVo getNewestTableInfoVo(Long gameId, String tableNum) {
+        GameRoomListVo vo = new GameRoomListVo();
+        GameRoomInfoOffline newestTableInfo = getNewestTableInfo(gameId, tableNum);
+        if (newestTableInfo == null) {
+            return vo;
+        }
+        BeanUtils.copyProperties(newestTableInfo, vo);
+        //查询本靴开奖数据
+        List<GameLotteryResult> lotteryResultList = gameLotteryResultService.getBootNumResultList(vo.getGameId(), vo.getTableNum(), vo.getBootNum());
+        if (CollectionUtils.isEmpty(lotteryResultList)) {
+            return vo;
+        }
+        //本靴牌开奖结果
+        gameLotteryResultService.setLotteryNum(lotteryResultList, vo);
+        return vo;
     }
 }
