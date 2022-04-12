@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-@ApiModel("桌号列表")
+@ApiModel("游戏桌号列表")
 public class GameRoomListVo{
 
     private static final long serialVersionUID = 1L;
