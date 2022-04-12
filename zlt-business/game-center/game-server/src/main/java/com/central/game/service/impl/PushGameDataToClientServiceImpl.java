@@ -6,6 +6,7 @@ import com.central.common.redis.constant.RedisKeyConstant;
 import com.central.common.redis.template.RedisRepository;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
+import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.model.vo.LotteryResultVo;
 import com.central.game.model.vo.NewAddLivePotVo;
@@ -111,6 +112,15 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("下注界面桌台配置信息推送结果:groupId={},result={}", groupId, push);
         //推送大厅
+        Result<String> hallPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+        log.info("大厅桌台配置信息推送结果,result={}", hallPush);
+    }
+
+    @Override
+    @Async
+    public void syncPushGameRoomStatus(GameRoomList po) {
+        //推送大厅
+        PushResult<GameRoomList> pushResult = PushResult.succeed(po, SocketTypeConstant.UPDATE_TABLE_STATUS, "后台修改桌台状态信息推送成功");
         Result<String> hallPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("大厅桌台配置信息推送结果,result={}", hallPush);
     }

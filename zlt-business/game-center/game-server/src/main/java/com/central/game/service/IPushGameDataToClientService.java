@@ -2,6 +2,7 @@ package com.central.game.service;
 
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
+import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.LivePotVo;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface IPushGameDataToClientService {
     void pushLotterResult(GameLotteryResult result);
 
     void syncPushGameRoomInfo(GameRoomInfoOffline po);
+
+    void syncPushGameRoomStatus(GameRoomList po);
 }

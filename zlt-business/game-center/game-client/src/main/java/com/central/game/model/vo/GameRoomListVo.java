@@ -48,7 +48,7 @@ public class GameRoomListVo{
     @ApiModelProperty(value = "实时倒计时")
     private Integer currentSecond = 0;
 
-    @ApiModelProperty(value = "牌局状态 0洗牌中 1开始下注 2停止下注 3结算中 4结算完成")
+    @ApiModelProperty(value = "牌局状态 0洗牌中 1开始下注 2停止下注 4结算完成")
     private Integer status;
 
     @ApiModelProperty(value = "庄下注人数")

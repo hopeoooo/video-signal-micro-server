@@ -12,10 +12,7 @@ import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.model.vo.LivePotVo;
-import com.central.game.service.IGameLotteryResultService;
-import com.central.game.service.IGameRecordService;
-import com.central.game.service.IGameRoomInfoOfflineService;
-import com.central.game.service.IGameRoomListService;
+import com.central.game.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +44,8 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     private IGameLotteryResultService gameLotteryResultService;
     @Autowired
     private RedisRepository redisRepository;
+    @Autowired
+    private IPushGameDataToClientService pushGameDataToClientService;
 
     @Override
     public List<GameRoomList> findGameRoomList(Long gameId) {
@@ -85,6 +84,8 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         gameRoomList.setMaintainStart(maintainStartTemp);
         gameRoomList.setMaintainEnd(maintainEndTemp);
         gameRoomListMapper.updateById(gameRoomList);
+        //异步通知客户端
+        pushGameDataToClientService.syncPushGameRoomStatus(gameRoomList);
         return true;
     }
 
