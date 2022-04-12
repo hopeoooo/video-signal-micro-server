@@ -73,7 +73,7 @@ public class GameRoomInfoOffline extends SuperEntity {
     @JsonIgnore
     private Integer doubleMax;
 
-    @ApiModelProperty(value = "牌局状态 0洗牌中 1开始下注 2停止下注 3结算中 4结算完成")
+    @ApiModelProperty(value = "牌局状态 0洗牌中 1开始下注 2停止下注 4结算完成")
     private Integer status;
 
     @ApiModelProperty(value = "开始下注时间")
