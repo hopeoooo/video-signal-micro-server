@@ -56,21 +56,21 @@ public class GameRoomListVo{
 
     @ApiModelProperty(value = "庄累计下注金额")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigDecimal baccaratBetAmonut = BigDecimal.ZERO;
+    private BigDecimal baccaratBetAmount = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "闲下注人数")
     private Integer playerBetNum = 0;
 
     @ApiModelProperty(value = "闲累计下注金额")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigDecimal playerBetAmonut = BigDecimal.ZERO;
+    private BigDecimal playerBetAmount = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "本局累计下注人数")
     private Integer totalBetNum = 0;
 
     @ApiModelProperty(value = "本局累计下注金额")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private BigDecimal totalBetAmonut = BigDecimal.ZERO;
+    private BigDecimal totalBetAmount = BigDecimal.ZERO;
 
     @ApiModelProperty(value = "本靴总局数")
     private Integer bootNumTotalNum = 0;

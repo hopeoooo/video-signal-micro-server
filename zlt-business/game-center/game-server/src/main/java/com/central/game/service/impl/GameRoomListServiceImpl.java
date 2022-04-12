@@ -131,15 +131,15 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
             //庄
             if (PlayEnum.BAC_BANKER.getCode().equals(livePotVo.getBetCode())) {
                 vo.setBaccaratBetNum(livePotVo.getBetNum());
-                vo.setBaccaratBetAmonut(livePotVo.getBetAmount());
+                vo.setBaccaratBetAmount(livePotVo.getBetAmount());
             }
             //闲
             if (PlayEnum.BAC_PLAYER.getCode().equals(livePotVo.getBetCode())) {
                 vo.setPlayerBetNum(livePotVo.getBetNum());
-                vo.setPlayerBetAmonut(livePotVo.getBetAmount());
+                vo.setPlayerBetAmount(livePotVo.getBetAmount());
             }
         }
-        vo.setTotalBetAmonut(totalBetAmount);
+        vo.setTotalBetAmount(totalBetAmount);
         String groupId = vo.getGameId() + "-" + vo.getTableNum() + "-" + vo.getBootNum() + "-" + vo.getBureauNum();
         //统计本局下注人数(去重)
         String redisBetNumDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_BET_NUM_DATA + groupId;
