@@ -180,17 +180,18 @@ public class SysUserController {
      * 查询一个游客用户登录对象LoginAppUser
      */
     @GetMapping(value = "/users-anon/findGuest")
-    public LoginAppUser findGuest(){
+    public Result<LoginAppUser> findGuest() {
         log.info("+++++++++  find guest");
 
-        if(!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE))
-            throw new InternalAuthenticationServiceException("游客已使用完");
-
+        if (!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE)) {
+            return Result.failed("游客已使用完");
+        }
         Object playName = redisTemplate.opsForList().rightPop(CommonConstant.PLAYER_ACCOUNT_QUEUE);
-        if(playName ==null)
-            throw new InternalAuthenticationServiceException("游客已满");
-
-        return appUserService.findByUsername(playName.toString());
+        if (playName == null) {
+            return Result.failed("游客已满");
+        }
+        LoginAppUser loginAppUser = appUserService.findByUsername(playName.toString());
+        return Result.succeed(loginAppUser);
     }
 
     @PostMapping(value = "/user/loginSuc")

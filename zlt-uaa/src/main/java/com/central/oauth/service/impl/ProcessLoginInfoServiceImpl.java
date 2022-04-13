@@ -2,6 +2,7 @@ package com.central.oauth.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
+import com.central.common.model.CodeEnum;
 import com.central.common.model.LoginLog;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
@@ -12,6 +13,7 @@ import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.user.feign.UserService;
 import com.central.user.model.co.SysUserCo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -58,6 +60,15 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
         Result<TouristDto> touristDtoResult = configService.findTouristAmount();
         log.info("init Amount is {}",touristDtoResult);
         log.info("authentication is {}",userDetails);
+        if (touristDtoResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            log.error("查询游客初始化余额失败");
+            return;
+        }
+        TouristDto resultDatas = touristDtoResult.getDatas();
+        if (resultDatas == null || ObjectUtils.isEmpty(resultDatas.getTouristAmount())) {
+            log.error("查询游客初始化余额为空");
+            return;
+        }
         SysUser sysUser =  userDetails;
         BigDecimal maxAmount = touristDtoResult.getDatas().getTouristAmount();
         // 游客初始化金额  持久化
