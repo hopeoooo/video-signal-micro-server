@@ -40,8 +40,6 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     @Autowired
     private IGameRoomInfoOfflineService gameRoomInfoOfflineService;
     @Autowired
-    private IGameRecordService gameRecordService;
-    @Autowired
     private IGameLotteryResultService gameLotteryResultService;
     @Autowired
     private RedisRepository redisRepository;
