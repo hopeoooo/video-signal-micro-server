@@ -1,4 +1,4 @@
-package com.central.game.rabbitMq;
+package com.central.game.rabbitMq.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

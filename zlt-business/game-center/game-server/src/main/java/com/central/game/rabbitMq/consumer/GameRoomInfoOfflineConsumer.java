@@ -1,4 +1,4 @@
-package com.central.game.rabbitMq;
+package com.central.game.rabbitMq.consumer;
 
 import com.alibaba.fastjson.JSONObject;
 import com.central.common.model.PushResult;

@@ -1,4 +1,4 @@
-package com.central.game.rabbitMq;
+package com.central.game.rabbitMq.consumer;
 
 import com.central.game.model.MqConsumerErrorMsg;
 import com.central.game.service.IMqConsumerErrorMsgService;

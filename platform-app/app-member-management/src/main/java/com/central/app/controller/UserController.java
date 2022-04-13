@@ -44,10 +44,10 @@ public class UserController {
         return userService.receiveWashCode();
     }
 
-    @GetMapping("/washCodeChange/getWashCodeRecord")
-    public Result<PageResult<WashCodeChangeVo>> getWashCodeRecord(String date){
-        return userService.getWashCodeRecord(date);
-    }
+//    @GetMapping("/washCodeChange/getWashCodeRecord")
+//    public Result<PageResult<WashCodeChangeVo>> getWashCodeRecord(String date){
+//        return userService.getWashCodeRecord(date);
+//    }
 
     @GetMapping("/followList/getRoomFollowList")
     public Result<List<RoomFollowVo>> getRoomFollowList(){
