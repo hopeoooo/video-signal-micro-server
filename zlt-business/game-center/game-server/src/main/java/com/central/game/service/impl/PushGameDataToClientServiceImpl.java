@@ -2,12 +2,10 @@ package com.central.game.service.impl;
 
 import com.central.common.model.PushResult;
 import com.central.common.model.Result;
-import com.central.common.redis.constant.RedisKeyConstant;
 import com.central.common.redis.template.RedisRepository;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
-import com.central.game.model.vo.LivePotVo;
 import com.central.game.model.vo.LotteryResultVo;
 import com.central.game.model.vo.NewAddLivePotVo;
 import com.central.game.model.vo.PayoutResultVo;
@@ -21,9 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -77,7 +73,7 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
         BeanUtils.copyProperties(result,vo);
         vo.setBetCodes(result.getResult());
         vo.setBetNames(result.getResultName());
-        PushResult<LotteryResultVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.LOTTER_RESULT, "桌台开奖信息推送成功");
+        PushResult<LotteryResultVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.LOTTERY_RESULT, "桌台开奖信息推送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("下注接口桌台开奖信息推送结果:groupId={},result={}", groupId, push);
         Result<String> hallPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));

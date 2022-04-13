@@ -31,7 +31,7 @@ import java.util.Map;
 @Component
 @RabbitListener(queues = "DataCatch.resultQueue")
 @Slf4j
-public class GameLotterResultConsumer {
+public class GameLotteryResultConsumer {
 
     @Autowired
     private IGameLotteryResultService gameLotteryResultService;

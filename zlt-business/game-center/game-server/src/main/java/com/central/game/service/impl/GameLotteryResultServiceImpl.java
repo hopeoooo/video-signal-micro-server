@@ -10,6 +10,7 @@ import com.central.game.constants.PlayEnum;
 import com.central.game.mapper.GameLotteryResultMapper;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
+import com.central.game.model.GameRecordSon;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
@@ -105,7 +106,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
             if (record.getWinLoss().compareTo(BigDecimal.ZERO) == 1) {
                 Result<SysUserMoney> moneyResult = userService.transterMoney(record.getUserId(), record.getWinLoss(), null, CapitalEnum.SETTLEMENTAMOUNT.getType(), null, record.getBetId());
                 if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-                    gameRecordSonService.saveAddMoneyStatus(record.getId(),1);
+                    writeBackAddMoneyStatus(record.getId());
                 } else {
                     log.error("用户钱包加派彩金额失败,moneyResult={},gameRecord={}", moneyResult.toString(), record.toString());
                 }
@@ -115,7 +116,20 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
             record.setValidbet(validbet);
             //更新下注记录
             gameRecordService.updateById(record);
+            //计算洗码
+            gameRecordService.calculateWashCode(record);
         }
+    }
+
+    public void writeBackAddMoneyStatus(Long gameRecordId){
+        //回写状态
+        GameRecordSon gameRecordSon = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, gameRecordId).one();
+        if (gameRecordSon == null) {
+            gameRecordSon = new GameRecordSon();
+            gameRecordSon.setGameRecordId(gameRecordId);
+            gameRecordSon.setAddMoneyStatus(1);
+        }
+        gameRecordSonService.saveOrUpdate(gameRecordSon);
     }
 
     /**

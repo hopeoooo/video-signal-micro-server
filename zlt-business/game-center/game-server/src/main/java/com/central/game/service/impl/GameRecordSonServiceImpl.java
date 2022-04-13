@@ -17,15 +17,4 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class GameRecordSonServiceImpl extends SuperServiceImpl<GameRecordSonMapper, GameRecordSon> implements IGameRecordSonService {
-
-    @Autowired
-    private GameRecordSonMapper mapper;
-
-    @Override
-    public void saveAddMoneyStatus(Long gameRecordId, Integer addMoneyStatus) {
-        GameRecordSon son = new GameRecordSon();
-        son.setAddMoneyStatus(addMoneyStatus);
-        son.setGameRecordId(gameRecordId);
-        mapper.insert(son);
-    }
 }

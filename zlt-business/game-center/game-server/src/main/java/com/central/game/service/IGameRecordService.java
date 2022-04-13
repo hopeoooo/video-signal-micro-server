@@ -64,5 +64,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     List<GameWinningRateVo> getGameWinningRate(Long userId);
 
     List<GameRecord> getNewestBetListByGameId(Long gameId, Long userId);
+
+    void calculateWashCode(GameRecord record);
 }
 
