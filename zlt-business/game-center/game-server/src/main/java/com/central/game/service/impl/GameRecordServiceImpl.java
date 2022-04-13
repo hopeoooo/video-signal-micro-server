@@ -528,18 +528,14 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         //所有玩法
         List<PlayEnum> playList = PlayEnum.getPlayListByGameId(gameId);
         for (PlayEnum playEnum : playList) {
-            LivePotVo livePot = new LivePotVo();
-            if (StringUtils.isBlank(redisDataKey)) {
+            LivePotVo livePot = null;
+            if (StringUtils.isNotBlank(redisDataKey)) {
+                livePot = (LivePotVo) redisRepository.getHashValues(redisDataKey, playEnum.getCode());
+            }
+            if (livePot == null) {
+                livePot = new LivePotVo();
                 livePot.setBetCode(playEnum.getCode());
                 livePot.setBetName(playEnum.getName());
-            } else {
-                Object redisLivePot = redisRepository.getHashValues(redisDataKey, playEnum.getCode());
-                if (ObjectUtils.isEmpty(redisLivePot)) {
-                    livePot.setBetCode(playEnum.getCode());
-                    livePot.setBetName(playEnum.getName());
-                } else {
-                    livePot = (LivePotVo) redisLivePot;
-                }
             }
             voList.add(livePot);
         }
