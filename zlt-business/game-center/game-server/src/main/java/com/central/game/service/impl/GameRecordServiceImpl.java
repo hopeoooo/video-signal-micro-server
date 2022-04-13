@@ -25,6 +25,7 @@ import com.central.game.model.co.GameRecordBetDataCo;
 import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.vo.*;
+import com.central.game.rocketMq.constant.BindingNameConstant;
 import com.central.game.service.*;
 import com.central.user.feign.UserService;
 import com.central.user.model.vo.RankingListVo;
@@ -33,6 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -65,6 +68,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     private RedisRepository redisRepository;
     @Autowired
     private IGameRoomInfoOfflineService gameRoomInfoOfflineService;
+    @Autowired
+    private StreamBridge streamBridge;
 
     private static final String minLimitRed = "minLimitRed";
     private static final String maxLimitRed = "maxLimitRed";
@@ -663,6 +668,14 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         lqw1.eq(GameRecord::getBureauNum, gameRecord.getBureauNum());
         List<GameRecord> gameRecordList = gameRecordMapper.selectList(lqw1);
         return gameRecordList;
+    }
+
+    @Override
+    @Async
+    public void calculateWashCode(GameRecord record) {
+        log.info("[calculateWashCode][开始发送完成,消息内容={}]", record.toString());
+        boolean sendResult = streamBridge.send(BindingNameConstant.WASH_CODE, record);
+        log.info("[calculateWashCode][发送消息完成,消息内容={}, 结果 = {}]", record.toString(),sendResult);
     }
 
     private BigDecimal keepDecimal(BigDecimal val) {

@@ -21,8 +21,11 @@ public class GameRecordSon extends SuperEntity {
     @ApiModelProperty(value = "游戏记录表ID")
     private Long gameRecordId;
 
-    @ApiModelProperty(value = "盈利后是否加回本地钱包，1.是")
+    @ApiModelProperty(value = "盈利后是否加回本地钱包，1.成功")
     private Integer addMoneyStatus;
+
+    @ApiModelProperty(value = "洗码状态，1.成功")
+    private Integer washCodeStatus;
 
 
 }

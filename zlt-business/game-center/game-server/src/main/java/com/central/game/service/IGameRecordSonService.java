@@ -9,6 +9,5 @@ import com.central.game.model.GameRecordSon;
  */
 public interface IGameRecordSonService extends ISuperService<GameRecordSon> {
 
-    void saveAddMoneyStatus(Long gameRecordId,Integer addMoneyStatus);
 }
 

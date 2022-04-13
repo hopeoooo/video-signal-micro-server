@@ -1,25 +1,126 @@
 package com.central.game.rocketMq.consumer;
 
+import com.central.common.model.CodeEnum;
+import com.central.common.model.Result;
+import com.central.common.model.UserWashCodeConfig;
+import com.central.common.redis.constant.RedisKeyConstant;
+import com.central.common.redis.lock.RedissLockUtil;
+import com.central.game.model.GameRecord;
+import com.central.game.model.GameRecordSon;
+import com.central.game.model.WashCodeChange;
+import com.central.game.service.IGameRecordSonService;
+import com.central.game.service.IWashCodeChangeService;
+import com.central.user.feign.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
+import org.springframework.util.CollectionUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.function.Function;
 
 /**
- * 注册消费者bean
+ * 洗码消费者
  */
 @Configuration
+@Slf4j
 public class WashCodeConsumer {
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private IWashCodeChangeService washCodeChangeService;
+    @Autowired
+    private IGameRecordSonService gameRecordSonService;
+
     @Bean
-    public Function<Flux<Message<String>>, Mono<Void>> washCode() {
+    public Function<Flux<Message<GameRecord>>, Mono<Void>> washCode() {
         return flux -> flux.map(message -> {
-            // 收到发送的消息
-            System.out.println("消费者，washCode: "+message.getPayload());
+            GameRecord record = message.getPayload();
+            log.info("接收到洗码消息record={}", record.toString());
+            calculateWashCode(record);
             return message;
         }).then();
+    }
+
+    public void calculateWashCode(GameRecord record) {
+        if (record == null) {
+            log.error("洗码record为空");
+            return;
+        }
+        BigDecimal validbet = record.getValidbet();
+        //有效投注额大于0才计算
+        if (ObjectUtils.isEmpty(validbet) || validbet.compareTo(BigDecimal.ZERO) < 1) {
+            log.info("洗码有效投注额为空，或小于0不计算,record={}", record.toString());
+            return;
+        }
+        //查询最新的洗码返水配置
+        Result<List<UserWashCodeConfig>> codeConfigResult = userService.findUserWashCodeConfigList(record.getUserId());
+        if (codeConfigResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            log.error("洗码配置查询失败,result={},record={}", codeConfigResult.toString(), record.toString());
+            return;
+        }
+        List<UserWashCodeConfig> codeConfigList = codeConfigResult.getDatas();
+        if (CollectionUtils.isEmpty(codeConfigList)) {
+            log.error("洗码列表配置为空,record={}", record.toString());
+            return;
+        }
+        String gameId = record.getGameId();
+        UserWashCodeConfig washCodeConfig = null;
+        for (UserWashCodeConfig config : codeConfigList) {
+            if (config.getGameId().toString().equals(gameId)) {
+                washCodeConfig = config;
+                break;
+            }
+        }
+        if (washCodeConfig == null) {
+            log.error("洗码明细配置为空,record={}", record.toString());
+            return;
+        }
+        BigDecimal gameRate = washCodeConfig.getGameRate();
+        if (ObjectUtils.isEmpty(gameRate)) {
+            log.error("洗码明细配置gameRate为空,washCodeConfig={},record={}", washCodeConfig.toString(), record.toString());
+            return;
+        }
+        //转化百分比
+        BigDecimal rate = gameRate.divide(new BigDecimal("100"));
+        BigDecimal washCodeVal = validbet.multiply(rate);
+        WashCodeChange washCodeChange = new WashCodeChange();
+        washCodeChange.setUserId(record.getUserId());
+        washCodeChange.setGameId(Long.parseLong(record.getGameId()));
+        washCodeChange.setGameName(record.getGameName());
+        washCodeChange.setRate(gameRate);
+        washCodeChange.setValidbet(validbet);
+        washCodeChange.setBetId(record.getBetId());
+        washCodeChange.setAmount(washCodeVal);
+        String washCodeKey = RedisKeyConstant.SYS_USER_MONEY_WASH_CODE_LOCK + record.getUserId();
+        boolean washCodeLock = RedissLockUtil.tryLock(washCodeKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
+        if (!washCodeLock) {
+            log.error("洗码锁获取失败,record={}", record.toString());
+        }
+        try {
+            washCodeChangeService.save(washCodeChange);
+            log.info("洗码明细记录成功,washCodeChange={},record={}", washCodeChange.toString(), record.toString());
+            //回写状态
+            GameRecordSon gameRecordSon = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, record.getId()).one();
+            if (gameRecordSon == null) {
+                gameRecordSon = new GameRecordSon();
+                gameRecordSon.setGameRecordId(record.getId());
+                gameRecordSon.setWashCodeStatus(1);
+            }
+            gameRecordSonService.saveOrUpdate(gameRecordSon);
+            log.info("洗码gameRecordSon状态回写成功,record={}", record.toString());
+        } catch (Exception e) {
+            log.error("洗码失败，record={},msg={}", record.toString(), e.getMessage());
+            e.printStackTrace();
+        } finally {
+            RedissLockUtil.unlock(washCodeKey);
+        }
     }
 }

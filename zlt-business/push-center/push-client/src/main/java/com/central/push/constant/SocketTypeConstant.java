@@ -46,7 +46,7 @@ public interface SocketTypeConstant {
     /**
      * 下注开奖结果
      */
-    String LOTTER_RESULT = "lotterResult";
+    String LOTTERY_RESULT = "lotteryResult";
 
     /**
      * 派彩结果
