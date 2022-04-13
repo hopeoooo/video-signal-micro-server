@@ -1,7 +1,9 @@
 package com.central.oauth.service.impl;
 
 import com.central.common.constant.SecurityConstants;
+import com.central.common.model.CodeEnum;
 import com.central.common.model.LoginAppUser;
+import com.central.common.model.Result;
 import com.central.common.redis.template.RedisRepository;
 import com.central.oauth.exception.CustomOAuth2Exception;
 import com.central.oauth.modle.CodeErrorAuthEnum;
@@ -72,7 +74,11 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
 
     @Override
     public UserDetails loadGuestUser() {
-        LoginAppUser loginAppUser = userService.findGuest();
+        Result<LoginAppUser> appUserResult = userService.findGuest();
+        if (appUserResult.getResp_code()!= CodeEnum.SUCCESS.getCode()){
+            throw new InternalAuthenticationServiceException(appUserResult.getResp_msg());
+        }
+        LoginAppUser loginAppUser = appUserResult.getDatas();
         return checkUser(loginAppUser);
     }
 

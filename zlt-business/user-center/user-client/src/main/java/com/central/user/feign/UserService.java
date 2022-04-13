@@ -60,7 +60,7 @@ public interface UserService {
      * @return
      */
     @GetMapping(value = "/users-anon/findGuest")
-    LoginAppUser findGuest();
+    Result<LoginAppUser> findGuest();
 
     /**
      * feign rpc访问远程/users/loginSuc接口

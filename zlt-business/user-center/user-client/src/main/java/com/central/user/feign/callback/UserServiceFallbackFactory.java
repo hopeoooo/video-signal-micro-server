@@ -69,9 +69,9 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public LoginAppUser findGuest(){
+            public Result<LoginAppUser> findGuest(){
                 log.error("通过游客用户异常:{}", throwable.getMessage());
-                return new LoginAppUser();
+                return Result.failed("获取游客失败");
             }
 
             @Override
