@@ -47,7 +47,7 @@ public class SocketMessageFormatController {
     @GetMapping("/getLotterResult")
     public PushResult<LotteryResultVo> getLotterResult() {
         LotteryResultVo vo = new LotteryResultVo();
-        PushResult<LotteryResultVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.LOTTER_RESULT, "桌台开奖信息推送成功");
+        PushResult<LotteryResultVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.LOTTERY_RESULT, "桌台开奖信息推送成功");
         return pushResult;
     }
 
