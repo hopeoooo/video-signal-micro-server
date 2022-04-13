@@ -1,12 +1,14 @@
-package com.central.user.service.impl;
+package com.central.game.service.impl;
 
+import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
+import com.central.common.model.Result;
 import com.central.common.model.UserWashCodeConfig;
-import com.central.common.model.WashCodeChange;
+import com.central.game.mapper.WashCodeChangeMapper;
+import com.central.game.model.WashCodeChange;
 import com.central.common.service.impl.SuperServiceImpl;
-import com.central.user.mapper.WashCodeChangeMapper;
-import com.central.user.service.IUserWashCodeConfigService;
-import com.central.user.service.IWashCodeChangeService;
+import com.central.game.service.IWashCodeChangeService;
+import com.central.user.feign.UserService;
 import com.central.user.model.vo.WashCodeChangeVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +26,21 @@ public class WashCodeChangeServiceImpl extends SuperServiceImpl<WashCodeChangeMa
     @Autowired
     private WashCodeChangeMapper mapper;
     @Autowired
-    private IUserWashCodeConfigService userWashCodeConfigService;
+    private UserService userService;
 
     @Override
-    public PageResult<WashCodeChangeVo> getWashCodeRecord(Long userId, String startTime, String endTime) {
+    public List<WashCodeChangeVo> getWashCodeRecord(Long userId, String startTime, String endTime) {
+        List<WashCodeChangeVo> resultList = new ArrayList<>();
         //查询最新的洗码返水配置
-        List<UserWashCodeConfig> washCodeConfigList = userWashCodeConfigService.findWashCodeConfigList(userId);
+        Result<List<UserWashCodeConfig>> codeConfigResult = userService.findUserWashCodeConfigList(userId);
+        if (codeConfigResult.getResp_code()!= CodeEnum.SUCCESS.getCode()){
+            return resultList;
+        }
+        List<UserWashCodeConfig> washCodeConfigList = codeConfigResult.getDatas();
         if (CollectionUtils.isEmpty(washCodeConfigList)) {
-            return PageResult.<WashCodeChangeVo>builder().data(null).count(0L).build();
+            return resultList;
         }
         List<WashCodeChange> recordList = mapper.getWashCodeRecord(userId, startTime, endTime);
-        List<WashCodeChangeVo> resultList = new ArrayList<>();
         for (UserWashCodeConfig washCodeConfig : washCodeConfigList) {
             WashCodeChangeVo vo = new WashCodeChangeVo();
             vo.setGameId(washCodeConfig.getGameId());
@@ -51,6 +57,6 @@ public class WashCodeChangeServiceImpl extends SuperServiceImpl<WashCodeChangeMa
                 }
             }
         }
-        return PageResult.<WashCodeChangeVo>builder().data(resultList).count((long) resultList.size()).build();
+        return resultList;
     }
 }

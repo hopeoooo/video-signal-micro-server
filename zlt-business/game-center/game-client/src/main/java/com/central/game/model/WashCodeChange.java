@@ -1,6 +1,7 @@
-package com.central.common.model;
+package com.central.game.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.central.common.model.SuperEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

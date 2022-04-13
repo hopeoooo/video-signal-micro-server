@@ -191,9 +191,6 @@ public interface UserService {
     @GetMapping("/userMoney/receiveWashCode")
     Result<String> receiveWashCode();
 
-    @GetMapping("/washCodeChange/getWashCodeRecord")
-    Result<PageResult<WashCodeChangeVo>> getWashCodeRecord(String date);
-
     @GetMapping("/followList/getRoomFollowList")
     Result<List<RoomFollowVo>> getRoomFollowList();
 

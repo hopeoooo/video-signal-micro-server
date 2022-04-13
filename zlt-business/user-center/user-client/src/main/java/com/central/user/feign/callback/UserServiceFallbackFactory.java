@@ -242,12 +242,6 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result<PageResult<WashCodeChangeVo>> getWashCodeRecord(String date) {
-                log.error("getWashCodeRecord error: {}", date);
-                return null;
-            }
-
-            @Override
             public Result<List<RoomFollowVo>> getRoomFollowList() {
                 log.error("getRoomFollowList error");
                 return null;
