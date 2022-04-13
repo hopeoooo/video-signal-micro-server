@@ -11,10 +11,10 @@ import java.util.function.Function;
 /**
  * 注册消费者bean
  */
-@Configuration
+//@Configuration
 public class WashCodeConsumer {
 
-    @Bean
+//    @Bean
     public Function<Flux<Message<String>>, Mono<Void>> washCode() {
         return flux -> flux.map(message -> {
             // 收到发送的消息
