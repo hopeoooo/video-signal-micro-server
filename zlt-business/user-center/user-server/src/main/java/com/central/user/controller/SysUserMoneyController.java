@@ -111,9 +111,9 @@ public class SysUserMoneyController {
             if (sysUserMoney == null) {
                 return Result.failed("用户钱包不存在");
             }
-            if (transterType == 9 && money.compareTo(sysUserMoney.getMoney()) == 1) {
+            if (transterType == CapitalEnum.BUSINESS_SUB.getType() && money.compareTo(sysUserMoney.getMoney()) == 1) {
                 return Result.failed("扣点金额不能大于剩余金额");
-            } else if (transterType == 4 && money.compareTo(sysUserMoney.getMoney()) == 1) {
+            } else if (transterType == CapitalEnum.BET.getType() && money.compareTo(sysUserMoney.getMoney()) == 1) {
                 return Result.failed("下注金额不能大于剩余金额");
             }
             SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId, sysUser, betId);
