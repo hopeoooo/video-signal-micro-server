@@ -258,6 +258,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("findUserNum error");
                 return Result.failed("查询失败");
             }
+
+            @Override
+            public void updateSysUser(SysUser sysUser) {
+                log.error("updateSysUser error");
+            }
+
         };
     }
 }

@@ -56,7 +56,7 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
 
     @Async
     @Override
-    public void initAmount(SysUser userDetails) {
+    public void initGuest(SysUser userDetails) {
         Result<TouristDto> touristDtoResult = configService.findTouristAmount();
         log.info("init Amount is {}",touristDtoResult);
         log.info("authentication is {}",userDetails);
@@ -76,6 +76,11 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
         sysMoneyVO.setUserMoney(maxAmount);
         sysMoneyVO.setUid(sysUser.getId());
         userService.updateMoney(sysMoneyVO);
+        //还原游客配置
+        SysUser user = new SysUser();
+        user.setId(sysUser.getId());
+        user.setIsAutoBet(false);
+        userService.updateSysUser(user);
     }
 
 }

@@ -76,7 +76,7 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
     public UserDetails loadGuestUser() {
         Result<LoginAppUser> appUserResult = userService.findGuest();
         if (appUserResult.getResp_code()!= CodeEnum.SUCCESS.getCode()){
-            throw new InternalAuthenticationServiceException(appUserResult.getResp_msg());
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH.getCode(),appUserResult.getResp_msg());
         }
         LoginAppUser loginAppUser = appUserResult.getDatas();
         return checkUser(loginAppUser);
@@ -94,8 +94,8 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
     }
 
     private LoginAppUser checkUser(LoginAppUser loginAppUser) {
-        if (loginAppUser != null && !loginAppUser.isEnabled() && !loginAppUser.getType().equals("APP_GUEST")) {
-            throw new DisabledException("用户已作废");
+        if (loginAppUser != null && !loginAppUser.isEnabled()) {
+            throw new DisabledException("当前用户已被禁用");
         }
         return loginAppUser;
     }

@@ -182,9 +182,8 @@ public class SysUserController {
     @GetMapping(value = "/users-anon/findGuest")
     public Result<LoginAppUser> findGuest() {
         log.info("+++++++++  find guest");
-
         if (!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE)) {
-            return Result.failed("游客已使用完");
+            return Result.failed("游客已满");
         }
         Object playName = redisTemplate.opsForList().rightPop(CommonConstant.PLAYER_ACCOUNT_QUEUE);
         if (playName == null) {
