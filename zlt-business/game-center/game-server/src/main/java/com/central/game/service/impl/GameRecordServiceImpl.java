@@ -673,9 +673,11 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     @Async
     public void calculateWashCode(GameRecord record) {
-        log.info("[calculateWashCode][开始发送完成,消息内容={}]", record.toString());
-        boolean sendResult = streamBridge.send(BindingNameConstant.WASH_CODE, record);
-        log.info("[calculateWashCode][发送消息完成,消息内容={}, 结果 = {}]", record.toString(),sendResult);
+        if (!ObjectUtils.isEmpty(record.getValidbet()) && record.getValidbet().compareTo(BigDecimal.ZERO) == 1) {
+            log.info("[calculateWashCode][开始发送完成,消息内容={}]", record.toString());
+            boolean sendResult = streamBridge.send(BindingNameConstant.WASH_CODE, record);
+            log.info("[calculateWashCode][发送消息完成,消息内容={}, 结果 = {}]", record.toString(), sendResult);
+        }
     }
 
     private BigDecimal keepDecimal(BigDecimal val) {
