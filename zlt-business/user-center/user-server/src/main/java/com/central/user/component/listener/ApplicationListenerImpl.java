@@ -1,6 +1,7 @@
 package com.central.user.component.listener;
 
 import com.central.common.constant.CommonConstant;
+import com.central.common.constant.SecurityConstants;
 import com.central.common.model.SysUser;
 import com.central.user.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Slf4j
-@Component
+//@Component
 public class ApplicationListenerImpl implements ApplicationListener<ApplicationStartedEvent> {
 
     @Autowired
@@ -27,10 +28,13 @@ public class ApplicationListenerImpl implements ApplicationListener<ApplicationS
     public void onApplicationEvent(ApplicationStartedEvent event) {
         log.info("+++++++++   redis init players");
         List<SysUser> sysUserList = appUserService.lambdaQuery().eq(SysUser::getType, CommonConstant.USER_TYPE_APP_GUEST).list();
-        log.info("{}",sysUserList);
-        if(!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE)){
-            sysUserList.forEach(item ->{
-                redisTemplate.opsForList().leftPush(CommonConstant.PLAYER_ACCOUNT_QUEUE,item.getUsername());
+        log.info("{}", sysUserList);
+        if (!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE)) {
+            sysUserList.forEach(item -> {
+                String loginKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + CommonConstant.REDIS_WEBAPP + item.getUsername();
+                if (!redisTemplate.hasKey(loginKey)) {
+                    redisTemplate.opsForList().leftPush(CommonConstant.PLAYER_ACCOUNT_QUEUE, item.getUsername());
+                }
             });
         }
     }

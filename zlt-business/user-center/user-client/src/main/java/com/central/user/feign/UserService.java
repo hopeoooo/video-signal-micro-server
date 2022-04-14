@@ -1,6 +1,5 @@
 package com.central.user.feign;
 
-import com.central.common.annotation.LoginUser;
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.*;
@@ -11,7 +10,6 @@ import com.central.user.feign.callback.UserServiceFallbackFactory;
 import com.central.user.model.vo.RoomFollowVo;
 import com.central.user.model.vo.SysUserMoneyVo;
 import com.central.user.model.vo.UserInfoVo;
-import com.central.user.model.vo.WashCodeChangeVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
@@ -199,4 +197,7 @@ public interface UserService {
 
     @GetMapping("/users/findUserNum")
     Result findUserNum(@RequestParam Map<String, Object> params);
+
+    @PutMapping("/users")
+    void updateSysUser(@RequestBody SysUser sysUser);
 }

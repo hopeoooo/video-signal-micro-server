@@ -9,6 +9,6 @@ public interface ProcessLoginInfoService {
 
     void processLoginInfo(UserDetails userDetails,String loginIp);
 
-    void initAmount(SysUser userDetails);
+    void initGuest(SysUser userDetails);
 
 }

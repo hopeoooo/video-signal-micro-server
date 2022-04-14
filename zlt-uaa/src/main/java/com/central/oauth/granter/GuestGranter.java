@@ -50,7 +50,7 @@ public class GuestGranter extends AbstractTokenGranter {
         }
         log.info("{}",userAuth.getPrincipal());
         OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);
-        processLoginInfoService.initAmount((SysUser) userAuth.getPrincipal());
+        processLoginInfoService.initGuest((SysUser) userAuth.getPrincipal());
         return new OAuth2Authentication(storedOAuth2Request, userAuth);
 
     }
