@@ -114,8 +114,8 @@ public class WashCodeConsumer {
             if (gameRecordSon == null) {
                 gameRecordSon = new GameRecordSon();
                 gameRecordSon.setGameRecordId(record.getId());
-                gameRecordSon.setWashCodeStatus(1);
             }
+            gameRecordSon.setWashCodeStatus(1);
             gameRecordSonService.saveOrUpdate(gameRecordSon);
             log.info("洗码gameRecordSon状态回写成功,record={}", record.toString());
         } catch (Exception e) {

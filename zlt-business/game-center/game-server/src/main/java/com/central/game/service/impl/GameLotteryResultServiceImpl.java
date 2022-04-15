@@ -142,8 +142,8 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
         if (gameRecordSon == null) {
             gameRecordSon = new GameRecordSon();
             gameRecordSon.setGameRecordId(gameRecordId);
-            gameRecordSon.setAddMoneyStatus(1);
         }
+        gameRecordSon.setAddMoneyStatus(1);
         gameRecordSonService.saveOrUpdate(gameRecordSon);
     }
 
