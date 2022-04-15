@@ -50,8 +50,8 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
         log.info("+++++++++++++username:{}",username);
 //        username = username.equals("player")?"play1":username;
 
-        username = username.equals("player")?getUserNameFrom():username;
-        log.info("+++++++++++++username:{}",username);
+//        username = username.equals("player")?getUserNameFrom():username;
+//        log.info("+++++++++++++username:{}",username);
         LoginAppUser loginAppUser = userService.findByUsername(username);
         if (loginAppUser == null) {
             throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USERNAME_PASSWORD.getCode(), "用户名或密码错误");
