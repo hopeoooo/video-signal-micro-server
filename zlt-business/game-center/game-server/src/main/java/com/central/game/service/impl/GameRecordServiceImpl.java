@@ -243,7 +243,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     public Result checkGame(Long gameId) {
-        GameList gameList = gameListService.getById(gameId);
+        GameList gameList = gameListService.findById(gameId);
         if (gameList == null) {
             return Result.failed("当前游戏不存在");
         }
@@ -257,7 +257,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     public Result checkTable(Long gameId, String tableNum) {
-        GameRoomList gameRoomList = gameRoomListService.lambdaQuery().eq(GameRoomList::getGameId, gameId).eq(GameRoomList::getGameRoomName, tableNum).one();
+        GameRoomList gameRoomList =gameRoomListService.findByGameIdAndGameRoomName(gameId,tableNum);
         if (gameRoomList == null) {
             return Result.failed("当前桌台不存在");
         }

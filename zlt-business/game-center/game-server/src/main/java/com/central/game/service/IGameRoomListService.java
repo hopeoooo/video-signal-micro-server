@@ -15,4 +15,6 @@ public interface IGameRoomListService  extends ISuperService<GameRoomList> {
     GameRoomList findById(String id);
 
     List<GameRoomListVo> findRoomListByGameId(Long gameId);
+
+    GameRoomList findByGameIdAndGameRoomName(Long gameId, String gameRoomName);
 }

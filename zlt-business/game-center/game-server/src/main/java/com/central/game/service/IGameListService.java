@@ -18,5 +18,7 @@ public interface IGameListService extends ISuperService<GameList> {
      * @return
      */
     PageResult<GameList> findList(SuperPage superPage);
+
+    GameList findById(Long gameId);
 }
 

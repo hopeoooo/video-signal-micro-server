@@ -4,6 +4,8 @@ import com.central.common.model.PageResult;
 import com.central.game.mapper.GameListMapper;
 import com.central.game.model.GameList;
 import com.central.game.service.IGameListService;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import com.central.common.model.SuperPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -20,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
+@CacheConfig(cacheNames = {"gameList"})
 public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameList> implements IGameListService {
     /**
      * 列表
@@ -31,5 +34,11 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
         Page<GameList> page = new Page<>(superPage.getPage(), superPage.getLimit());
         List<GameList> list  =  baseMapper.findList(page, superPage);
         return PageResult.<GameList>builder().data(list).count(page.getTotal()).build();
+    }
+
+    @Override
+    @Cacheable(key = "#id")
+    public GameList findById(Long gameId) {
+        return baseMapper.selectById(gameId);
     }
 }

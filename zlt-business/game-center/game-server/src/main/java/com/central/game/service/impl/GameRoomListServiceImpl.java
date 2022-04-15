@@ -123,6 +123,16 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         return list;
     }
 
+    @Override
+    @Cacheable(key = "#p0+'::'+#p1")
+    public GameRoomList findByGameIdAndGameRoomName(Long gameId, String gameRoomName) {
+        LambdaQueryWrapper<GameRoomList> lqw = Wrappers.lambdaQuery();
+        lqw.eq(GameRoomList::getGameId, gameId);
+        lqw.eq(GameRoomList::getGameRoomName, gameRoomName);
+        GameRoomList gameRoomList = gameRoomListMapper.selectOne(lqw);
+        return gameRoomList;
+    }
+
     public void getTableUpInfo(GameRoomListVo vo) {
         String groupId = vo.getGameId() + "-" + vo.getTableNum() + "-" + vo.getBootNum() + "-" + vo.getBureauNum();
         String redisDataKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_DATA + groupId;
