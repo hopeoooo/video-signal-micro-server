@@ -98,6 +98,7 @@ public class WashCodeConsumer {
         washCodeChange.setGameName(record.getGameName());
         washCodeChange.setRate(gameRate);
         washCodeChange.setValidbet(validbet);
+        washCodeChange.setGameRecordId(record.getId());
         washCodeChange.setBetId(record.getBetId());
         washCodeChange.setAmount(washCodeVal);
         String washCodeKey = RedisKeyConstant.SYS_USER_MONEY_WASH_CODE_LOCK + record.getUserId();

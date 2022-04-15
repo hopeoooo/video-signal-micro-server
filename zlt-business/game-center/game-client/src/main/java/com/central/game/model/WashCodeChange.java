@@ -30,6 +30,8 @@ public class WashCodeChange extends SuperEntity {
     private Long gameId;
     @ApiModelProperty(value = "游戏名称")
     private String gameName;
+    @ApiModelProperty(value = "游戏记录表ID")
+    private Long gameRecordId;
     @ApiModelProperty(value = "注单ID")
     private String betId;
     @ApiModelProperty(value = "返水比例（%）")
