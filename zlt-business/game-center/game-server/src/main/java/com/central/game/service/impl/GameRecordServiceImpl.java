@@ -589,7 +589,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     @Override
-    public List<PayoutResultVo> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum) {
+    public List<PayoutResultVo> getPayoutResult(Long gameId, String tableNum, String bootNum, String bureauNum) {
         return gameRecordMapper.getPayoutResult(gameId, tableNum, bootNum, bureauNum);
 
     }
@@ -683,7 +683,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
 
     @Override
     @Async
-    public void syncDeleteGuestRecordBureauNum(String gameId, String tableNum, String bootNum, String bureauNum) {
+    public void syncDeleteGuestRecordBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum) {
         gameRecordMapper.deleteGuestRecordBureauNum(UserType.APP_GUEST.name(),gameId, tableNum, bootNum, bureauNum);
     }
 

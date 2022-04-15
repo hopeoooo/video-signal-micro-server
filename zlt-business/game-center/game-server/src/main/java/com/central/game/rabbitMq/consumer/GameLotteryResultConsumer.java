@@ -58,7 +58,7 @@ public class GameLotteryResultConsumer {
             try {
                 result = new GameLotteryResult();
                 BeanUtils.copyProperties(resultCo, result);
-                result.setGameId(GameListEnum.BACCARAT.getGameId().toString());
+                result.setGameId(GameListEnum.BACCARAT.getGameId());
                 result.setGameName(GameListEnum.BACCARAT.getGameName());
                 result.setLotteryId(resultCo.getId());
                 result.setLotteryTime(resultCo.getCreateTime());

@@ -46,7 +46,7 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
 
     List<GameRecordVo> findBetList(Page<GameRecordVo> page, @Param("p") GameRecordBetPageCo params);
 
-    List<PayoutResultVo> getPayoutResult(@Param("gameId") String gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
+    List<PayoutResultVo> getPayoutResult(@Param("gameId") Long gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 
     List<RankingListVo> getTodayLotteryList(@Param("startTime") String startTime,@Param("endTime") String endTime);
 
@@ -60,5 +60,5 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
 
     List<LivePotVo> getLivePot(@Param("gameId") Long gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 
-    void deleteGuestRecordBureauNum(@Param("userType") String userType, @Param("gameId") String gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
+    void deleteGuestRecordBureauNum(@Param("userType") String userType, @Param("gameId") Long gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 }

@@ -51,7 +51,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     PageResult<GameRecordVo> findBetList(GameRecordBetPageCo params);
     List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum);
 
-    List<PayoutResultVo> getPayoutResult(String gameId, String tableNum, String bootNum, String bureauNum);
+    List<PayoutResultVo> getPayoutResult(Long gameId, String tableNum, String bootNum, String bureauNum);
 
     List<RankingListVo> getTodayLotteryList();
 
@@ -67,6 +67,6 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
 
     void calculateWashCode(GameRecord record);
 
-    void syncDeleteGuestRecordBureauNum(String gameId, String tableNum, String bootNum, String bureauNum);
+    void syncDeleteGuestRecordBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum);
 }
 
