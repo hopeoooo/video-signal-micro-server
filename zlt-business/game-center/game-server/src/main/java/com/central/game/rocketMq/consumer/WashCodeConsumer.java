@@ -93,6 +93,7 @@ public class WashCodeConsumer {
         BigDecimal washCodeVal = validbet.multiply(rate);
         WashCodeChange washCodeChange = new WashCodeChange();
         washCodeChange.setUserId(record.getUserId());
+        washCodeChange.setUserName(record.getUserName());
         washCodeChange.setGameId(Long.parseLong(record.getGameId()));
         washCodeChange.setGameName(record.getGameName());
         washCodeChange.setRate(gameRate);

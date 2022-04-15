@@ -79,6 +79,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     @Transactional
     public Result<List<LivePotVo>> saveRecord(GameRecordCo co, SysUser user, String ip) {
+        //查询详细数据
+        user = userService.selectByUsername(user.getUsername());
         String userName = user.getUsername();
         Long gameId = co.getGameId();
         Result checkGameResult = checkGame(gameId);
