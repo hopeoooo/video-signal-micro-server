@@ -85,8 +85,9 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
             record.setGameResult(result);
             record.setGameResultName(lotteryResult.getResultName());
             //包含则说明中奖
-            if (result.contains(record.getBetCode())) {
-                PlayEnum playEnum = PlayEnum.getPlayByCode(record.getBetCode());
+            String betCode = record.getBetCode();
+            if (result.contains(betCode)) {
+                PlayEnum playEnum = PlayEnum.getPlayByCode(betCode);
                 if (playEnum == null) {
                     log.error("玩法不支持,lotteryResult={}", lotteryResult.toString());
                     break;
@@ -97,6 +98,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
                 //输赢金额=派彩金额-下注金额
                 BigDecimal winLoss = winningAmount.subtract(betAmount);
                 record.setWinLoss(winLoss);
+            //如果是庄闲开和退换本金
             } else {
                 record.setWinningAmount(BigDecimal.ZERO);
                 record.setWinLoss(betAmount.negate());
@@ -109,6 +111,14 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
                     writeBackAddMoneyStatus(record.getId());
                 } else {
                     log.error("用户钱包加派彩金额失败,moneyResult={},gameRecord={}", moneyResult.toString(), record.toString());
+                }
+            //开奖结果包含和 庄闲玩法退回本金
+            } else if (result.contains(PlayEnum.BAC_TIE.getCode()) && (PlayEnum.BAC_BANKER.getCode().equals(betCode)) || PlayEnum.BAC_PLAYER.getCode().equals(betCode)) {
+                Result<SysUserMoney> moneyResult = userService.transterMoney(record.getUserId(), record.getBetAmount(), null, CapitalEnum.SETTLEMENTAMOUNT.getType(), null, record.getBetId());
+                if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
+                    writeBackAddMoneyStatus(record.getId());
+                } else {
+                    log.error("开奖结果包含和退回本金失败,moneyResult={},gameRecord={}", moneyResult.toString(), record.toString());
                 }
             }
             //计算有效投注额
@@ -155,7 +165,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
                     return winLoss;
                 } else if (winLoss.compareTo(BigDecimal.ZERO) == -1) {//输赢小于0，有效投注=投注金额
                     return record.getBetAmount();
-                } else if (lotteryResult.contains(PlayEnum.BAC_TIE.getCode())) { //游戏结果是和局，游戏投注额=0
+                } else if (lotteryResult.contains(PlayEnum.BAC_TIE.getCode())) { //游戏结果是和局，有效投注额=0
                     return BigDecimal.ZERO;
                 }
             } else if (size == 2) {//同时下了庄闲，对冲
