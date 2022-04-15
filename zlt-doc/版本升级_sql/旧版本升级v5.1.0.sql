@@ -13,3 +13,7 @@ ADD COLUMN `ga_key` varchar(255) NULL COMMENT '谷歌验证码KEY' AFTER `ga_bin
 
 ALTER TABLE `user-center`.`sys_user`
 ADD COLUMN `verify` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否验证 1：是，其他：否' AFTER `ga_key`;
+
+ALTER TABLE `user-center`.`sys_user`
+DROP INDEX `idx_username`,
+ADD UNIQUE INDEX `idx_username`(`username`) USING BTREE;

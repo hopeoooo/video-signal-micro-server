@@ -40,7 +40,7 @@ public class SysUser extends SuperEntity {
 	@ApiModelProperty(value = "账号类型：APP：前端app用户，APP_GUEST：前端app游客用户，BACKEND：后端管理用户")
 	private String type;
 	private String openId;
-	
+
 	@ApiModelProperty(value = "逻辑删除 0：未删除，1：已删除")
 	private boolean isDel;
 
