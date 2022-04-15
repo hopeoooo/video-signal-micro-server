@@ -139,4 +139,10 @@
         from game_record where game_id=#{gameId} and table_num=#{tableNum} and boot_num=#{bootNum} and bureau_num=#{bureauNum} GROUP BY bet_code
     </select>
 
+    <delete id="deleteGuestRecordBureauNum">
+        DELETE a,b FROM game_record a
+        LEFT JOIN game_record_son b on a.id=b.game_record_id
+        where a.user_type =#{userType} and a.game_id=#{gameId} and a.table_num=#{tableNum} and a.boot_num=#{bootNum} and a.bureau_num=#{bureauNum}
+    </delete>
+
 </mapper>

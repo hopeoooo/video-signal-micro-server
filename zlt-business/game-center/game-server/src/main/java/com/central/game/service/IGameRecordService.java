@@ -66,5 +66,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     List<GameRecord> getNewestBetListByGameId(Long gameId, Long userId);
 
     void calculateWashCode(GameRecord record);
+
+    void syncDeleteGuestRecordBureauNum(String gameId, String tableNum, String bootNum, String bureauNum);
 }
 

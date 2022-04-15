@@ -59,4 +59,6 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     List<BigDecimal> getGameWinningRate(@Param("userId") Long userId,@Param("gameId") Long gameId);
 
     List<LivePotVo> getLivePot(@Param("gameId") Long gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
+
+    void deleteGuestRecordBureauNum(@Param("userType") String userType, @Param("gameId") String gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 }

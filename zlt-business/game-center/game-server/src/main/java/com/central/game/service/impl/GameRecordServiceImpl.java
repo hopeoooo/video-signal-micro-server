@@ -374,6 +374,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         gameRecord.setUserId(user.getId());
         gameRecord.setUserName(user.getUsername());
         gameRecord.setParent(user.getParent());
+        gameRecord.setUserType(user.getType());
         gameRecord.setGameId(gameId.toString());
         gameRecord.setGameName(gameName);
         gameRecord.setBetCode(betDataCo.getBetCode());
@@ -678,6 +679,12 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             boolean sendResult = streamBridge.send(BindingNameConstant.WASH_CODE, record);
             log.info("[calculateWashCode][发送消息完成,消息内容={}, 结果 = {}]", record.toString(), sendResult);
         }
+    }
+
+    @Override
+    @Async
+    public void syncDeleteGuestRecordBureauNum(String gameId, String tableNum, String bootNum, String bureauNum) {
+        gameRecordMapper.deleteGuestRecordBureauNum(UserType.APP_GUEST.name(),gameId, tableNum, bootNum, bureauNum);
     }
 
     private BigDecimal keepDecimal(BigDecimal val) {

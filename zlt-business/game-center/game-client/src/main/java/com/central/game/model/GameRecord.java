@@ -95,5 +95,6 @@ public class GameRecord extends SuperEntity {
     @ApiModelProperty(value = "最大限红")
     private BigDecimal maxLimitRed;
 
-
+    @ApiModelProperty(value = "账号类型：APP：前端app用户，APP_GUEST：前端app游客用户，BACKEND：后端管理用户")
+    private String userType;
 }

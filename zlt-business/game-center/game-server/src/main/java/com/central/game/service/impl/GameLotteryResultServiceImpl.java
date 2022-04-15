@@ -116,8 +116,10 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
             record.setValidbet(validbet);
             //更新下注记录
             gameRecordService.updateById(record);
-            //计算洗码
-            gameRecordService.calculateWashCode(record);
+            //计算洗码（游客不计算）
+            if (!UserType.APP_GUEST.name().equals(record.getUserType())) {
+                gameRecordService.calculateWashCode(record);
+            }
         }
     }
 

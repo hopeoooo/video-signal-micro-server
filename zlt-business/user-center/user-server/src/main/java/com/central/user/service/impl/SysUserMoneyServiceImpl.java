@@ -91,8 +91,11 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
             sysUserMoney.setMoney(sysUserMoney.getMoney().subtract(money));
         }
         baseMapper.updateById(sysUserMoney);
-        SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, traceId, transterType, sysUserMoney.getMoney(), betId);
-        iSysTansterMoneyLogService.save(sysTansterMoneyLog);
+        //游客不记录数据
+        if (!UserType.APP_GUEST.name().equals(sysUser.getType())) {
+            SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, traceId, transterType, sysUserMoney.getMoney(), betId);
+            iSysTansterMoneyLogService.save(sysTansterMoneyLog);
+        }
         return sysUserMoney;
     }
 
