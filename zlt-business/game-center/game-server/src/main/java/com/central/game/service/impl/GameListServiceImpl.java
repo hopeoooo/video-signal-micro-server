@@ -37,7 +37,7 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
     }
 
     @Override
-    @Cacheable(key = "#p0")
+//    @Cacheable(key = "#p0")
     public GameList findById(Long gameId) {
         return baseMapper.selectById(gameId);
     }

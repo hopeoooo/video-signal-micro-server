@@ -124,7 +124,7 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     }
 
     @Override
-    @Cacheable(key = "#p0+'::'+#p1")
+//    @Cacheable(key = "#p0+'::'+#p1")
     public GameRoomList findByGameIdAndGameRoomName(Long gameId, String gameRoomName) {
         LambdaQueryWrapper<GameRoomList> lqw = Wrappers.lambdaQuery();
         lqw.eq(GameRoomList::getGameId, gameId);
