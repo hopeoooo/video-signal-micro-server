@@ -98,8 +98,11 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
                 //输赢金额=派彩金额-下注金额
                 BigDecimal winLoss = winningAmount.subtract(betAmount);
                 record.setWinLoss(winLoss);
-            //如果是庄闲开和退换本金
-            } else {
+            //如果是庄闲开和退换本金,输赢派彩为0
+            } else if(result.contains(PlayEnum.BAC_TIE.getCode()) && (PlayEnum.BAC_BANKER.getCode().equals(betCode)) || PlayEnum.BAC_PLAYER.getCode().equals(betCode)) {
+                record.setWinningAmount(BigDecimal.ZERO);
+                record.setWinLoss(BigDecimal.ZERO);
+            }else {
                 record.setWinningAmount(BigDecimal.ZERO);
                 record.setWinLoss(betAmount.negate());
             }
