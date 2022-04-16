@@ -2,6 +2,7 @@ package com.central.oauth2.common.store;
 
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.SysUser;
+import com.central.common.model.UserType;
 import com.central.oauth2.common.properties.SecurityProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -263,10 +264,11 @@ public class CustomRedisTokenStore implements TokenStore {
         String returnKey = "";
         // TODO 处理 "APP_GUEST"
         SysUser sysUser = (SysUser) authentication.getPrincipal();
-        if(sysUser.getType().equals("APP_GUEST"))
-            returnKey= SecurityConstants.REDIS_UNAME_TO_ACCESS+"APP_GUEST:"+sysUser.getUsername();
-        else
-            returnKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + "online:"+sysUser.getUsername();
+        if (UserType.APP_GUEST.name().equals(sysUser.getType())) {
+            returnKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + UserType.APP_GUEST.name() + ":" + sysUser.getUsername();
+        } else {
+            returnKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + SecurityConstants.APP_USER_ONLINE + sysUser.getUsername();
+        }
         log.info("return Key is {}",returnKey);
         return returnKey;
     }
