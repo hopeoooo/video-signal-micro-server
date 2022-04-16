@@ -34,7 +34,7 @@ public class ApplicationListenerAuthencationSuccess implements ApplicationListen
                 LoginAppUser loginAppUser = (LoginAppUser)((AbstractAuthenticationToken) event.getSource()).getPrincipal();
                 log.info("登陆成功 AuthenticationSuccessEvent： {}, {}", loginAppUser.getUsername(), loginAppUser.getType());
                 processLoginInfoService.processLoginInfo(loginAppUser,getLoginIp());
-                userService.processLoginSuccess(loginAppUser);
+                userService.pushOnlineNum();
             }
         }
     }

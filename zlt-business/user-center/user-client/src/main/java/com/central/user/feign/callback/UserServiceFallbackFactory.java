@@ -81,6 +81,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
+            public Result pushOnlineNum() {
+                log.error("pushOnlineNum推送APP在线人数失败");
+                return Result.failed("推送APP在线人数失败");
+            }
+
+            @Override
             public LoginAppUser findByMobile(String mobile) {
                 log.error("通过手机号查询用户异常:{}", mobile, throwable);
                 return new LoginAppUser();

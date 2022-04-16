@@ -186,4 +186,9 @@ public interface SecurityConstants {
      * 账号类型参数名
      */
     String ACCOUNT_TYPE_PARAM_NAME = "account_type";
+
+    /**
+     * app在线人数
+     */
+    String APP_USER_ONLINE = "online:";
 }

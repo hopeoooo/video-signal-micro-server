@@ -69,6 +69,13 @@ public interface UserService {
     Boolean processLoginSuccess(@RequestBody LoginAppUser loginAppUser);
 
     /**
+     * 推送APP在线人数
+     * @return
+     */
+    @GetMapping(value = "/user/pushOnlineNum")
+    Result pushOnlineNum();
+
+    /**
      * 通过手机号查询用户、角色信息
      *
      * @param mobile 手机号

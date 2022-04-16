@@ -31,7 +31,7 @@ public interface SocketTypeConstant {
     /**
      * 在线人数
      */
-    String ONLINE_NUMS = "online_nums";
+    String ONLINE_NUMS = "onlineNum";
 
     /**
      * 即时彩池

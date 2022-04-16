@@ -193,22 +193,25 @@ public class SysUserController {
         return Result.succeed(loginAppUser);
     }
 
-    @PostMapping(value = "/user/loginSuc")
-    public Boolean processLoginSuccess(@RequestBody LoginAppUser loginAppUser){
-        log.info("login success process, user is {}",loginAppUser.getUsername());
-        String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + "online:*";
+    @GetMapping(value = "/user/getOnlineNum")
+    @ApiOperation(value = "初始化查询在线人数")
+    public Result<Integer> getOnlineNum(){
+        String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + SecurityConstants.APP_USER_ONLINE + "*";
+        Set<String> keySet = redisTemplate.keys(onlineKey);
+        int playerSize = keySet.size();
+        return Result.succeed(playerSize);
+    }
+
+    @GetMapping(value = "/user/pushOnlineNum")
+    @ApiOperation(value = "socket推送在线人数")
+    public Result pushOnlineNum(){
+        String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + SecurityConstants.APP_USER_ONLINE + "*";
         Set<String> keySet = redisTemplate.keys(onlineKey);
         int playerSize = keySet.size();
         PushResult<Integer> pushResult = PushResult.succeed(playerSize, SocketTypeConstant.ONLINE_NUMS,"在线人数推送成功");
         Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
         log.info("在线人数消息推送结果:{}",push);
-        return Boolean.TRUE;
-    }
-
-    @ApiOperation(value = "通知在线人数")
-    @PostMapping(value = "/user/notify_players")
-    public PushResult<Integer> notifyPlayers(){
-        return PushResult.succeed(0, "online_nums","在线人数推送成功");
+        return Result.succeed();
     }
 
     /**
