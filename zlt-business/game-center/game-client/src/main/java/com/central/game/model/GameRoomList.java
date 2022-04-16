@@ -20,8 +20,6 @@ import java.util.Date;
 public class GameRoomList extends SuperEntity {
 
     private static final long serialVersionUID = 1L;
-    @TableId(value = "id", type = IdType.INPUT)
-    private Long id;
 
     @ApiModelProperty(value = "游戏表id")
     private Long gameId;
