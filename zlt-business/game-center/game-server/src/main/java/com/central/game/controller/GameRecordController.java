@@ -6,10 +6,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.utils.AddrUtil;
-import com.central.game.dto.GameRecordDto;
-import com.central.game.dto.GameRecordReportDto;
-import com.central.game.dto.HomeHistogramDto;
-import com.central.game.dto.HomePageDto;
+import com.central.game.dto.*;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
@@ -207,4 +204,15 @@ public class GameRecordController {
         return Result.succeed(gameRecordList);
     }
 
+    @ResponseBody
+    @ApiOperation(value = "会员报表")
+    @GetMapping("/findUserReportDto")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false),
+    })
+    public Result<List<UserReportDto>> findUserReportDto(@RequestParam Map<String, Object> params) {
+        List<UserReportDto> userReportDtos = gameRecordService.findUserReportDto(params);
+        return Result.succeed(userReportDtos);
+    }
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.central.platform.backend.mapper.UserReportMapper">
+	<sql id="where">
+        <where>
+            <if test="p.userId != null">
+                and u.user_id = #{p.userId}
+            </if>
+            <if test="p.startTime != null and p.startTime != ''">
+                and u.statics_times <![CDATA[>=]]> #{p.startTime}
+            </if>
+
+            <if test="p.endTime != null and p.endTime != ''">
+                and u.statics_times <![CDATA[<=]]> #{p.endTime}
+            </if>
+        </where>
+	</sql>
+
+<!--	<select id="findOnlineUserList" resultType="com.central.common.model.OnlineUser">-->
+<!--		select * from online_user t-->
+<!--		<include refid="where" />-->
+<!--		order by t.id asc-->
+<!--	</select>-->
+<!--	<select id="findPageList" resultType="com.central.common.model.OnlineUser">-->
+<!--		select t.statics_day AS staticsDay,-->
+<!--		MAX(t.online_num) AS MaxOnlineNum,-->
+<!--		SUM(t.online_num)/count(0) AS onlineNum-->
+<!--		 from online_user t-->
+<!--		<include refid="where" />-->
+<!--		GROUP BY t.statics_day-->
+<!--		order by t.id desc-->
+<!--	</select>-->
+
+	<insert id="saveUserReport" parameterType="com.central.platform.backend.model.UserReport">
+    INSERT INTO user_report (id,user_id,statics_times,charge_amount,withdraw_money,valid_amount,win_loss)
+    VALUES (#{u.id},#{u.userId},#{u.staticsTimes},#{u.chargeAmount},#{u.withdrawMoney},#{u.validAmount},#{u.winLoss})
+    ON DUPLICATE KEY  UPDATE
+    charge_amount =charge_amount+ VALUES(charge_amount),
+	withdraw_money =withdraw_money+ VALUES(withdraw_money),
+	valid_amount =valid_amount+ VALUES(valid_amount),
+	win_loss =win_loss+ VALUES(win_loss);
+  </insert>
+
+    <select id="findUserReportVos"  resultType="com.central.platform.backend.model.vo.UserReportVo">
+        select u.user_id as userId,sum(u.valid_amount) as validAmount,sum(u.win_loss) as winLoss,sum(u.charge_amount) as chargeAmount,sum(u.withdraw_money) as withdrawMoney
+        from user_report u
+        <include refid="where" />
+         GROUP BY u.user_id limit #{p.page},#{p.pageSize};
+    </select>
+
+    <select id="findUserReportVoCount"  resultType="java.lang.Long">
+        select COUNT(1) from (select u.user_id as userId
+        from user_report u
+        <include refid="where" />
+        GROUP BY u.user_id ) a;
+    </select>
+</mapper>

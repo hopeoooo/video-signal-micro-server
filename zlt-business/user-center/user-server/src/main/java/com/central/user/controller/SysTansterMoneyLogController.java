@@ -5,6 +5,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.vo.SysTansterMoneyLogVo;
+import com.central.user.dto.UserTansterMoneyDto;
 import com.central.user.model.co.SysTansterMoneyPageCo;
 import com.central.user.service.ISysTansterMoneyLogService;
 import io.swagger.annotations.Api;
@@ -58,5 +59,16 @@ public class SysTansterMoneyLogController {
         return sysTansterMoneyLogService.findAmountChangeList(params);
     }
 
-
+    @ResponseBody
+    @ApiOperation(value = "会员充提报表")
+    @GetMapping("/findUserTansterMoneyDto")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "startTime", value = "开始时间", required = false),
+        @ApiImplicitParam(name = "endTime", value = "结束时间", required = false),
+        @ApiImplicitParam(name = "orderType", value = "账变类型", required = false),
+    })
+    public Result<List<UserTansterMoneyDto>> findUserTansterMoneyDto(@RequestParam Map<String, Object> params) {
+        List<UserTansterMoneyDto> userReportDtos = sysTansterMoneyLogService.findUserTansterMoneyDto(params);
+        return Result.succeed(userReportDtos);
+    }
 }

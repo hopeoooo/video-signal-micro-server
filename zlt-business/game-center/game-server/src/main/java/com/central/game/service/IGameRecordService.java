@@ -4,10 +4,7 @@ import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.service.ISuperService;
-import com.central.game.dto.GameRecordDto;
-import com.central.game.dto.GameRecordReportDto;
-import com.central.game.dto.HomeHistogramDto;
-import com.central.game.dto.HomePageDto;
+import com.central.game.dto.*;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
@@ -68,5 +65,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     void calculateWashCode(GameRecord record);
 
     void syncDeleteGuestRecordBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum);
+
+    List<UserReportDto> findUserReportDto(Map<String, Object> params);
 }
 

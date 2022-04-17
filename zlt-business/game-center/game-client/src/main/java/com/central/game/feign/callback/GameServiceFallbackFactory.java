@@ -2,10 +2,7 @@ package com.central.game.feign.callback;
 
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.game.dto.GameRecordDto;
-import com.central.game.dto.GameRecordReportDto;
-import com.central.game.dto.HomeHistogramDto;
-import com.central.game.dto.HomePageDto;
+import com.central.game.dto.*;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.*;
@@ -160,6 +157,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             public Result<HomeHistogramDto> findHomeHistogramDto(Map<String, Object> params) {
                 log.error("findHomePageDto查询首页柱状图失败:{}", params);
                 return Result.failed("查询首页柱状图失败");
+            }
+
+            @Override
+            public Result<List<UserReportDto>> findUserReportDto(Map<String, Object> params) {
+                log.error("findUserReportDto会员报表失败:{}", params);
+                return Result.failed("会员报表");
             }
         };
     }

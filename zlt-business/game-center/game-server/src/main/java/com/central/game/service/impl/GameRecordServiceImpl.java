@@ -11,10 +11,7 @@ import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
 import com.central.game.constants.GameListEnum;
 import com.central.game.constants.PlayEnum;
-import com.central.game.dto.GameRecordDto;
-import com.central.game.dto.GameRecordReportDto;
-import com.central.game.dto.HomeHistogramDto;
-import com.central.game.dto.HomePageDto;
+import com.central.game.dto.*;
 import com.central.game.mapper.GameRecordMapper;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRecord;
@@ -687,6 +684,11 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Async
     public void syncDeleteGuestRecordBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum) {
         gameRecordMapper.deleteGuestRecordBureauNum(UserType.APP_GUEST.name(),gameId, tableNum, bootNum, bureauNum);
+    }
+
+    @Override
+    public List<UserReportDto> findUserReportDto(Map<String, Object> params) {
+        return gameRecordMapper.findUserReportDto(params);
     }
 
     private BigDecimal keepDecimal(BigDecimal val) {

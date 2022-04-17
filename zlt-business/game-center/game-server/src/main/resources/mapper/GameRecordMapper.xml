@@ -145,4 +145,10 @@
         where a.user_type =#{userType} and a.game_id=#{gameId} and a.table_num=#{tableNum} and a.boot_num=#{bootNum} and a.bureau_num=#{bureauNum}
     </delete>
 
+
+    <select id="findUserReportDto"  resultType="com.central.game.dto.UserReportDto">
+        select g.user_id as userId,IFNULL(SUM(g.validbet),0) as validAmount,IFNULL(SUM(g.win_Loss),0) as winLoss from game_record g
+        <include refid="where" /> GROUP BY g.user_id
+    </select>
+
 </mapper>

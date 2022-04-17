@@ -2,10 +2,7 @@ package com.central.game.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.db.mapper.SuperMapper;
-import com.central.game.dto.GameRecordDto;
-import com.central.game.dto.GameRecordReportDto;
-import com.central.game.dto.HomeHistogramDto;
-import com.central.game.dto.HomePageDto;
+import com.central.game.dto.*;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
@@ -61,4 +58,6 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     List<LivePotVo> getLivePot(@Param("gameId") Long gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 
     void deleteGuestRecordBureauNum(@Param("userType") String userType, @Param("gameId") Long gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
+
+    List<UserReportDto> findUserReportDto(@Param("p") Map<String, Object> params);
 }
