@@ -25,4 +25,6 @@ public interface ISysTansterMoneyLogService extends ISuperService<SysTansterMone
     PageResult<SysTansterMoneyLogVo> findAmountChangeList(SysTansterMoneyPageCo params);
 
     List<UserTansterMoneyDto> findUserTansterMoneyDto(Map<String, Object> params);
+
+     List<SysTansterMoneyLogVo>  findOrderTypeAccountChangeList( String orderType,List<Long> listId);
 }

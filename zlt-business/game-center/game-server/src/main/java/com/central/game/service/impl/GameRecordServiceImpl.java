@@ -694,4 +694,12 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     private BigDecimal keepDecimal(BigDecimal val) {
         return val == null ? BigDecimal.ZERO.setScale(2) : val.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
+    @Override
+    public List<RankingBackstageVo>  findValidBetRankingList(List<Long> listId){
+       return gameRecordMapper.findValidBetRankingList(listId);
+    }
+    @Override
+    public List<RankingBackstageVo>  findWinLossRankingList(){
+        return gameRecordMapper.findWinLossRankingList();
+    }
 }

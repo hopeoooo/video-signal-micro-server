@@ -85,4 +85,20 @@
           GROUP BY s.user_id;
     </select>
 
+
+    <select id="findOrderTypeAccountChangeList" resultType="com.central.common.vo.SysTansterMoneyLogVo">
+        select SUM(t.money) as money,t.user_id as userId,t.order_type as orderType,	t.user_name as userName
+        from sys_tanster_money_log t
+        where
+         t.order_type in (#{orderType})
+        <if test="listId != null and listId != ''">
+            and t.user_id in
+            <foreach  item="item1" collection="listId" index="index"  open="(" separator="," close=")">
+                #{item1}
+            </foreach>
+        </if>
+        GROUP BY t.user_id,t.order_type
+        ORDER BY SUM(t.money) desc  LIMIT 10
+    </select>
+
 </mapper>

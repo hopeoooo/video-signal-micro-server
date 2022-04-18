@@ -32,7 +32,13 @@ public class SysTansterMoneyLogController {
     @Autowired
     private ISysTansterMoneyLogService sysTansterMoneyLogService;
 
-
+    @ApiOperation(value = "根据类型查询账变记录")
+    @GetMapping("/findOrderTypeAccountChangeList")
+    public Result<List<SysTansterMoneyLogVo>> findOrderTypeAccountChangeList(@RequestParam(value ="orderType" ,required = false)String orderType,
+                                                                             @RequestParam(value ="listId", required = false)List<Long> listId) {
+        List<SysTansterMoneyLogVo> list = sysTansterMoneyLogService.findOrderTypeAccountChangeList(orderType,listId);
+        return Result.succeed(list);
+    }
     /**
      * 用户查询
      *

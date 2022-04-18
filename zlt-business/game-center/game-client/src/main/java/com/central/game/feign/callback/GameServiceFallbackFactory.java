@@ -13,8 +13,10 @@ import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.GameRecordBackstageVo;
+import com.central.game.model.vo.RankingBackstageVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -163,6 +165,18 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             public Result<List<UserReportDto>> findUserReportDto(Map<String, Object> params) {
                 log.error("findUserReportDto会员报表失败:{}", params);
                 return Result.failed("会员报表");
+            }
+
+            @Override
+            public Result<List<RankingBackstageVo>> findValidBetRankingList(List<Long> listId) {
+                log.error("findValidBetRankingList查询投注金额排行失败");
+                return Result.failed("查询投注金额排行失败");
+            }
+
+            @Override
+            public Result<List<RankingBackstageVo>> findWinLossRankingList() {
+                log.error("findWinLossRankingList查询盈利金额排行失败");
+                return Result.failed("查询盈利金额排行失败");
             }
         };
     }

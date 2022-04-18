@@ -271,6 +271,11 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
+            public Result<List<SysTansterMoneyLogVo>> findOrderTypeAccountChangeList(String orderType ,List<Long> listId) {
+                log.error("findOrderTypeAccountChangeList error");
+                return Result.failed("查询失败");
+            }
+            @Override
             public Result<List<RoomFollowVo>> clearGuestFollowList(Long userId) {
                 log.error("clearGuestFollowList error,userId={}",userId);
                 return Result.failed("清空关注列表失败");

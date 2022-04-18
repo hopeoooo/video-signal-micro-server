@@ -67,5 +67,9 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
     void syncDeleteGuestRecordBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum);
 
     List<UserReportDto> findUserReportDto(Map<String, Object> params);
+
+     List<RankingBackstageVo>  findValidBetRankingList(List<Long> listId);
+
+     List<RankingBackstageVo>  findWinLossRankingList();
 }
 

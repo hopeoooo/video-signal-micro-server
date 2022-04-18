@@ -44,6 +44,26 @@
         <include refid="where" />
     </select>
 
+    <select id="findValidBetRankingList"  resultType="com.central.game.model.vo.RankingBackstageVo">
+        select g.user_id as userId,g.user_name as userName,IFNULL(SUM(g.validbet),0) as validbet,IFNULL(SUM(win_Loss),0) as winLoss
+        from game_record g
+        <where>
+            <if test="listId != null and listId != ''">
+                and g.user_id in
+                <foreach  item="item" collection="listId" index="index"  open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        GROUP BY g.user_id  ORDER BY SUM(g.validbet) desc   LIMIT 10;
+    </select>
+
+    <select id="findWinLossRankingList"  resultType="com.central.game.model.vo.RankingBackstageVo">
+        select g.user_id as userId,g.user_name as userName,IFNULL(SUM(g.validbet),0) as validbet,IFNULL(SUM(win_Loss),0) as winLoss
+        from game_record g
+        GROUP BY g.user_id  ORDER BY SUM(g.win_Loss) desc   LIMIT 10;
+    </select>
+
     <select id="findGameRecordTotal"  resultType="com.central.game.dto.GameRecordDto">
         SELECT
         IFNULL(SUM(g.bet_amount) ,0) as betAmount,
