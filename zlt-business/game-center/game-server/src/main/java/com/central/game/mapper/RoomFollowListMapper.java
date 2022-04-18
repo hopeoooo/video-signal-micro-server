@@ -1,14 +1,12 @@
-package com.central.user.mapper;
+package com.central.game.mapper;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.central.common.model.SysUserMoney;
 import com.central.db.mapper.SuperMapper;
-import com.central.user.model.RoomFollowList;
+import com.central.game.model.GameRoomList;
+import com.central.game.model.RoomFollowList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 用户钱包表
@@ -18,4 +16,6 @@ import java.util.Map;
  */
 @Mapper
 public interface RoomFollowListMapper extends SuperMapper<RoomFollowList> {
+
+    List<GameRoomList> getRoomFollowList(@Param("userId") Long userId);
 }

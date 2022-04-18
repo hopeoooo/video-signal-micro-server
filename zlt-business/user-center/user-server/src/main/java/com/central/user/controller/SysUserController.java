@@ -203,14 +203,17 @@ public class SysUserController {
     }
 
     @GetMapping(value = "/user/pushOnlineNum")
-    @ApiOperation(value = "socket推送在线人数")
-    public Result pushOnlineNum(){
+    @ApiOperation(value = "socket推送在线人数",hidden = true)
+    public Result pushOnlineNum(@RequestParam("changeNum") Integer changeNum) {
         String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + SecurityConstants.APP_USER_ONLINE + "*";
         Set<String> keySet = redisTemplate.keys(onlineKey);
         int playerSize = keySet.size();
-        PushResult<Integer> pushResult = PushResult.succeed(playerSize, SocketTypeConstant.ONLINE_NUMS,"在线人数推送成功");
+        if (changeNum != null) {
+            playerSize = playerSize + changeNum;
+        }
+        PushResult<Integer> pushResult = PushResult.succeed(playerSize, SocketTypeConstant.ONLINE_NUMS, "在线人数推送成功");
         Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
-        log.info("在线人数消息推送结果:{}",push);
+        log.info("在线人数消息推送结果:{}", push);
         return Result.succeed();
     }
 

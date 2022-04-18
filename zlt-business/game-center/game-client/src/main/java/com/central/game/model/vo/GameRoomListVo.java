@@ -24,6 +24,9 @@ public class GameRoomListVo{
     @TableId(value = "id", type = IdType.INPUT)
     private Long id;
 
+    @ApiModelProperty(value = "房间id")
+    private Long roomId;
+
     @ApiModelProperty(value = "游戏表id")
     private Long gameId;
 

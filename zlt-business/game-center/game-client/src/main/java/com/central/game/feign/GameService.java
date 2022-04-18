@@ -155,12 +155,14 @@ public interface GameService {
     @GetMapping("/gameRecord/findUserReportDto")
     Result<List<UserReportDto>> findUserReportDto(@RequestParam Map<String, Object> params) ;
 
-
     @GetMapping("/gameRecord/findValidBetRankingList")
-     Result<List<RankingBackstageVo>> findValidBetRankingList(@RequestParam(value ="listId", required = false) List<Long> listId);
+    Result<List<RankingBackstageVo>> findValidBetRankingList(@RequestParam(value ="listId", required = false) List<Long> listId);
 
     @GetMapping("/gameRecord/findWinLossRankingList")
-     Result<List<RankingBackstageVo>> findWinLossRankingList();
+    Result<List<RankingBackstageVo>> findWinLossRankingList();
+
+    @GetMapping("/followList/clearGuestFollowList/{userId}")
+    Result clearGuestFollowList(@PathVariable("userId") Long userId);
 
     @GetMapping("/gameRecord/findUserGameReportDto")
     Result<List<UserGameReportDto>> findUserGameReportDto(@RequestParam(value = "userId")Long userId);

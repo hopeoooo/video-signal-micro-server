@@ -68,6 +68,6 @@ public class OauthLogoutSuccessHandler implements LogoutSuccessHandler {
 //		SysUser sysUser = (SysUser) authentication.getPrincipal();
 //		log.info("log out {}",sysUser.getUsername());
 		//推送在线人数
-		userService.pushOnlineNum();
+		userService.pushOnlineNum(0);
 	}
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.central.game.mapper.RoomFollowListMapper">
+
+    <select id="getRoomFollowList" resultType="com.central.game.model.GameRoomList">
+        SELECT b.*
+        FROM room_follow_list a
+        LEFT JOIN game_room_list b
+        ON a.room_id=b.id where a.user_id=#{userId} and b.room_status !=0
+    </select>
+</mapper>

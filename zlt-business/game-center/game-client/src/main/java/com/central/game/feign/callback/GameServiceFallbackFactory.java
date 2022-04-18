@@ -184,6 +184,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
                 log.error("findUserGameReportDto会员游戏报表失败:{}", userId);
                 return Result.failed("会员游戏报表失败");
             }
+
+            @Override
+            public Result clearGuestFollowList(Long userId) {
+                log.error("clearGuestFollowList清空关注列表失败，userId:{}",userId);
+                return Result.failed("清空关注列表失败");
+            }
         };
     }
 }

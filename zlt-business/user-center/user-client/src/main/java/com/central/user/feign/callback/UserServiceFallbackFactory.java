@@ -81,8 +81,8 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result pushOnlineNum() {
-                log.error("pushOnlineNum推送APP在线人数失败");
+            public Result pushOnlineNum(Integer changeNum) {
+                log.error("pushOnlineNum推送APP在线人数失败,changeNum={}",changeNum);
                 return Result.failed("推送APP在线人数失败");
             }
 
@@ -280,11 +280,6 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             public Result<List<SysUser>> findListByIds(List<Long> ids){
                 log.error("findListByIds error");
                 return Result.failed("查询失败");
-            }
-            @Override
-            public Result<List<RoomFollowVo>> clearGuestFollowList(Long userId) {
-                log.error("clearGuestFollowList error,userId={}",userId);
-                return Result.failed("清空关注列表失败");
             }
         };
     }

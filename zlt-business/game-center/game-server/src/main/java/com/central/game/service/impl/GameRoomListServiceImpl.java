@@ -105,9 +105,10 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         for (GameRoomList roomList : gameRoomLists) {
             GameRoomListVo vo = new GameRoomListVo();
             BeanUtils.copyProperties(roomList, vo);
+            vo.setRoomId(roomList.getId());
             vo.setTableNum(roomList.getGameRoomName());
             //桌台状态
-            getRoomStatus(vo);
+            setRoomStatus(vo);
             //桌台中心信息
             GameRoomInfoOffline tableCoreInfo = gameRoomInfoOfflineService.getNewestTableInfo(vo.getGameId(),vo.getTableNum());
             if (tableCoreInfo != null) {
@@ -133,7 +134,8 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         return gameRoomList;
     }
 
-    public void getRoomStatus(GameRoomListVo vo) {
+    @Override
+    public void setRoomStatus(GameRoomListVo vo) {
         //判断桌台维护状态
         if (2 == vo.getRoomStatus()) {
             boolean maintain = DateUtil.isEffectiveDate(new Date(), vo.getMaintainStart(), vo.getMaintainEnd());

@@ -1,4 +1,4 @@
-package com.central.user.controller;
+package com.central.game.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -6,10 +6,11 @@ import com.central.common.annotation.LoginUser;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
-import com.central.game.feign.GameService;
 import com.central.game.model.GameRoomList;
-import com.central.user.model.RoomFollowList;
-import com.central.user.service.IRoomFollowListService;
+import com.central.game.model.RoomFollowList;
+import com.central.game.model.vo.GameRoomListVo;
+import com.central.game.service.IGameRoomListService;
+import com.central.game.service.IRoomFollowListService;
 import com.central.user.model.vo.RoomFollowVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,16 +37,12 @@ public class RoomFollowListController {
     @Autowired
     private IRoomFollowListService roomFollowListService;
     @Autowired
-    private GameService gameService;
+    private IGameRoomListService gameRoomListService;
 
     @ApiOperation(value = "当前登录用户关注、取消关注房间")
     @PostMapping("/addOrRemoveFollow/{roomId}")
     public Result addFollow(@LoginUser SysUser user, @PathVariable("roomId") Long roomId) {
-        Result<GameRoomList> result = gameService.findRoomDetailById(roomId);
-        if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
-            return Result.failed("服务器异常,关注失败");
-        }
-        GameRoomList roomList = result.getDatas();
+        GameRoomList roomList = gameRoomListService.getById(roomId);
         if (roomList == null || roomList.getRoomStatus() == 0) {
             return Result.failed("当前房间不存在或已关闭,操作失败");
         }
@@ -67,38 +64,14 @@ public class RoomFollowListController {
 
     @ApiOperation(value = "当前登录用户查询房间关注列表")
     @GetMapping("/getRoomFollowList")
-    public Result<List<RoomFollowVo>> getRoomFollowList(@LoginUser SysUser user) {
-        List<RoomFollowVo> result = new ArrayList<>();
-        List<RoomFollowList> list = roomFollowListService.lambdaQuery().eq(RoomFollowList::getUserId, user.getId()).orderByDesc(RoomFollowList::getCreateTime).list();
-        if (CollectionUtils.isEmpty(list)) {
-            return Result.succeed(result);
-        }
-        //查询最新的房间状态，禁用的不显示
-        StringJoiner joiner = new StringJoiner(",");
-        for (RoomFollowList room : list) {
-            joiner.add(room.getRoomId().toString());
-        }
-        String roomIds = joiner.toString();
-        Result<List<GameRoomList>> detail = gameService.findRoomDetailByIds(roomIds);
-        if (detail.getResp_code() != CodeEnum.SUCCESS.getCode()) {
-            return Result.failed("服务器异常,查询失败");
-        }
-        for (RoomFollowList followList : list) {
-            for (GameRoomList room : detail.getDatas()) {
-                if (followList.getRoomId() == room.getId() && room.getRoomStatus() != 0) {
-                    RoomFollowVo vo = new RoomFollowVo();
-                    vo.setRoomId(followList.getRoomId());
-                    vo.setGameRoomName(room.getGameRoomName());
-                    result.add(vo);
-                }
-            }
-        }
-        return Result.succeed(result);
+    public Result<List<GameRoomListVo>> getRoomFollowList(@LoginUser SysUser user) {
+        List<GameRoomListVo> roomFollowList = roomFollowListService.getRoomFollowList(user.getId());
+        return Result.succeed(roomFollowList);
     }
 
-    @ApiOperation(value = "清空游客关注列表")
+    @ApiOperation(value = "清空游客关注列表",hidden = true)
     @GetMapping("/clearGuestFollowList/{userId}")
-    public Result<List<RoomFollowVo>> clearGuestFollowList(@PathVariable Long userId) {
+    public Result clearGuestFollowList(@PathVariable Long userId) {
         LambdaQueryWrapper<RoomFollowList> lqw = Wrappers.lambdaQuery();
         lqw.eq(RoomFollowList::getUserId,userId);
         roomFollowListService.remove(lqw);

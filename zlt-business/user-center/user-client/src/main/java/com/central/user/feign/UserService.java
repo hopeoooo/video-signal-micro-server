@@ -74,7 +74,7 @@ public interface UserService {
      * @return
      */
     @GetMapping(value = "/user/pushOnlineNum")
-    Result pushOnlineNum();
+    Result pushOnlineNum(@RequestParam("changeNum") Integer changeNum);
 
     /**
      * 通过手机号查询用户、角色信息
@@ -214,7 +214,4 @@ public interface UserService {
 
     @PostMapping("/users/findListByIds")
     Result<List<SysUser>> findListByIds(@RequestBody List<Long> ids);
-
-    @GetMapping("/followList/clearGuestFollowList/{userId}")
-    Result<List<RoomFollowVo>> clearGuestFollowList(@PathVariable("userId") Long userId);
 }

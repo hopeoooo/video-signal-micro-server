@@ -1,4 +1,4 @@
-package com.central.user.model;
+package com.central.game.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.central.common.model.SuperEntity;
