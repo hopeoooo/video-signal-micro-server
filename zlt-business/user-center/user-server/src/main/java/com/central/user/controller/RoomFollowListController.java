@@ -95,4 +95,13 @@ public class RoomFollowListController {
         }
         return Result.succeed(result);
     }
+
+    @ApiOperation(value = "清空游客关注列表")
+    @GetMapping("/clearGuestFollowList/{userId}")
+    public Result<List<RoomFollowVo>> clearGuestFollowList(@PathVariable Long userId) {
+        LambdaQueryWrapper<RoomFollowList> lqw = Wrappers.lambdaQuery();
+        lqw.eq(RoomFollowList::getUserId,userId);
+        roomFollowListService.remove(lqw);
+        return Result.succeed();
+    }
 }

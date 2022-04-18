@@ -270,6 +270,11 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("updateSysUser error");
             }
 
+            @Override
+            public Result<List<RoomFollowVo>> clearGuestFollowList(Long userId) {
+                log.error("clearGuestFollowList error,userId={}",userId);
+                return Result.failed("清空关注列表失败");
+            }
         };
     }
 }

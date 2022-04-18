@@ -1,6 +1,7 @@
 package com.central.oauth.component;
 
 import com.central.common.model.LoginAppUser;
+import com.central.common.model.UserType;
 import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.oauth.utils.IpUtil;
 import com.central.user.feign.UserService;
@@ -35,6 +36,10 @@ public class ApplicationListenerAuthencationSuccess implements ApplicationListen
                 log.info("登陆成功 AuthenticationSuccessEvent： {}, {}", loginAppUser.getUsername(), loginAppUser.getType());
                 processLoginInfoService.processLoginInfo(loginAppUser,getLoginIp());
                 userService.pushOnlineNum();
+                //清空游客关注记录
+                if (UserType.APP_GUEST.name().equals(loginAppUser.getType())){
+                    userService.clearGuestFollowList(loginAppUser.getId());
+                }
             }
         }
     }

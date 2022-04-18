@@ -207,4 +207,7 @@ public interface UserService {
 
     @PutMapping("/users")
     void updateSysUser(@RequestBody SysUser sysUser);
+
+    @GetMapping("/followList/clearGuestFollowList/{userId}")
+    Result<List<RoomFollowVo>> clearGuestFollowList(@PathVariable("userId") Long userId);
 }
