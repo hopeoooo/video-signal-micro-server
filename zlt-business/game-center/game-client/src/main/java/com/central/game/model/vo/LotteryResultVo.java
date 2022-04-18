@@ -11,7 +11,7 @@ import java.util.List;
 public class LotteryResultVo {
 
     @ApiModelProperty(value = "游戏ID")
-    private String gameId;
+    private Long gameId;
 
     @ApiModelProperty(value = "游戏名称")
     private String gameName;
