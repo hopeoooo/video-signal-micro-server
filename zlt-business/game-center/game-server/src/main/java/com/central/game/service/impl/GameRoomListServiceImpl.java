@@ -106,6 +106,8 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
             GameRoomListVo vo = new GameRoomListVo();
             BeanUtils.copyProperties(roomList, vo);
             vo.setTableNum(roomList.getGameRoomName());
+            //桌台状态
+            getRoomStatus(vo);
             //桌台中心信息
             GameRoomInfoOffline tableCoreInfo = gameRoomInfoOfflineService.getNewestTableInfo(vo.getGameId(),vo.getTableNum());
             if (tableCoreInfo != null) {
@@ -131,15 +133,20 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         return gameRoomList;
     }
 
-    public void getTableCoreInfo(GameRoomListVo vo, GameRoomInfoOffline tableCoreInfo) {
+    public void getRoomStatus(GameRoomListVo vo) {
         //判断桌台维护状态
         if (2 == vo.getRoomStatus()) {
             boolean maintain = DateUtil.isEffectiveDate(new Date(), vo.getMaintainStart(), vo.getMaintainEnd());
             //当前时间不在维护时间区间内属于正常状态
             if (!maintain) {
                 vo.setRoomStatus(1);
+                vo.setMaintainStart(null);
+                vo.setMaintainEnd(null);
             }
         }
+    }
+
+    public void getTableCoreInfo(GameRoomListVo vo, GameRoomInfoOffline tableCoreInfo) {
         vo.setBootNum(tableCoreInfo.getBootNum());
         vo.setBureauNum(tableCoreInfo.getBureauNum());
         vo.setSecond(tableCoreInfo.getSecond());
