@@ -60,6 +60,11 @@ public class WashCodeConsumer {
             log.info("洗码有效投注额为空，或小于0不计算,record={}", record.toString());
             return;
         }
+        //判断是否已经处理过，防止重复计算
+        GameRecordSon gameRecordSonOld = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, record.getId()).eq(GameRecordSon::getWashCodeStatus, 1).one();
+        if (gameRecordSonOld != null) {
+            return;
+        }
         //查询最新的洗码返水配置
         Result<List<UserWashCodeConfig>> codeConfigResult = userService.findUserWashCodeConfigList(record.getUserId());
         if (codeConfigResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {

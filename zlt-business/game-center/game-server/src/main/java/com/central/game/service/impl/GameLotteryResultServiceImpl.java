@@ -81,6 +81,11 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
         //计算每笔注单的派彩金额和输赢值
         String result = lotteryResult.getResult();
         for (GameRecord record : gameRecordList) {
+            //判断是否已经处理过，防止重复计算
+            GameRecordSon gameRecordSon = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, record.getId()).eq(GameRecordSon::getAddMoneyStatus, 1).one();
+            if (gameRecordSon != null) {
+                continue;
+            }
             BigDecimal betAmount = record.getBetAmount();
             record.setGameResult(result);
             record.setGameResultName(lotteryResult.getResultName());
