@@ -161,4 +161,7 @@ public interface GameService {
 
     @GetMapping("/gameRecord/findWinLossRankingList")
      Result<List<RankingBackstageVo>> findWinLossRankingList();
+
+    @GetMapping("/gameRecord/findUserGameReportDto")
+    Result<List<UserGameReportDto>> findUserGameReportDto(@RequestParam(value = "userId")Long userId);
 }

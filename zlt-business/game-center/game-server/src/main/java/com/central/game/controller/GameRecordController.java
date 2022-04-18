@@ -151,6 +151,14 @@ public class GameRecordController {
     }
 
     @ResponseBody
+    @ApiOperation(value = "会员游戏报表")
+    @GetMapping("/findUserGameReportDto")
+    public Result<List<UserGameReportDto>> findUserGameReportDto(@RequestParam(value = "userId")Long userId){
+        List<UserGameReportDto> userGameReportDto = gameRecordService.findUserGameReportDto(userId);
+        return Result.succeed(userGameReportDto);
+    }
+
+    @ResponseBody
     @ApiOperation(value = "admin首页柱状图查询")
     @GetMapping("/findHomeHistogramDto")
     @ApiImplicitParams({

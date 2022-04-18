@@ -209,8 +209,9 @@ public interface UserService {
     @PutMapping("/users")
     void updateSysUser(@RequestBody SysUser sysUser);
 
-
-
     @GetMapping("/sysTansterMoney/findOrderTypeAccountChangeList")
     Result<List<SysTansterMoneyLogVo>> findOrderTypeAccountChangeList(@RequestParam(value ="orderType", required = false) String orderType,@RequestParam(value ="listId", required = false) List<Long> listId) ;
+
+    @PostMapping("/users/findListByIds")
+    Result<List<SysUser>> findListByIds(@RequestBody List<Long> ids);
 }

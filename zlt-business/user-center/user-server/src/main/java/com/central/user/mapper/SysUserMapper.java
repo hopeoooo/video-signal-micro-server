@@ -27,4 +27,6 @@ public interface SysUserMapper extends SuperMapper<SysUser> {
     List<SysUser> findList(Page<SysUser> page, @Param("u") SysUserListCo params);
 
     Integer findUserNum(@Param("p") Map<String, Object> params);
+
+    List<SysUser> findListByIds(@Param("ids")List<Long> ids);
 }

@@ -140,4 +140,6 @@ public interface ISysUserService extends ISuperService<SysUser> {
 	Result updateVerify(Long id);
 
 	Integer findUserNum(@Param("p") Map<String, Object> params);
+
+	List<SysUser> findListByIds(List<Long> ids);
 }
