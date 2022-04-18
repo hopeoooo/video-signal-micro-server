@@ -67,4 +67,22 @@
         order by t.id desc
     </select>
 
+    <select id="findUserTansterMoneyDto" resultType="com.central.user.dto.UserTansterMoneyDto">
+        select IFNULL(SUM(s.money),0) as money,s.user_id as userId
+        from sys_tanster_money_log s
+        <where>
+            <if test="p.orderType != null">
+                and s.order_type = #{p.orderType}
+            </if>
+            <if test="p.startTime != null and p.startTime != ''">
+                and s.create_time <![CDATA[>=]]> #{p.startTime}
+            </if>
+
+            <if test="p.endTime != null and p.endTime != ''">
+                and s.create_time <![CDATA[<=]]> #{p.endTime}
+            </if>
+        </where>
+          GROUP BY s.user_id;
+    </select>
+
 </mapper>

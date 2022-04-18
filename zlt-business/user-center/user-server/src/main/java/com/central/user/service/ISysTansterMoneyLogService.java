@@ -5,6 +5,7 @@ import com.central.common.model.Result;
 import com.central.common.model.SysTansterMoneyLog;
 import com.central.common.service.ISuperService;
 import com.central.common.vo.SysTansterMoneyLogVo;
+import com.central.user.dto.UserTansterMoneyDto;
 import com.central.user.model.co.SysTansterMoneyPageCo;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface ISysTansterMoneyLogService extends ISuperService<SysTansterMone
     List<SysTansterMoneyLogVo> findAllByParent(SysTansterMoneyPageCo params);
 
     PageResult<SysTansterMoneyLogVo> findAmountChangeList(SysTansterMoneyPageCo params);
+
+    List<UserTansterMoneyDto> findUserTansterMoneyDto(Map<String, Object> params);
 }

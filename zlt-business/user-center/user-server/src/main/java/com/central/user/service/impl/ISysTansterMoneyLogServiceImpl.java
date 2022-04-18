@@ -7,6 +7,7 @@ import com.central.common.model.SysTansterMoneyLog;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
 import com.central.common.vo.SysTansterMoneyLogVo;
+import com.central.user.dto.UserTansterMoneyDto;
 import com.central.user.mapper.SysTansterMoneyLogMapper;
 import com.central.user.model.co.SysTansterMoneyPageCo;
 import com.central.user.service.ISysTansterMoneyLogService;
@@ -76,5 +77,10 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
         params.setEndTime(endTime);
         PageResult<SysTansterMoneyLogVo> sysTansterMoneyList = findSysTansterMoneyList(params);
         return sysTansterMoneyList;
+    }
+
+    @Override
+    public List<UserTansterMoneyDto> findUserTansterMoneyDto(Map<String, Object> params) {
+        return baseMapper.findUserTansterMoneyDto(params);
     }
 }

@@ -3,10 +3,7 @@ package com.central.game.feign;
 import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.game.dto.GameRecordDto;
-import com.central.game.dto.GameRecordReportDto;
-import com.central.game.dto.HomeHistogramDto;
-import com.central.game.dto.HomePageDto;
+import com.central.game.dto.*;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.*;
@@ -153,4 +150,7 @@ public interface GameService {
 
     @GetMapping("/gameRecord/findHomeHistogramDto")
     Result<HomeHistogramDto> findHomeHistogramDto(@RequestParam Map<String, Object> params) ;
+
+    @GetMapping("/gameRecord/findUserReportDto")
+    Result<List<UserReportDto>> findUserReportDto(@RequestParam Map<String, Object> params) ;
 }
