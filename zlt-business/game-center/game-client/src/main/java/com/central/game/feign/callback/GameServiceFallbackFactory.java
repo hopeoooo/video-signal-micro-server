@@ -178,6 +178,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
                 log.error("findWinLossRankingList查询盈利金额排行失败");
                 return Result.failed("查询盈利金额排行失败");
             }
+
+            @Override
+            public Result<List<UserGameReportDto>> findUserGameReportDto(Long userId) {
+                log.error("findUserGameReportDto会员游戏报表失败:{}", userId);
+                return Result.failed("会员游戏报表失败");
+            }
         };
     }
 }

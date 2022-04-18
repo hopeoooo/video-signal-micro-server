@@ -71,5 +71,7 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
      List<RankingBackstageVo>  findValidBetRankingList(List<Long> listId);
 
      List<RankingBackstageVo>  findWinLossRankingList();
+
+    List<UserGameReportDto> findUserGameReportDto(Long userId);
 }
 

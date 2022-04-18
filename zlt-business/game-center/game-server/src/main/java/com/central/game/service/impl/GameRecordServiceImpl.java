@@ -702,4 +702,9 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     public List<RankingBackstageVo>  findWinLossRankingList(){
         return gameRecordMapper.findWinLossRankingList();
     }
+
+    @Override
+    public List<UserGameReportDto> findUserGameReportDto(Long userId) {
+        return gameRecordMapper.findUserGameReportDto(userId);
+    }
 }

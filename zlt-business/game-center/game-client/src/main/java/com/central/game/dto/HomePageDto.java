@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 public class HomePageDto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 6845823678855379L;
 
     @ApiModelProperty(value = "有效投注")
     private BigDecimal validbet;

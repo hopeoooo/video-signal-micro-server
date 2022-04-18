@@ -84,4 +84,12 @@
 			</if>
 		</where>;
 	</select>
+
+	<select id="findListByIds" resultType="com.central.common.model.SysUser">
+		select t.* from sys_user t
+		where t.id in
+		<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
 </mapper>

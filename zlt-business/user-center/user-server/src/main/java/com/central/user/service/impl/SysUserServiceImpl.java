@@ -317,6 +317,11 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
         return baseMapper.findUserNum(params);
     }
 
+    @Override
+    public List<SysUser> findListByIds(List<Long> ids) {
+        return baseMapper.findListByIds(ids);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Result saveOrUpdateUser(SysUser sysUser) throws Exception {

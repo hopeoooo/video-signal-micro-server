@@ -576,4 +576,14 @@ public class SysUserController {
     private boolean checkAdmin(long id) {
         return id == 1L;
     }
+
+    @ApiOperation(value = "根据ids,查询用户")
+    @PostMapping("/users/findListByIds")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "ids", value = "用户id", required = true)
+    })
+    public Result<List<SysUser>> findListByIds(@RequestBody List<Long> ids) {
+        List<SysUser> listByIds = appUserService.findListByIds(ids);
+        return Result.succeed(listByIds);
+    }
 }

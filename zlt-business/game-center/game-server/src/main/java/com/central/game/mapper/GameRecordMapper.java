@@ -64,4 +64,6 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     List<RankingBackstageVo>  findValidBetRankingList(@Param("listId")List<Long> listId);
 
     List<RankingBackstageVo>  findWinLossRankingList();
+
+    List<UserGameReportDto> findUserGameReportDto(@Param("userId") Long userId);
 }
