@@ -60,4 +60,8 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     void deleteGuestRecordBureauNum(@Param("userType") String userType, @Param("gameId") Long gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 
     List<UserReportDto> findUserReportDto(@Param("p") Map<String, Object> params);
+
+    List<RankingBackstageVo>  findValidBetRankingList(@Param("listId")List<Long> listId);
+
+    List<RankingBackstageVo>  findWinLossRankingList();
 }

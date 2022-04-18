@@ -215,4 +215,22 @@ public class GameRecordController {
         List<UserReportDto> userReportDtos = gameRecordService.findUserReportDto(params);
         return Result.succeed(userReportDtos);
     }
+
+
+    @ApiOperation(value = "投注金额排行")
+    @GetMapping("/findValidBetRankingList")
+    public Result<List<RankingBackstageVo>> findValidBetRankingList(@RequestParam(value ="listId", required = false) List<Long> listId) {
+        List<RankingBackstageVo> validBetRankingList = gameRecordService.findValidBetRankingList(listId);
+        return Result.succeed(validBetRankingList);
+    }
+
+
+
+    @ApiOperation(value = "盈利金额排行")
+    @GetMapping("/findWinLossRankingList")
+    public Result<List<RankingBackstageVo>> findWinLossRankingList() {
+        List<RankingBackstageVo> validBetRankingList = gameRecordService.findWinLossRankingList();
+        return Result.succeed(validBetRankingList);
+    }
+
 }

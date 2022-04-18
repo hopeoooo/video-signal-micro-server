@@ -21,4 +21,6 @@ public interface SysTansterMoneyLogMapper extends SuperMapper<SysTansterMoneyLog
     List<SysTansterMoneyLogVo> findAllByParent(@Param("u") SysTansterMoneyPageCo params);
 
     List<UserTansterMoneyDto> findUserTansterMoneyDto(@Param("p") Map<String, Object> params);
+
+    List<SysTansterMoneyLogVo>  findOrderTypeAccountChangeList( @Param("orderType") String orderType, @Param("listId")List<Long> listId);
 }

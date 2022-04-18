@@ -10,6 +10,7 @@ import com.central.user.feign.callback.UserServiceFallbackFactory;
 import com.central.user.model.vo.RoomFollowVo;
 import com.central.user.model.vo.SysUserMoneyVo;
 import com.central.user.model.vo.UserInfoVo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
@@ -207,4 +208,9 @@ public interface UserService {
 
     @PutMapping("/users")
     void updateSysUser(@RequestBody SysUser sysUser);
+
+
+
+    @GetMapping("/sysTansterMoney/findOrderTypeAccountChangeList")
+    Result<List<SysTansterMoneyLogVo>> findOrderTypeAccountChangeList(@RequestParam(value ="orderType", required = false) String orderType,@RequestParam(value ="listId", required = false) List<Long> listId) ;
 }

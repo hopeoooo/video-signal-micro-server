@@ -14,6 +14,7 @@ import com.central.game.feign.callback.GameServiceFallbackFactory;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.GameRecordBackstageVo;
+import com.central.game.model.vo.RankingBackstageVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
@@ -153,4 +154,11 @@ public interface GameService {
 
     @GetMapping("/gameRecord/findUserReportDto")
     Result<List<UserReportDto>> findUserReportDto(@RequestParam Map<String, Object> params) ;
+
+
+    @GetMapping("/gameRecord/findValidBetRankingList")
+     Result<List<RankingBackstageVo>> findValidBetRankingList(@RequestParam(value ="listId", required = false) List<Long> listId);
+
+    @GetMapping("/gameRecord/findWinLossRankingList")
+     Result<List<RankingBackstageVo>> findWinLossRankingList();
 }

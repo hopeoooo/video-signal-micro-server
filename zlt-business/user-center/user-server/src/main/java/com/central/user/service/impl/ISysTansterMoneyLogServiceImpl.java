@@ -7,13 +7,16 @@ import com.central.common.model.SysTansterMoneyLog;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
 import com.central.common.vo.SysTansterMoneyLogVo;
+import com.central.user.mapper.OnlineUserMapper;
 import com.central.user.dto.UserTansterMoneyDto;
 import com.central.user.mapper.SysTansterMoneyLogMapper;
 import com.central.user.model.co.SysTansterMoneyPageCo;
 import com.central.user.service.ISysTansterMoneyLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +27,8 @@ import java.util.Map;
 @Slf4j
 @Service
 public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterMoneyLogMapper, SysTansterMoneyLog> implements ISysTansterMoneyLogService {
-
+    @Autowired
+    private SysTansterMoneyLogMapper tansterMoneyLogMapper;
     /**
      * 查询会员账变记录
      *
@@ -83,4 +87,11 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
     public List<UserTansterMoneyDto> findUserTansterMoneyDto(Map<String, Object> params) {
         return baseMapper.findUserTansterMoneyDto(params);
     }
+
+
+    @Override
+    public  List<SysTansterMoneyLogVo>  findOrderTypeAccountChangeList( String orderType,List<Long> listId){
+      return   tansterMoneyLogMapper.findOrderTypeAccountChangeList(orderType,listId);
+    }
+
 }
