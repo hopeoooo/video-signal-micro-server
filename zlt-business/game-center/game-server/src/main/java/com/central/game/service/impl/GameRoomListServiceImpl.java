@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.redis.constant.RedisKeyConstant;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.common.utils.DateUtil;
 import com.central.game.constants.PlayEnum;
 import com.central.game.mapper.GameRoomListMapper;
 import com.central.game.model.GameLotteryResult;
@@ -108,11 +109,8 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
             //桌台中心信息
             GameRoomInfoOffline tableCoreInfo = gameRoomInfoOfflineService.getNewestTableInfo(vo.getGameId(),vo.getTableNum());
             if (tableCoreInfo != null) {
-                vo.setBootNum(tableCoreInfo.getBootNum());
-                vo.setBureauNum(tableCoreInfo.getBureauNum());
-                vo.setSecond(tableCoreInfo.getSecond());
-                vo.setCurrentSecond(tableCoreInfo.getCurrentSecond());
-                vo.setStatus(tableCoreInfo.getStatus());
+                //中心区域信息
+                getTableCoreInfo(vo,tableCoreInfo);
                 //桌台上部分信息
                 getTableUpInfo(vo);
                 //桌台下部分信息
@@ -131,6 +129,22 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         lqw.eq(GameRoomList::getGameRoomName, gameRoomName);
         GameRoomList gameRoomList = gameRoomListMapper.selectOne(lqw);
         return gameRoomList;
+    }
+
+    public void getTableCoreInfo(GameRoomListVo vo, GameRoomInfoOffline tableCoreInfo) {
+        //判断桌台维护状态
+        if (2 == vo.getRoomStatus()) {
+            boolean maintain = DateUtil.isEffectiveDate(new Date(), vo.getMaintainStart(), vo.getMaintainEnd());
+            //当前时间不在维护时间区间内属于正常状态
+            if (!maintain) {
+                vo.setRoomStatus(1);
+            }
+        }
+        vo.setBootNum(tableCoreInfo.getBootNum());
+        vo.setBureauNum(tableCoreInfo.getBureauNum());
+        vo.setSecond(tableCoreInfo.getSecond());
+        vo.setCurrentSecond(tableCoreInfo.getCurrentSecond());
+        vo.setStatus(tableCoreInfo.getStatus());
     }
 
     public void getTableUpInfo(GameRoomListVo vo) {

@@ -156,4 +156,8 @@ public interface CommonConstant {
     String PLAYER_ACCOUNT_QUEUE = "player_acc_list";
 
     public String REDIS_WEBAPP = "webApp:";
+
+    Integer OPEN = 1;
+
+    Integer CLOSE = 0;
 }

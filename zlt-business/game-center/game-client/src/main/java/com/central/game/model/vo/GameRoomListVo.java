@@ -33,6 +33,14 @@ public class GameRoomListVo{
     @ApiModelProperty(value = "游戏桌号状态 0禁用，1：正常，2：维护")
     private Integer roomStatus;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty(value = "维护开始时间")
+    private Date maintainStart;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ApiModelProperty(value = "维护结束时间")
+    private Date maintainEnd;
+
     @ApiModelProperty(value = "桌台编号")
     private String tableNum;
 
