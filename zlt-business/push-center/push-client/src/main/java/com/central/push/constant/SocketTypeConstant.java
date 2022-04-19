@@ -58,5 +58,10 @@ public interface SocketTypeConstant {
      */
     String UPDATE_TABLE_STATUS = "updateTableStatus";
 
+    /**
+     * 桌台用户分组信息
+     */
+    String TABLE_GROUP_USER = "tableGroupUser";
+
 
 }

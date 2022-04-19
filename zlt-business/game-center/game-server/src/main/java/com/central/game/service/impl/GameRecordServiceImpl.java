@@ -159,7 +159,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                             if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
                                 gameRecordMapper.updateById(record);
                                 //汇总新增的下注额
-                                newAddBetList.add(getLivePotVo(userName, betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
+                                newAddBetList.add(getLivePotVo(user, betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
                             } else {
                                 log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
                             }
@@ -176,7 +176,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                         if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
                             gameRecordMapper.insert(record);
                             //汇总新增的下注额
-                            newAddBetList.add(getLivePotVo(userName, betDataCo.getBetCode(), betDataCo.getBetName(), record.getBetAmount(), 1));
+                            newAddBetList.add(getLivePotVo(user, betDataCo.getBetCode(), betDataCo.getBetName(), record.getBetAmount(), 1));
                         } else {
                             log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
                         }
@@ -190,6 +190,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         }
         //异步推送新增 投注记录
         pushGameDataToClientService.syncLivePot(newAddLivePotVo);
+        //异步推送虚拟分组用户最新余额
+        pushGameDataToClientService.syncTableNumGroup(newAddLivePotVo);
         return Result.succeed(newAddBetList);
     }
 
@@ -215,9 +217,10 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
 
-    public LivePotVo getLivePotVo(String userName, String betDataCo, String betName, BigDecimal newAddBetAmount, Integer onlineNum) {
+    public LivePotVo getLivePotVo(SysUser user, String betDataCo, String betName, BigDecimal newAddBetAmount, Integer onlineNum) {
         LivePotVo livePotVo = new LivePotVo();
-        livePotVo.setUserName(userName);
+        livePotVo.setUserId(user.getId());
+        livePotVo.setUserName(user.getUsername());
         livePotVo.setBetCode(betDataCo);
         livePotVo.setBetName(betName);
         livePotVo.setBetAmount(newAddBetAmount);

@@ -19,4 +19,6 @@ public interface IPushGameDataToClientService {
     void syncPushGameRoomInfo(GameRoomInfoOffline po);
 
     void syncPushGameRoomStatus(GameRoomList po);
+
+    void syncTableNumGroup(NewAddLivePotVo newAddLivePotVo);
 }

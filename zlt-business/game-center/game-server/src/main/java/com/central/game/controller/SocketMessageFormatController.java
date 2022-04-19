@@ -5,6 +5,7 @@ import com.central.common.model.Result;
 import com.central.game.model.GameRecord;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
+import com.central.game.model.vo.GameRoomGroupUserVo;
 import com.central.game.model.vo.LotteryResultVo;
 import com.central.game.model.vo.NewAddLivePotVo;
 import com.central.game.model.vo.PayoutResultVo;
@@ -12,6 +13,7 @@ import com.central.push.constant.SocketTypeConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,6 +66,14 @@ public class SocketMessageFormatController {
     public PushResult<GameRoomList> getTableStatus() {
         GameRoomList po = new GameRoomList();
         PushResult<GameRoomList> pushResult = PushResult.succeed(po, SocketTypeConstant.UPDATE_TABLE_STATUS, "后台修改桌台状态信息推送成功");
+        return pushResult;
+    }
+
+    @ApiOperation(value = "桌台虚拟分组用户余额变化时Socket数据格式")
+    @GetMapping("/getTableGroupUser")
+    public PushResult<GameRoomGroupUserVo> getTableGroupUser() {
+        GameRoomGroupUserVo po = new GameRoomGroupUserVo();
+        PushResult<GameRoomGroupUserVo> pushResult = PushResult.succeed(po, SocketTypeConstant.TABLE_GROUP_USER, "桌台用户余额信息推送成功");
         return pushResult;
     }
 

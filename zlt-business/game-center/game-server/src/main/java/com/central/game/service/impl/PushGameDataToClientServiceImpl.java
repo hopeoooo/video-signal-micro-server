@@ -1,25 +1,28 @@
 package com.central.game.service.impl;
 
+import com.central.common.model.CodeEnum;
 import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.common.redis.template.RedisRepository;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
-import com.central.game.model.vo.LotteryResultVo;
-import com.central.game.model.vo.NewAddLivePotVo;
-import com.central.game.model.vo.PayoutResultVo;
+import com.central.game.model.vo.*;
 import com.central.game.service.IGameRecordService;
 import com.central.game.service.IPushGameDataToClientService;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
+import com.central.user.feign.UserService;
+import com.central.user.model.vo.SysUserInfoMoneyVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -29,7 +32,7 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     @Autowired
     private PushService pushService;
     @Autowired
-    private RedisRepository redisRepository;
+    private UserService userService;
     @Autowired
     @Lazy
     private IGameRecordService gameRecordService;
@@ -100,5 +103,29 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
         PushResult<GameRoomList> pushResult = PushResult.succeed(po, SocketTypeConstant.UPDATE_TABLE_STATUS, "后台修改桌台状态信息推送成功");
         Result<String> hallPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("大厅桌台配置信息推送结果,result={}", hallPush);
+    }
+
+    @Override
+    @Async
+    public void syncTableNumGroup(NewAddLivePotVo newAddLivePotVo) {
+        List<LivePotVo> betResult = newAddLivePotVo.getBetResult();
+        if (CollectionUtils.isEmpty(betResult)) {
+            return;
+        }
+        List<Long> userIdList = new ArrayList<>();
+        userIdList.add(betResult.get(0).getUserId());
+        Result<List<SysUserInfoMoneyVo>> userResult = userService.findListByUserIdList(userIdList);
+        if (userResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            return;
+        }
+        List<SysUserInfoMoneyVo> userResultData = userResult.getDatas();
+        SysUserInfoMoneyVo sysUserInfoMoneyVo = userResultData.get(0);
+        GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
+        BeanUtils.copyProperties(sysUserInfoMoneyVo, vo);
+        String groupId = newAddLivePotVo.getGameId() + "-" + newAddLivePotVo.getTableNum();
+        PushResult<GameRoomGroupUserVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.TABLE_GROUP_USER, "桌台用户余额信息推送成功");
+        //推送下注界面
+        Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+        log.info("下注界面桌台用户余额信息推送推送结果:groupId={},result={}", groupId, push);
     }
 }

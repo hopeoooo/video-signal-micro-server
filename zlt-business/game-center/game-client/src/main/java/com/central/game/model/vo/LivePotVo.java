@@ -12,6 +12,10 @@ import java.math.BigDecimal;
 @Data
 public class LivePotVo {
 
+    @ApiModelProperty(value = "用户ID", hidden = true)
+    @JsonIgnore
+    private Long userId;
+
     @ApiModelProperty(value = "用户名", hidden = true)
     @JsonIgnore
     private String userName;
