@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.central.game.mapper.GameRoomGroupUserMapper">
+
+    <select id="getNotFullGroup" resultType="Long">
+        SELECT a.id FROM game_room_group a
+        LEFT JOIN game_room_group_user b ON a.id=b.group_id
+        WHERE a.game_id=#{gameId} AND a.table_num=#{tableNum}
+        GROUP BY b.group_id HAVING count(1) &lt; 7
+    </select>
+
+    <select id="checkExist" resultType="com.central.game.model.GameRoomGroupUser">
+        SELECT a.* from game_room_group_user a
+        LEFT JOIN game_room_group b on a.group_id = b.id
+        where b.game_id=#{gameId} and b.table_num=#{tableNum} and a.user_id=#{userId}
+    </select>
+</mapper>
