@@ -1,9 +1,13 @@
 package com.central.platform.backend.controller;
 
 import com.central.common.model.Result;
+import com.central.game.dto.GameRecordReportDto;
 import com.central.game.dto.HomeHistogramDto;
 import com.central.game.dto.HomePageDto;
 import com.central.game.feign.GameService;
+import com.central.game.model.vo.OperatingOverviewVo;
+import com.central.game.model.vo.RankingBackstageVo;
+import com.central.platform.backend.model.dto.SiteDataReportDto;
 import com.central.platform.backend.model.vo.HomeHistogramVo;
 import com.central.platform.backend.model.vo.HomePageVo;
 import com.central.platform.backend.util.DateUtil;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -100,4 +105,32 @@ public class HomePageController {
         homeHistogramVos.add(validbet);
         return Result.succeed(homeHistogramVos);
     }
+
+    @ApiOperation(value = "运营概览")
+    @GetMapping("/operatingOverview")
+    public Result<Map<String, OperatingOverviewVo>> operatingOverview() {
+        //充值人数，首冲人数，注册人数
+        Map<String,OperatingOverviewVo> map = new HashMap<>();
+        map.put("today",getSiteDataReportDto(DateUtil.getToday()));
+        map.put("yesterday",getSiteDataReportDto(DateUtil.getYesterday()));
+        map.put("week",getSiteDataReportDto(DateUtil.getWeek()));
+        map.put("lastWeek",getSiteDataReportDto(DateUtil.getLastWeek()));
+        map.put("month",getSiteDataReportDto(DateUtil.getMonth()));
+        map.put("lastMonth",getSiteDataReportDto(DateUtil.getLastMonth()));
+        map.put("nearlyTwoMonths",getSiteDataReportDto(DateUtil.getNearlyTwoMonths()));
+        return Result.succeed(map);
+    }
+
+    private OperatingOverviewVo getSiteDataReportDto(Map<String, Object> map) {
+        //充值首充人数暂时没有
+        //充值 提现暂时没有
+        OperatingOverviewVo overviewVo = new OperatingOverviewVo();
+        Result<GameRecordReportDto> validbetTotal = gameService.findValidbetTotal(map);
+        overviewVo.setValidbet(validbetTotal.getDatas().getAmount());
+        overviewVo.setValidbetNum(validbetTotal.getDatas().getNum());
+        overviewVo.setWinLoss(validbetTotal.getDatas().getProfit());
+        return overviewVo;
+    }
+
+
 }

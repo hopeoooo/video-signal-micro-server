@@ -13,4 +13,7 @@ public class GameRecordReportDto {
 
     @ApiModelProperty(value = "人数")
     private Integer num;
+
+    @ApiModelProperty(value = "投注盈亏")
+    private BigDecimal profit;
 }
