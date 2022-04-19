@@ -186,6 +186,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
+            public Result removeTableNumGroup(String userName) {
+                log.error("removeTableNumGroup删除桌台用户失败，userName:{}",userName);
+                return Result.failed("删除桌台用户失败");
+            }
+
+            @Override
             public Result clearGuestFollowList(Long userId) {
                 log.error("clearGuestFollowList清空关注列表失败，userId:{}",userId);
                 return Result.failed("清空关注列表失败");

@@ -22,4 +22,7 @@ public class GameRoomGroupUser extends SuperEntity {
 
     @ApiModelProperty(value = "用户ID")
     private Long userId;
+
+    @ApiModelProperty(value = "用户名")
+    private String userName;
 }

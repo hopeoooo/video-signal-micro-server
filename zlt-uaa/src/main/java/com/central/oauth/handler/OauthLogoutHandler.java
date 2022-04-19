@@ -1,6 +1,7 @@
 package com.central.oauth.handler;
 
 import cn.hutool.core.util.StrUtil;
+import com.central.oauth.service.ILogoutSuccessService;
 import com.central.oauth.utils.UsernameHolder;
 import com.central.oauth2.common.properties.SecurityProperties;
 import com.central.oauth2.common.util.AuthUtils;
@@ -33,6 +34,9 @@ public class OauthLogoutHandler implements LogoutHandler {
 	@Resource
 	private SecurityProperties securityProperties;
 
+	@Autowired
+	private ILogoutSuccessService logoutSuccessService;
+
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 		Assert.notNull(tokenStore, "tokenStore must be set");
@@ -44,6 +48,7 @@ public class OauthLogoutHandler implements LogoutHandler {
 			if (securityProperties.getAuth().getUnifiedLogout()) {
 				OAuth2Authentication oAuth2Authentication = tokenStore.readAuthentication(token);
 				UsernameHolder.setContext(oAuth2Authentication.getName());
+				logoutSuccessService.removeTableNumGroup(oAuth2Authentication.getName());
 			}
 
 			OAuth2AccessToken existingAccessToken = tokenStore.readAccessToken(token);

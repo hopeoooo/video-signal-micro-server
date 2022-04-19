@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.game.mapper.GameRoomGroupUserMapper;
 import com.central.game.model.GameRoomGroup;
@@ -11,6 +12,7 @@ import com.central.game.model.GameRoomGroupUser;
 import com.central.game.model.vo.GameRoomGroupUserVo;
 import com.central.game.service.IGameRoomGroupService;
 import com.central.game.service.IGameRoomGroupUserService;
+import com.central.game.service.IPushGameDataToClientService;
 import com.central.user.feign.UserService;
 import com.central.user.model.vo.SysUserInfoMoneyVo;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,8 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
     private IGameRoomGroupService gameRoomGroupService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private IPushGameDataToClientService pushGameDataToClientService;
 
     @Override
     public List<Long> getNotFullGroup(Long gameId, String tableNum) {
@@ -44,9 +48,9 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
     }
 
     @Override
-    public void addGroup(Long gameId, String tableNum, Long userId) {
+    public void addGroup(Long gameId, String tableNum, SysUser sysUser) {
         //先查询是否已存在
-        GameRoomGroupUser user = gameRoomGroupUserMapper.checkExist(gameId, tableNum, userId);
+        GameRoomGroupUser user = gameRoomGroupUserMapper.checkExist(gameId, tableNum, sysUser.getId());
         if (user != null) {
             return;
         }
@@ -63,9 +67,25 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
             groupId = groupList.get(0);
         }
         GameRoomGroupUser gameRoomGroupUser = new GameRoomGroupUser();
-        gameRoomGroupUser.setUserId(userId);
+        gameRoomGroupUser.setUserId(sysUser.getId());
+        gameRoomGroupUser.setUserName(sysUser.getUsername());
         gameRoomGroupUser.setGroupId(groupId);
         gameRoomGroupUserMapper.insert(gameRoomGroupUser);
+
+        List<Long> userIdList = new ArrayList<>();
+        userIdList.add(sysUser.getId());
+        Result<List<SysUserInfoMoneyVo>> result = userService.findListByUserIdList(userIdList);
+        if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
+            vo.setGameId(gameId);
+            vo.setTableNum(tableNum);
+            if (!CollectionUtils.isEmpty(result.getDatas())) {
+                SysUserInfoMoneyVo userInfoMoneyVo = result.getDatas().get(0);
+                BeanUtils.copyProperties(userInfoMoneyVo, vo);
+                vo.setUserName(user.getUserName());
+                pushGameDataToClientService.syncTableNumGroup(vo);
+            }
+        }
     }
 
     @Override
@@ -98,5 +118,35 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
             list.add(userVo);
         }
         return list;
+    }
+
+    @Override
+    public List<GameRoomGroupUserVo> getGroupList(String userName) {
+        return gameRoomGroupUserMapper.getGroupList(userName);
+    }
+
+    @Override
+    public void removeGroup(Long gameId, String tableNum, SysUser sysUser) {
+        //先查询是否已存在
+        GameRoomGroupUser user = gameRoomGroupUserMapper.checkExist(gameId, tableNum, sysUser.getId());
+        if (user != null && user.getUserId() != null) {
+            gameRoomGroupUserMapper.deleteById(user.getId());
+            GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
+            vo.setGameId(gameId);
+            vo.setTableNum(tableNum);
+            vo.setStatus(0);
+            vo.setUserName(user.getUserName());
+            pushGameDataToClientService.syncTableNumGroup(vo);
+        }
+    }
+
+    @Override
+    public void removeAllGroup(String userName) {
+        List<GameRoomGroupUserVo> groupList = gameRoomGroupUserMapper.getGroupList(userName);
+        for (GameRoomGroupUserVo vo : groupList) {
+            gameRoomGroupUserMapper.deleteById(vo.getId());
+            vo.setStatus(0);
+            pushGameDataToClientService.syncTableNumGroup(vo);
+        }
     }
 }

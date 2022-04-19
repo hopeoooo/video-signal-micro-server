@@ -3,12 +3,10 @@ package com.central.oauth.handler;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.Result;
-import com.central.common.model.SysUser;
-import com.central.common.model.SysUserMoney;
 import com.central.common.utils.JsonUtil;
+import com.central.oauth.service.ILogoutSuccessService;
 import com.central.oauth.service.impl.UnifiedLogoutService;
 import com.central.oauth2.common.properties.SecurityProperties;
-import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +39,7 @@ public class OauthLogoutSuccessHandler implements LogoutSuccessHandler {
 	@Resource
 	private SecurityProperties securityProperties;
 	@Autowired
-	private UserService userService;
+	private ILogoutSuccessService logoutSuccessService;
 
 	@Override
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -68,6 +66,6 @@ public class OauthLogoutSuccessHandler implements LogoutSuccessHandler {
 //		SysUser sysUser = (SysUser) authentication.getPrincipal();
 //		log.info("log out {}",sysUser.getUsername());
 		//推送在线人数
-		userService.pushOnlineNum(0);
+		logoutSuccessService.pushOnlineNum(0);
 	}
 }

@@ -3,6 +3,7 @@ package com.central.game.service;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
+import com.central.game.model.vo.GameRoomGroupUserVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.model.vo.NewAddLivePotVo;
 
@@ -21,4 +22,6 @@ public interface IPushGameDataToClientService {
     void syncPushGameRoomStatus(GameRoomList po);
 
     void syncTableNumGroup(NewAddLivePotVo newAddLivePotVo);
+
+    void syncTableNumGroup(GameRoomGroupUserVo vo);
 }

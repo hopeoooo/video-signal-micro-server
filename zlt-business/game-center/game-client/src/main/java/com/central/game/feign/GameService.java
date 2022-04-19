@@ -166,4 +166,7 @@ public interface GameService {
 
     @GetMapping("/gameRecord/findUserGameReportDto")
     Result<List<UserGameReportDto>> findUserGameReportDto(@RequestParam(value = "userId")Long userId);
+
+    @GetMapping("/gameRoomGroupUser/removeAllGroup/{userName}")
+    Result removeTableNumGroup(@PathVariable("userName") String userName);
 }

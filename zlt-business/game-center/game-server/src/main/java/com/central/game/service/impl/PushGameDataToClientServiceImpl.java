@@ -14,6 +14,7 @@ import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.feign.UserService;
 import com.central.user.model.vo.SysUserInfoMoneyVo;
+import com.central.user.model.vo.SysUserMoneyVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,17 +113,25 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
         if (CollectionUtils.isEmpty(betResult)) {
             return;
         }
-        List<Long> userIdList = new ArrayList<>();
-        userIdList.add(betResult.get(0).getUserId());
-        Result<List<SysUserInfoMoneyVo>> userResult = userService.findListByUserIdList(userIdList);
-        if (userResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+        String userName = betResult.get(0).getUserName();
+        Result<SysUserMoneyVo> moneyVoResult = userService.getMoneyByUserName(userName);
+        if (moneyVoResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
             return;
         }
-        List<SysUserInfoMoneyVo> userResultData = userResult.getDatas();
-        SysUserInfoMoneyVo sysUserInfoMoneyVo = userResultData.get(0);
+        SysUserMoneyVo sysUserMoneyVo = moneyVoResult.getDatas();
         GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
-        BeanUtils.copyProperties(sysUserInfoMoneyVo, vo);
-        String groupId = newAddLivePotVo.getGameId() + "-" + newAddLivePotVo.getTableNum();
+        vo.setStatus(1);
+        vo.setUserName(userName);
+        vo.setMoney(sysUserMoneyVo.getMoney());
+        vo.setGameId(newAddLivePotVo.getGameId());
+        vo.setTableNum(newAddLivePotVo.getTableNum());
+        syncTableNumGroup(vo);
+    }
+
+    @Override
+    @Async
+    public void syncTableNumGroup(GameRoomGroupUserVo vo) {
+        String groupId = vo.getGameId() + "-" + vo.getTableNum();
         PushResult<GameRoomGroupUserVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.TABLE_GROUP_USER, "桌台用户余额信息推送成功");
         //推送下注界面
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));

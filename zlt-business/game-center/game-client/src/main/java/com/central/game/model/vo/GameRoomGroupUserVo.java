@@ -13,6 +13,15 @@ import java.math.BigDecimal;
 @ApiModel("用户桌台分组列表")
 public class GameRoomGroupUserVo {
 
+    @ApiModelProperty(value = "id")
+    private Long id;
+
+    @ApiModelProperty(value = "游戏ID")
+    private Long gameId;
+
+    @ApiModelProperty(value = "桌台编号")
+    private String tableNum;
+
     @ApiModelProperty(value = "用户名")
     private String userName;
 
@@ -21,6 +30,9 @@ public class GameRoomGroupUserVo {
 
     @ApiModelProperty(value = "余额")
     private BigDecimal money;
+
+    @ApiModelProperty(value = "用户状态：0.退出，1.余额变化")
+    private Integer status = 1;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     public BigDecimal getMoney() {
