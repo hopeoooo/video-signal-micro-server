@@ -132,7 +132,7 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     @Async
     public void syncTableNumGroup(GameRoomGroupUserVo vo) {
         String groupId = vo.getGameId() + "-" + vo.getTableNum();
-        PushResult<GameRoomGroupUserVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.TABLE_GROUP_USER, "桌台用户余额信息推送成功");
+        PushResult<GameRoomGroupUserVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.TABLE_GROUP_USER, "桌台分组用户信息推送成功");
         //推送下注界面
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("下注界面桌台用户余额信息推送推送结果:groupId={},result={}", groupId, push);

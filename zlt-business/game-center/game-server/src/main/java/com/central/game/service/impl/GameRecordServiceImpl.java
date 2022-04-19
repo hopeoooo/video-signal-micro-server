@@ -572,6 +572,29 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         params.setEndTime(endTime);
         Page<GameRecordVo> page = new Page<>(params.getPage(), params.getLimit());
         List<GameRecordVo> list = gameRecordMapper.findBetList(page, params);
+        if (!CollectionUtils.isEmpty(list)){
+            //小计
+            BigDecimal subtotalBetAmount = BigDecimal.ZERO;
+            BigDecimal subtotalValidbet = BigDecimal.ZERO;
+            BigDecimal subtotalWinLoss = BigDecimal.ZERO;
+            for (GameRecordVo vo : list) {
+                subtotalBetAmount = subtotalBetAmount.add(vo.getBetAmount());
+                subtotalValidbet = subtotalValidbet.add(vo.getValidbet());
+                subtotalWinLoss = subtotalWinLoss.add(vo.getWinLoss());
+            }
+            GameRecordVo subtotal = new GameRecordVo();
+            subtotal.setGameName("小计");
+            subtotal.setBetAmount(subtotalBetAmount);
+            subtotal.setValidbet(subtotalValidbet);
+            subtotal.setWinLoss(subtotalWinLoss);
+            list.add(subtotal);
+            //总计
+            GameRecordVo totalBetList = gameRecordMapper.findTotalBetList(params);
+            if (totalBetList != null) {
+                totalBetList.setGameName("总计");
+            }
+            list.add(totalBetList);
+        }
         return PageResult.<GameRecordVo>builder().data(list).count(page.getTotal()).build();
     }
 

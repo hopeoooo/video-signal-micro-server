@@ -37,7 +37,7 @@ public class GameRoomGroupUserController {
     @PostMapping("/save")
     public Result save(@ModelAttribute GameRoomGroupCo co, @LoginUser SysUser sysUser) {
         SysUser sysUserFull = userService.selectByUsername(sysUser.getUsername());
-        if (UserType.APP_GUEST.name().equals(sysUserFull.getType())) {
+        if (sysUserFull != null && UserType.APP_GUEST.name().equals(sysUserFull.getType())) {
             return Result.failed("游客账号不支持此功能");
         }
         gameRoomGroupUserService.addGroup(co.getGameId(), co.getTableNum(), sysUserFull);
@@ -48,7 +48,7 @@ public class GameRoomGroupUserController {
     @PostMapping("/removeGroup")
     public Result removeGroup(@ModelAttribute GameRoomGroupCo co, @LoginUser SysUser sysUser) {
         SysUser sysUserFull = userService.selectByUsername(sysUser.getUsername());
-        if (UserType.APP_GUEST.name().equals(sysUserFull.getType())) {
+        if (sysUserFull != null && UserType.APP_GUEST.name().equals(sysUserFull.getType())) {
             return Result.failed("游客账号不支持此功能");
         }
         gameRoomGroupUserService.removeGroup(co.getGameId(), co.getTableNum(), sysUserFull);
@@ -59,7 +59,7 @@ public class GameRoomGroupUserController {
     @GetMapping("/getTableNumGroupList")
     public Result<List<GameRoomGroupUserVo>> getTableNumGroupList(@ModelAttribute GameRoomGroupCo co, @LoginUser SysUser sysUser) {
         SysUser sysUserFull = userService.selectByUsername(sysUser.getUsername());
-        if (UserType.APP_GUEST.name().equals(sysUserFull.getType())) {
+        if (sysUserFull != null && UserType.APP_GUEST.name().equals(sysUserFull.getType())) {
             return Result.failed("游客账号不支持此功能");
         }
         List<GameRoomGroupUserVo> list = gameRoomGroupUserService.getTableNumGroupList(co.getGameId(), co.getTableNum(), sysUser.getId());
@@ -70,7 +70,7 @@ public class GameRoomGroupUserController {
     @GetMapping("/removeAllGroup/{userName}")
     public Result removeAllGroup(@PathVariable String userName) {
         SysUser sysUserFull = userService.selectByUsername(userName);
-        if (UserType.APP_GUEST.name().equals(sysUserFull.getType())) {
+        if (sysUserFull != null && UserType.APP_GUEST.name().equals(sysUserFull.getType())) {
             return Result.failed("游客账号不支持此功能");
         }
         gameRoomGroupUserService.removeAllGroup(userName);

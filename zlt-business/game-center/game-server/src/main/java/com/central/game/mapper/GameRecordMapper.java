@@ -43,6 +43,8 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
 
     List<GameRecordVo> findBetList(Page<GameRecordVo> page, @Param("p") GameRecordBetPageCo params);
 
+    GameRecordVo findTotalBetList(@Param("p") GameRecordBetPageCo params);
+
     List<PayoutResultVo> getPayoutResult(@Param("gameId") Long gameId, @Param("tableNum") String tableNum, @Param("bootNum") String bootNum, @Param("bureauNum") String bureauNum);
 
     List<RankingListVo> getTodayLotteryList(@Param("startTime") String startTime,@Param("endTime") String endTime);

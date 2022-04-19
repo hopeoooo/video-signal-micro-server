@@ -21,7 +21,7 @@
         from game_room_group_user a left JOIN game_room_group b on a.group_id=b.id
         <where>
             <if test="userName!=null and userName!=''">
-                b.user_name=#{userName}
+                a.user_name=#{userName}
             </if>
         </where>
     </select>

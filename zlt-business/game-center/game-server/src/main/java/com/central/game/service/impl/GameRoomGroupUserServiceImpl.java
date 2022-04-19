@@ -82,7 +82,7 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
             if (!CollectionUtils.isEmpty(result.getDatas())) {
                 SysUserInfoMoneyVo userInfoMoneyVo = result.getDatas().get(0);
                 BeanUtils.copyProperties(userInfoMoneyVo, vo);
-                vo.setUserName(user.getUserName());
+                vo.setUserName(sysUser.getUsername());
                 pushGameDataToClientService.syncTableNumGroup(vo);
             }
         }
