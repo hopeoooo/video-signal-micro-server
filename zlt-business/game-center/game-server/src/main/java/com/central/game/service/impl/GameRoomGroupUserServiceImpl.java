@@ -75,7 +75,7 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
         List<Long> userIdList = new ArrayList<>();
         userIdList.add(sysUser.getId());
         Result<List<SysUserInfoMoneyVo>> result = userService.findListByUserIdList(userIdList);
-        if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+        if (result.getResp_code() == CodeEnum.SUCCESS.getCode()) {
             GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
             vo.setGameId(gameId);
             vo.setTableNum(tableNum);

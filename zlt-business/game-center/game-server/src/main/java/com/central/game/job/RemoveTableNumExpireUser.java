@@ -29,10 +29,8 @@ public class RemoveTableNumExpireUser {
     @Autowired
     private IPushGameDataToClientService pushGameDataToClientService;
 
-    /**
-     * 5分钟一次
-     */
-    @Scheduled(cron = "*/10 * * * * * ")
+    //每隔5分钟执行一次
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void scheduledTask() {
         List<GameRoomGroupUserVo> groupList = gameRoomGroupUserService.getGroupList(null);
         for (GameRoomGroupUserVo groupUser : groupList) {
