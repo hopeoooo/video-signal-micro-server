@@ -19,6 +19,7 @@ import com.central.search.client.service.IQueryService;
 import com.central.search.model.LogicDelDto;
 import com.central.search.model.SearchDto;
 import com.central.user.model.SysUserExcel;
+import com.central.user.model.vo.SysUserInfoMoneyVo;
 import com.central.user.service.ISysUserService;
 import com.central.user.model.vo.UserInfoVo;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -588,5 +589,13 @@ public class SysUserController {
     public Result<List<SysUser>> findListByIds(@RequestBody List<Long> ids) {
         List<SysUser> listByIds = appUserService.findListByIds(ids);
         return Result.succeed(listByIds);
+    }
+
+    @ApiOperation(value = "根据ids,查询用户基本信息及余额",hidden = true)
+    @PostMapping("/users/findListByUserIdList")
+    @ApiImplicitParam(name = "userIdList", value = "用户userIdList", required = true)
+    public Result<List<SysUserInfoMoneyVo>> findListByUserIdList(@RequestBody List<Long> userIdList) {
+        List<SysUserInfoMoneyVo> list = appUserService.findListByUserIds(userIdList);
+        return Result.succeed(list);
     }
 }

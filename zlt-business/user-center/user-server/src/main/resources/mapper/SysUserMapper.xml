@@ -92,4 +92,14 @@
 			#{item}
 		</foreach>
 	</select>
+
+	<select id="findListByUserIds" resultType="com.central.user.model.vo.SysUserInfoMoneyVo">
+		SELECT a.id userId,a.username userName,a.head_img_url headImgUrl,b.money
+		from sys_user a LEFT JOIN sys_user_money b on a.id=b.user_id
+		where a.is_del=0
+		and a.id in
+		<foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
 </mapper>

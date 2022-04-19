@@ -14,6 +14,7 @@ import com.central.user.model.SysUserExcel;
 import com.central.user.model.co.EnabledUserCo;
 import com.central.user.model.co.GaBindCo;
 import com.central.user.model.co.SysUserListCo;
+import com.central.user.model.vo.SysUserInfoMoneyVo;
 import com.central.user.service.ISysRoleUserService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
@@ -320,6 +321,11 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
     @Override
     public List<SysUser> findListByIds(List<Long> ids) {
         return baseMapper.findListByIds(ids);
+    }
+
+    @Override
+    public List<SysUserInfoMoneyVo> findListByUserIds(List<Long> userIdList) {
+        return baseMapper.findListByUserIds(userIdList);
     }
 
     @Transactional(rollbackFor = Exception.class)

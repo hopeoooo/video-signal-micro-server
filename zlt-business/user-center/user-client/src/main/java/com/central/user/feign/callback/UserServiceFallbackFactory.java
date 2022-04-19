@@ -6,10 +6,7 @@ import com.central.user.model.co.*;
 import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.UserService;
-import com.central.user.model.vo.RoomFollowVo;
-import com.central.user.model.vo.SysUserMoneyVo;
-import com.central.user.model.vo.UserInfoVo;
-import com.central.user.model.vo.WashCodeChangeVo;
+import com.central.user.model.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -279,6 +276,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             @Override
             public Result<List<SysUser>> findListByIds(List<Long> ids){
                 log.error("findListByIds error");
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result<List<SysUserInfoMoneyVo>> findListByUserIdList(List<Long> userIdList) {
+                log.error("findListByUserIdList error userIdList={}",userIdList.toString());
                 return Result.failed("查询失败");
             }
         };

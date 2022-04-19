@@ -8,8 +8,10 @@ import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
 import com.central.user.model.vo.RoomFollowVo;
+import com.central.user.model.vo.SysUserInfoMoneyVo;
 import com.central.user.model.vo.SysUserMoneyVo;
 import com.central.user.model.vo.UserInfoVo;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -214,4 +216,7 @@ public interface UserService {
 
     @PostMapping("/users/findListByIds")
     Result<List<SysUser>> findListByIds(@RequestBody List<Long> ids);
+
+    @PostMapping("/users/findListByUserIdList")
+    Result<List<SysUserInfoMoneyVo>> findListByUserIdList(@RequestBody List<Long> userIdList);
 }

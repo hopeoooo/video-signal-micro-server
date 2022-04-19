@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.SysUser;
 import com.central.db.mapper.SuperMapper;
 import com.central.user.model.co.SysUserListCo;
+import com.central.user.model.vo.SysUserInfoMoneyVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,4 +30,6 @@ public interface SysUserMapper extends SuperMapper<SysUser> {
     Integer findUserNum(@Param("p") Map<String, Object> params);
 
     List<SysUser> findListByIds(@Param("ids")List<Long> ids);
+
+    List<SysUserInfoMoneyVo> findListByUserIds(@Param("userIdList") List<Long> userIdList);
 }

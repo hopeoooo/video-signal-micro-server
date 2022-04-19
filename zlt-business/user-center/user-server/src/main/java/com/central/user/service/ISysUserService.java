@@ -6,6 +6,7 @@ import com.central.user.model.SysUserExcel;
 import com.central.user.model.co.EnabledUserCo;
 import com.central.user.model.co.GaBindCo;
 import com.central.user.model.co.SysUserListCo;
+import com.central.user.model.vo.SysUserInfoMoneyVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -142,4 +143,6 @@ public interface ISysUserService extends ISuperService<SysUser> {
 	Integer findUserNum(@Param("p") Map<String, Object> params);
 
 	List<SysUser> findListByIds(List<Long> ids);
+
+	List<SysUserInfoMoneyVo> findListByUserIds(List<Long> userIdList);
 }
