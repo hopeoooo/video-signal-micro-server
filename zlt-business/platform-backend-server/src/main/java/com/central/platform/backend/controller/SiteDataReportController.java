@@ -32,13 +32,19 @@ public class SiteDataReportController {
     @GetMapping("/find")
     public Result<Map<String,SiteDataReportDto>> find(){
         Map<String,SiteDataReportDto> map = new HashMap<>();
-        map.put("today",getSiteDataReportDto(DateUtil.getToday()));
-        map.put("yesterday",getSiteDataReportDto(DateUtil.getYesterday()));
-        map.put("week",getSiteDataReportDto(DateUtil.getWeek()));
-        map.put("lastWeek",getSiteDataReportDto(DateUtil.getLastWeek()));
-        map.put("month",getSiteDataReportDto(DateUtil.getMonth()));
-        map.put("lastMonth",getSiteDataReportDto(DateUtil.getLastMonth()));
-        map.put("nearlyTwoMonths",getSiteDataReportDto(DateUtil.getNearlyTwoMonths()));
+        try {
+            map.put("today",getSiteDataReportDto(DateUtil.getToday()));
+            map.put("yesterday",getSiteDataReportDto(DateUtil.getYesterday()));
+            map.put("week",getSiteDataReportDto(DateUtil.getWeek()));
+            map.put("lastWeek",getSiteDataReportDto(DateUtil.getLastWeek()));
+            map.put("month",getSiteDataReportDto(DateUtil.getMonth()));
+            map.put("lastMonth",getSiteDataReportDto(DateUtil.getLastMonth()));
+            map.put("nearlyTwoMonths",getSiteDataReportDto(DateUtil.getNearlyTwoMonths()));
+        }catch (Exception ex){
+            log.error("站点数据报表查询失败{}",ex);
+            return Result.failed("查询失败");
+        }
+
         return Result.succeed(map);
     }
 
