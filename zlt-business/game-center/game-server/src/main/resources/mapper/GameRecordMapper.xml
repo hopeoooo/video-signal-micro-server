@@ -82,7 +82,7 @@
     </select>
 
     <select id="findValidbetTotal"  resultType="com.central.game.dto.GameRecordReportDto">
-        select count(1) as num,IFNULL(sum(a.validbet),0) as amount,IFNULL(sum(a.win_Loss),0) as profit from (select SUM(g.validbet) validbet, sum(a.win_Loss) from game_record g where g.validbet > 0
+        select count(1) as num,IFNULL(sum(a.validbet),0) as amount,IFNULL(sum(a.win_Loss),0) as profit from (select SUM(g.validbet) validbet, sum(g.win_Loss) win_Loss from game_record g where g.validbet > 0
         <if test="p.startTime != null and p.startTime != ''">
             and g.create_time <![CDATA[>=]]> #{p.startTime}
         </if>
