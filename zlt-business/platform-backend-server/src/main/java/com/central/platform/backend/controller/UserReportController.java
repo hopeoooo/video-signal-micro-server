@@ -74,8 +74,11 @@ public class UserReportController {
                 });
                 list.add(userReportVo);
             });
+            pageResult.setData(list);
+        }else {
+            pageResult.setData(userReportVos);
         }
-        pageResult.setData(list);
+
         pageResult.setCount(iUserReportService.findUserReportVoCount(map));
         return Result.succeed(pageResult);
     }
