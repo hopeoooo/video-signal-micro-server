@@ -60,9 +60,10 @@ public class SysTansterMoneyLogController {
 
     @ApiOperation(value = "用户账变列表-前台")
     @GetMapping("/findAmountChangeList")
-    public PageResult<SysTansterMoneyLogVo> findAmountChangeList(@Valid @ModelAttribute SysTansterMoneyPageCo params, @LoginUser SysUser user) {
+    public Result<PageResult<SysTansterMoneyLogVo>> findAmountChangeList(@Valid @ModelAttribute SysTansterMoneyPageCo params, @LoginUser SysUser user) {
         params.setUserId(user.getId());
-        return sysTansterMoneyLogService.findAmountChangeList(params);
+        PageResult<SysTansterMoneyLogVo> amountChangeList = sysTansterMoneyLogService.findAmountChangeList(params);
+        return Result.succeed(amountChangeList)
     }
 
     @ResponseBody

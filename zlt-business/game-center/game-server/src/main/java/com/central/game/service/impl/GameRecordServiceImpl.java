@@ -592,8 +592,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             GameRecordVo totalBetList = gameRecordMapper.findTotalBetList(params);
             if (totalBetList != null) {
                 totalBetList.setGameName("总计");
+                list.add(totalBetList);
             }
-            list.add(totalBetList);
         }
         return PageResult.<GameRecordVo>builder().data(list).count(page.getTotal()).build();
     }
