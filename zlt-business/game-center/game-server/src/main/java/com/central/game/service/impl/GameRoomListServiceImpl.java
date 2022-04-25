@@ -119,21 +119,27 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
                     break;
                 }
             }
-            //桌台状态
-            setRoomStatus(vo);
-            //桌台中心信息
-            GameRoomInfoOffline tableCoreInfo = gameRoomInfoOfflineService.getNewestTableInfo(vo.getGameId(),vo.getTableNum());
-            if (tableCoreInfo != null) {
-                //中心区域信息
-                getTableCoreInfo(vo,tableCoreInfo);
-                //桌台上部分信息
-                getTableUpInfo(vo);
-                //桌台下部分信息
-                getTableLowerInfo(vo);
-            }
+            setTabelInfo(vo);
             list.add(vo);
         }
         return list;
+    }
+
+    @Override
+    public GameRoomListVo setTabelInfo(GameRoomListVo vo){
+        //桌台状态
+        setRoomStatus(vo);
+        //桌台中心信息
+        GameRoomInfoOffline tableCoreInfo = gameRoomInfoOfflineService.getNewestTableInfo(vo.getGameId(),vo.getTableNum());
+        if (tableCoreInfo != null) {
+            //中心区域信息
+            getTableCoreInfo(vo,tableCoreInfo);
+            //桌台上部分信息
+            getTableUpInfo(vo);
+            //桌台下部分信息
+            getTableLowerInfo(vo);
+        }
+        return vo;
     }
 
     @Override
