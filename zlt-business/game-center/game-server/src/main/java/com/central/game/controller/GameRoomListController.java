@@ -3,7 +3,9 @@ package com.central.game.controller;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.central.common.annotation.LoginUser;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.GameRoomListVo;
@@ -52,8 +54,8 @@ public class GameRoomListController {
 
     @ApiOperation(value = "根据游戏ID查询房间列表(前台用)")
     @GetMapping("/findRoomListByGameId/{gameId}")
-    public Result<List<GameRoomListVo>> findRoomListByGameId(@PathVariable("gameId") Long gameId) {
-        List<GameRoomListVo> gameRoomList = iGameRoomListService.findRoomListByGameId(gameId);
+    public Result<List<GameRoomListVo>> findRoomListByGameId(@PathVariable("gameId") Long gameId, @LoginUser SysUser sysUser) {
+        List<GameRoomListVo> gameRoomList = iGameRoomListService.findRoomListByGameId(gameId,sysUser.getId());
         return Result.succeed(gameRoomList);
     }
 
