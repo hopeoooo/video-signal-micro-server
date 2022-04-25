@@ -63,7 +63,7 @@ public class SysTansterMoneyLogController {
     public Result<PageResult<SysTansterMoneyLogVo>> findAmountChangeList(@Valid @ModelAttribute SysTansterMoneyPageCo params, @LoginUser SysUser user) {
         params.setUserId(user.getId());
         PageResult<SysTansterMoneyLogVo> amountChangeList = sysTansterMoneyLogService.findAmountChangeList(params);
-        return Result.succeed(amountChangeList)
+        return Result.succeed(amountChangeList);
     }
 
     @ResponseBody
