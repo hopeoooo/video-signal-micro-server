@@ -43,6 +43,13 @@ public class GameRoomListCo {
     @ApiModelProperty(value = "对子最大限红")
     private BigDecimal maxTwain;
 
+
+    @ApiModelProperty(value = "近景视频url地址")
+    private String nearVideoUrl;
+
+    @ApiModelProperty(value = "远景视频url地址")
+    private String farVideoUrl;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "维护开始时间")
     private Date maintainStart;
