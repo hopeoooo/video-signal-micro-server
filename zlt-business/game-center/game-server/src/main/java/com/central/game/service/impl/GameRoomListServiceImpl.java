@@ -11,6 +11,7 @@ import com.central.game.mapper.GameRoomListMapper;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
+import com.central.game.model.RoomFollowList;
 import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.*;
@@ -46,6 +47,8 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     private RedisRepository redisRepository;
     @Autowired
     private IPushGameDataToClientService pushGameDataToClientService;
+    @Autowired
+    private IRoomFollowListService roomFollowListService;
 
     @Override
     public List<GameRoomList> findGameRoomList(Long gameId) {
@@ -96,17 +99,26 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     }
 
     @Override
-    public List<GameRoomListVo> findRoomListByGameId(Long gameId) {
+    public List<GameRoomListVo> findRoomListByGameId(Long gameId,Long userId) {
         LambdaQueryWrapper<GameRoomList> lqw = Wrappers.lambdaQuery();
         lqw.eq(GameRoomList::getGameId, gameId).ne(GameRoomList::getRoomStatus, 0);
         List<GameRoomList> gameRoomLists = gameRoomListMapper.selectList(lqw);
         //查询列表上下两部分数据
         List<GameRoomListVo> list = new ArrayList<>();
+        //查询当前用户桌台关注情况
+        List<RoomFollowList> roomLists = roomFollowListService.lambdaQuery().eq(RoomFollowList::getUserId, userId).list();
         for (GameRoomList roomList : gameRoomLists) {
             GameRoomListVo vo = new GameRoomListVo();
             BeanUtils.copyProperties(roomList, vo);
             vo.setRoomId(roomList.getId());
             vo.setTableNum(roomList.getGameRoomName());
+            //判断当前桌台是否关注
+            for (RoomFollowList roomFollow : roomLists) {
+                if (roomList.getId() == roomFollow.getRoomId()) {
+                    vo.setFollowStatus(1);
+                    break;
+                }
+            }
             //桌台状态
             setRoomStatus(vo);
             //桌台中心信息
