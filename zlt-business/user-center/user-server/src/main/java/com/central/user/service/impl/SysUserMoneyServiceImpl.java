@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.game.feign.GameService;
+import com.central.game.model.vo.GameRoomGroupUserVo;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.mapper.SysUserMoneyMapper;
@@ -47,6 +49,8 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     private ISysTansterMoneyLogService iSysTansterMoneyLogService;
     @Autowired
     private PushService pushService;
+    @Autowired
+    private GameService gameService;
 
 
     /**
@@ -111,6 +115,32 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.MONEY,"用户钱包推送成功");
         Result<String> push = pushService.sendOneMessage(userName,JSONObject.toJSONString(pushResult));
         log.info("用户钱包userName:{},推送结果:{}", userId, push);
+    }
+
+    @Override
+    @Async
+    public void syncPushMoneyToTableNum(Long userId, String userName) {
+        Result<List<GameRoomGroupUserVo>> listResult = gameService.getAllGroupListByUserName(userName);
+        if (listResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            log.error("推送桌台分组用户金额时查询getAllGroupListByUserName失败");
+            return;
+        }
+        LambdaQueryWrapper<SysUserMoney> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysUserMoney::getUserId, userId);
+        SysUserMoney sysUserMoney = baseMapper.selectOne(lqw);
+        List<GameRoomGroupUserVo> datas = listResult.getDatas();
+        for (GameRoomGroupUserVo vo : datas) {
+            vo.setStatus(1);
+            vo.setUserName(userName);
+            vo.setMoney(sysUserMoney.getMoney());
+            vo.setGameId(vo.getGameId());
+            vo.setTableNum(vo.getTableNum());
+            String groupId = vo.getGameId() + "-" + vo.getTableNum();
+            PushResult<GameRoomGroupUserVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.TABLE_GROUP_USER, "桌台分组用户信息推送成功");
+            //推送下注界面
+            Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+            log.info("下注界面桌台用户余额信息推送推送结果:groupId={},result={}", groupId, push);
+        }
     }
 
     @Override

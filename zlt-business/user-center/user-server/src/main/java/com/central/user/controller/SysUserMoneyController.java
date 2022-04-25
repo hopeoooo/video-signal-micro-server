@@ -118,6 +118,8 @@ public class SysUserMoneyController {
             }
             SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId, sysUser, betId);
             userMoneyService.syncPushMoneyToWebApp(userId, sysUser.getUsername());
+            //推送余额变化到桌台
+            userMoneyService.syncPushMoneyToTableNum(userId, sysUser.getUsername());
             return Result.succeed(saveSysUserMoney);
         } catch (Exception e) {
             log.error("用户上下分异常,userId:{},money:{},remark:{},transterType{},traceId{},betId:{}", userId, money, remark, transterType, traceId, betId);

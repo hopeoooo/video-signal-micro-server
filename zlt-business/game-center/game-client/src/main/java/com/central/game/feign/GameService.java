@@ -14,6 +14,7 @@ import com.central.game.feign.callback.GameServiceFallbackFactory;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.GameRecordBackstageVo;
+import com.central.game.model.vo.GameRoomGroupUserVo;
 import com.central.game.model.vo.RankingBackstageVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -169,4 +170,7 @@ public interface GameService {
 
     @GetMapping("/gameRoomGroupUser/removeAllGroup/{userName}")
     Result removeTableNumGroup(@PathVariable("userName") String userName);
+
+    @GetMapping("/getAllGroupListByUserName/{userName}")
+    Result<List<GameRoomGroupUserVo>> getAllGroupListByUserName(@PathVariable(value = "userName") String userName);
 }

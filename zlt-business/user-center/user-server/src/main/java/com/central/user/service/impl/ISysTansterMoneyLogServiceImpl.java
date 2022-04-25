@@ -44,7 +44,7 @@ public class ISysTansterMoneyLogServiceImpl extends SuperServiceImpl<SysTansterM
         for (SysTansterMoneyLog sysTansterMoneyLog : list) {
             SysTansterMoneyLogVo sysTansterMoney = new SysTansterMoneyLogVo();
             BeanUtils.copyProperties(sysTansterMoneyLog, sysTansterMoney);
-            String orderTypeName = CapitalEnum.fingCapitalEnumType(sysTansterMoneyLog.getOrderType()).name();
+            String orderTypeName = CapitalEnum.fingCapitalEnumType(sysTansterMoneyLog.getOrderType()).getName();
             sysTansterMoney.setOrderTypeName(orderTypeName);
             sysTansterMoneyLogs.add(sysTansterMoney);
         }

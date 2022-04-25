@@ -190,8 +190,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         }
         //异步推送新增 投注记录
         pushGameDataToClientService.syncLivePot(newAddLivePotVo);
-        //异步推送虚拟分组用户最新余额
-        pushGameDataToClientService.syncTableNumGroup(newAddLivePotVo);
+        //异步推送虚拟分组用户最新余额,移动到user服务推送
+//        pushGameDataToClientService.syncTableNumGroup(newAddLivePotVo);
         return Result.succeed(newAddBetList);
     }
 
@@ -592,8 +592,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             GameRecordVo totalBetList = gameRecordMapper.findTotalBetList(params);
             if (totalBetList != null) {
                 totalBetList.setGameName("总计");
+                list.add(totalBetList);
             }
-            list.add(totalBetList);
         }
         return PageResult.<GameRecordVo>builder().data(list).count(page.getTotal()).build();
     }
