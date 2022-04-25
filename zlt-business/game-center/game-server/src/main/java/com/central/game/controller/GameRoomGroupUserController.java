@@ -66,6 +66,13 @@ public class GameRoomGroupUserController {
         return Result.succeed(list);
     }
 
+    @ApiOperation(value = "查询当前用户在的所有桌台",hidden = true)
+    @GetMapping("/getAllGroupListByUserName/{userName}")
+    public Result<List<GameRoomGroupUserVo>> getAllGroupListByUserName(@PathVariable String userName) {
+        List<GameRoomGroupUserVo> list = gameRoomGroupUserService.getGroupList(userName);
+        return Result.succeed(list);
+    }
+
     @ApiOperation(value = "退出登录时退出桌台", hidden = true)
     @GetMapping("/removeAllGroup/{userName}")
     public Result removeAllGroup(@PathVariable String userName) {

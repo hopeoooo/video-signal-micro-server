@@ -40,5 +40,7 @@ public interface ISysUserMoneyService extends ISuperService<SysUserMoney> {
     BigDecimal getSumMoneyByParent(String parent);
 
     List<RankingListVo> getRichList();
+
+    void syncPushMoneyToTableNum(Long userId,String userName);
 }
 

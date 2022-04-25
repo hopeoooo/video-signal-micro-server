@@ -13,6 +13,7 @@ import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.GameRecordBackstageVo;
+import com.central.game.model.vo.GameRoomGroupUserVo;
 import com.central.game.model.vo.RankingBackstageVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -189,6 +190,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             public Result removeTableNumGroup(String userName) {
                 log.error("removeTableNumGroup删除桌台用户失败，userName:{}",userName);
                 return Result.failed("删除桌台用户失败");
+            }
+
+            @Override
+            public Result<List<GameRoomGroupUserVo>> getAllGroupListByUserName(String userName) {
+                log.error("getAllGroupListByUserName查询用户虚拟分组失败，userName:{}",userName);
+                return Result.failed("查询用户虚拟分组失败");
             }
 
             @Override
