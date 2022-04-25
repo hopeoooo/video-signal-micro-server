@@ -42,7 +42,7 @@ public class SysTansterMoneyLog extends SuperEntity {
     @ApiModelProperty(value = "备注")
     private String remark;
 
-    @ApiModelProperty(value = "订单类型")
+    @ApiModelProperty(value = "订单类型，3.派彩，4.下注，5.手动入款，6.手动出款，7.领取洗码，8.商户API加点,9.商户API扣点")
     private Integer orderType;
 
     @ApiModelProperty(value = "父级")
