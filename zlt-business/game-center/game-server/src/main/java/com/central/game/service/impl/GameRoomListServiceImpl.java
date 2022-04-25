@@ -155,7 +155,7 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     @Override
     public void setRoomStatus(GameRoomListVo vo) {
         //判断桌台维护状态
-        if (2 == vo.getRoomStatus()) {
+        if (!ObjectUtils.isEmpty(vo.getRoomStatus()) && vo.getRoomStatus() == 2) {
             boolean maintain = DateUtil.isEffectiveDate(new Date(), vo.getMaintainStart(), vo.getMaintainEnd());
             //当前时间不在维护时间区间内属于正常状态
             if (!maintain) {
