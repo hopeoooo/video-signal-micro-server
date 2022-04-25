@@ -73,13 +73,7 @@ public class GameRoomInfoOfflineServiceImpl extends SuperServiceImpl<GameRoomInf
             return vo;
         }
         BeanUtils.copyProperties(newestTableInfo, vo);
-        //查询本靴开奖数据
-        List<GameLotteryResult> lotteryResultList = gameLotteryResultService.getBootNumResultList(vo.getGameId(), vo.getTableNum(), vo.getBootNum());
-        if (CollectionUtils.isEmpty(lotteryResultList)) {
-            return vo;
-        }
-        //本靴牌开奖结果
-        gameLotteryResultService.setLotteryNum(lotteryResultList, vo);
+        gameRoomListService.setTabelInfo(vo);
         return vo;
     }
 }

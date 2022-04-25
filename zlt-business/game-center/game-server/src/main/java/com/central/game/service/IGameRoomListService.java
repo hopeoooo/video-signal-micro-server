@@ -19,4 +19,6 @@ public interface IGameRoomListService  extends ISuperService<GameRoomList> {
     GameRoomList findByGameIdAndGameRoomName(Long gameId, String gameRoomName);
 
     void setRoomStatus(GameRoomListVo vo);
+
+    GameRoomListVo setTabelInfo(GameRoomListVo vo);
 }
