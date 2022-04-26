@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -25,21 +26,21 @@ public class GameRoomGroupUserController {
 
     @ApiOperation(value = "保存当前用户桌台分组")
     @PostMapping("/save")
-    public Result save(@ModelAttribute GameRoomGroupCo co, @LoginUser SysUser sysUser) {
+    public Result save(@Valid @ModelAttribute GameRoomGroupCo co, @LoginUser SysUser sysUser) {
         gameRoomGroupUserService.addGroup(co.getGameId(), co.getTableNum(), sysUser);
         return Result.succeed();
     }
 
     @ApiOperation(value = "移除当前用户桌台分组")
     @PostMapping("/removeGroup")
-    public Result removeGroup(@ModelAttribute GameRoomGroupCo co, @LoginUser SysUser sysUser) {
+    public Result removeGroup(@Valid @ModelAttribute GameRoomGroupCo co, @LoginUser SysUser sysUser) {
         gameRoomGroupUserService.removeGroup(co.getGameId(), co.getTableNum(), sysUser);
         return Result.succeed();
     }
 
     @ApiOperation(value = "查询当前用户桌台分组列表")
     @GetMapping("/getTableNumGroupList")
-    public Result<List<GameRoomGroupUserVo>> getTableNumGroupList(@ModelAttribute GameRoomGroupCo co, @LoginUser SysUser sysUser) {
+    public Result<List<GameRoomGroupUserVo>> getTableNumGroupList(@Valid @ModelAttribute GameRoomGroupCo co, @LoginUser SysUser sysUser) {
         List<GameRoomGroupUserVo> list = gameRoomGroupUserService.getTableNumGroupList(co.getGameId(), co.getTableNum(), sysUser);
         return Result.succeed(list);
     }
