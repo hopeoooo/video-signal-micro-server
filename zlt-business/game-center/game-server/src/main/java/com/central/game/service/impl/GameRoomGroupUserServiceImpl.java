@@ -115,25 +115,19 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
         GameRoomGroupUserVo userVo = null;
         for (SysUserInfoMoneyVo vo : userResultData) {
             userVo = new GameRoomGroupUserVo();
-            //其他玩家隐藏部分账号信息
-            String userName = vo.getUserName();
-            if (StringUtils.isNotBlank(userName) && !userName.equals(sysUser.getUsername())) {
-                if (userName.length() > 3) {
-                    userName = userName.substring(0, userName.length() - 3);
-                }
-                userName = userName + "***";
-            }
-            vo.setUserName(userName);
+            //其他玩家隐藏部分账号信息，暂时交前端处理，前端要通过用户名匹配数据
+//            String userName = vo.getUserName();
+//            if (StringUtils.isNotBlank(userName) && !userName.equals(sysUser.getUsername())) {
+//                if (userName.length() > 3) {
+//                    userName = userName.substring(0, userName.length() - 3);
+//                }
+//                userName = userName + "***";
+//            }
+//            vo.setUserName(userName);
             BeanUtils.copyProperties(vo, userVo);
             list.add(userVo);
         }
         return list;
-    }
-
-    public static void main(String[] args) {
-        String s="benson";
-        s=s.substring(0,s.length()-3)+"***";
-        System.out.println(s);
     }
 
     @Override
