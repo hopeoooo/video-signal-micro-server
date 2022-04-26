@@ -578,9 +578,15 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             BigDecimal subtotalValidbet = BigDecimal.ZERO;
             BigDecimal subtotalWinLoss = BigDecimal.ZERO;
             for (GameRecordVo vo : list) {
-                subtotalBetAmount = subtotalBetAmount.add(vo.getBetAmount());
-                subtotalValidbet = subtotalValidbet.add(vo.getValidbet());
-                subtotalWinLoss = subtotalWinLoss.add(vo.getWinLoss());
+                if (!ObjectUtils.isEmpty(vo.getBetAmount())){
+                    subtotalBetAmount = subtotalBetAmount.add(vo.getBetAmount());
+                }
+                if (!ObjectUtils.isEmpty(vo.getValidbet())){
+                    subtotalValidbet = subtotalValidbet.add(vo.getValidbet());
+                }
+                if (!ObjectUtils.isEmpty(vo.getWinLoss())){
+                    subtotalWinLoss = subtotalWinLoss.add(vo.getWinLoss());
+                }
             }
             GameRecordVo subtotal = new GameRecordVo();
             subtotal.setGameName("小计");
