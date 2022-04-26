@@ -15,7 +15,7 @@ public interface IGameRoomGroupUserService extends ISuperService<GameRoomGroupUs
 
     void addGroup(Long gameId, String tableNum, SysUser sysUser);
 
-    List<GameRoomGroupUserVo> getTableNumGroupList(Long gameId, String tableNum, Long userId);
+    List<GameRoomGroupUserVo> getTableNumGroupList(Long gameId, String tableNum, SysUser sysUser);
 
     List<GameRoomGroupUserVo> getGroupList(String userName);
 
