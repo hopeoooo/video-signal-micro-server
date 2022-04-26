@@ -690,7 +690,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             List<BigDecimal> winList = totalList.stream().filter(t -> t.compareTo(BigDecimal.ZERO) == 1).collect(Collectors.toList());
             int winNum = winList.size();
             //胜率
-            BigDecimal rate = new BigDecimal(winNum).divide(new BigDecimal(totalNum)).multiply(new BigDecimal(100));
+            BigDecimal rate = new BigDecimal(winNum).divide(new BigDecimal(totalNum),4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
             vo.setRete(keepDecimal(rate).toString());
         }
         return list;
