@@ -629,14 +629,31 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     public List<RankingListVo> getTodayLotteryList() {
         String startTime = DateUtil.getStartTime(0);
         String endTime = DateUtil.getEndTime(0);
-        return gameRecordMapper.getTodayLotteryList(startTime, endTime);
+        List<RankingListVo> todayLotteryList = gameRecordMapper.getTodayLotteryList(startTime, endTime);
+        for (RankingListVo vo : todayLotteryList) {
+            vo.setUserName(setUserNameAsterisk(vo.getUserName()));
+        }
+        return todayLotteryList;
     }
 
     @Override
     public List<RankingListVo> getTodayBetList() {
         String startTime = DateUtil.getStartTime(0);
         String endTime = DateUtil.getEndTime(0);
-        return gameRecordMapper.getTodayBetList(startTime, endTime);
+        List<RankingListVo> todayBetList = gameRecordMapper.getTodayBetList(startTime, endTime);
+        for (RankingListVo vo : todayBetList) {
+            vo.setUserName(setUserNameAsterisk(vo.getUserName()));
+        }
+        return todayBetList;
+    }
+
+    private String setUserNameAsterisk(String userName) {
+        if (ObjectUtils.isEmpty(userName)) {
+            return null;
+        }
+        String benStr = userName.substring(0, 2);
+        String endStr = userName.substring(userName.length() - 2);
+        return benStr + "***" + endStr;
     }
 
     @Override

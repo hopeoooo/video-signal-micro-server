@@ -159,7 +159,14 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
 
     @Override
     public List<RankingListVo> getRichList() {
-        return baseMapper.getRichList();
+        List<RankingListVo> richList = baseMapper.getRichList();
+        for (RankingListVo vo : richList) {
+            String userName = vo.getUserName();
+            String benStr = userName.substring(0, 2);
+            String endStr = userName.substring(userName.length() - 2);
+            vo.setUserName(benStr + "***" + endStr);
+        }
+        return richList;
     }
 
     private SysTansterMoneyLog getSysTansterMoneyLog(BigDecimal beforeMoery, BigDecimal money, SysUser sysUser,
