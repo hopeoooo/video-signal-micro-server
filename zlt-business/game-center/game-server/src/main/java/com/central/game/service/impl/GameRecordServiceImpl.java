@@ -681,7 +681,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             list.add(vo);
             List<BigDecimal> totalList = gameRecordMapper.getGameWinningRate(userId, gameListEnum.getGameId());
             if (CollectionUtils.isEmpty(totalList)) {
-                vo.setRete("0%");
+                vo.setRete("0.00%");
                 continue;
             }
             //总局数
