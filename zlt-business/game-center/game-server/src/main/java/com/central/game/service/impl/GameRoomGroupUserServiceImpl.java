@@ -16,6 +16,7 @@ import com.central.game.service.IPushGameDataToClientService;
 import com.central.user.feign.UserService;
 import com.central.user.model.vo.SysUserInfoMoneyVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,10 +90,10 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
     }
 
     @Override
-    public List<GameRoomGroupUserVo> getTableNumGroupList(Long gameId, String tableNum, Long userId) {
+    public List<GameRoomGroupUserVo> getTableNumGroupList(Long gameId, String tableNum, SysUser sysUser) {
         //先查询是否已存在
         List<GameRoomGroupUserVo> list = new ArrayList<>();
-        GameRoomGroupUser user = gameRoomGroupUserMapper.checkExist(gameId, tableNum, userId);
+        GameRoomGroupUser user = gameRoomGroupUserMapper.checkExist(gameId, tableNum, sysUser.getId());
         if (user == null) {
             return list;
         }
@@ -114,10 +115,25 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
         GameRoomGroupUserVo userVo = null;
         for (SysUserInfoMoneyVo vo : userResultData) {
             userVo = new GameRoomGroupUserVo();
+            //其他玩家隐藏部分账号信息
+            String userName = vo.getUserName();
+            if (StringUtils.isNotBlank(userName) && !userName.equals(sysUser.getUsername())) {
+                if (userName.length() > 3) {
+                    userName = userName.substring(0, userName.length() - 3);
+                }
+                userName = userName + "***";
+            }
+            vo.setUserName(userName);
             BeanUtils.copyProperties(vo, userVo);
             list.add(userVo);
         }
         return list;
+    }
+
+    public static void main(String[] args) {
+        String s="benson";
+        s=s.substring(0,s.length()-3)+"***";
+        System.out.println(s);
     }
 
     @Override
