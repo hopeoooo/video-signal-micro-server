@@ -681,7 +681,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             list.add(vo);
             List<BigDecimal> totalList = gameRecordMapper.getGameWinningRate(userId, gameListEnum.getGameId());
             if (CollectionUtils.isEmpty(totalList)) {
-                vo.setRete("0");
+                vo.setRete("0%");
                 continue;
             }
             //总局数
@@ -691,7 +691,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             int winNum = winList.size();
             //胜率
             BigDecimal rate = new BigDecimal(winNum).divide(new BigDecimal(totalNum),4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
-            vo.setRete(keepDecimal(rate).toString());
+            vo.setRete(keepDecimal(rate).toString()+"%");
         }
         return list;
     }
