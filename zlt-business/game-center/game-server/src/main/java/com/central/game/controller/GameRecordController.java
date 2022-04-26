@@ -78,7 +78,7 @@ public class GameRecordController {
 
     @ApiOperation(value = "根据父级查询下注记录")
     @GetMapping("/getGameRecordByParent")
-    public Result<List<GameRecord>> getGameRecordByParent(@ModelAttribute GameRecordBetCo params) {
+    public Result<List<GameRecord>> getGameRecordByParent(@Valid @ModelAttribute GameRecordBetCo params) {
         List<GameRecord> list = gameRecordService.getGameRecordByParent(params);
         return Result.succeed(list);
     }
@@ -94,14 +94,14 @@ public class GameRecordController {
 
     @ApiOperation(value = "查询最新局即时彩池数据")
     @GetMapping("/getLivePot")
-    public Result<NewAddLivePotVo> getLivePot(@ModelAttribute GameRecordLivePotCo co) {
+    public Result<NewAddLivePotVo> getLivePot(@Valid @ModelAttribute GameRecordLivePotCo co) {
         NewAddLivePotVo list = gameRecordService.getLivePot(co.getGameId(), co.getTableNum());
         return Result.succeed(list);
     }
 
     @ApiOperation(value = "查询最新局筹码区注单数据")
     @GetMapping("/getChipArea")
-    public Result<List<GameRecord>> getChipArea(@ModelAttribute GameRecordLivePotCo co) {
+    public Result<List<GameRecord>> getChipArea(@Valid @ModelAttribute GameRecordLivePotCo co) {
         List<GameRecord> list = gameRecordService.getGameRecordByBureauNum(co.getGameId(), co.getTableNum());
         return Result.succeed(list);
     }
