@@ -7,7 +7,9 @@ import com.central.push.constant.SocketTypeConstant;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.yeauty.annotation.*;
 import org.yeauty.pojo.Session;
 
@@ -21,10 +23,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * https://blog.csdn.net/qq_38089964/article/details/81541846
  */
 @Slf4j
-@ServerEndpoint(path = "/ws/group/{groupId}/{userName}", host = "${ws.host}", port = "${ws.port}")
+@ServerEndpoint(path = "/ws/group/{groupId}/{token}", host = "${ws.host}", port = "${ws.port}")
 @Component
 @Data
 public class NettyWebSocketGroupServer {
+
+    @Autowired
+    private CustomReactiveAuthentication customReactiveAuthentication;
 
     private static final Map<String, CopyOnWriteArraySet<NettyWebSocketGroupServer>> groups = new HashMap<>();
 
@@ -36,7 +41,12 @@ public class NettyWebSocketGroupServer {
 
 
     @OnOpen
-    public void onOpen(Session session, @PathVariable String groupId, @PathVariable String userName) {
+    public void onOpen(Session session, @PathVariable String groupId, @PathVariable String token) {
+        String userName = customReactiveAuthentication.authentication(token);
+        if (ObjectUtils.isEmpty(userName)) {
+            log.error("/ws/group/onOpen连接失败,获取用户信息失败,token={}", token);
+            return;
+        }
         this.session = session;
         this.groupId = groupId;
         this.userName = userName;
@@ -62,7 +72,7 @@ public class NettyWebSocketGroupServer {
     }
 
     @OnClose
-    public void onClose() {
+    public void onClose(@PathVariable String token) {
         CopyOnWriteArraySet<NettyWebSocketGroupServer> friends = groups.get(groupId);
         if (friends != null) {
             friends.remove(this);
@@ -78,7 +88,7 @@ public class NettyWebSocketGroupServer {
     }
 
     @OnError
-    public void onError(Session session, Throwable error) {
+    public void onError(Session session, @PathVariable String token, Throwable error) {
         log.info("群组:{},用户:{}连接发生错误{}", groupId, userName, error.getMessage());
         error.printStackTrace();
     }
@@ -110,7 +120,6 @@ public class NettyWebSocketGroupServer {
             }
         }
     }
-
 
     /**
      * 通过房间ID群发消息

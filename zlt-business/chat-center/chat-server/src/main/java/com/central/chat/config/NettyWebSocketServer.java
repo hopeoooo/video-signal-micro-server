@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.yeauty.annotation.*;
 import org.yeauty.pojo.Session;
 
@@ -23,13 +24,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * https://blog.csdn.net/qq_38089964/article/details/81541846
  */
 @Slf4j
-@ServerEndpoint(path = "/ws/chat/{groupId}/{userName}", host = "${ws.host}", port = "${ws.port}")
+@ServerEndpoint(path = "/ws/chat/{groupId}/{token}", host = "${ws.host}", port = "${ws.port}")
 @Component
 @Data
 public class NettyWebSocketServer {
 
     @Autowired
     private ChatService chatService;
+    @Autowired
+    private CustomReactiveAuthentication customReactiveAuthentication;
 
     private static final Map<String, CopyOnWriteArraySet<NettyWebSocketServer>> groups = new HashMap<>();
 
@@ -41,7 +44,12 @@ public class NettyWebSocketServer {
 
 
     @OnOpen
-    public void onOpen(Session session, @PathVariable String groupId, @PathVariable String userName) {
+    public void onOpen(Session session, @PathVariable String groupId, @PathVariable String token) {
+        String userName = customReactiveAuthentication.authentication(token);
+        if (ObjectUtils.isEmpty(userName)) {
+            log.error("/ws/chat/onOpen连接失败,获取用户信息失败,token={}",token);
+            return;
+        }
         this.session = session;
         this.groupId = groupId;
         this.userName = userName;
@@ -56,14 +64,14 @@ public class NettyWebSocketServer {
         }
         //同名的后面的连接会覆盖前面的
         for (NettyWebSocketServer item : friends) {
-            if (item.getUserName().equals(userName)) {
+            if (item.getUserName().equals(this.userName)) {
                 friends.remove(item);
                 break;
             }
         }
         friends.add(this);
-        log.info("群组:{},用户:{} 加入连接，当前连接数为：{}", groupId, userName, friends.size());
-        onMessage(session, "连接成功");
+        log.info("群组:{},用户:{} 加入连接，当前连接数为：{}", groupId, this.userName, friends.size());
+        onMessage(session,"连接成功");
     }
 
     @OnClose
@@ -76,7 +84,7 @@ public class NettyWebSocketServer {
     }
 
     @OnMessage
-    public void onMessage(Session session,String message) {
+    public void onMessage(Session session, String message) {
         CopyOnWriteArraySet<NettyWebSocketServer> friends = groups.get(groupId);
         if (friends != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -98,14 +106,6 @@ public class NettyWebSocketServer {
     public void onError(Session session, Throwable error) {
         log.info("群组:{},用户:{}连接发生错误{}", groupId, userName, error.getMessage());
         error.printStackTrace();
-    }
-
-    public static void main(String[] args) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("userName", 1);
-        data.put("message", 1);
-        data.put("date", 1);
-        System.out.println(JSONObject.toJSONString(data));
     }
 
     /**
