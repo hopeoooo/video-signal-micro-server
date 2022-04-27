@@ -118,12 +118,12 @@ public class RedisTokensServiceImpl implements ITokensService {
         }
         OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
         if (accessToken == null) { // 没有找到token，无效的token
-            log.error("webSocket token认证失败,Invalid access token:{}", token);
+            log.error("Invalid access token:{}", token);
             return null;
         }
         OAuth2Authentication authentication = tokenStore.readAuthentication(accessToken);
         if (authentication == null) { // 无效的token
-            log.error("webSocket token认证失败,Invalid access token:{}", token);
+            log.error("Invalid access token:{}", token);
             return null;
         }
         SysUser sysUser = (SysUser) authentication.getPrincipal();

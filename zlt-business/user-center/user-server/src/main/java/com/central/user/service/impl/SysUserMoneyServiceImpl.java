@@ -130,6 +130,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         SysUserMoney sysUserMoney = baseMapper.selectOne(lqw);
         List<GameRoomGroupUserVo> datas = listResult.getDatas();
         for (GameRoomGroupUserVo vo : datas) {
+            vo.setGroupId(vo.getGroupId());
             vo.setStatus(1);
             vo.setUserName(userName);
             vo.setMoney(sysUserMoney.getMoney());
