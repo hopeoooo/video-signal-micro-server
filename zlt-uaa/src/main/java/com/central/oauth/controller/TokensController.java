@@ -3,6 +3,7 @@ package com.central.oauth.controller;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.config.feign.ConfigService;
 import com.central.oauth.model.TokenVo;
 import com.central.oauth.service.ITokensService;
@@ -53,6 +54,13 @@ public class TokensController {
     @ApiOperation(value = "token列表")
     public PageResult<TokenVo> list(@RequestParam Map<String, Object> params, String tenantId) {
         return tokensService.listTokens(params, tenantId);
+    }
+
+    @GetMapping("/getUserInfoByToken")
+    @ApiOperation(value = "根据token获取用户信息")
+    public Result<SysUser> getUserInfoByToken(@RequestParam("token") String token) {
+        SysUser sysUser = tokensService.getUserInfoByToken(token);
+        return Result.succeed(sysUser);
     }
 
     @GetMapping("/players")

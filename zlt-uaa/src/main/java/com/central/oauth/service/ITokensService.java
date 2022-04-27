@@ -1,6 +1,7 @@
 package com.central.oauth.service;
 
 import com.central.common.model.PageResult;
+import com.central.common.model.SysUser;
 import com.central.oauth.model.TokenVo;
 
 import java.util.Map;
@@ -23,4 +24,6 @@ public interface ITokensService {
      * 查看是否存在用户的key
      */
     Boolean exist(String username,String clientId);
+
+    SysUser getUserInfoByToken(String token);
 }

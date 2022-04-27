@@ -4,16 +4,21 @@ import cn.hutool.core.util.PageUtil;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.PageResult;
+import com.central.common.model.SysUser;
 import com.central.common.redis.template.RedisRepository;
 import com.central.oauth.model.TokenVo;
 import com.central.oauth.service.ITokensService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,6 +40,8 @@ import java.util.Set;
 public class RedisTokensServiceImpl implements ITokensService {
     @Autowired
     private RedisRepository redisRepository;
+    @Autowired
+    private TokenStore tokenStore;
 
     @Override
     public PageResult<TokenVo> listTokens(Map<String, Object> params, String clientId) {
@@ -102,5 +109,24 @@ public class RedisTokensServiceImpl implements ITokensService {
     public Boolean exist(String username,String clientId){
         String key = SecurityConstants.REDIS_UNAME_TO_ACCESS + clientId + ":" + username;
         return redisRepository.exists(key);
+    }
+
+    @Override
+    public SysUser getUserInfoByToken(String token) {
+        if (StringUtils.isBlank(token)){
+            return null;
+        }
+        OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
+        if (accessToken == null) { // 没有找到token，无效的token
+            log.error("webSocket token认证失败,Invalid access token:{}", token);
+            return null;
+        }
+        OAuth2Authentication authentication = tokenStore.readAuthentication(accessToken);
+        if (authentication == null) { // 无效的token
+            log.error("webSocket token认证失败,Invalid access token:{}", token);
+            return null;
+        }
+        SysUser sysUser = (SysUser) authentication.getPrincipal();
+        return sysUser;
     }
 }
