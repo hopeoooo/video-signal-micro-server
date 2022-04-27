@@ -143,7 +143,7 @@ public class DefaultExceptionAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NullPointerException.class)
     public Result nullPointerException(NullPointerException e) {
-        return defHandler("参数值不允许为空", e);
+        return defHandler("空指针异常", e);
     }
 
     /**
