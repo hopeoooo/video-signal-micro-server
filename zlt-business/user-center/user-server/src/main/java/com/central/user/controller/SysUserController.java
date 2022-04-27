@@ -35,6 +35,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -196,10 +197,19 @@ public class SysUserController {
 
     @GetMapping(value = "/user/getOnlineNum")
     @ApiOperation(value = "初始化查询在线人数")
-    public Result<Integer> getOnlineNum(){
+    public Result<Integer> getOnlineNum() {
         String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + SecurityConstants.APP_USER_ONLINE + "*";
         Set<String> keySet = redisTemplate.keys(onlineKey);
         int playerSize = keySet.size();
+        //查询最低在线人数
+        Result<String> result = configService.findMinOnlineUserQuantity();
+        if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            log.error("查询最低在线人数失败,result={}", result.toString());
+        }
+        String datas = result.getDatas();
+        if (!ObjectUtils.isEmpty(datas)) {
+            playerSize = playerSize + Integer.parseInt(datas);
+        }
         return Result.succeed(playerSize);
     }
 
@@ -211,6 +221,15 @@ public class SysUserController {
         int playerSize = keySet.size();
         if (changeNum != null) {
             playerSize = playerSize + changeNum;
+        }
+        //查询最低在线人数
+        Result<String> result = configService.findMinOnlineUserQuantity();
+        if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            log.error("查询最低在线人数失败,result={}", result.toString());
+        }
+        String datas = result.getDatas();
+        if (!ObjectUtils.isEmpty(datas)) {
+            playerSize = playerSize + Integer.parseInt(datas);
         }
         PushResult<Integer> pushResult = PushResult.succeed(playerSize, SocketTypeConstant.ONLINE_NUMS, "在线人数推送成功");
         Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
