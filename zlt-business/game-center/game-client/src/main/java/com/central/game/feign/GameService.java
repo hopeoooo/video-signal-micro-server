@@ -171,6 +171,6 @@ public interface GameService {
     @GetMapping("/gameRoomGroupUser/removeAllGroup/{userName}")
     Result removeTableNumGroup(@PathVariable("userName") String userName);
 
-    @GetMapping("/getAllGroupListByUserName/{userName}")
+    @GetMapping("/gameRoomGroupUser/getAllGroupListByUserName/{userName}")
     Result<List<GameRoomGroupUserVo>> getAllGroupListByUserName(@PathVariable(value = "userName") String userName);
 }

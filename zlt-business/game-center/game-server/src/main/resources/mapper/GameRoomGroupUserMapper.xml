@@ -17,7 +17,7 @@
     </select>
 
     <select id="getGroupList" resultType="com.central.game.model.vo.GameRoomGroupUserVo">
-        SELECT a.user_name userName,a.id,b.game_id gameId,b.table_num tableNum
+        SELECT a.user_name userName,a.id,a.group_id groupId,b.game_id gameId,b.table_num tableNum
         from game_room_group_user a left JOIN game_room_group b on a.group_id=b.id
         <where>
             <if test="userName!=null and userName!=''">

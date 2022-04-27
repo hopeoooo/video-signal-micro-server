@@ -72,21 +72,23 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
         gameRoomGroupUser.setUserName(sysUser.getUsername());
         gameRoomGroupUser.setGroupId(groupId);
         gameRoomGroupUserMapper.insert(gameRoomGroupUser);
-
+        GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
+        vo.setGameId(gameId);
+        vo.setTableNum(tableNum);
+        vo.setGroupId(user.getGroupId());
+        vo.setStatus(2);
         List<Long> userIdList = new ArrayList<>();
         userIdList.add(sysUser.getId());
         Result<List<SysUserInfoMoneyVo>> result = userService.findListByUserIdList(userIdList);
         if (result.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-            GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
-            vo.setGameId(gameId);
-            vo.setTableNum(tableNum);
             if (!CollectionUtils.isEmpty(result.getDatas())) {
                 SysUserInfoMoneyVo userInfoMoneyVo = result.getDatas().get(0);
-                BeanUtils.copyProperties(userInfoMoneyVo, vo);
+                vo.setMoney(userInfoMoneyVo.getMoney());
+                vo.setHeadImgUrl(userInfoMoneyVo.getHeadImgUrl());
                 vo.setUserName(sysUser.getUsername());
-                pushGameDataToClientService.syncTableNumGroup(vo);
             }
         }
+        pushGameDataToClientService.syncTableNumGroup(vo);
     }
 
     @Override
@@ -104,7 +106,14 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
             return list;
         }
         List<Long> userIdList = new ArrayList<>();
+        GameRoomGroupUserVo userVo = null;
         for (GameRoomGroupUser gameRoomGroupUser : userList) {
+            userVo = new GameRoomGroupUserVo();
+            userVo.setGroupId(gameRoomGroupUser.getGroupId());
+            userVo.setUserName(gameRoomGroupUser.getUserName());
+            userVo.setGameId(gameId);
+            userVo.setTableNum(tableNum);
+            list.add(userVo);
             userIdList.add(gameRoomGroupUser.getUserId());
         }
         Result<List<SysUserInfoMoneyVo>> userResult = userService.findListByUserIdList(userIdList);
@@ -112,20 +121,14 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
             return list;
         }
         List<SysUserInfoMoneyVo> userResultData = userResult.getDatas();
-        GameRoomGroupUserVo userVo = null;
-        for (SysUserInfoMoneyVo vo : userResultData) {
-            userVo = new GameRoomGroupUserVo();
-            //其他玩家隐藏部分账号信息，暂时交前端处理，前端要通过用户名匹配数据
-//            String userName = vo.getUserName();
-//            if (StringUtils.isNotBlank(userName) && !userName.equals(sysUser.getUsername())) {
-//                if (userName.length() > 3) {
-//                    userName = userName.substring(0, userName.length() - 3);
-//                }
-//                userName = userName + "***";
-//            }
-//            vo.setUserName(userName);
-            BeanUtils.copyProperties(vo, userVo);
-            list.add(userVo);
+        for(GameRoomGroupUserVo groupUserVo:list){
+            for (SysUserInfoMoneyVo vo : userResultData) {
+                if (groupUserVo.getUserName().equals(vo.getUserName())){
+                    groupUserVo.setHeadImgUrl(vo.getHeadImgUrl());
+                    groupUserVo.setMoney(vo.getMoney());
+                    break;
+                }
+            }
         }
         return list;
     }
@@ -142,6 +145,7 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
         if (user != null && user.getUserId() != null) {
             gameRoomGroupUserMapper.deleteById(user.getId());
             GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
+            vo.setGroupId(user.getGroupId());
             vo.setGameId(gameId);
             vo.setTableNum(tableNum);
             vo.setStatus(0);
