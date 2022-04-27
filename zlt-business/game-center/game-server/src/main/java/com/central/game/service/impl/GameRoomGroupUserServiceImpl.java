@@ -75,7 +75,7 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
         GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
         vo.setGameId(gameId);
         vo.setTableNum(tableNum);
-        vo.setGroupId(user.getGroupId());
+        vo.setGroupId(gameRoomGroupUser.getGroupId());
         vo.setStatus(2);
         List<Long> userIdList = new ArrayList<>();
         userIdList.add(sysUser.getId());
