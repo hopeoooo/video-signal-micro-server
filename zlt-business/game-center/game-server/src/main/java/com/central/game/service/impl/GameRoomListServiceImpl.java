@@ -14,7 +14,10 @@ import com.central.game.model.GameRoomList;
 import com.central.game.model.RoomFollowList;
 import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.model.vo.LivePotVo;
-import com.central.game.service.*;
+import com.central.game.service.IGameRoomInfoOfflineService;
+import com.central.game.service.IGameRoomListService;
+import com.central.game.service.IPushGameDataToClientService;
+import com.central.game.service.IRoomFollowListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,6 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
@@ -41,8 +43,6 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     private GameRoomListMapper gameRoomListMapper;
     @Autowired
     private IGameRoomInfoOfflineService gameRoomInfoOfflineService;
-    @Autowired
-    private IGameLotteryResultService gameLotteryResultService;
     @Autowired
     private RedisRepository redisRepository;
     @Autowired
@@ -209,10 +209,49 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
 
     public void getTableLowerInfo(GameRoomListVo vo) {
         //本靴牌开奖结果
-        List<GameLotteryResult> lotteryResultList = gameLotteryResultService.getBootNumResultList(vo.getGameId(), vo.getTableNum(), vo.getBootNum());
-        if (CollectionUtils.isEmpty(lotteryResultList)) {
+        String redisDataKey = RedisKeyConstant.GAME_RECORD_LOTTERY_RESULT_DATA + vo.getGameId() + "-" + vo.getTableNum() + "-" + 1016;
+        int length = redisRepository.length(redisDataKey).intValue();
+        if (length == 0) {
             return;
         }
-        gameLotteryResultService.setLotteryNum(lotteryResultList, vo);
+        List<Object> list = redisRepository.getList(redisDataKey, 0, length);
+        List<GameLotteryResult> lotteryResultList = new ArrayList<>();
+        for (Object obj : list) {
+            GameLotteryResult result = (GameLotteryResult) obj;
+            lotteryResultList.add(result);
+        }
+        setLotteryNum(lotteryResultList, vo);
+    }
+
+    public void setLotteryNum(List<GameLotteryResult> lotteryResultList, GameRoomListVo vo){
+        vo.setBootNumResultList(lotteryResultList);
+        vo.setBootNumTotalNum(lotteryResultList.size());
+        Integer bankerNum = 0;
+        Integer playerNum = 0;
+        Integer tieNum = 0;
+        Integer bpairNum = 0;
+        Integer ppairNum = 0;
+        for (GameLotteryResult result : lotteryResultList) {
+            if (result.getResult().contains(PlayEnum.BAC_BANKER.getCode())) {
+                bankerNum++;
+            }
+            if (result.getResult().contains(PlayEnum.BAC_PLAYER.getCode())) {
+                playerNum++;
+            }
+            if (result.getResult().contains(PlayEnum.BAC_TIE.getCode())) {
+                tieNum++;
+            }
+            if (result.getResult().contains(PlayEnum.BAC_BPAIR.getCode())) {
+                bpairNum++;
+            }
+            if (result.getResult().contains(PlayEnum.BAC_PPAIR.getCode())) {
+                ppairNum++;
+            }
+        }
+        vo.setBootNumBankerNum(bankerNum);
+        vo.setBootNumPlayerNum(playerNum);
+        vo.setBootNumTieNum(tieNum);
+        vo.setBootNumBpairNum(bpairNum);
+        vo.setBootNumPpairNum(ppairNum);
     }
 }

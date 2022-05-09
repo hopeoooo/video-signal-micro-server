@@ -33,8 +33,8 @@ public interface IGameLotteryResultService extends ISuperService<GameLotteryResu
 
     PageResult<GameLotteryResult> findList(GameLotteryResultBackstageCo map);
 
-    void setLotteryNum(List<GameLotteryResult> lotteryResultList, GameRoomListVo vo);
-
     List<GameLotteryResult> getBootNumResultList(Long gameId, String tableNum, String bootNum);
+
+    void syncSaveToRedis(GameLotteryResult result);
 }
 

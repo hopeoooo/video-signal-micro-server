@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.*;
+import com.central.common.redis.constant.RedisKeyConstant;
+import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
 import com.central.game.constants.PlayEnum;
@@ -51,6 +53,8 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
     private UserService userService;
     @Autowired
     private IGameRecordSonService gameRecordSonService;
+    @Autowired
+    private RedisRepository redisRepository;
 
     @Override
     public List<GameLotteryResult> getLotteryResultList(GameLotteryResultCo co) {
@@ -202,39 +206,6 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
     }
 
     @Override
-    public void setLotteryNum(List<GameLotteryResult> lotteryResultList, GameRoomListVo vo){
-        vo.setBootNumResultList(lotteryResultList);
-        vo.setBootNumTotalNum(lotteryResultList.size());
-        Integer bankerNum = 0;
-        Integer playerNum = 0;
-        Integer tieNum = 0;
-        Integer bpairNum = 0;
-        Integer ppairNum = 0;
-        for (GameLotteryResult result : lotteryResultList) {
-            if (result.getResult().contains(PlayEnum.BAC_BANKER.getCode())) {
-                bankerNum++;
-            }
-            if (result.getResult().contains(PlayEnum.BAC_PLAYER.getCode())) {
-                playerNum++;
-            }
-            if (result.getResult().contains(PlayEnum.BAC_TIE.getCode())) {
-                tieNum++;
-            }
-            if (result.getResult().contains(PlayEnum.BAC_BPAIR.getCode())) {
-                bpairNum++;
-            }
-            if (result.getResult().contains(PlayEnum.BAC_PPAIR.getCode())) {
-                ppairNum++;
-            }
-        }
-        vo.setBootNumBankerNum(bankerNum);
-        vo.setBootNumPlayerNum(playerNum);
-        vo.setBootNumTieNum(tieNum);
-        vo.setBootNumBpairNum(bpairNum);
-        vo.setBootNumPpairNum(ppairNum);
-    }
-
-    @Override
     public List<GameLotteryResult> getBootNumResultList(Long gameId, String tableNum, String bootNum) {
         LambdaQueryWrapper<GameLotteryResult> lqw = Wrappers.lambdaQuery();
         lqw.eq(GameLotteryResult::getGameId, gameId);
@@ -242,5 +213,14 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
         lqw.eq(GameLotteryResult::getBootNum, bootNum);
         List<GameLotteryResult> lotteryResultList = gameLotteryResultMapper.selectList(lqw);
         return lotteryResultList;
+    }
+
+    @Override
+    @Async
+    public void syncSaveToRedis(GameLotteryResult result) {
+        String redisDataKey = RedisKeyConstant.GAME_RECORD_LOTTERY_RESULT_DATA + result.getGameId() + "-" + result.getTableNum() + "-" + result.getBootNum();
+        redisRepository.rightPush(redisDataKey, result);
+        //有效期2小时
+        redisRepository.setExpire(redisDataKey, 2 * 60 * 60);
     }
 }

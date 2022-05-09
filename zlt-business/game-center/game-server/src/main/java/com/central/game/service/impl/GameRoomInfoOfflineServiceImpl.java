@@ -2,23 +2,16 @@ package com.central.game.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.game.mapper.GameRoomInfoOfflineMapper;
-import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.vo.GameRoomListVo;
-import com.central.game.service.IGameLotteryResultService;
-import com.central.game.service.IGameRecordService;
 import com.central.game.service.IGameRoomInfoOfflineService;
 import com.central.game.service.IGameRoomListService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
 
 /**
  * @author zlt
@@ -30,8 +23,6 @@ public class GameRoomInfoOfflineServiceImpl extends SuperServiceImpl<GameRoomInf
 
     @Autowired
     private GameRoomInfoOfflineMapper gameRoomInfoOfflineMapper;
-    @Autowired
-    private IGameLotteryResultService gameLotteryResultService;
     @Autowired
     private IGameRoomListService gameRoomListService;
 

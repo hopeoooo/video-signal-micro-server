@@ -63,17 +63,28 @@ public class GameLotteryResultConsumer {
                 result.setLotteryId(resultCo.getId());
                 result.setLotteryTime(resultCo.getCreateTime());
                 gameLotteryResultService.save(result);
-                //推送开奖结果
-                pushGameDataToClientService.pushLotterResult(result);
-                //计算派彩，有效投注额，输赢
-                gameLotteryResultService.calculateBetResult(result);
-                //异步推送派彩结果
-                pushGameDataToClientService.syncPushPayoutResult(result);
-                //异步删除游客用户记录
-                gameRecordService.syncDeleteGuestRecordBureauNum(result.getGameId(),result.getTableNum(),result.getBootNum(),result.getBureauNum());
+                //业务处理
+                business(result);
             } catch (Exception e) {
                 log.error("开奖数据保存失败,data={},msg={}", result.toString(), e.getMessage());
             }
         }
+    }
+
+    /**
+     * 业务处理
+     * @param result
+     */
+    public void business(GameLotteryResult result){
+        //按靴缓存数据，方便列表统计查询
+        gameLotteryResultService.syncSaveToRedis(result);
+        //推送开奖结果
+        pushGameDataToClientService.pushLotterResult(result);
+        //计算派彩，有效投注额，输赢
+        gameLotteryResultService.calculateBetResult(result);
+        //异步推送派彩结果
+        pushGameDataToClientService.syncPushPayoutResult(result);
+        //异步删除游客用户记录
+        gameRecordService.syncDeleteGuestRecordBureauNum(result.getGameId(),result.getTableNum(),result.getBootNum(),result.getBureauNum());
     }
 }

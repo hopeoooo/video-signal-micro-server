@@ -22,8 +22,7 @@ public class ChatServiceImpl implements ChatService {
     @Async
     public void syncSaveChatMessage(String groupId, String message) {
         String key = ChatConstant.CHAT_MESSAGE_KEY + groupId;
-        redisRepository.in(key, message);
-        System.out.println("aaa" + Thread.currentThread().getId());
+        redisRepository.rightPush(key, message);
     }
 
     @Override
