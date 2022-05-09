@@ -215,11 +215,7 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
             return;
         }
         List<Object> list = redisRepository.getList(redisDataKey, 0, length);
-        List<GameLotteryResult> lotteryResultList = new ArrayList<>();
-        for (Object obj : list) {
-            GameLotteryResult result = (GameLotteryResult) obj;
-            lotteryResultList.add(result);
-        }
+        List<GameLotteryResult> lotteryResultList = (List<GameLotteryResult>)(List)list;
         setLotteryNum(lotteryResultList, vo);
     }
 
