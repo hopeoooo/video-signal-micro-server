@@ -209,7 +209,7 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
 
     public void getTableLowerInfo(GameRoomListVo vo) {
         //本靴牌开奖结果
-        String redisDataKey = RedisKeyConstant.GAME_RECORD_LOTTERY_RESULT_DATA + vo.getGameId() + "-" + vo.getTableNum() + "-" + 1016;
+        String redisDataKey = RedisKeyConstant.GAME_RECORD_LOTTERY_RESULT_DATA + vo.getGameId() + "-" + vo.getTableNum() + "-" + vo.getBootNum();
         int length = redisRepository.length(redisDataKey).intValue();
         if (length == 0) {
             return;
