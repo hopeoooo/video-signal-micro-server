@@ -9,13 +9,16 @@ import com.central.game.service.IGameRoomInfoOfflineService;
 import com.central.game.service.IPushGameDataToClientService;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
+import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -32,9 +35,11 @@ public class GameRoomInfoOfflineConsumer {
     private IPushGameDataToClientService pushGameDataToClientService;
 
     @RabbitHandler
-    public void process(String data) {
+    public void process(String data, Channel channel, Message message) throws IOException {
         log.info("接收到桌台配置详情数据,data={}", data);
         saveOrUpdateData(data);
+        // 消息的标识，false只确认当前一个消息收到，true确认所有consumer获得的消息（成功消费，消息从队列中删除 ）
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
         log.info("桌台配置详细信息处理完成,data={}", data);
     }
 
