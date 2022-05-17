@@ -24,23 +24,14 @@ public class SysUserJettonController {
     @GetMapping(value = "/uid")
     @ApiOperation(value = "根据uid查询用户筹码配置")
     public Result<String> queryJettonByUid(@LoginUser SysUser sysUser){
-
-        SysUserJetton sysUserJetton = sysUserJettonService.lambdaQuery().eq(SysUserJetton::getUid,sysUser.getId()).one();
-        return Result.succeed(sysUserJetton == null?"5,10,20,50,100": sysUserJetton.getJettonConfig(),"query success");
+        SysUserJetton sysUserJetton = sysUserJettonService.queryJettonByUid(sysUser.getId());
+        return Result.succeed(sysUserJetton == null?"5,10,20,50,100": sysUserJetton.getJettonConfig());
     }
 
     @PostMapping("/put_config")
     @ApiOperation(value = "设置用户筹码")
     public Result<Boolean> updateJettonConfig(@RequestBody SysUserJettonVO sysUserJettonVO, @LoginUser SysUser sysUser){
-        SysUserJetton dbSysjetton = sysUserJettonService.lambdaQuery().eq(SysUserJetton::getUid,sysUser.getId()).one();
-        Boolean result = Boolean.FALSE;
-        if(dbSysjetton == null){
-            SysUserJetton sysUserJetton = SysUserJetton.builder().uid(sysUser.getId()).jettonConfig(sysUserJettonVO.getJetton_config()).build();
-            result = sysUserJettonService.save(sysUserJetton);
-        }else {
-            dbSysjetton.setJettonConfig(sysUserJettonVO.getJetton_config());
-            result = sysUserJettonService.updateById(dbSysjetton);
-        }
-        return Result.succeed(result);
+        sysUserJettonService.updateJettonConfig(sysUserJettonVO.getJetton_config(),sysUser.getId());
+        return Result.succeed();
     }
 }

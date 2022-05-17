@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 @Data
-@Builder
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("筹码配置实体")
 @TableName("sys_user_jetton")
