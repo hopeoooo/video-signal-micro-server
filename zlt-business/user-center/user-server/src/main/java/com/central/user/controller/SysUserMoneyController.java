@@ -97,15 +97,16 @@ public class SysUserMoneyController {
         if (capitalEnum == CapitalEnum.DEFAULT) {
             return Result.failed("操作类型错误");
         }
+        SysUser sysUser = iSysUserService.selectById(userId);
+        if (sysUser == null) {
+            return Result.failed("用户不存在");
+        }
         String redisKey = RedisKeyConstant.SYS_USER_MONEY_MONEY_LOCK + userId;
         boolean moneyLock = RedissLockUtil.tryLock(redisKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
+        SysUserMoney saveSysUserMoney = null;
         try {
             if (!moneyLock) {
                 return Result.failed("上下分请求太过频繁");
-            }
-            SysUser sysUser = iSysUserService.selectById(userId);
-            if (sysUser == null) {
-                return Result.failed("用户不存在");
             }
             SysUserMoney sysUserMoney = userMoneyService.findByUserId(userId);
             if (sysUserMoney == null) {
@@ -116,17 +117,18 @@ public class SysUserMoneyController {
             } else if (transterType == CapitalEnum.BET.getType() && money.compareTo(sysUserMoney.getMoney()) == 1) {
                 return Result.failed("下注金额不能大于剩余金额");
             }
-            SysUserMoney saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId, sysUser, betId);
-            userMoneyService.syncPushMoneyToWebApp(userId, sysUser.getUsername());
-            //推送余额变化到桌台
-            userMoneyService.syncPushMoneyToTableNum(userId, sysUser.getUsername());
-            return Result.succeed(saveSysUserMoney);
+            saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId, sysUser, betId);
         } catch (Exception e) {
             log.error("用户上下分异常,userId:{},money:{},remark:{},transterType{},traceId{},betId:{}", userId, money, remark, transterType, traceId, betId);
             return Result.failed("操作失败");
         } finally {
             RedissLockUtil.unlock(redisKey);
         }
+        //推送到首页余额变化
+        userMoneyService.syncPushMoneyToWebApp(userId, sysUser.getUsername());
+        //推送余额变化到桌台
+        userMoneyService.syncPushMoneyToTableNum(userId, sysUser.getUsername());
+        return Result.succeed(saveSysUserMoney);
     }
 
     @ApiOperation(value = "设置玩家金额")
