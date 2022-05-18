@@ -78,10 +78,27 @@ public class GameListController {
 
     @ApiOperation(value = "查询洗码配置列表(后台)")
     @GetMapping("/findGameList")
-    public Result<List<GameList>> findGameList(@RequestParam(value = "state", required = false)Integer state) {
+    public Result<List<GameList>> findGameList(@RequestParam(value = "gameId", required = false) Long gameId, @RequestParam(value = "state", required = false) Integer state) {
         LambdaQueryWrapper<GameList> wrapper = new LambdaQueryWrapper<>();
-        if (state!=null){
-            wrapper.eq(GameList::getRateStatus,state);
+        if (gameId != null) {
+            wrapper.eq(GameList::getId, gameId);
+        }
+        if (state != null) {
+            wrapper.eq(GameList::getRateStatus, state);
+        }
+        List<GameList> list = gameListService.list(wrapper);
+        return Result.succeed(list);
+    }
+
+    @ApiOperation(value = "根据游戏ID查询开启洗码配置列表")
+    @GetMapping("/findEnableGameListByGameId")
+    public Result<List<GameList>> findEnableGameListByGameId(@RequestParam(value = "gameId", required = false) Long gameId, @RequestParam(value = "state", required = false) Integer state) {
+        LambdaQueryWrapper<GameList> wrapper = new LambdaQueryWrapper<>();
+        if (gameId != null) {
+            wrapper.eq(GameList::getId, gameId);
+        }
+        if (state != null) {
+            wrapper.eq(GameList::getRateStatus, state);
         }
         List<GameList> list = gameListService.list(wrapper);
         return Result.succeed(list);

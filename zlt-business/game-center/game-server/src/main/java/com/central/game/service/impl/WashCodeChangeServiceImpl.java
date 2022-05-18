@@ -32,7 +32,7 @@ public class WashCodeChangeServiceImpl extends SuperServiceImpl<WashCodeChangeMa
     public List<WashCodeChangeVo> getWashCodeRecord(Long userId, String startTime, String endTime) {
         List<WashCodeChangeVo> resultList = new ArrayList<>();
         //查询最新的洗码返水配置
-        Result<List<UserWashCodeConfig>> codeConfigResult = userService.findUserWashCodeConfigList(userId);
+        Result<List<UserWashCodeConfig>> codeConfigResult = userService.findWashCodeConfigListByUserId(userId);
         if (codeConfigResult.getResp_code()!= CodeEnum.SUCCESS.getCode()){
             return resultList;
         }

@@ -19,4 +19,6 @@ public interface IUserWashCodeConfigService extends ISuperService<UserWashCodeCo
      * @return
      */
     List<UserWashCodeConfig> findWashCodeConfigList(Long userId);
+
+    List<UserWashCodeConfig> findWashCodeConfigListByUserId(Long userId);
 }

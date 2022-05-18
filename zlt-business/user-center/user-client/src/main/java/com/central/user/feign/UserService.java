@@ -176,7 +176,10 @@ public interface UserService {
     Result<List<SysTansterMoneyLogVo>> findAllByParent(@SpringQueryMap SysTansterMoneyPageCo params);
 
     @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
-     Result< List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable("userId") Long userId) ;
+     Result<List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable("userId") Long userId) ;
+
+    @GetMapping("/userWashCode/findWashCodeConfigListByUserId/{userId}")
+     Result<List<UserWashCodeConfig>> findWashCodeConfigListByUserId(@PathVariable("userId") Long userId) ;
 
     @PostMapping("/userWashCode/saveUserWashCodeConfig")
     Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfigCo> list) ;

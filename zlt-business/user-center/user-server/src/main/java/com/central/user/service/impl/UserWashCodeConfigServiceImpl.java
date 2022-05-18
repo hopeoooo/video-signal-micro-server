@@ -1,10 +1,12 @@
 package com.central.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.central.common.constant.CommonConstant;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.Result;
 import com.central.common.model.UserWashCodeConfig;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.game.constants.GameListEnum;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
 import com.central.user.mapper.UserWashCodeConfigMapper;
@@ -65,6 +67,33 @@ public class UserWashCodeConfigServiceImpl extends SuperServiceImpl<UserWashCode
             washCodeConfigList.add(userWashCodeConfig);
         }
         return washCodeConfigList;
+    }
+
+    @Override
+    public List<UserWashCodeConfig> findWashCodeConfigListByUserId(Long userId) {
+        List<UserWashCodeConfig> userWashCodeConfigList = new ArrayList<>();
+        for (GameListEnum game : GameListEnum.values()) {
+            LambdaQueryWrapper<UserWashCodeConfig> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(UserWashCodeConfig::getUserId, userId);
+            wrapper.eq(UserWashCodeConfig::getGameId, game.getGameId());
+            List<UserWashCodeConfig> userWashCodeConfigs = baseMapper.selectList(wrapper);
+            if (CollectionUtils.isEmpty(userWashCodeConfigs)) {
+                Result<List<GameList>> gameListResult = gameService.findEnableGameListByGameId(game.getGameId(), CommonConstant.OPEN);
+                if (gameListResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+                    log.error("全局洗码配置查询失败，userId={},gameId={}", userId, game.getGameId());
+                    continue;
+                }
+                gameListResult.getDatas().forEach(info -> {
+                    UserWashCodeConfig cfg = new UserWashCodeConfig();
+                    cfg.setGameId(info.getId());
+                    cfg.setGameName(info.getName());
+                    cfg.setGameRate(info.getGameRate());
+                    userWashCodeConfigs.add(cfg);
+                });
+            }
+            userWashCodeConfigList.addAll(userWashCodeConfigs);
+        }
+        return userWashCodeConfigList;
     }
 
 }

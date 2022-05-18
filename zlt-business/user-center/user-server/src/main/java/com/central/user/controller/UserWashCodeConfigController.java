@@ -50,6 +50,13 @@ public class UserWashCodeConfigController {
         return Result.succeed(userWashCodeConfig,"查询成功");
     }
 
+    @ApiOperation("根据userId查询全部洗码配置")
+    @GetMapping("/findWashCodeConfigListByUserId/{userId}")
+    public Result<List<UserWashCodeConfig>> findWashCodeConfigListByUserId(@PathVariable Long userId) {
+        List<UserWashCodeConfig> userWashCodeConfig = userWashCodeConfigService.findWashCodeConfigListByUserId(userId);
+        return Result.succeed(userWashCodeConfig);
+    }
+
 
 
     @ApiOperation(value = "保存")

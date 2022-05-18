@@ -62,6 +62,9 @@ public interface GameService {
     @GetMapping("/gamelist/findGameList")
      Result<List<GameList>> findGameList(@RequestParam("state") Integer state) ;
 
+    @GetMapping("/gamelist/findEnableGameListByGameId")
+     Result<List<GameList>> findEnableGameListByGameId(@RequestParam("gameId") Long gameId,@RequestParam("state") Integer state) ;
+
     /**
      * 房间列表
      *

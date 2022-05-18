@@ -68,6 +68,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
+            public Result<List<GameList>> findEnableGameListByGameId(Long gameId,Integer state) {
+                log.error("findEnableGameListByGameId查询洗码配置列表失败", throwable);
+                return Result.failed("查询失败");
+            }
+
+            @Override
             public Result<List<GameRoomList>> findList(Long gameId) {
                 log.error("findList查询房间列表失败", throwable);
                 return Result.failed("查询失败");

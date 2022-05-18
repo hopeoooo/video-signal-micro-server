@@ -195,10 +195,15 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 return Result.failed("查询转账记录异常");
             }
 
-            @GetMapping("/userWashCode/findUserWashCodeConfigList/{userId}")
             @Override
-            public Result< List<UserWashCodeConfig>> findUserWashCodeConfigList(Long userId) {
+            public Result<List<UserWashCodeConfig>> findUserWashCodeConfigList(Long userId) {
                 log.error("findUserWashCodeConfigList查询个人洗码配置异常:{}",userId,throwable);
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result<List<UserWashCodeConfig>> findWashCodeConfigListByUserId(Long userId) {
+                log.error("findWashCodeConfigListByUserId查询个人洗码配置异常:{}", userId, throwable);
                 return Result.failed("查询失败");
             }
 
