@@ -23,9 +23,10 @@ public class SysUserJettonController {
 
     @GetMapping(value = "/uid")
     @ApiOperation(value = "根据uid查询用户筹码配置")
-    public Result<String> queryJettonByUid(@LoginUser SysUser sysUser){
+    public Result<String> queryJettonByUid(@LoginUser SysUser sysUser) {
         SysUserJetton sysUserJetton = sysUserJettonService.queryJettonByUid(sysUser.getId());
-        return Result.succeed(sysUserJetton == null?"5,10,20,50,100": sysUserJetton.getJettonConfig());
+        String jettonConfig = sysUserJetton == null ? "5,10,20,50,100" : sysUserJetton.getJettonConfig();
+        return Result.succeed(jettonConfig, "查询成功");
     }
 
     @PostMapping("/put_config")
