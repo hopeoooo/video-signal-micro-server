@@ -41,6 +41,7 @@ public class RoomFollowListServiceImpl extends SuperServiceImpl<RoomFollowListMa
         for (GameRoomList roomList : list) {
             GameRoomListVo vo = new GameRoomListVo();
             BeanUtils.copyProperties(roomList, vo);
+            vo.setFollowStatus(1);
             vo.setRoomId(roomList.getId());
             vo.setTableNum(roomList.getGameRoomName());
             vo.setGameRoomName(roomList.getGameRoomName());
