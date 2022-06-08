@@ -698,15 +698,28 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
 
     @Override
     public List<GameRecord> getNewestBetListByGameId(Long gameId, Long userId) {
+        List<GameRecord> gameRecordList = new ArrayList<>();
+        Result<LoginLog> loginResult = userService.getLastLoginLogByUserId(userId);
+        if (loginResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            log.error("查询用户最后一次登录信息失败，userId={}", userId);
+            return gameRecordList;
+        }
+        LoginLog loginLog = loginResult.getDatas();
+        if (loginLog == null || ObjectUtils.isEmpty(loginLog.getCreateTime())) {
+            return gameRecordList;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String loginTime = sdf.format(loginLog.getCreateTime());
         //先查询最新投注的局数
         LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
         lqw.eq(GameRecord::getGameId, gameId);
         lqw.eq(GameRecord::getUserId, userId);
+        lqw.ge(GameRecord::getCreateTime, loginTime);
         lqw.orderByDesc(GameRecord::getCreateTime);
         lqw.last("limit 1");
         GameRecord gameRecord = gameRecordMapper.selectOne(lqw);
         if (gameRecord == null) {
-            return null;
+            return gameRecordList;
         }
         //再查询本局的所有投注记录
         LambdaQueryWrapper<GameRecord> lqw1 = Wrappers.lambdaQuery();
@@ -715,7 +728,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         lqw1.eq(GameRecord::getTableNum, gameRecord.getTableNum());
         lqw1.eq(GameRecord::getBootNum, gameRecord.getBootNum());
         lqw1.eq(GameRecord::getBureauNum, gameRecord.getBureauNum());
-        List<GameRecord> gameRecordList = gameRecordMapper.selectList(lqw1);
+        gameRecordList = gameRecordMapper.selectList(lqw1);
         return gameRecordList;
     }
 

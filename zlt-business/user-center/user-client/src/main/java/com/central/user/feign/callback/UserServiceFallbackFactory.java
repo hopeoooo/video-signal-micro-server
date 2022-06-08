@@ -289,6 +289,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("findListByUserIdList error userIdList={}",userIdList.toString());
                 return Result.failed("查询失败");
             }
+
+            @Override
+            public Result<LoginLog> getLastLoginLogByUserId(Long userId) {
+                log.error("getLastLoginLogByUserId error userId={}",userId);
+                return Result.failed("查询失败");
+            }
         };
     }
 }

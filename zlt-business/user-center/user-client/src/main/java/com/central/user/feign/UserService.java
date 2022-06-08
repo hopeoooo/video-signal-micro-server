@@ -222,4 +222,7 @@ public interface UserService {
 
     @PostMapping("/users/findListByUserIdList")
     Result<List<SysUserInfoMoneyVo>> findListByUserIdList(@RequestBody List<Long> userIdList);
+
+    @GetMapping("/loginLog/getLastLoginLogByUserId/{userId}")
+    Result<LoginLog> getLastLoginLogByUserId(@PathVariable("userId") Long userId);
 }

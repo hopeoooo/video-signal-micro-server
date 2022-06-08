@@ -1,13 +1,17 @@
 package com.central.user.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.central.common.annotation.LoginUser;
 import com.central.common.dto.LoginLogPageDto;
 import com.central.common.model.LoginLog;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.model.SysUser;
 import com.central.user.service.ILoginLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +49,13 @@ public class LoginLogController {
     public Result<Boolean> addLoginlog(@RequestBody LoginLog loginLog){
         Boolean result = ILoginLogService.save(loginLog);
         return result? Result.succeed(Boolean.TRUE):Result.succeed(Boolean.FALSE);
+    }
+
+    @ApiOperation(value = "根据userId查询最新登录信息")
+    @GetMapping("/getLastLoginLogByUserId/{userId}")
+    public Result<LoginLog> getLastLoginLogByUserId(@PathVariable Long userId) {
+        LoginLog loginLog = ILoginLogService.lambdaQuery().eq(LoginLog::getUserId, userId).orderByDesc(LoginLog::getCreateTime).last("limit 1").one();
+        return Result.succeed(loginLog);
     }
 
 }
