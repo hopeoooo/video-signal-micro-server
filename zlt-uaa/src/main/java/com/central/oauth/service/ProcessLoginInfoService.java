@@ -11,4 +11,6 @@ public interface ProcessLoginInfoService {
 
     void initGuest(SysUser userDetails);
 
+    void clearGuestGameRecord(SysUser sysUser);
+
 }

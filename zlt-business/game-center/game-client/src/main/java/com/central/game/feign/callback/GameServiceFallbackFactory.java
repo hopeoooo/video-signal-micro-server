@@ -205,6 +205,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
+            public Result clearGuestGameRecord(Long userId) {
+                log.error("clearGuestGameRecord根据userId清空投注记录失败，userId:{}",userId);
+                return Result.failed("查询失败");
+            }
+
+            @Override
             public Result clearGuestFollowList(Long userId) {
                 log.error("clearGuestFollowList清空关注列表失败，userId:{}",userId);
                 return Result.failed("清空关注列表失败");

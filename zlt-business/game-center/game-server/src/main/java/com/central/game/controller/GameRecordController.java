@@ -1,5 +1,7 @@
 package com.central.game.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.annotation.LoginUser;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
@@ -210,6 +212,15 @@ public class GameRecordController {
     public Result<List<GameRecord>> getNewestBetListByGameId(@PathVariable Long gameId,@LoginUser SysUser user) {
         List<GameRecord> gameRecordList = gameRecordService.getNewestBetListByGameId(gameId, user.getId());
         return Result.succeed(gameRecordList);
+    }
+
+    @ApiOperation(value = "根据userId清空所有投注记录")
+    @GetMapping("/clearGuestGameRecord/{userId}")
+    public Result clearGuestGameRecord(@PathVariable Long userId) {
+        LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
+        lqw.eq(GameRecord::getUserId, null);
+        gameRecordService.remove(lqw);
+        return Result.succeed();
     }
 
     @ResponseBody

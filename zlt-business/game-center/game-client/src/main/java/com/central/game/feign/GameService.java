@@ -176,4 +176,7 @@ public interface GameService {
 
     @GetMapping("/gameRoomGroupUser/getAllGroupListByUserName/{userName}")
     Result<List<GameRoomGroupUserVo>> getAllGroupListByUserName(@PathVariable(value = "userName") String userName);
+
+    @GetMapping("/gameRecord/clearGuestGameRecord/{userId}")
+    Result clearGuestGameRecord(@PathVariable("userId") Long userId);
 }

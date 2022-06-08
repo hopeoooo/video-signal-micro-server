@@ -91,7 +91,7 @@ public class GameLotteryResultConsumer {
             gameLotteryResultService.calculateBetResult(result);
             //异步推送派彩结果
             pushGameDataToClientService.syncPushPayoutResult(result);
-            //异步删除游客用户记录
+            //异步删除游客用户记录（改为登录成功后删除）
             gameRecordService.syncDeleteGuestRecordBureauNum(result.getGameId(),result.getTableNum(),result.getBootNum(),result.getBureauNum());
         }catch (Exception e){
             log.error("开奖数据业务处理失败,data={},msg={}", result.toString(), e.getMessage());

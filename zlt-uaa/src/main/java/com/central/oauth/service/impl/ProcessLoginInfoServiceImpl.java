@@ -9,11 +9,13 @@ import com.central.common.model.SysUser;
 import com.central.common.vo.SysMoneyVO;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
+import com.central.game.feign.GameService;
 import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.user.feign.UserService;
 import com.central.user.model.co.SysUserCo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,12 @@ import java.math.BigDecimal;
 @Service
 public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
 
-    @Resource
+    @Autowired
     private UserService userService;
-
-    @Resource
+    @Autowired
     private ConfigService configService;
+    @Resource
+    private GameService gameService;
 
     @Async
     @Override
@@ -81,6 +84,12 @@ public class ProcessLoginInfoServiceImpl implements ProcessLoginInfoService {
         user.setId(sysUser.getId());
         user.setIsAutoBet(false);
         userService.updateSysUser(user);
+    }
+
+    @Async
+    @Override
+    public void clearGuestGameRecord(SysUser sysUser){
+        gameService.clearGuestGameRecord(sysUser.getId());
     }
 
 }

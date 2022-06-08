@@ -50,7 +50,11 @@ public class GuestGranter extends AbstractTokenGranter {
         }
         log.info("{}",userAuth.getPrincipal());
         OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);
-        processLoginInfoService.initGuest((SysUser) userAuth.getPrincipal());
+        SysUser sysUser = (SysUser) userAuth.getPrincipal();
+        //还原金额
+        processLoginInfoService.initGuest(sysUser);
+        //清空之前游客账号的投注记录
+        processLoginInfoService.clearGuestGameRecord(sysUser);
         return new OAuth2Authentication(storedOAuth2Request, userAuth);
 
     }
