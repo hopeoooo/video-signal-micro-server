@@ -218,7 +218,7 @@ public class GameRecordController {
     @GetMapping("/clearGuestGameRecord/{userId}")
     public Result clearGuestGameRecord(@PathVariable Long userId) {
         LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
-        lqw.eq(GameRecord::getUserId, null);
+        lqw.eq(GameRecord::getUserId, userId);
         gameRecordService.remove(lqw);
         return Result.succeed();
     }
