@@ -136,20 +136,19 @@ public class SysUserMoneyController {
     public Result<Boolean> updateMoney(@RequestBody SysMoneyVO sysMoneyVO){
         log.info("udpate money for player {}",sysMoneyVO.getUid());
         SysUserMoney sysUserMoney = userMoneyService.lambdaQuery().eq(SysUserMoney::getUserId,sysMoneyVO.getUid()).one();
-        Boolean result = Boolean.FALSE;
         if(sysUserMoney != null){
             log.info("+++++++++  udpate user money  {}",sysMoneyVO.getUid());
-            result = userMoneyService.lambdaUpdate().eq(SysUserMoney::getUserId,sysMoneyVO.getUid()).set(SysUserMoney::getMoney,sysMoneyVO.getUserMoney()).update();
+            sysUserMoney.setMoney(sysMoneyVO.getUserMoney());
+            userMoneyService.updateCache(sysUserMoney);
         } else{
             log.info("+++++++++  udpate user money  {}",sysMoneyVO.getUid());
             SysUserMoney userMoney = new SysUserMoney();
             userMoney.setMoney(sysMoneyVO.getUserMoney());
             userMoney.setUserId(sysMoneyVO.getUid());
             userMoney.setUnfinishedCode(BigDecimal.ZERO);
-            result = userMoneyService.save(userMoney);
+            userMoneyService.saveCache(userMoney);
         }
-        log.info("+++++++++  udpate user money  {}",result);
-        return Result.succeed(result);
+        return Result.succeed();
     }
 
     @ApiOperation(value = "保存")

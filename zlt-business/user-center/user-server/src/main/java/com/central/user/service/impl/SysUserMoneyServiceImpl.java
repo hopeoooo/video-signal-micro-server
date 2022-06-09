@@ -82,6 +82,14 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     }
 
     @Override
+    @CachePut(key="#sysUserMoney.userId")
+    public SysUserMoney updateCache(SysUserMoney sysUserMoney) {
+        baseMapper.updateById(sysUserMoney);
+        //金额设置的时候实体默认是null,缓存保存null,后面计算的时候会NPE,要查询一次缓存中保存0，后面计算的时候才不会有问题
+        return baseMapper.selectById(sysUserMoney.getId());
+    }
+
+    @Override
     @Transactional
     @CachePut(key="#sysUserMoney.userId")
     public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Integer transterType, String remark, String traceId, SysUser sysUser, String betId) {
