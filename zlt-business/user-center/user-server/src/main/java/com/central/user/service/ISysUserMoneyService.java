@@ -28,6 +28,8 @@ public interface ISysUserMoneyService extends ISuperService<SysUserMoney> {
 
     SysUserMoney saveCache(SysUserMoney sysUserMoney);
 
+    SysUserMoney updateCache(SysUserMoney sysUserMoney);
+
     SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Integer transterType, String remark, String traceId, SysUser sysUser,String betId);
 
     /**

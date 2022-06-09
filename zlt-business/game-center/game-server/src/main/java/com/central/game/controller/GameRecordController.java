@@ -1,17 +1,14 @@
 package com.central.game.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.annotation.LoginUser;
-import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.utils.AddrUtil;
 import com.central.game.dto.*;
 import com.central.game.model.GameRecord;
-import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordBetCo;
+import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.co.GameRecordLivePotCo;
 import com.central.game.model.vo.*;
@@ -217,9 +214,7 @@ public class GameRecordController {
     @ApiOperation(value = "根据userId清空所有投注记录")
     @GetMapping("/clearGuestGameRecord/{userId}")
     public Result clearGuestGameRecord(@PathVariable Long userId) {
-        LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();
-        lqw.eq(GameRecord::getUserId, userId);
-        gameRecordService.remove(lqw);
+        gameRecordService.lambdaUpdate().eq(GameRecord::getUserId, userId).remove();
         return Result.succeed();
     }
 
