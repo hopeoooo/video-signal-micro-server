@@ -28,9 +28,9 @@ public class ComparePlayers {
 
     @Scheduled(cron = "*/10 * * * * * ")
     public void scheduledTask() {
-        if (!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE)) {
-            return;
-        }
+//        if (!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE)) {
+//            return;
+//        }
         List<SysUser> sysUserList = appUserService.lambdaQuery().eq(SysUser::getType, UserType.APP_GUEST.name()).eq(SysUser::getEnabled, 1).list();
         List<String> userNameList = sysUserList.stream().map(t -> t.getUsername()).collect(Collectors.toList());
         log.info("check player account");
