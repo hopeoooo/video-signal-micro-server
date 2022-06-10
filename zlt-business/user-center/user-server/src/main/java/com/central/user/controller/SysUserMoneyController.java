@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -162,7 +163,7 @@ public class SysUserMoneyController {
 
     @ApiOperation(value = "更新洗码金额")
     @PostMapping("/updateWashCode")
-    public Result updateWashCode(@NotEmpty(message = "userId不允许为空") @RequestParam("userId") Long userId, @NotEmpty(message = "washCode不允许为空") @RequestParam("washCode") BigDecimal washCode) {
+    public Result updateWashCode(@NotNull(message = "userId不允许为空") @RequestParam("userId") Long userId, @NotNull(message = "washCode不允许为空") @RequestParam("washCode") BigDecimal washCode) {
         if (washCode.compareTo(BigDecimal.ZERO) < 1) {
             return Result.failed("洗码金额必须大于0");
         }
