@@ -3,8 +3,6 @@ package com.central.game.rocketMq.consumer;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.Result;
 import com.central.common.model.UserWashCodeConfig;
-import com.central.common.redis.constant.RedisKeyConstant;
-import com.central.common.redis.lock.RedissLockUtil;
 import com.central.game.model.GameRecord;
 import com.central.game.model.GameRecordSon;
 import com.central.game.model.WashCodeChange;
@@ -89,13 +87,17 @@ public class WashCodeConsumer {
             return;
         }
         BigDecimal gameRate = washCodeConfig.getGameRate();
-        if (ObjectUtils.isEmpty(gameRate)) {
-            log.error("洗码明细配置gameRate为空,washCodeConfig={},record={}", washCodeConfig.toString(), record.toString());
+        if (ObjectUtils.isEmpty(gameRate) || gameRate.compareTo(BigDecimal.ZERO) < 1) {
+            log.error("洗码明细配置gameRate为空或0,washCodeConfig={},record={}", washCodeConfig.toString(), record.toString());
             return;
         }
         //转化百分比
         BigDecimal rate = gameRate.divide(new BigDecimal("100"));
         BigDecimal washCodeVal = validbet.multiply(rate);
+        if (washCodeVal.compareTo(BigDecimal.ZERO) < 1) {
+            log.error("洗码金额计算为0,washCodeVal={},gameRate={},record={}", washCodeVal, gameRate, record.toString());
+            return;
+        }
         WashCodeChange washCodeChange = new WashCodeChange();
         washCodeChange.setUserId(record.getUserId());
         washCodeChange.setUserName(record.getUserName());
@@ -106,13 +108,10 @@ public class WashCodeConsumer {
         washCodeChange.setGameRecordId(record.getId());
         washCodeChange.setBetId(record.getBetId());
         washCodeChange.setAmount(washCodeVal);
-        String washCodeKey = RedisKeyConstant.SYS_USER_MONEY_WASH_CODE_LOCK + record.getUserId();
-        boolean washCodeLock = RedissLockUtil.tryLock(washCodeKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
-        if (!washCodeLock) {
-            log.error("洗码锁获取失败,record={}", record.toString());
-        }
         try {
             washCodeChangeService.save(washCodeChange);
+            //把洗码额加回userMoney
+            userService.updateWashCode(record.getUserId(),washCodeVal);
             log.info("洗码明细记录成功,washCodeChange={},record={}", washCodeChange.toString(), record.toString());
             //回写状态
             GameRecordSon gameRecordSon = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, record.getId()).one();
@@ -126,8 +125,6 @@ public class WashCodeConsumer {
         } catch (Exception e) {
             log.error("洗码失败，record={},msg={}", record.toString(), e.getMessage());
             e.printStackTrace();
-        } finally {
-            RedissLockUtil.unlock(washCodeKey);
         }
     }
 }

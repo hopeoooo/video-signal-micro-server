@@ -18,6 +18,7 @@ import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -225,4 +226,7 @@ public interface UserService {
 
     @GetMapping("/loginLog/getLastLoginLogByUserId/{userId}")
     Result<LoginLog> getLastLoginLogByUserId(@PathVariable("userId") Long userId);
+
+    @PostMapping("/userMoney/updateWashCode")
+    Result updateWashCode(@RequestParam("userId") Long userId, @RequestParam("washCode") BigDecimal washCode);
 }
