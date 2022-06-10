@@ -295,6 +295,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("getLastLoginLogByUserId error userId={}",userId);
                 return Result.failed("查询失败");
             }
+
+            @Override
+            public Result updateWashCode(Long userId, BigDecimal washCode) {
+                log.error("updateWashCode error userId={},washCode={}",userId,washCode);
+                return Result.failed("洗码金额更新失败");
+            }
         };
     }
 }

@@ -21,10 +21,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -158,6 +160,28 @@ public class SysUserMoneyController {
         return Result.succeed(saveSysUserMoney);
     }
 
+    @ApiOperation(value = "更新洗码金额")
+    @PostMapping("/updateWashCode")
+    public Result updateWashCode(@NotEmpty(message = "userId不允许为空") @RequestParam("userId") Long userId, @NotEmpty(message = "washCode不允许为空") @RequestParam("washCode") BigDecimal washCode) {
+        if (washCode.compareTo(BigDecimal.ZERO) < 1) {
+            return Result.failed("洗码金额必须大于0");
+        }
+        String washCodeKey = RedisKeyConstant.SYS_USER_MONEY_WASH_CODE_LOCK + userId;
+        boolean washCodeLock = RedissLockUtil.tryLock(washCodeKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
+        if (!washCodeLock) {
+            log.error("洗码锁获取失败,userId={},washCode={}", userId, washCode);
+            return Result.failed("更新洗码金额失败");
+        }
+        try {
+            SysUserMoney userMoney = userMoneyService.findByUserId(userId);
+            BigDecimal oldWashCode = userMoney.getWashCode() == null ? BigDecimal.ZERO : userMoney.getWashCode();
+            userMoney.setWashCode(oldWashCode.add(washCode));
+            SysUserMoney sysUserMoney = userMoneyService.updateCache(userMoney);
+        } finally {
+            RedissLockUtil.unlock(washCodeKey);
+        }
+        return Result.succeed();
+    }
 
     @ApiOperation("登录用户领取洗码")
     @GetMapping("/receiveWashCode")
