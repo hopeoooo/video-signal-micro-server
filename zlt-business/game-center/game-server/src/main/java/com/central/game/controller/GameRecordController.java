@@ -214,7 +214,7 @@ public class GameRecordController {
     @ApiOperation(value = "根据userId清空所有投注记录")
     @GetMapping("/clearGuestGameRecord/{userId}")
     public Result clearGuestGameRecord(@PathVariable Long userId) {
-        gameRecordService.lambdaUpdate().eq(GameRecord::getUserId, userId).remove();
+        gameRecordService.clearGuestGameRecord(userId);
         return Result.succeed();
     }
 

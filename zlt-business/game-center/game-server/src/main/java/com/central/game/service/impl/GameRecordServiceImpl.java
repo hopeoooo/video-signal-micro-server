@@ -769,4 +769,9 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     public List<UserGameReportDto> findUserGameReportDto(Long userId) {
         return gameRecordMapper.findUserGameReportDto(userId);
     }
+
+    @Override
+    public void clearGuestGameRecord(Long userId) {
+        gameRecordMapper.clearGuestGameRecord(userId);
+    }
 }
