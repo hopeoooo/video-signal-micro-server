@@ -110,9 +110,14 @@ public class WashCodeConsumer {
         washCodeChange.setAmount(washCodeVal);
         try {
             washCodeChangeService.save(washCodeChange);
-            //把洗码额加回userMoney
-            userService.updateWashCode(record.getUserId(),washCodeVal);
             log.info("洗码明细记录成功,washCodeChange={},record={}", washCodeChange.toString(), record.toString());
+            //把洗码额加回userMoney
+            Result result = userService.updateWashCode(record.getUserId(), washCodeVal);
+            if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+                log.error("洗码金额加回userMoney失败,result={},record={},washCodeChange={}", result, record, washCodeChange);
+            } else {
+                log.info("洗码金额加回userMoney成功,washCodeChange={},record={}", washCodeChange.toString(), record.toString());
+            }
             //回写状态
             GameRecordSon gameRecordSon = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, record.getId()).one();
             if (gameRecordSon == null) {
