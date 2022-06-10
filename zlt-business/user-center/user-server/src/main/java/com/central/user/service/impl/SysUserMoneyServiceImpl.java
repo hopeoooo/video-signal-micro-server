@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.game.feign.GameService;
-import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.GameRoomGroupUserVo;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
@@ -145,17 +144,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
             vo.setMoney(sysUserMoney.getMoney());
             vo.setGameId(vo.getGameId());
             vo.setTableNum(vo.getTableNum());
-            Result<GameRoomList> gameRoomResult = gameService.findByGameIdAndGameRoomName(vo.getGameId(), vo.getTableNum());
-            if (gameRoomResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
-                log.error("根据gameId和tableNum查询房间信息失败，gameId={},tableNum={}", vo.getGameId(), vo.getTableNum());
-                continue;
-            }
-            GameRoomList gameRoomList = gameRoomResult.getDatas();
-            if (gameRoomList == null) {
-                log.error("根据gameId和tableNum查询房间信息为空，gameId={},tableNum={}", vo.getGameId(), vo.getTableNum());
-                continue;
-            }
-            String groupId = vo.getGameId() + "-" + gameRoomList.getId();
+            String groupId = vo.getGameId() + "-" + vo.getTableNum();
             PushResult<GameRoomGroupUserVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.TABLE_GROUP_USER, "桌台分组用户信息推送成功");
             //推送下注界面
             Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
