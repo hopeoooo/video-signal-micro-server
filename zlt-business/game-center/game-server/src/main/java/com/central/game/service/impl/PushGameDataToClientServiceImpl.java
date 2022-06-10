@@ -9,6 +9,7 @@ import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.*;
 import com.central.game.service.IGameRecordService;
+import com.central.game.service.IGameRoomListService;
 import com.central.game.service.IPushGameDataToClientService;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
@@ -16,6 +17,7 @@ import com.central.user.feign.UserService;
 import com.central.user.model.vo.SysUserInfoMoneyVo;
 import com.central.user.model.vo.SysUserMoneyVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -35,6 +37,8 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     @Autowired
     private UserService userService;
     @Autowired
+    private IGameRoomListService gameRoomListService;
+    @Autowired
     @Lazy
     private IGameRecordService gameRecordService;
 
@@ -47,7 +51,10 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
         if (newAddLivePotVo == null) {
             return;
         }
-        String groupId = newAddLivePotVo.getGameId() + "-" + newAddLivePotVo.getTableNum();
+        String groupId = getGroupId(newAddLivePotVo.getGameId(), newAddLivePotVo.getTableNum());
+        if (StringUtils.isBlank(groupId)) {
+            return;
+        }
         PushResult<NewAddLivePotVo> pushResult = PushResult.succeed(newAddLivePotVo, SocketTypeConstant.LIVE_POT, "即时彩池数据送成功");
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("下注界面即时彩池数据推送结果:groupId={},result={}", groupId, push);
@@ -60,7 +67,10 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     @Override
 //    @Async
     public void syncPushPayoutResult(GameLotteryResult result) {
-        String groupId = result.getGameId() + "-" + result.getTableNum();
+        String groupId = getGroupId(result.getGameId(), result.getTableNum());
+        if (StringUtils.isBlank(groupId)) {
+            return;
+        }
         List<PayoutResultVo> payoutResult = gameRecordService.getPayoutResult(result.getGameId(), result.getTableNum(), result.getBootNum(), result.getBureauNum());
         for (PayoutResultVo payoutResultVo : payoutResult) {
             PushResult<PayoutResultVo> pushResult = PushResult.succeed(payoutResultVo, SocketTypeConstant.PAYOUT_RESULT, "派彩结果信息推送成功");
@@ -72,7 +82,10 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     @Override
 //    @Async
     public void pushLotterResult(GameLotteryResult result) {
-        String groupId = result.getGameId() + "-" + result.getTableNum();
+        String groupId = getGroupId(result.getGameId(), result.getTableNum());
+        if (StringUtils.isBlank(groupId)) {
+            return;
+        }
         LotteryResultVo vo = new LotteryResultVo();
         BeanUtils.copyProperties(result,vo);
         vo.setBetCodes(result.getResult());
@@ -87,7 +100,10 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     @Override
 //    @Async
     public void syncPushGameRoomInfo(GameRoomInfoOffline po) {
-        String groupId = po.getGameId() + "-" + po.getTableNum();
+        String groupId = getGroupId(po.getGameId(), po.getTableNum());
+        if (StringUtils.isBlank(groupId)) {
+            return;
+        }
         PushResult<GameRoomInfoOffline> pushResult = PushResult.succeed(po, SocketTypeConstant.TABLE_INFO, "桌台配置信息推送成功");
         //推送下注界面
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
@@ -131,10 +147,24 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
     @Override
     @Async
     public void syncTableNumGroup(GameRoomGroupUserVo vo) {
-        String groupId = vo.getGameId() + "-" + vo.getTableNum();
+        String groupId = getGroupId(vo.getGameId(), vo.getTableNum());
+        if (StringUtils.isBlank(groupId)) {
+            return;
+        }
         PushResult<GameRoomGroupUserVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.TABLE_GROUP_USER, "桌台分组用户信息推送成功");
         //推送下注界面
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("下注界面桌台用户余额信息推送推送结果:groupId={},result={}", groupId, push);
+    }
+
+    public String getGroupId(Long gameId, String tableNum) {
+        //通过房间ID关联，防止名称变更时失去连接
+        GameRoomList gameRoom = gameRoomListService.findByGameIdAndGameRoomName(gameId, tableNum);
+        if (gameRoom == null) {
+            log.error("查询房间信息为空，gameId={},tableNum={}", gameId, tableNum);
+            return null;
+        }
+        String groupId = gameId + "-" + tableNum;
+        return groupId;
     }
 }

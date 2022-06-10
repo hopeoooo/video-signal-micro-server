@@ -113,4 +113,11 @@ public class GameRoomListController {
         iGameRoomListService.removeById(id);
         return Result.succeed();
     }
+
+    @ApiOperation(value = "根据房间游戏ID和名称查询房间详情")
+    @GetMapping("/findByGameIdAndGameRoomName")
+    public Result<GameRoomList> findByGameIdAndGameRoomName(@RequestParam("gameId") Long gameId,@RequestParam("gameRoomName") String gameRoomName) {
+        GameRoomList room = iGameRoomListService.findByGameIdAndGameRoomName(gameId,gameRoomName);
+        return Result.succeed(room);
+    }
 }
