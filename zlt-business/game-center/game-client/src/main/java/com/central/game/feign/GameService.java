@@ -179,4 +179,7 @@ public interface GameService {
 
     @GetMapping("/gameRecord/clearGuestGameRecord/{userId}")
     Result clearGuestGameRecord(@PathVariable("userId") Long userId);
+
+    @GetMapping("/gameRoomList/findByGameIdAndGameRoomName")
+    Result<GameRoomList> findByGameIdAndGameRoomName(@RequestParam("gameId") Long gameId,@RequestParam("gameRoomName") String gameRoomName);
 }

@@ -69,10 +69,11 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
 
     List<UserReportDto> findUserReportDto(Map<String, Object> params);
 
-     List<RankingBackstageVo>  findValidBetRankingList(List<Long> listId);
+    List<RankingBackstageVo>  findValidBetRankingList(List<Long> listId);
 
-     List<RankingBackstageVo>  findWinLossRankingList();
+    List<RankingBackstageVo>  findWinLossRankingList();
 
     List<UserGameReportDto> findUserGameReportDto(Long userId);
+
 }
 

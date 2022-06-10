@@ -211,6 +211,12 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
             }
 
             @Override
+            public Result<GameRoomList> findByGameIdAndGameRoomName(Long gameId, String gameRoomName) {
+                log.error("findByGameIdAndGameRoomName查询失败，gameId:{},gameRoomName:{}",gameId,gameRoomName);
+                return Result.failed("查询失败");
+            }
+
+            @Override
             public Result clearGuestFollowList(Long userId) {
                 log.error("clearGuestFollowList清空关注列表失败，userId:{}",userId);
                 return Result.failed("清空关注列表失败");
