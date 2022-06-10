@@ -75,5 +75,6 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
 
     List<UserGameReportDto> findUserGameReportDto(Long userId);
 
+    void clearGuestGameRecord(Long userId);
 }
 
