@@ -94,6 +94,10 @@ public class WashCodeConsumer {
         //转化百分比
         BigDecimal rate = gameRate.divide(new BigDecimal("100"));
         BigDecimal washCodeVal = validbet.multiply(rate);
+        if (washCodeVal.compareTo(BigDecimal.ZERO) < 1) {
+            log.error("洗码金额计算为0,washCodeVal={},gameRate={},record={}", washCodeVal, gameRate, record.toString());
+            return;
+        }
         WashCodeChange washCodeChange = new WashCodeChange();
         washCodeChange.setUserId(record.getUserId());
         washCodeChange.setUserName(record.getUserName());
