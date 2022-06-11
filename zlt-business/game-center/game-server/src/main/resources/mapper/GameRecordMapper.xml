@@ -140,7 +140,7 @@
 
     <select id="getTodayLotteryList" resultType="com.central.user.model.vo.RankingListVo">
         SELECT user_name userName,sum(winning_amount) amount,FORMAT(sum(winning_amount),2) money from game_record
-        where bet_time BETWEEN #{startTime} and #{endTime} GROUP BY user_id ORDER BY amount desc
+        where winning_amount is not null and bet_time BETWEEN #{startTime} and #{endTime} GROUP BY user_id ORDER BY amount desc
     </select>
 
     <select id="getTodayBetList" resultType="com.central.user.model.vo.RankingListVo">
