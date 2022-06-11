@@ -120,8 +120,8 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
             money = new SysUserMoney();
         }
         SysUserMoneyVo vo = new SysUserMoneyVo();
-        vo.setMoney(BigDecimalUtils.keepDecimal(vo.getMoney()));
         BeanUtils.copyProperties(money, vo);
+        vo = BigDecimalUtils.keepDecimal(vo);
         PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.MONEY,"用户钱包推送成功");
         Result<String> push = pushService.sendOneMessage(userName,JSONObject.toJSONString(pushResult));
         log.info("用户钱包userName:{},推送结果:{}", userId, push);
@@ -143,10 +143,11 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
             vo.setGroupId(vo.getGroupId());
             vo.setStatus(1);
             vo.setUserName(userName);
-            vo.setMoney(BigDecimalUtils.keepDecimal(sysUserMoney.getMoney()));
+            vo.setMoney(sysUserMoney.getMoney());
             vo.setGameId(vo.getGameId());
             vo.setTableNum(vo.getTableNum());
             String groupId = vo.getGameId() + "-" + vo.getTableNum();
+            vo = BigDecimalUtils.keepDecimal(vo);
             PushResult<GameRoomGroupUserVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.TABLE_GROUP_USER, "桌台分组用户信息推送成功");
             //推送下注界面
             Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
