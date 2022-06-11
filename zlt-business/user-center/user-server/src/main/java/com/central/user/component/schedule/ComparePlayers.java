@@ -25,8 +25,8 @@ public class ComparePlayers {
     @Resource
     private RedisTemplate redisTemplate;
 
-
-    @Scheduled(cron = "*/10 * * * * * ")
+    //5分钟一次
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void scheduledTask() {
 //        if (!redisTemplate.hasKey(CommonConstant.PLAYER_ACCOUNT_QUEUE)) {
 //            return;
