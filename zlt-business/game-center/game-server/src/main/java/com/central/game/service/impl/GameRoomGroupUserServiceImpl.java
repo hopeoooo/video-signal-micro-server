@@ -144,6 +144,8 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
         GameRoomGroupUser user = gameRoomGroupUserMapper.checkExist(gameId, tableNum, sysUser.getId());
         if (user != null && user.getUserId() != null) {
             gameRoomGroupUserMapper.deleteById(user.getId());
+            //查询当前分组是否还有人没有成员删除分组
+            deleteGroup(user.getGroupId());
             GameRoomGroupUserVo vo = new GameRoomGroupUserVo();
             vo.setGroupId(user.getGroupId());
             vo.setGameId(gameId);
@@ -159,8 +161,21 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
         List<GameRoomGroupUserVo> groupList = gameRoomGroupUserMapper.getGroupList(userName);
         for (GameRoomGroupUserVo vo : groupList) {
             gameRoomGroupUserMapper.deleteById(vo.getId());
+            //查询当前分组是否还有人没有成员删除分组
+            deleteGroup(vo.getGroupId());
             vo.setStatus(0);
             pushGameDataToClientService.syncTableNumGroup(vo);
         }
+    }
+
+    //分组没有成员时删除分组
+    public Integer deleteGroup(Long groupId) {
+        LambdaQueryWrapper<GameRoomGroupUser> lqw = Wrappers.lambdaQuery();
+        lqw.eq(GameRoomGroupUser::getGroupId, groupId);
+        Integer count = gameRoomGroupUserMapper.selectCount(lqw);
+        if (count == 0) {
+            gameRoomGroupService.removeById(groupId);
+        }
+        return count;
     }
 }
