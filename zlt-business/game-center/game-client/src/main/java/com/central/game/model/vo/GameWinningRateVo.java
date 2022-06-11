@@ -17,6 +17,6 @@ public class GameWinningRateVo {
     @ApiModelProperty(value = "游戏名称")
     private String gameName;
 
-    @ApiModelProperty(value = "胜率")
+    @ApiModelProperty(value = "胜率%")
     private String rete;
 }
