@@ -169,13 +169,12 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
     }
 
     //分组没有成员时删除分组
-    public Integer deleteGroup(Long groupId) {
+    public void deleteGroup(Long groupId) {
         LambdaQueryWrapper<GameRoomGroupUser> lqw = Wrappers.lambdaQuery();
         lqw.eq(GameRoomGroupUser::getGroupId, groupId);
         Integer count = gameRoomGroupUserMapper.selectCount(lqw);
         if (count == 0) {
             gameRoomGroupService.removeById(groupId);
         }
-        return count;
     }
 }
