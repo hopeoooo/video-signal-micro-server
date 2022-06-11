@@ -120,6 +120,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
             money = new SysUserMoney();
         }
         SysUserMoneyVo vo = new SysUserMoneyVo();
+        vo.setMoney(BigDecimalUtils.keepDecimal(vo.getMoney()));
         BeanUtils.copyProperties(money, vo);
         PushResult<SysUserMoneyVo> pushResult = PushResult.succeed(vo, SocketTypeConstant.MONEY,"用户钱包推送成功");
         Result<String> push = pushService.sendOneMessage(userName,JSONObject.toJSONString(pushResult));
