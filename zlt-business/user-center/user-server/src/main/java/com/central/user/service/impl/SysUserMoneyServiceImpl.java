@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.common.utils.BigDecimalUtils;
 import com.central.game.feign.GameService;
 import com.central.game.model.vo.GameRoomGroupUserVo;
 import com.central.push.constant.SocketTypeConstant;
@@ -141,7 +142,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
             vo.setGroupId(vo.getGroupId());
             vo.setStatus(1);
             vo.setUserName(userName);
-            vo.setMoney(sysUserMoney.getMoney());
+            vo.setMoney(BigDecimalUtils.keepDecimal(sysUserMoney.getMoney()));
             vo.setGameId(vo.getGameId());
             vo.setTableNum(vo.getTableNum());
             String groupId = vo.getGameId() + "-" + vo.getTableNum();
