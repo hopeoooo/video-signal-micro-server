@@ -691,7 +691,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             int winNum = winList.size();
             //胜率
             BigDecimal rate = new BigDecimal(winNum).divide(new BigDecimal(totalNum),4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
-            vo.setRete(keepDecimal(rate).toString());
+            vo.setRete(keepDecimal1(rate).toString());
         }
         return list;
     }
@@ -756,6 +756,11 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     private BigDecimal keepDecimal(BigDecimal val) {
         return val == null ? BigDecimal.ZERO.setScale(2) : val.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
+
+    private BigDecimal keepDecimal1(BigDecimal val) {
+        return val == null ? BigDecimal.ZERO : val.setScale(0, BigDecimal.ROUND_HALF_UP);
+    }
+
     @Override
     public List<RankingBackstageVo>  findValidBetRankingList(List<Long> listId){
        return gameRecordMapper.findValidBetRankingList(listId);
