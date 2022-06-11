@@ -207,7 +207,10 @@ public class SysUserMoneyController {
             }
             BigDecimal money = userMoney.getMoney();
             userMoneyService.receiveWashCode(userMoney);
-            userMoneyService.syncPushMoneyToWebApp(userId,user.getUsername());
+            //推送到首页余额变化
+            userMoneyService.syncPushMoneyToWebApp(userId, user.getUsername());
+            //推送余额变化到桌台
+            userMoneyService.syncPushMoneyToTableNum(userId, user.getUsername());
             //记录账变
             SysTansterMoneyLog sysTansterMoneyLog = new SysTansterMoneyLog();
             sysTansterMoneyLog.setUserId(userId);
