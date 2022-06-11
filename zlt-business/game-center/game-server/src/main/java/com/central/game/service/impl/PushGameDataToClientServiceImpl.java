@@ -4,6 +4,7 @@ import com.central.common.model.CodeEnum;
 import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.common.redis.template.RedisRepository;
+import com.central.common.utils.BigDecimalUtils;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
@@ -63,6 +64,7 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
         String groupId = result.getGameId() + "-" + result.getTableNum();
         List<PayoutResultVo> payoutResult = gameRecordService.getPayoutResult(result.getGameId(), result.getTableNum(), result.getBootNum(), result.getBureauNum());
         for (PayoutResultVo payoutResultVo : payoutResult) {
+            payoutResultVo = BigDecimalUtils.keepDecimal(payoutResultVo);
             PushResult<PayoutResultVo> pushResult = PushResult.succeed(payoutResultVo, SocketTypeConstant.PAYOUT_RESULT, "派彩结果信息推送成功");
             Result<String> push = pushService.sendMessageByGroupIdAndUserName(groupId, payoutResultVo.getUserName(), com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
             log.info("派彩结果信息推送结果:groupId={},userName={},result={}", groupId, payoutResultVo.getUserName(), push);
