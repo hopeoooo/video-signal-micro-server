@@ -9,6 +9,8 @@ import com.central.common.redis.lock.RedissLockUtil;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
+import com.central.config.dto.TouristDto;
+import com.central.config.feign.ConfigService;
 import com.central.game.constants.GameListEnum;
 import com.central.game.constants.PlayEnum;
 import com.central.game.dto.*;
@@ -66,6 +68,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Autowired
     private IGameRoomInfoOfflineService gameRoomInfoOfflineService;
     @Autowired
+    private ConfigService configService;
+    @Autowired
     private StreamBridge streamBridge;
 
     private static final String minLimitRed = "minLimitRed";
@@ -114,9 +118,22 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             }
             totalBetAmount = totalBetAmount.add(betAmount);
         }
+        //游客账号需验证单笔投注限制
+        if (UserType.APP_GUEST.name().equals(user.getType())) {
+            Result<TouristDto> touristAmount = configService.findTouristAmount();
+            if (touristAmount.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+                log.error("游客单笔最大投注失败，userName={},touristAmount={}", userName, touristAmount);
+                return Result.failed("下注失败");
+            }
+            TouristDto datas = touristAmount.getDatas();
+            if (datas != null && datas.getTouristSingleMaxBet() != null && datas.getTouristSingleMaxBet().compareTo(totalBetAmount) == 1) {
+                return Result.failed("投注金额超过单笔最大投注额,游客单笔最大投注额为" + datas.getTouristSingleMaxBet());
+            }
+        }
         //校验本次总下注额是否超过本地剩余额度
         Result<SysUserMoneyVo> totalMoneyResult = userService.getMoneyByUserName(userName);
         if (totalMoneyResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            log.error("查询用户余额失败，userName={},totalMoneyResult={}", userName, totalMoneyResult);
             return Result.failed("下注失败");
         }
         SysUserMoneyVo userMoneyVo = totalMoneyResult.getDatas();
