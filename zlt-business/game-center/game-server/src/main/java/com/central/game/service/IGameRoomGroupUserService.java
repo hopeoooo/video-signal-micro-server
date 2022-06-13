@@ -22,4 +22,6 @@ public interface IGameRoomGroupUserService extends ISuperService<GameRoomGroupUs
     void removeGroup(Long gameId, String tableNum, SysUser sysUser);
 
     void removeAllGroup(String userName);
+
+    Integer getGameOnlineNum(Long gameId);
 }

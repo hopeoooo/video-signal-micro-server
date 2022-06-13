@@ -25,4 +25,11 @@
             </if>
         </where>
     </select>
+
+    <select id="getGameOnlineNum" resultType="Integer">
+        SELECT count(1) count
+        from game_room_group_user a
+        LEFT JOIN game_room_group b on a.group_id=b.id
+        where b.game_id=#{gameId}
+    </select>
 </mapper>

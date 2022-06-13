@@ -20,4 +20,6 @@ public interface GameRoomGroupUserMapper extends SuperMapper<GameRoomGroupUser> 
     GameRoomGroupUser checkExist(@Param("gameId") Long gameId, @Param("tableNum") String tableNum,@Param("userId") Long userId);
 
     List<GameRoomGroupUserVo> getGroupList(@Param("userName") String userName);
+
+    Integer getGameOnlineNum(@Param("gameId") Long gameId);
 }
