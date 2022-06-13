@@ -63,5 +63,10 @@ public interface SocketTypeConstant {
      */
     String TABLE_GROUP_USER = "tableGroupUser";
 
+    /**
+     * 桌台在线人数
+     */
+    String GAME_ONLINE_NUM = "gameOnlineNum";
+
 
 }

@@ -138,5 +138,22 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
         //推送下注界面
         Result<String> push = pushService.sendMessageByGroupId(groupId, com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
         log.info("下注界面桌台用户余额信息推送推送结果:groupId={},result={}", groupId, push);
+        //推送游戏在线人数
+        Integer status = vo.getStatus();
+        Integer onlineNum = 0;
+        if (status == 1) {
+            return;
+        } else if (status == 0) {
+            onlineNum = -1;
+        } else if (status == 0) {
+            onlineNum = 1;
+        }
+        GameOnlineNumVo onlineNumVo = new GameOnlineNumVo();
+        onlineNumVo.setGameId(vo.getGameId());
+        onlineNumVo.setOnlineNum(onlineNum);
+        //推送大厅
+        PushResult<GameOnlineNumVo> pushResult1 = PushResult.succeed(onlineNumVo, SocketTypeConstant.GAME_ONLINE_NUM, "游戏在线人数推送成功");
+        Result<String> onlineNumPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult1));
+        log.info("大厅游戏在线人数推送结果,result={}", onlineNumPush);
     }
 }

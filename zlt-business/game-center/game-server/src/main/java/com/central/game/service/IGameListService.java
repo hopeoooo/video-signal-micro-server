@@ -5,6 +5,8 @@ import com.central.common.model.SuperPage;
 import com.central.common.service.ISuperService;
 import com.central.game.model.GameList;
 
+import java.util.List;
+
 /**
  * 
  *
@@ -20,5 +22,7 @@ public interface IGameListService extends ISuperService<GameList> {
     PageResult<GameList> findList(SuperPage superPage);
 
     GameList findById(Long gameId);
+
+    List<GameList> findAll();
 }
 

@@ -168,6 +168,11 @@ public class GameRoomGroupUserServiceImpl extends SuperServiceImpl<GameRoomGroup
         }
     }
 
+    @Override
+    public Integer getGameOnlineNum(Long gameId) {
+        return gameRoomGroupUserMapper.getGameOnlineNum(gameId);
+    }
+
     //分组没有成员时删除分组
     public void deleteGroup(Long groupId) {
         LambdaQueryWrapper<GameRoomGroupUser> lqw = Wrappers.lambdaQuery();

@@ -1,9 +1,14 @@
 package com.central.game.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.PageResult;
 import com.central.game.mapper.GameListMapper;
 import com.central.game.model.GameList;
+import com.central.game.model.GameRoomList;
 import com.central.game.service.IGameListService;
+import com.central.game.service.IGameRoomGroupUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -24,6 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @CacheConfig(cacheNames = {"gameList"})
 public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameList> implements IGameListService {
+
+    @Autowired
+    private IGameRoomGroupUserService gameRoomGroupUserService;
     /**
      * 列表
      * @param superPage
@@ -40,5 +48,18 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
 //    @Cacheable(key = "#p0")
     public GameList findById(Long gameId) {
         return baseMapper.selectById(gameId);
+    }
+
+    @Override
+    public List<GameList> findAll() {
+        LambdaQueryWrapper<GameList> lqw = Wrappers.lambdaQuery();
+        lqw.in(GameList::getGameStatus, 1, 2);
+        List<GameList> gameLists = baseMapper.selectList(lqw);
+        //查询在线人数
+        for (GameList game : gameLists) {
+            Integer onlineNum = gameRoomGroupUserService.getGameOnlineNum(game.getId());
+            game.setOnlineNum(onlineNum);
+        }
+        return gameLists;
     }
 }
