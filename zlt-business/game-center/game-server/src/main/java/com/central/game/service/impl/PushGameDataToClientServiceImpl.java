@@ -145,7 +145,7 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
             return;
         } else if (status == 0) {
             onlineNum = -1;
-        } else if (status == 0) {
+        } else if (status == 2) {
             onlineNum = 1;
         }
         GameOnlineNumVo onlineNumVo = new GameOnlineNumVo();
