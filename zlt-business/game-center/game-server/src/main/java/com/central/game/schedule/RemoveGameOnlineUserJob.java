@@ -1,26 +1,24 @@
-package com.central.game.job;
+package com.central.game.schedule;
 
 import com.central.common.constant.SecurityConstants;
 import com.central.common.redis.template.RedisRepository;
-import com.central.game.model.GameRoomGroup;
-import com.central.game.model.GameRoomGroupUser;
 import com.central.game.model.vo.GameRoomGroupUserVo;
-import com.central.game.service.IGameRoomGroupService;
 import com.central.game.service.IGameRoomGroupUserService;
 import com.central.game.service.IPushGameDataToClientService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shardingsphere.elasticjob.api.ShardingContext;
+import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
- * 定时清除桌台用户
+ * 每5分钟移除一次游戏在线登录过期的用户
  */
-@Component
 @Slf4j
-public class RemoveTableNumExpireUser {
+@Component
+public class RemoveGameOnlineUserJob implements SimpleJob {
 
     @Autowired
     private RedisRepository redisRepository;
@@ -29,9 +27,8 @@ public class RemoveTableNumExpireUser {
     @Autowired
     private IPushGameDataToClientService pushGameDataToClientService;
 
-    //每隔5分钟执行一次
-    @Scheduled(cron = "0 0/5 * * * ?")
-    public void scheduledTask() {
+    @Override
+    public void execute(ShardingContext shardingContext) {
         List<GameRoomGroupUserVo> groupList = gameRoomGroupUserService.getGroupList(null);
         for (GameRoomGroupUserVo groupUser : groupList) {
             String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + SecurityConstants.APP_USER_ONLINE + groupUser.getUserName();
