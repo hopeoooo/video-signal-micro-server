@@ -1,5 +1,6 @@
 package com.central.game.schedule;
 
+import com.central.common.constant.CommonConstant;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.redis.template.RedisRepository;
 import com.central.game.model.vo.GameRoomGroupUserVo;
@@ -31,7 +32,7 @@ public class RemoveGameOnlineUserJob implements SimpleJob {
     public void execute(ShardingContext shardingContext) {
         List<GameRoomGroupUserVo> groupList = gameRoomGroupUserService.getGroupList(null);
         for (GameRoomGroupUserVo groupUser : groupList) {
-            String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + SecurityConstants.APP_USER_ONLINE + groupUser.getUserName();
+            String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + CommonConstant.REDIS_WEBAPP + groupUser.getUserName();
             boolean exists = redisRepository.exists(onlineKey);
             if (!exists) {
                 gameRoomGroupUserService.removeById(groupUser.getId());
