@@ -704,7 +704,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             //总局数
             int totalNum = totalList.size();
             //盈利的
-            List<BigDecimal> winList = totalList.stream().filter(t -> t.compareTo(BigDecimal.ZERO) == 1).collect(Collectors.toList());
+            List<BigDecimal> winList = totalList.stream().filter(t -> !ObjectUtils.isEmpty(t) && t.compareTo(BigDecimal.ZERO) == 1).collect(Collectors.toList());
             int winNum = winList.size();
             //胜率
             BigDecimal rate = new BigDecimal(winNum).divide(new BigDecimal(totalNum),4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
