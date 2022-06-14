@@ -1,7 +1,13 @@
 package com.central.oauth.controller;
 
+import com.central.common.model.PageResult;
+import com.central.common.model.Result;
+import com.central.oauth.model.Client;
 import io.swagger.annotations.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * 登陆【参考接口】
@@ -113,5 +119,14 @@ public class LoginController {
     })
     public void loginPlatformBackend(@PathVariable String Username, @PathVariable String Password, @PathVariable String grant_type,
                       @PathVariable String username, @PathVariable String googleCode, @PathVariable String deviceId) {
+    }
+
+    @Value("${zlt.uaa.isSingleLogin:false}")
+    private boolean isSingleLogin;
+
+    @GetMapping("/getIsSingleLogin")
+    @ApiOperation(value = "单点登录配置")
+    public Result getIsSingleLogin() {
+        return Result.succeed(isSingleLogin);
     }
 }
