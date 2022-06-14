@@ -7,6 +7,7 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -123,10 +124,15 @@ public class LoginController {
 
     @Value("${zlt.uaa.isSingleLogin:false}")
     private boolean isSingleLogin;
+    @Value("${zlt.naocs.server.namespace}")
+    private String namespace;
 
     @GetMapping("/getIsSingleLogin")
     @ApiOperation(value = "单点登录配置")
     public Result getIsSingleLogin() {
-        return Result.succeed(isSingleLogin);
+        Map<String,Object> map=new HashMap<>();
+        map.put("isSingleLogin",isSingleLogin);
+        map.put("namespace",namespace);
+        return Result.succeed(map);
     }
 }
