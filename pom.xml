@@ -484,6 +484,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.zlt</groupId>
+                <artifactId>zlt-elasticjob-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-recipes</artifactId>
                 <version>${curator.version}</version>
