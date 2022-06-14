@@ -97,6 +97,9 @@ public class DateUtil {
      * @return
      */
     public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {
+        if (startTime == null || endTime == null) {
+            return false;
+        }
         if (nowTime.getTime() == startTime.getTime()
                 || nowTime.getTime() == endTime.getTime()) {
             return true;
