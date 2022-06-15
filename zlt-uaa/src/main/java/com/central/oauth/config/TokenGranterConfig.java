@@ -27,6 +27,7 @@ import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ import java.util.List;
  */
 @Slf4j
 @Configuration
+@Component
 public class TokenGranterConfig {
     @Autowired
     private ClientDetailsService clientDetailsService;
@@ -78,7 +80,7 @@ public class TokenGranterConfig {
     /**
      * 是否登录同应用同账号互踢
      */
-    @Value("${zlt.uaa.isSingleLogin:true}")
+    @Value("${zlt.uaa.isSingleLogin:false}")
     private boolean isSingleLogin;
 
     /**
