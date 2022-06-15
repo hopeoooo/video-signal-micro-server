@@ -176,7 +176,6 @@ public class TokenGranterConfig {
         tokenServices.setClientDetailsService(clientDetailsService); // 客户端详情服务
         tokenServices.setTokenEnhancer(tokenEnhancer());
         addUserDetailsService(tokenServices);
-        log.info("isSingleLogin第五次的值{}",isSingleLogin);
         return tokenServices;
     }
 
