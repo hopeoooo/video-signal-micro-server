@@ -6,8 +6,6 @@ import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.oauth.service.impl.CustomTokenServices;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth.service.impl.UserDetailsByNameServiceFactoryWrapper;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,8 +44,6 @@ import java.util.List;
  */
 @Slf4j
 @Configuration
-@Setter
-@Getter
 public class TokenGranterConfig {
     @Autowired
     private ClientDetailsService clientDetailsService;
@@ -86,6 +82,9 @@ public class TokenGranterConfig {
     private boolean isSingleLogin;
     @Value("${zlt.oauth2.token.store.type}")
     private String storetype;
+
+    @Autowired
+    private CustomConfig customConfig;
 
     /**
      * 授权模式
@@ -176,8 +175,10 @@ public class TokenGranterConfig {
     @ConditionalOnMissingBean
     protected DefaultTokenServices createDefaultTokenServices() {
         log.info("isSingleLogin第一次的值{}",isSingleLogin);
+        boolean singleLogin = customConfig.isSingleLogin();
+        log.info("isSingleLogin第一次的值{}",singleLogin);
         log.info("storetype第一次的值{}",storetype);
-        DefaultTokenServices tokenServices = new CustomTokenServices(isSingleLogin);
+        DefaultTokenServices tokenServices = new CustomTokenServices(singleLogin);
         tokenServices.setTokenStore(tokenStore); // 存储令牌策略
         tokenServices.setSupportRefreshToken(true); // 运行令牌自动刷新
         tokenServices.setReuseRefreshToken(reuseRefreshToken);
