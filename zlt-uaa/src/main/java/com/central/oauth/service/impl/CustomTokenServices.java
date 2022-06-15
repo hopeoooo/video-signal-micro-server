@@ -53,7 +53,7 @@ public class CustomTokenServices extends DefaultTokenServices {
         OAuth2AccessToken existingAccessToken = tokenStore.getAccessToken(authentication);
         OAuth2RefreshToken refreshToken = null;
         if (existingAccessToken != null) {
-            if (isSingleLogin) {
+            if (true) {
                 if (existingAccessToken.getRefreshToken() != null) {
                     tokenStore.removeRefreshToken(existingAccessToken.getRefreshToken());
                 }
