@@ -40,4 +40,10 @@ public interface IValidateCodeService {
      * 验证google身份验证码
      */
     void validateGoogleCode(String googleCode,String username);
+
+    /**
+     * 校验账号类似是否是APP类型，其他类型账号不允许登录前台
+     * @param username
+     */
+    void validateAppUserType(String username);
 }

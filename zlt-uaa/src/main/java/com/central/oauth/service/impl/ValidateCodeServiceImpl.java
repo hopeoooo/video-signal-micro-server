@@ -7,6 +7,7 @@ import com.central.common.constant.SecurityConstants;
 import com.central.common.model.LoginAppUser;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
+import com.central.common.model.UserType;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.utils.GoogleAuthUtil;
 import com.central.oauth.exception.CustomOAuth2Exception;
@@ -122,7 +123,7 @@ public class ValidateCodeServiceImpl implements IValidateCodeService {
     @Override
     public void validateGoogleCode(String googleCode, String username) {
 
-        try {
+//        try {
             if (StrUtil.isBlank(username)) {
                 throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_NO_PARAMS_USERNAME.getCode(), "请在请求参数中携带username参数");
             }
@@ -150,8 +151,20 @@ public class ValidateCodeServiceImpl implements IValidateCodeService {
                     throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_GOOGLE_CODE_VALI.getCode(), "谷歌身份验证失败");
                 }
             }
-        }catch (Exception ex){
-            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_GOOGLE_CODE_VALI.getCode(), "谷歌身份验证失败");
+//        }catch (Exception ex){
+//            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_GOOGLE_CODE_VALI.getCode(), "谷歌身份验证失败");
+//        }
+    }
+
+    @Override
+    public void validateAppUserType(String username) {
+        if (StrUtil.isBlank(username)) {
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_NO_PARAMS_USERNAME.getCode(), "请在请求参数中携带username参数");
+        }
+        LoginAppUser loginAppUser = userService.findByUsername(username);
+        // TODO 通过类型来判断用户的处理方式是错误的
+        if (loginAppUser == null || !UserType.APP.name().equals(loginAppUser.getType())) {
+            throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USERNAME_PASSWORD.getCode(), "用户名或密码错误");
         }
     }
 
