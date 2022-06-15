@@ -51,7 +51,7 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         log.info("+++++++++++++username:{}",username);
         LoginAppUser loginAppUser = userService.findByUsername(username);
-        if (loginAppUser == null || !UserType.APP.name().equals(loginAppUser.getType())) {
+        if (loginAppUser == null) {
             throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USERNAME_PASSWORD.getCode(), "用户名或密码错误");
         }
         log.info("+++++++++++++++++++登录校验密码结束");
