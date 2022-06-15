@@ -1,9 +1,11 @@
 package com.central.oauth.service.impl;
 
+import com.central.common.constant.CommonConstant;
 import com.central.common.constant.SecurityConstants;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.LoginAppUser;
 import com.central.common.model.Result;
+import com.central.common.model.UserType;
 import com.central.common.redis.template.RedisRepository;
 import com.central.oauth.exception.CustomOAuth2Exception;
 import com.central.oauth.modle.CodeErrorAuthEnum;
@@ -48,12 +50,8 @@ public class UserDetailServiceImpl implements ZltUserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         log.info("+++++++++++++username:{}",username);
-//        username = username.equals("player")?"play1":username;
-
-//        username = username.equals("player")?getUserNameFrom():username;
-//        log.info("+++++++++++++username:{}",username);
         LoginAppUser loginAppUser = userService.findByUsername(username);
-        if (loginAppUser == null) {
+        if (loginAppUser == null || !UserType.APP.name().equals(loginAppUser.getType())) {
             throw new CustomOAuth2Exception(CodeErrorAuthEnum.ERROR_AUTH_USERNAME_PASSWORD.getCode(), "用户名或密码错误");
         }
         log.info("+++++++++++++++++++登录校验密码结束");
