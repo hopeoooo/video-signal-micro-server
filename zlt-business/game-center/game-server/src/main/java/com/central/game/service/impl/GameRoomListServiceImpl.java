@@ -102,6 +102,7 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     public List<GameRoomListVo> findRoomListByGameId(Long gameId,Long userId) {
         LambdaQueryWrapper<GameRoomList> lqw = Wrappers.lambdaQuery();
         lqw.eq(GameRoomList::getGameId, gameId).ne(GameRoomList::getRoomStatus, 0);
+        lqw.orderByAsc(GameRoomList::getGameRoomName);
         List<GameRoomList> gameRoomLists = gameRoomListMapper.selectList(lqw);
         //查询列表上下两部分数据
         List<GameRoomListVo> list = new ArrayList<>();
