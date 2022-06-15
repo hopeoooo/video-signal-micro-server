@@ -80,11 +80,6 @@ public class TokenGranterConfig {
      */
     @Value("${zlt.uaa.isSingleLogin:false}")
     private boolean isSingleLogin;
-    @Value("${zlt.oauth2.token.store.type}")
-    private String storetype;
-
-    @Autowired
-    private CustomConfig customConfig;
 
     /**
      * 授权模式
@@ -174,11 +169,7 @@ public class TokenGranterConfig {
     @Bean
     @ConditionalOnMissingBean
     protected DefaultTokenServices createDefaultTokenServices() {
-        log.info("isSingleLogin第一次的值{}",isSingleLogin);
-        boolean singleLogin = customConfig.isSingleLogin();
-        log.info("isSingleLogin第一次的值{}",singleLogin);
-        log.info("storetype第一次的值{}",storetype);
-        DefaultTokenServices tokenServices = new CustomTokenServices(singleLogin);
+        DefaultTokenServices tokenServices = new CustomTokenServices(isSingleLogin);
         tokenServices.setTokenStore(tokenStore); // 存储令牌策略
         tokenServices.setSupportRefreshToken(true); // 运行令牌自动刷新
         tokenServices.setReuseRefreshToken(reuseRefreshToken);
