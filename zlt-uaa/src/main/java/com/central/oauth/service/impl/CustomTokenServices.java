@@ -1,6 +1,7 @@
 package com.central.oauth.service.impl;
 
 import com.central.common.constant.SecurityConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,7 @@ import java.util.UUID;
  * Blog: https://zlt2000.gitee.io
  * Github: https://github.com/zlt2000
  */
+@Slf4j
 public class CustomTokenServices extends DefaultTokenServices {
     private TokenStore tokenStore;
     private TokenEnhancer accessTokenEnhancer;
@@ -44,7 +46,9 @@ public class CustomTokenServices extends DefaultTokenServices {
     private boolean isSingleLogin;
 
     public CustomTokenServices(boolean isSingleLogin) {
+        log.info("isSingleLogin第二次的值{}",isSingleLogin);
         this.isSingleLogin = isSingleLogin;
+        log.info("isSingleLogin第三次的值{}",this.isSingleLogin);
     }
 
     @Override
@@ -53,7 +57,8 @@ public class CustomTokenServices extends DefaultTokenServices {
         OAuth2AccessToken existingAccessToken = tokenStore.getAccessToken(authentication);
         OAuth2RefreshToken refreshToken = null;
         if (existingAccessToken != null) {
-            if (true) {
+            log.info("isSingleLogin第四次的值{}",isSingleLogin);
+            if (isSingleLogin) {
                 if (existingAccessToken.getRefreshToken() != null) {
                     tokenStore.removeRefreshToken(existingAccessToken.getRefreshToken());
                 }
