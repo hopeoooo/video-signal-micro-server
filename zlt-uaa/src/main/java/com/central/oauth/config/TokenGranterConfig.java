@@ -6,6 +6,8 @@ import com.central.oauth.service.ProcessLoginInfoService;
 import com.central.oauth.service.impl.CustomTokenServices;
 import com.central.oauth.service.impl.UserDetailServiceFactory;
 import com.central.oauth.service.impl.UserDetailsByNameServiceFactoryWrapper;
+import com.central.oauth2.common.properties.SecurityProperties;
+import com.central.oauth2.common.properties.UaaProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,6 +82,9 @@ public class TokenGranterConfig {
      */
     @Value("${zlt.uaa.isSingleLogin:false}")
     private boolean isSingleLogin;
+
+    @Autowired
+    private UaaProperties uaaProperties;
 
     /**
      * 授权模式
@@ -169,6 +174,7 @@ public class TokenGranterConfig {
     @Bean
     @ConditionalOnMissingBean
     protected DefaultTokenServices createDefaultTokenServices() {
+        Boolean isSingleLogin = uaaProperties.getIsSingleLogin();
         DefaultTokenServices tokenServices = new CustomTokenServices(isSingleLogin);
         tokenServices.setTokenStore(tokenStore); // 存储令牌策略
         tokenServices.setSupportRefreshToken(true); // 运行令牌自动刷新
