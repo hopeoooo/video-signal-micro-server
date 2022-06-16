@@ -46,7 +46,9 @@ public class CustomTokenServices extends DefaultTokenServices {
     private boolean isSingleLogin;
 
     public CustomTokenServices(boolean isSingleLogin) {
+        log.info("isSingleLogin第二次的值{}",isSingleLogin);
         this.isSingleLogin = isSingleLogin;
+        log.info("isSingleLogin第三次的值{}",this.isSingleLogin);
     }
 
     @Override
@@ -55,7 +57,7 @@ public class CustomTokenServices extends DefaultTokenServices {
         OAuth2AccessToken existingAccessToken = tokenStore.getAccessToken(authentication);
         OAuth2RefreshToken refreshToken = null;
         if (existingAccessToken != null) {
-            //isSingleLogin本地正常，测试环境一直获取不到值，这里先写死，开启登录时同应用同账号互踢
+            log.info("isSingleLogin第四次的值{}",isSingleLogin);
             if (isSingleLogin) {
                 if (existingAccessToken.getRefreshToken() != null) {
                     tokenStore.removeRefreshToken(existingAccessToken.getRefreshToken());

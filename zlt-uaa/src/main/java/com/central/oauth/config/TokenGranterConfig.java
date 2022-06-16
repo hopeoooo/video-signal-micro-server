@@ -77,9 +77,10 @@ public class TokenGranterConfig {
 
     /**
      * 是否登录同应用同账号互踢
+     * isSingleLogin本地正常，测试环境一直获取不到值，这里先默认开启登录时同应用同账号互踢
      */
     @Value("${zlt.uaa.isSingleLogin:false}")
-    private boolean isSingleLogin;
+    private boolean isSingleLogin = true;
 
     /**
      * 授权模式
@@ -169,6 +170,7 @@ public class TokenGranterConfig {
     @Bean
     @ConditionalOnMissingBean
     protected DefaultTokenServices createDefaultTokenServices() {
+        log.info("isSingleLogin第一次的值{}",isSingleLogin);
         DefaultTokenServices tokenServices = new CustomTokenServices(isSingleLogin);
         tokenServices.setTokenStore(tokenStore); // 存储令牌策略
         tokenServices.setSupportRefreshToken(true); // 运行令牌自动刷新
