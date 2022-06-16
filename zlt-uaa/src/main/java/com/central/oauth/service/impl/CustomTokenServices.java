@@ -56,7 +56,7 @@ public class CustomTokenServices extends DefaultTokenServices {
         OAuth2RefreshToken refreshToken = null;
         if (existingAccessToken != null) {
             //isSingleLogin本地正常，测试环境一直获取不到值，这里先写死，开启登录时同应用同账号互踢
-            if (true) {
+            if (isSingleLogin) {
                 if (existingAccessToken.getRefreshToken() != null) {
                     tokenStore.removeRefreshToken(existingAccessToken.getRefreshToken());
                 }
