@@ -2,7 +2,6 @@ package com.central.oauth2.common;
 
 import com.central.oauth2.common.properties.SecurityProperties;
 import com.central.oauth2.common.properties.TokenStoreProperties;
-import com.central.oauth2.common.properties.UaaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -16,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
  * Blog: https://zlt2000.gitee.io
  * Github: https://github.com/zlt2000
  */
-@EnableConfigurationProperties({SecurityProperties.class, TokenStoreProperties.class, UaaProperties.class})
+@EnableConfigurationProperties({SecurityProperties.class, TokenStoreProperties.class})
 @ComponentScan
 public class AuthClientAutoConfiguration {
 }
