@@ -39,6 +39,9 @@
             <if test="p.bureauNum != null and p.bureauNum != ''">
                 and g.bureau_num = #{p.bureauNum}
             </if>
+            <if test="p.tableNum != null and p.tableNum != ''">
+                and g.table_num = #{p.tableNum}
+            </if>
             <if test="p.gameId != null and p.gameId != ''">
                 and g.game_id = #{p.gameId}
             </if>

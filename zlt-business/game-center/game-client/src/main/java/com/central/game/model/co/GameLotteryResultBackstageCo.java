@@ -13,6 +13,9 @@ public class GameLotteryResultBackstageCo extends PageCo {
     @ApiModelProperty(value = "局号")
     private String bureauNum;
 
+    @ApiModelProperty(value = "桌台编号")
+    private String tableNum;
+
     @ApiModelProperty(value = "游戏ID")
     private String gameId;
 
