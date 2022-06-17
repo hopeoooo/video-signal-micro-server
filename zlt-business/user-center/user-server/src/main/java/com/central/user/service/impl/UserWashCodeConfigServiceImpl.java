@@ -73,27 +73,33 @@ public class UserWashCodeConfigServiceImpl extends SuperServiceImpl<UserWashCode
     public List<UserWashCodeConfig> findWashCodeConfigListByUserId(Long userId) {
         List<UserWashCodeConfig> userWashCodeConfigList = new ArrayList<>();
         for (GameListEnum game : GameListEnum.values()) {
-            LambdaQueryWrapper<UserWashCodeConfig> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(UserWashCodeConfig::getUserId, userId);
-            wrapper.eq(UserWashCodeConfig::getGameId, game.getGameId());
-            List<UserWashCodeConfig> userWashCodeConfigs = baseMapper.selectList(wrapper);
-            if (CollectionUtils.isEmpty(userWashCodeConfigs)) {
-                Result<List<GameList>> gameListResult = gameService.findEnableGameListByGameId(game.getGameId(), CommonConstant.OPEN);
-                if (gameListResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
-                    log.error("全局洗码配置查询失败，userId={},gameId={}", userId, game.getGameId());
-                    continue;
-                }
-                gameListResult.getDatas().forEach(info -> {
-                    UserWashCodeConfig cfg = new UserWashCodeConfig();
-                    cfg.setGameId(info.getId());
-                    cfg.setGameName(info.getName());
-                    cfg.setGameRate(info.getGameRate());
-                    userWashCodeConfigs.add(cfg);
-                });
-            }
+            List<UserWashCodeConfig> userWashCodeConfigs = findWashCodeConfigListByGameIdAndUserId(game.getGameId(),userId);
             userWashCodeConfigList.addAll(userWashCodeConfigs);
         }
         return userWashCodeConfigList;
+    }
+
+    @Override
+    public List<UserWashCodeConfig> findWashCodeConfigListByGameIdAndUserId(Long gameId, Long userId) {
+        LambdaQueryWrapper<UserWashCodeConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserWashCodeConfig::getUserId, userId);
+        wrapper.eq(UserWashCodeConfig::getGameId, gameId);
+        List<UserWashCodeConfig> userWashCodeConfigs = baseMapper.selectList(wrapper);
+        if (CollectionUtils.isEmpty(userWashCodeConfigs)) {
+            Result<List<GameList>> gameListResult = gameService.findEnableGameListByGameId(gameId, CommonConstant.OPEN);
+            if (gameListResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+                log.error("全局洗码配置查询失败，userId={},gameId={}", userId, gameId);
+                return userWashCodeConfigs;
+            }
+            gameListResult.getDatas().forEach(info -> {
+                UserWashCodeConfig cfg = new UserWashCodeConfig();
+                cfg.setGameId(info.getId());
+                cfg.setGameName(info.getName());
+                cfg.setGameRate(info.getGameRate());
+                userWashCodeConfigs.add(cfg);
+            });
+        }
+        return userWashCodeConfigs;
     }
 
 }

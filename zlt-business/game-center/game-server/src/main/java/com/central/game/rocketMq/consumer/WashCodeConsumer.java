@@ -64,7 +64,7 @@ public class WashCodeConsumer {
             return;
         }
         //查询最新的洗码返水配置
-        Result<List<UserWashCodeConfig>> codeConfigResult = userService.findWashCodeConfigListByUserId(record.getUserId());
+        Result<List<UserWashCodeConfig>> codeConfigResult = userService.findWashCodeConfigListByGameIdAndUserId(Long.parseLong(record.getGameId()),record.getUserId());
         if (codeConfigResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
             log.error("洗码配置查询失败,result={},record={}", codeConfigResult.toString(), record.toString());
             return;

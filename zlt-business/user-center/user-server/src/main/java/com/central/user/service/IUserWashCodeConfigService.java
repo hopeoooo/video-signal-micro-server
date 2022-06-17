@@ -21,4 +21,6 @@ public interface IUserWashCodeConfigService extends ISuperService<UserWashCodeCo
     List<UserWashCodeConfig> findWashCodeConfigList(Long userId);
 
     List<UserWashCodeConfig> findWashCodeConfigListByUserId(Long userId);
+
+    List<UserWashCodeConfig> findWashCodeConfigListByGameIdAndUserId(Long gameId, Long userId);
 }

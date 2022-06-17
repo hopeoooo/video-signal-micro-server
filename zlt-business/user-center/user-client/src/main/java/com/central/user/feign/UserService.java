@@ -180,7 +180,10 @@ public interface UserService {
      Result<List<UserWashCodeConfig>> findUserWashCodeConfigList(@PathVariable("userId") Long userId) ;
 
     @GetMapping("/userWashCode/findWashCodeConfigListByUserId/{userId}")
-     Result<List<UserWashCodeConfig>> findWashCodeConfigListByUserId(@PathVariable("userId") Long userId) ;
+    Result<List<UserWashCodeConfig>> findWashCodeConfigListByUserId(@PathVariable("userId") Long userId) ;
+
+    @GetMapping("/userWashCode/findWashCodeConfigListByGameIdAndUserId")
+    Result<List<UserWashCodeConfig>> findWashCodeConfigListByGameIdAndUserId(@RequestParam("gameId") Long gameId, @RequestParam("userId") Long userId);
 
     @PostMapping("/userWashCode/saveUserWashCodeConfig")
     Result saveUserWashCodeConfig(@RequestBody List<UserWashCodeConfigCo> list) ;

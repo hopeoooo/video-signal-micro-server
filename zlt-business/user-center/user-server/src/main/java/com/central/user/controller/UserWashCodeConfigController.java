@@ -57,7 +57,12 @@ public class UserWashCodeConfigController {
         return Result.succeed(userWashCodeConfig);
     }
 
-
+    @ApiOperation("根据gameId和userId查询洗码配置")
+    @GetMapping("/findWashCodeConfigListByGameIdAndUserId")
+    public Result<List<UserWashCodeConfig>> findWashCodeConfigListByGameIdAndUserId(@RequestParam("gameId") Long gameId, @RequestParam("userId") Long userId) {
+        List<UserWashCodeConfig> userWashCodeConfig = userWashCodeConfigService.findWashCodeConfigListByGameIdAndUserId(gameId, userId);
+        return Result.succeed(userWashCodeConfig);
+    }
 
     @ApiOperation(value = "保存")
     @PostMapping("/saveUserWashCodeConfig")
