@@ -5,4 +5,10 @@
     <select id="findList" resultType="com.central.game.model.GameList">
         select * from game_list t
     </select>
+
+    <select id="findEnableAllGame" resultType="com.central.game.model.GameList">
+        SELECT a.* from game_list a
+        LEFT JOIN game_room_list b on a.id=b.game_id
+        where a.game_status!=0 and b.room_status!=0 GROUP BY a.id
+    </select>
 </mapper>

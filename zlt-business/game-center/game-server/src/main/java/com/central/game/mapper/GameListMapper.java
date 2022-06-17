@@ -24,4 +24,6 @@ public interface GameListMapper extends SuperMapper<GameList> {
      * @return
      */
     List<GameList> findList(Page<GameList> page, @Param("sp")SuperPage superPage);
+
+    List<GameList> findEnableAllGame();
 }

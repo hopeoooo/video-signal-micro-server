@@ -52,9 +52,7 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
 
     @Override
     public List<GameList> findAll() {
-        LambdaQueryWrapper<GameList> lqw = Wrappers.lambdaQuery();
-        lqw.in(GameList::getGameStatus, 1, 2);
-        List<GameList> gameLists = baseMapper.selectList(lqw);
+        List<GameList> gameLists = baseMapper.findEnableAllGame();
         //查询在线人数
         for (GameList game : gameLists) {
             Integer onlineNum = gameRoomGroupUserService.getGameOnlineNum(game.getId());
