@@ -116,9 +116,9 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
                 record.setWinLoss(betAmount.negate());
             }
             record.setSetTime(setTime);
-            //输赢金额大于0，更新本地钱包
-            if (record.getWinLoss().compareTo(BigDecimal.ZERO) == 1) {
-                Result<SysUserMoney> moneyResult = userService.transterMoney(record.getUserId(), record.getWinLoss(), null, CapitalEnum.SETTLEMENTAMOUNT.getType(), null, record.getBetId());
+            //派彩金额大于0，更新本地钱包
+            if (record.getWinningAmount().compareTo(BigDecimal.ZERO) == 1) {
+                Result<SysUserMoney> moneyResult = userService.transterMoney(record.getUserId(), record.getWinningAmount(), null, CapitalEnum.SETTLEMENTAMOUNT.getType(), null, record.getBetId());
                 if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
                     writeBackAddMoneyStatus(record.getId());
                 } else {
