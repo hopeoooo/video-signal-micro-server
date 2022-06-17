@@ -53,6 +53,6 @@
                 or  g.create_time <![CDATA[<=]]> #{p.endTime})
             </if>
         </where>
-        ORDER BY t.lottery_time DESC
+        ORDER BY g.lottery_time DESC
     </select>
 </mapper>
