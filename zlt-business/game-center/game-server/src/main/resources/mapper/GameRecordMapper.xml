@@ -11,6 +11,12 @@
             <if test="p.userName != null and p.userName != ''">
                 and g.user_name = #{p.userName}
             </if>
+            <if test="p.tableNum != null and p.tableNum != ''">
+                and g.table_num = #{p.tableNum}
+            </if>
+            <if test="p.bureauNum != null and p.bureauNum != ''">
+                and g.bureau_num = #{p.bureauNum}
+            </if>
             <if test="p.parent != null and p.parent != ''">
                 and g.parent = #{p.parent}
             </if>
