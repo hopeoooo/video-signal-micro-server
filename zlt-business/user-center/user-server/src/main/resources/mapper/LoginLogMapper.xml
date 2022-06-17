@@ -35,8 +35,8 @@
                     and  l.login_ip = #{p.loginIp}
                 </if>
             </if>
-
         </where>
+        ORDER BY l.create_time DESC
     </select>
 
 </mapper>
