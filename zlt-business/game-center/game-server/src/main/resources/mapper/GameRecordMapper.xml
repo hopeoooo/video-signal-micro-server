@@ -39,7 +39,7 @@
         LEFT JOIN game_room_info_offline o on g.table_num=o.table_num
         and g.boot_num=o.boot_num and g.bureau_num=o.bureau_num
         <include refid="where" />
-
+        order by g.set_time desc
     </select>
 
     <select id="getGameRecordByParent"  resultType="com.central.game.model.GameRecord">
