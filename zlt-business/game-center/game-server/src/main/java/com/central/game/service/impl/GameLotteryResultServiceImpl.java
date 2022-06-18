@@ -108,7 +108,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
                 BigDecimal winLoss = winningAmount.subtract(betAmount);
                 record.setWinLoss(winLoss);
             //如果是庄闲开和退换本金,输赢派彩为0
-            } else if(result.contains(PlayEnum.BAC_TIE.getCode()) && (PlayEnum.BAC_BANKER.getCode().equals(betCode)) || PlayEnum.BAC_PLAYER.getCode().equals(betCode)) {
+            } else if(result.contains(PlayEnum.BAC_TIE.getCode()) && (PlayEnum.BAC_BANKER.getCode().equals(betCode) || PlayEnum.BAC_PLAYER.getCode().equals(betCode))) {
                 record.setWinningAmount(BigDecimal.ZERO);
                 record.setWinLoss(BigDecimal.ZERO);
             }else {
@@ -125,7 +125,7 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
                     log.error("用户钱包加派彩金额失败,moneyResult={},gameRecord={}", moneyResult.toString(), record.toString());
                 }
             //开奖结果包含和 庄闲玩法退回本金
-            } else if (result.contains(PlayEnum.BAC_TIE.getCode()) && (PlayEnum.BAC_BANKER.getCode().equals(betCode)) || PlayEnum.BAC_PLAYER.getCode().equals(betCode)) {
+            } else if (result.contains(PlayEnum.BAC_TIE.getCode()) && (PlayEnum.BAC_BANKER.getCode().equals(betCode) || PlayEnum.BAC_PLAYER.getCode().equals(betCode))) {
                 Result<SysUserMoney> moneyResult = userService.transterMoney(record.getUserId(), record.getBetAmount(), null, CapitalEnum.SETTLEMENTAMOUNT.getType(), null, record.getBetId());
                 if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
                     writeBackAddMoneyStatus(record.getId());

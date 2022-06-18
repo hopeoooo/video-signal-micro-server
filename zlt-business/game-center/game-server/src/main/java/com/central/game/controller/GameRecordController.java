@@ -6,12 +6,14 @@ import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.utils.AddrUtil;
 import com.central.game.dto.*;
+import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.GameRecordBetCo;
 import com.central.game.model.co.GameRecordBetPageCo;
 import com.central.game.model.co.GameRecordCo;
 import com.central.game.model.co.GameRecordLivePotCo;
 import com.central.game.model.vo.*;
+import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
 import com.central.user.model.vo.RankingListVo;
 import io.swagger.annotations.Api;
@@ -39,6 +41,9 @@ public class GameRecordController {
 
     @Autowired
     private IGameRecordService gameRecordService;
+
+    @Autowired
+    private IGameLotteryResultService gameLotteryResultService;
 
 
     /**
@@ -245,6 +250,14 @@ public class GameRecordController {
     public Result<List<RankingBackstageVo>> findWinLossRankingList() {
         List<RankingBackstageVo> validBetRankingList = gameRecordService.findWinLossRankingList();
         return Result.succeed(validBetRankingList);
+    }
+
+    @ApiOperation(value = "计算开奖结果测试")
+    @GetMapping("/gameLotteryResult/{id}")
+    public Result gameLotteryResult(@PathVariable Long id) {
+        GameLotteryResult lotteryResult = gameLotteryResultService.getById(id);
+        gameLotteryResultService.calculateBetResult(lotteryResult);
+        return Result.succeed();
     }
 
 }
