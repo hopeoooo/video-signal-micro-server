@@ -74,14 +74,7 @@ public class WashCodeConsumer {
             log.error("洗码列表配置为空,record={}", record.toString());
             return;
         }
-        String gameId = record.getGameId();
-        UserWashCodeConfig washCodeConfig = null;
-        for (UserWashCodeConfig config : codeConfigList) {
-            if (config.getGameId().toString().equals(gameId)) {
-                washCodeConfig = config;
-                break;
-            }
-        }
+        UserWashCodeConfig washCodeConfig = codeConfigList.get(0);
         if (washCodeConfig == null) {
             log.error("洗码明细配置为空,record={}", record.toString());
             return;
