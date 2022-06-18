@@ -2,7 +2,10 @@ package com.central.game.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
+import com.central.common.model.Result;
+import com.central.config.feign.ConfigService;
 import com.central.game.mapper.GameListMapper;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
@@ -18,6 +21,7 @@ import com.central.common.service.impl.SuperServiceImpl;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 
 /**
  * 
@@ -32,6 +36,8 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
 
     @Autowired
     private IGameRoomGroupUserService gameRoomGroupUserService;
+    @Autowired
+    private ConfigService configService;
     /**
      * 列表
      * @param superPage
@@ -55,7 +61,16 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
         List<GameList> gameLists = baseMapper.findEnableAllGame();
         //查询在线人数
         for (GameList game : gameLists) {
+            //查询最低在线人数
+            Result<String> result = configService.findMinOnlineUserQuantity();
+            if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+                log.error("查询最低在线人数失败,result={}", result.toString());
+            }
             Integer onlineNum = gameRoomGroupUserService.getGameOnlineNum(game.getId());
+            String datas = result.getDatas();
+            if (!ObjectUtils.isEmpty(datas)) {
+                onlineNum = onlineNum + Integer.parseInt(datas);
+            }
             game.setOnlineNum(onlineNum);
         }
         return gameLists;
