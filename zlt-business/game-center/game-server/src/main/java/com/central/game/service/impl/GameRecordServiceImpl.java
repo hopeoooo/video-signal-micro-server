@@ -127,7 +127,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             }
             TouristDto datas = touristAmount.getDatas();
             if (datas != null && datas.getTouristSingleMaxBet() != null && totalBetAmount.compareTo(datas.getTouristSingleMaxBet()) == 1) {
-                return Result.failed("投注金额超过单笔最大投注额,游客单笔最大投注额为" + datas.getTouristSingleMaxBet().stripTrailingZeros().toPlainString());
+                return Result.failedDynamic("投注金额超过单笔最大投注额,游客单笔最大投注额为",datas.getTouristSingleMaxBet().stripTrailingZeros().toPlainString());
             }
         }
         //校验本次总下注额是否超过本地剩余额度

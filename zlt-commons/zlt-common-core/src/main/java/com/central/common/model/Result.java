@@ -43,8 +43,18 @@ public class Result<T> implements Serializable {
         return result;
     }
 
+    public static <T> Result<T> of(T datas, Integer code, String msg, Object dynamicMsg) {
+        Result<T> result = of(datas, code, msg);
+        result.setResp_msg(result.getResp_msg() + dynamicMsg);
+        return result;
+    }
+
     public static <T> Result<T> failed(String msg) {
         return of(null, CodeEnum.ERROR.getCode(), msg);
+    }
+
+    public static <T> Result<T> failedDynamic(String msg, Object dynamicMsg) {
+        return of(null, CodeEnum.ERROR.getCode(), msg, dynamicMsg);
     }
 
     public static <T> Result<T> failed(int codeEnum, String msg, T datas) {

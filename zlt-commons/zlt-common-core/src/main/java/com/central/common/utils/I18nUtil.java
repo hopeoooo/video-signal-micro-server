@@ -3,6 +3,7 @@ package com.central.common.utils;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.constant.I18nKeys;
 import com.central.common.dto.I18nSourceDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -50,7 +51,7 @@ public class I18nUtil implements ApplicationContextAware {
             return key;
         }
         String value = redisTemplate.<String, String>opsForHash().get(keyOf(language), key);
-        if (null == value) {
+        if (StringUtils.isBlank(value)) {
             return key;
         }
         return value;
