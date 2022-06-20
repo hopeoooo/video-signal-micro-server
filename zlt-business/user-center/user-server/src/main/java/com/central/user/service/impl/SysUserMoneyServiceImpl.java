@@ -102,6 +102,7 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
             //扣减金额大于本地余额时，最多只能扣减剩余的
             money = money.compareTo(sysUserMoney.getMoney()) == 1 ? sysUserMoney.getMoney() : money;
             sysUserMoney.setMoney(sysUserMoney.getMoney().subtract(money));
+            money = money.negate();
         }
         baseMapper.updateById(sysUserMoney);
         //游客不记录数据
