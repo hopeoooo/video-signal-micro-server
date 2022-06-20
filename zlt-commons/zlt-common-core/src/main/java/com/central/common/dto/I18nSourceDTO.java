@@ -11,9 +11,6 @@ import java.util.Map;
 @Data
 public class I18nSourceDTO {
 
-    @ApiModelProperty("中文国际化资源")
-    private Map<String, String> zhCn;
-
     @ApiModelProperty("英文国际化资源")
     private Map<String, String> enUs;
 
