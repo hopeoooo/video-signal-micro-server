@@ -27,6 +27,10 @@ public class Result<T> implements Serializable {
         return of(null, CodeEnum.SUCCESS.getCode(), msg);
     }
 
+    public static <T> Result<T> succeedDynamic(String msg, Object dynamic) {
+        return of(null, CodeEnum.SUCCESS.getCode(), msg, dynamic);
+    }
+
     public static <T> Result<T> succeed(T model, String msg) {
         return of(model, CodeEnum.SUCCESS.getCode(), msg);
     }

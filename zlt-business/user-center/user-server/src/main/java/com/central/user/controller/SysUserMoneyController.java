@@ -221,7 +221,7 @@ public class SysUserMoneyController {
             sysTansterMoneyLog.setOrderType(CapitalEnum.WASH_CODE.getType());
             sysTansterMoneyLog.setOrderNo("XM" + DateUtil.format(new Date(), "yyyyMMddHHmmssSSS"));
             iSysTansterMoneyLogService.syncSave(sysTansterMoneyLog);
-            return Result.succeed("成功领取金额" + washCode.stripTrailingZeros().toPlainString());
+            return Result.succeedDynamic("成功领取金额" , washCode.stripTrailingZeros().toPlainString());
         } finally {
             RedissLockUtil.unlock(moneyKey);
             RedissLockUtil.unlock(washCodeKey);
