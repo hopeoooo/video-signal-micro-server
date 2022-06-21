@@ -198,7 +198,7 @@ public class SysUserController {
     @GetMapping(value = "/user/getOnlineNum")
     @ApiOperation(value = "初始化查询在线人数")
     public Result<Integer> getOnlineNum() {
-        String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + SecurityConstants.APP_USER_ONLINE + "*";
+        String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + CommonConstant.REDIS_WEBAPP + "*";
         Set<String> keySet = redisTemplate.keys(onlineKey);
         int playerSize = keySet.size();
         //查询最低在线人数
