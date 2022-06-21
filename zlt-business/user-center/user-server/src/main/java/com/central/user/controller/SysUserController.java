@@ -216,7 +216,7 @@ public class SysUserController {
     @GetMapping(value = "/user/pushOnlineNum")
     @ApiOperation(value = "socket推送在线人数",hidden = true)
     public Result pushOnlineNum(@RequestParam("changeNum") Integer changeNum) {
-        String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + SecurityConstants.APP_USER_ONLINE + "*";
+        String onlineKey = SecurityConstants.REDIS_UNAME_TO_ACCESS + CommonConstant.REDIS_WEBAPP + "*";
         Set<String> keySet = redisTemplate.keys(onlineKey);
         int playerSize = keySet.size();
         if (changeNum != null) {
