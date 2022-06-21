@@ -516,7 +516,7 @@ public class SysUserController {
     @ApiOperation(value = "登录用户修改头像")
     @GetMapping("/users/updateHeadImg")
     @ApiImplicitParam(name = "headImg", value = "头像地址,只需要传这一个参数，其他参数为框架多余展示的不用理会", required = true, dataType = "String")
-    public Result updateHeadImgUrl(@LoginUser SysUser user,@NotBlank(message = "headImg不允许为空") String headImg) {
+    public Result updateHeadImgUrl(@LoginUser SysUser user,@NotBlank(message = "头像不允许为空") String headImg) {
         Long id = user.getId();
         cacheEvictUser(id);
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
@@ -545,7 +545,7 @@ public class SysUserController {
             @ApiImplicitParam(name = "oldLoginPassword", value = "原登录密码", required = true),
             @ApiImplicitParam(name = "newLoginPassword", value = "新登录密码", required = true),
             @ApiImplicitParam(name = "confirmLoginPassword", value = "确认登录密码", required = true)})
-    public Result updateIsAutoBet(@LoginUser SysUser user, @NotBlank(message = "oldLoginPassword不允许为空") String oldLoginPassword, @NotBlank(message = "newLoginPassword不允许为空") String newLoginPassword, @NotBlank(message = "confirmLoginPassword不允许为空") String confirmLoginPassword) {
+    public Result updateLoginPassword(@LoginUser SysUser user, @NotBlank(message = "原密码不允许为空") String oldLoginPassword, @NotBlank(message = "新密码不允许为空") String newLoginPassword, @NotBlank(message = "确认密码不允许为空") String confirmLoginPassword) {
         if (oldLoginPassword.equals(newLoginPassword)) {
             return Result.failed("两次输入密码不匹配，请仔细确认");
         }
