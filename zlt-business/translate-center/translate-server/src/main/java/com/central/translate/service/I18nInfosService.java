@@ -38,7 +38,7 @@ public interface I18nInfosService extends ISuperService<I18nInfo> {
      * @author lance
      * @since 2022 -01-28 12:44:38
      */
-    I18nSourceDTO getFrontFullI18nSource();
+    I18nSourceDTO getFrontFullI18nSource(Integer fromOf);
 
     /**
      * 初始化国际化资源redis缓存

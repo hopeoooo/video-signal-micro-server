@@ -122,18 +122,43 @@ public class TranslateController {
     }
 
     /**
-     * 获取所有的前台国际化资源
+     * 获取所有的前台PC国际化资源
      *
      * @return {@link Result} 出参释义
      * @author lance
      * @since 2022 -01-28 13:17:46
      */
     @GetMapping("/frontFullSource")
-    @ApiOperation(value = "获取所有的前台台国际化资源")
+    @ApiOperation(value = "获取所有的前台PC国际化资源")
     public Result<I18nSourceDTO> frontFullSource(){
         return i18nInfosService.frontFullSource();
     }
 
+    /**
+     * 获取所有的前台App国际化资源
+     *
+     * @return {@link Result} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:17:46
+     */
+    @GetMapping("/frontAppFullSource")
+    @ApiOperation(value = "获取所有的前台App国际化资源")
+    public Result<I18nSourceDTO> frontAppFullSource(){
+        return i18nInfosService.frontAppFullSource();
+    }
+
+    /**
+     * 获取所有的前台Message国际化资源
+     *
+     * @return {@link Result} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:17:46
+     */
+    @GetMapping("/frontMessageFullSource")
+    @ApiOperation(value = "获取所有的前台Message国际化资源")
+    public Result<I18nSourceDTO> frontMessageFullSource(){
+        return i18nInfosService.frontMessageFullSource();
+    }
 
     /**
      * 获取语言标签

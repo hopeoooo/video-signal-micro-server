@@ -14,15 +14,25 @@ public interface I18nKeys {
     String LANGUAGE = "language";
 
     /**
-     * 前台
+     * 前台PC
      */
-    Integer FRONT = 0;
+    Integer FRONT_PC = 0;
 
     /**
      * 后台
      */
     Integer BACKEND = 1;
 
+    /**
+     * 前台PC
+     */
+    Integer FRONT_APP = 2;
+
+
+    /**
+     * 前台PC
+     */
+    Integer FRONT_MESSAGE = 3;
     /**
      * 语种
      */
@@ -57,26 +67,70 @@ public interface I18nKeys {
     }
 
     interface Redis {
-        // 前台
-        interface Front {
+        // 前台PC
+        interface FrontPc {
             /**
              * 中文国际化 key
              */
-            String ZH_CN_KEY = "i18n:source:zh_cn:hash:" + I18nKeys.FRONT;
+            String ZH_CN_KEY = "i18n:source:zh_cn:hash:" + I18nKeys.FRONT_PC;
             /**
              * 英文国际化 key
              */
-            String EN_US_KEY = "i18n:source:en_us:hash:" + I18nKeys.FRONT;
+            String EN_US_KEY = "i18n:source:en_us:hash:" + I18nKeys.FRONT_PC;
 
             /**
              * 高棉语国际化 key
              */
-            String KHM_KEY = "i18n:source:khm:hash:" + I18nKeys.FRONT;
+            String KHM_KEY = "i18n:source:khm:hash:" + I18nKeys.FRONT_PC;
 
             /**
              * 泰语国际化 key
              */
-            String TH_KEY = "i18n:source:th:hash:" + I18nKeys.FRONT;
+            String TH_KEY = "i18n:source:th:hash:" + I18nKeys.FRONT_PC;
+        }
+
+        // 前台移动端
+        interface FrontApp {
+            /**
+             * 中文国际化 key
+             */
+            String ZH_CN_KEY = "i18n:source:zh_cn:hash:" + I18nKeys.FRONT_APP;
+            /**
+             * 英文国际化 key
+             */
+            String EN_US_KEY = "i18n:source:en_us:hash:" + I18nKeys.FRONT_APP;
+
+            /**
+             * 高棉语国际化 key
+             */
+            String KHM_KEY = "i18n:source:khm:hash:" + I18nKeys.FRONT_APP;
+
+            /**
+             * 泰语国际化 key
+             */
+            String TH_KEY = "i18n:source:th:hash:" + I18nKeys.FRONT_APP;
+        }
+
+        // 前台message
+        interface FrontMessage{
+            /**
+             * 中文国际化 key
+             */
+            String ZH_CN_KEY = "i18n:source:zh_cn:hash:" + I18nKeys.FRONT_MESSAGE;
+            /**
+             * 英文国际化 key
+             */
+            String EN_US_KEY = "i18n:source:en_us:hash:" + I18nKeys.FRONT_MESSAGE;
+
+            /**
+             * 高棉语国际化 key
+             */
+            String KHM_KEY = "i18n:source:khm:hash:" + I18nKeys.FRONT_MESSAGE;
+
+            /**
+             * 泰语国际化 key
+             */
+            String TH_KEY = "i18n:source:th:hash:" + I18nKeys.FRONT_MESSAGE;
         }
 
         // 后台

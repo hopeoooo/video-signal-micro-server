@@ -68,6 +68,18 @@ public class TranslateServiceFallbackFactory implements FallbackFactory<Translat
             }
 
             @Override
+            public Result<I18nSourceDTO> frontAppFullSource() {
+                log.error("调用失败");
+                return null;
+            }
+
+            @Override
+            public Result<I18nSourceDTO> frontMessageFullSource() {
+                log.error("调用失败");
+                return null;
+            }
+
+            @Override
             public List<LanguageLabelVO> languageLabel() {
                 log.error("调用失败");
                 return null;

@@ -93,7 +93,7 @@ public interface TranslateService {
     Result<I18nSourceDTO> backendFullSource();
 
     /**
-     * 获取所有的前台国际化资源
+     * 获取所有的前台PC国际化资源
      *
      * @return {@link Result} 出参释义
      * @author lance
@@ -101,6 +101,26 @@ public interface TranslateService {
      */
     @GetMapping("/translate/frontFullSource")
     Result<I18nSourceDTO> frontFullSource();
+
+    /**
+     * 获取所有的前台APP国际化资源
+     *
+     * @return {@link Result} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:17:46
+     */
+    @GetMapping("/translate/frontAppFullSource")
+    Result<I18nSourceDTO> frontAppFullSource();
+
+    /**
+     * 获取所有的前台message国际化资源
+     *
+     * @return {@link Result} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:17:46
+     */
+    @GetMapping("/translate/frontMessageFullSource")
+    Result<I18nSourceDTO> frontMessageFullSource();
 
     /**
      * 获取语言标签
