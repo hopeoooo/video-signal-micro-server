@@ -12,24 +12,15 @@ import com.central.game.constants.PlayEnum;
 import com.central.game.mapper.GameLotteryResultMapper;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
-import com.central.game.model.GameRecordSon;
-import com.central.game.model.GameRoomList;
 import com.central.game.model.co.GameLotteryResultBackstageCo;
 import com.central.game.model.co.GameLotteryResultCo;
-import com.central.game.model.vo.GameRoomListVo;
-import com.central.game.model.vo.LivePotVo;
 import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
-import com.central.game.service.IGameRecordSonService;
-import com.central.push.constant.SocketTypeConstant;
-import com.central.push.feign.PushService;
 import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -51,8 +42,6 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
     private IGameRecordService gameRecordService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private IGameRecordSonService gameRecordSonService;
     @Autowired
     private RedisRepository redisRepository;
 
@@ -81,15 +70,11 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
         }
         //先查询本局的下注记录
         List<GameRecord> gameRecordList = gameRecordService.lambdaQuery().eq(GameRecord::getTableNum, lotteryResult.getTableNum())
-                .eq(GameRecord::getBootNum, lotteryResult.getBootNum()).eq(GameRecord::getBureauNum, lotteryResult.getBureauNum()).list();
+                .eq(GameRecord::getBootNum, lotteryResult.getBootNum()).eq(GameRecord::getBureauNum, lotteryResult.getBureauNum())
+                .isNull(GameRecord::getSetTime).list();
         //计算每笔注单的派彩金额和输赢值
         String result = lotteryResult.getResult();
         for (GameRecord record : gameRecordList) {
-            //判断是否已经处理过，防止重复计算
-            GameRecordSon gameRecordSon = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, record.getId()).eq(GameRecordSon::getAddMoneyStatus, 1).one();
-            if (gameRecordSon != null) {
-                continue;
-            }
             BigDecimal betAmount = record.getBetAmount();
             record.setGameResult(result);
             record.setGameResultName(lotteryResult.getResultName());
@@ -119,17 +104,13 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
             //派彩金额大于0，更新本地钱包
             if (record.getWinningAmount().compareTo(BigDecimal.ZERO) == 1) {
                 Result<SysUserMoney> moneyResult = userService.transterMoney(record.getUserId(), record.getWinningAmount(), null, CapitalEnum.SETTLEMENTAMOUNT.getType(), null, record.getBetId());
-                if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-                    writeBackAddMoneyStatus(record.getId());
-                } else {
+                if (moneyResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
                     log.error("用户钱包加派彩金额失败,moneyResult={},gameRecord={}", moneyResult.toString(), record.toString());
                 }
             //开奖结果包含和 庄闲玩法退回本金
             } else if (result.contains(PlayEnum.BAC_TIE.getCode()) && (PlayEnum.BAC_BANKER.getCode().equals(betCode) || PlayEnum.BAC_PLAYER.getCode().equals(betCode))) {
                 Result<SysUserMoney> moneyResult = userService.transterMoney(record.getUserId(), record.getBetAmount(), null, CapitalEnum.SETTLEMENTAMOUNT.getType(), null, record.getBetId());
-                if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-                    writeBackAddMoneyStatus(record.getId());
-                } else {
+                if (moneyResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
                     log.error("开奖结果包含和退回本金失败,moneyResult={},gameRecord={}", moneyResult.toString(), record.toString());
                 }
             }
@@ -143,17 +124,6 @@ public class GameLotteryResultServiceImpl extends SuperServiceImpl<GameLotteryRe
                 gameRecordService.calculateWashCode(record);
             }
         }
-    }
-
-    public void writeBackAddMoneyStatus(Long gameRecordId){
-        //回写状态
-        GameRecordSon gameRecordSon = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, gameRecordId).one();
-        if (gameRecordSon == null) {
-            gameRecordSon = new GameRecordSon();
-            gameRecordSon.setGameRecordId(gameRecordId);
-        }
-        gameRecordSon.setAddMoneyStatus(1);
-        gameRecordSonService.saveOrUpdate(gameRecordSon);
     }
 
     /**

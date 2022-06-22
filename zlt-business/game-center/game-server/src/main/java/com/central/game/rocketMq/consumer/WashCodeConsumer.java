@@ -4,9 +4,7 @@ import com.central.common.model.CodeEnum;
 import com.central.common.model.Result;
 import com.central.common.model.UserWashCodeConfig;
 import com.central.game.model.GameRecord;
-import com.central.game.model.GameRecordSon;
 import com.central.game.model.WashCodeChange;
-import com.central.game.service.IGameRecordSonService;
 import com.central.game.service.IWashCodeChangeService;
 import com.central.user.feign.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +32,6 @@ public class WashCodeConsumer {
     private UserService userService;
     @Autowired
     private IWashCodeChangeService washCodeChangeService;
-    @Autowired
-    private IGameRecordSonService gameRecordSonService;
 
     @Bean
     public Function<Flux<Message<GameRecord>>, Mono<Void>> washCode() {
@@ -59,8 +55,8 @@ public class WashCodeConsumer {
             return;
         }
         //判断是否已经处理过，防止重复计算
-        GameRecordSon gameRecordSonOld = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, record.getId()).eq(GameRecordSon::getWashCodeStatus, 1).one();
-        if (gameRecordSonOld != null) {
+        Integer count = washCodeChangeService.lambdaQuery().eq(WashCodeChange::getGameRecordId, record.getId()).count();
+        if (count > 0) {
             return;
         }
         //查询最新的洗码返水配置
@@ -111,15 +107,6 @@ public class WashCodeConsumer {
             } else {
                 log.info("洗码金额加回userMoney成功,washCodeChange={},record={}", washCodeChange.toString(), record.toString());
             }
-            //回写状态
-            GameRecordSon gameRecordSon = gameRecordSonService.lambdaQuery().eq(GameRecordSon::getGameRecordId, record.getId()).one();
-            if (gameRecordSon == null) {
-                gameRecordSon = new GameRecordSon();
-                gameRecordSon.setGameRecordId(record.getId());
-            }
-            gameRecordSon.setWashCodeStatus(1);
-            gameRecordSonService.saveOrUpdate(gameRecordSon);
-            log.info("洗码gameRecordSon状态回写成功,record={}", record.toString());
         } catch (Exception e) {
             log.error("洗码失败，record={},msg={}", record.toString(), e.getMessage());
             e.printStackTrace();
