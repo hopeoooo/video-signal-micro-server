@@ -73,7 +73,7 @@ public class GameRecordController {
     public Result<List<GameRecord>> findBureauBetDetail(@Valid @ModelAttribute GameRecordDetailCo params, @LoginUser SysUser user) {
         List<GameRecord> list = gameRecordService.lambdaQuery().eq(GameRecord::getGameId, params.getGameId()).eq(GameRecord::getTableNum, params.getTableNum())
                 .eq(GameRecord::getBootNum, params.getBootNum()).eq(GameRecord::getBureauNum, params.getBureauNum()).eq(GameRecord::getUserId, user.getId())
-                .list();
+                .orderByDesc(GameRecord::getCreateTime).list();
         return Result.succeed(list);
     }
 
