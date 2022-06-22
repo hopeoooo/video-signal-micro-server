@@ -20,6 +20,8 @@ import java.util.Map;
  */
 @Mapper
 public interface I18nInfoMapper extends SuperMapper<I18nInfo> {
+
+    List<I18nInfo> findListByZhCn(@Param("fromOf")Integer fromOf, @Param("zhCn") String zhCn);
     /**
      * 分页查询列表
      *

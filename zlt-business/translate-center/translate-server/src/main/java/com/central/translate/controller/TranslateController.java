@@ -52,7 +52,9 @@ public class TranslateController {
     public Result<String> backendUpdate(@ApiIgnore @LoginUser SysUser sysUser,
         @RequestBody @Validated(SaveI18nInfoCo.Update.class) UpdateI18nInfoCo param) {
         param.setOperator(sysUser.getUsername());
-        i18nInfosService.updateI18nInfo(I18nKeys.BACKEND, param);
+        if (!i18nInfosService.updateI18nInfo(I18nKeys.BACKEND, param)){
+            return Result.failed("数据重复");
+        }
         return Result.succeed("操作成功");
     }
 
@@ -72,7 +74,9 @@ public class TranslateController {
         if (Objects.isNull(param.getFromOf())) {
             return Result.failed("参数必传");
         }
-        i18nInfosService.updateI18nInfo(param.getFromOf(), param);
+        if (!i18nInfosService.updateI18nInfo(param.getFromOf(), param)){
+            return Result.failed("数据重复");
+        }
         return Result.succeed("操作成功");
     }
 

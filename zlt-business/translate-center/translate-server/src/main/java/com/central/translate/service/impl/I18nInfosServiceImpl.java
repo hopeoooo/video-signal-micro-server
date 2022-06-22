@@ -1,6 +1,7 @@
 package com.central.translate.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -46,6 +47,11 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Override
+    public List<I18nInfo> findListByZhCn(Integer fromOf, String zhCn) {
+        return mapper.findListByZhCn(fromOf,zhCn);
+    }
 
     /**
      * 获取所有的后台国际化资源
@@ -208,7 +214,14 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         if (null == info) {
             return false;
         }
-
+        List<I18nInfo> listByZhCn = findListByZhCn(from, param.getZhCn());
+        if (CollUtil.isNotEmpty(listByZhCn)){
+            for (I18nInfo i18nInfo:listByZhCn){
+                if (i18nInfo.getId().longValue() != param.getId().longValue()){
+                    return false;
+                }
+            }
+        }
         LambdaUpdateWrapper<I18nInfo> update = Wrappers.lambdaUpdate(I18nInfo.class).eq(I18nInfo::getId, param.getId())
             .eq(I18nInfo::getFromOf, from).set(param.getPageId() != null, I18nInfo::getPageId, param.getPageId())
             .set(param.getPositionId() != null, I18nInfo::getPositionId, param.getPositionId())

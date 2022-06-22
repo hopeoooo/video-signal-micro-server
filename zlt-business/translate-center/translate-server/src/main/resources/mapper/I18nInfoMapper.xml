@@ -2,6 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.central.translate.mapper.I18nInfoMapper">
+
+    <select id="findListByZhCn" resultType="com.central.common.model.I18nInfo">
+        select
+        t.id as id,
+        t.from_of as fromOf,
+        t.zh_cn as zhCn
+        from i18n_info t
+        <where>
+            <if test="zhCn != null and zhCn != ''">
+                AND t.zh_cn = #{zhCn}
+            </if>
+            <if test="fromOf != null">
+                AND t.from_of = #{fromOf}
+            </if>
+        </where>
+    </select>
+
+
     <select id="findList" resultType="com.central.common.model.I18nInfo">
         select * from i18n_info t
     </select>
