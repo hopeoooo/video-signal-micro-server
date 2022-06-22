@@ -1,6 +1,7 @@
 package com.central.translate.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -11,6 +12,7 @@ import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.I18nInfo;
 import com.central.common.utils.I18nUtil;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.common.utils.StringUtils;
 import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.mapper.I18nInfoMapper;
 import com.central.translate.model.co.I18nInfoPageMapperCo;
@@ -46,6 +48,11 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Override
+    public List<I18nInfo> findListByZhCn(Integer fromOf, String zhCn) {
+        return mapper.findListByZhCn(fromOf,zhCn);
+    }
 
     /**
      * 获取所有的后台国际化资源
@@ -208,7 +215,14 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         if (null == info) {
             return false;
         }
-
+        List<I18nInfo> listByZhCn = findListByZhCn(from, param.getZhCn());
+        if (CollUtil.isNotEmpty(listByZhCn)){
+            for (I18nInfo i18nInfo:listByZhCn){
+                if (i18nInfo.getId().longValue() != param.getId().longValue()){
+                    return false;
+                }
+            }
+        }
         LambdaUpdateWrapper<I18nInfo> update = Wrappers.lambdaUpdate(I18nInfo.class).eq(I18nInfo::getId, param.getId())
             .eq(I18nInfo::getFromOf, from).set(param.getPageId() != null, I18nInfo::getPageId, param.getPageId())
             .set(param.getPositionId() != null, I18nInfo::getPositionId, param.getPositionId())
@@ -220,8 +234,12 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         boolean succeed = count > 0;
 
         if (succeed) {
+            String oldKey = null;
+            if (!info.getZhCn().equals(param.getZhCn())){
+                oldKey = info.getZhCn();
+            }
             // 更新redis
-            updateI18nRedis(from, param, info);
+            updateI18nRedis(from, param, info,oldKey);
         }
 
         return succeed;
@@ -243,12 +261,12 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         info.setFromOf(from);
         boolean succeed = save(info);
         if (succeed) {
-            updateI18nRedis(from, param, info);
+            updateI18nRedis(from, param, info,null);
         }
         return succeed;
     }
 
-    private void updateI18nRedis(Integer from, SaveI18nInfoCo param, I18nInfo info) {
+    private void updateI18nRedis(Integer from, SaveI18nInfoCo param, I18nInfo info,String oldKey) {
         boolean zhcnChange = StrUtil.isNotBlank(param.getZhCn());
         boolean enusChange = StrUtil.isNotBlank(param.getEnUs());
         boolean khmChange = StrUtil.isNotBlank(param.getKhm());
@@ -271,6 +289,9 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             }
             // 更新中文国际化
             I18nUtil.resetSource(redisKey, i18nKey, param.getZhCn());
+            if (StringUtils.isNotEmpty(oldKey)){
+                I18nUtil.deleteByKey(redisKey,oldKey);
+            }
         }
         if (enusChange) {
             // 更新英文国际化
@@ -284,6 +305,9 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                 redisKey = I18nKeys.Redis.Backend.EN_US_KEY;
             }
             I18nUtil.resetSource(redisKey, i18nKey, param.getEnUs());
+            if (StringUtils.isNotEmpty(oldKey)){
+                I18nUtil.deleteByKey(redisKey,oldKey);
+            }
         }
         if (khmChange) {
             // 更新高棉语国际化
@@ -297,6 +321,9 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                 redisKey = I18nKeys.Redis.Backend.KHM_KEY;
             }
             I18nUtil.resetSource(redisKey, i18nKey, param.getKhm());
+            if (StringUtils.isNotEmpty(oldKey)){
+                I18nUtil.deleteByKey(redisKey,oldKey);
+            }
         }
         if (thChange) {
             // 更新泰语国际化
@@ -310,6 +337,9 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                 redisKey = I18nKeys.Redis.Backend.TH_KEY;
             }
             I18nUtil.resetSource(redisKey, i18nKey, param.getTh());
+            if (StringUtils.isNotEmpty(oldKey)){
+                I18nUtil.deleteByKey(redisKey,oldKey);
+            }
         }
     }
 

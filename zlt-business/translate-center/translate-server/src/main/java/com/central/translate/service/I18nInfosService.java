@@ -21,6 +21,7 @@ import java.util.List;
  */
 public interface I18nInfosService extends ISuperService<I18nInfo> {
 
+    List<I18nInfo> findListByZhCn(Integer fromOf,String zhCn);
     /**
      * 获取所有的后台国际化资源
      *
