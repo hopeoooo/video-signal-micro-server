@@ -166,5 +166,9 @@ public class NettyWebSocketGroupServer {
         }
         return null;
     }
+
+    public static Object getAllConnect() {
+        return groups;
+    }
 }
 
