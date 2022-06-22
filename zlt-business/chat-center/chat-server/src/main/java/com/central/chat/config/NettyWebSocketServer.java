@@ -4,6 +4,7 @@ package com.central.chat.config;
 import com.alibaba.fastjson.JSONObject;
 import com.central.chat.service.ChatService;
 import com.central.chat.vo.MessageVo;
+import com.central.common.model.PushResult;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +72,8 @@ public class NettyWebSocketServer {
         }
         friends.add(this);
         log.info("群组:{},用户:{} 加入连接，当前连接数为：{}", groupId, this.userName, friends.size());
-        onMessage(session,"连接成功");
+        PushResult pushResult = PushResult.succeed("连接成功", "heartbeat", "客户端消息接收成功");
+        onMessage(session,JSONObject.toJSONString(pushResult));
     }
 
     @OnClose
