@@ -73,7 +73,7 @@ public class NettyWebSocketServer {
         friends.add(this);
         log.info("群组:{},用户:{} 加入连接，当前连接数为：{}", groupId, this.userName, friends.size());
         PushResult pushResult = PushResult.succeed("连接成功", "heartbeat", "客户端消息接收成功");
-        onMessage(session,JSONObject.toJSONString(pushResult));
+        session.sendText(JSONObject.toJSONString(pushResult));
     }
 
     @OnClose
