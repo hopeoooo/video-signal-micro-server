@@ -127,5 +127,9 @@ public class NettyWebSocketServer {
         }
         return null;
     }
+
+    public static Object getAllConnect() {
+        return groups;
+    }
 }
 
