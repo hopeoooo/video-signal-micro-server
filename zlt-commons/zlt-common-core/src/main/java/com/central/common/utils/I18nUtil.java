@@ -87,6 +87,9 @@ public class I18nUtil implements ApplicationContextAware {
         redisTemplate.opsForHash().put(redisKey, key, value);
     }
 
+    public static void deleteByKey(String redisKey, String key) {
+        redisTemplate.opsForHash().delete(redisKey, key);
+    }
     /**
      * 获取对应语言的国际化资源
      *
