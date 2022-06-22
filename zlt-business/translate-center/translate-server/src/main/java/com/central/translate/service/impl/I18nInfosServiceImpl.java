@@ -290,7 +290,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             // 更新中文国际化
             I18nUtil.resetSource(redisKey, i18nKey, param.getZhCn());
             if (StringUtils.isNotEmpty(oldKey)){
-                I18nUtil.deleteByKey(redisKey,i18nKey);
+                I18nUtil.deleteByKey(redisKey,oldKey);
             }
         }
         if (enusChange) {
@@ -306,7 +306,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             }
             I18nUtil.resetSource(redisKey, i18nKey, param.getEnUs());
             if (StringUtils.isNotEmpty(oldKey)){
-                I18nUtil.deleteByKey(redisKey,i18nKey);
+                I18nUtil.deleteByKey(redisKey,oldKey);
             }
         }
         if (khmChange) {
@@ -322,7 +322,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             }
             I18nUtil.resetSource(redisKey, i18nKey, param.getKhm());
             if (StringUtils.isNotEmpty(oldKey)){
-                I18nUtil.deleteByKey(redisKey,i18nKey);
+                I18nUtil.deleteByKey(redisKey,oldKey);
             }
         }
         if (thChange) {
@@ -338,7 +338,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             }
             I18nUtil.resetSource(redisKey, i18nKey, param.getTh());
             if (StringUtils.isNotEmpty(oldKey)){
-                I18nUtil.deleteByKey(redisKey,i18nKey);
+                I18nUtil.deleteByKey(redisKey,oldKey);
             }
         }
     }
