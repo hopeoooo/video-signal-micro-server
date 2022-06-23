@@ -97,11 +97,11 @@ public class NettyWebSocketServer {
             vo.setUserName(this.userName);
             vo.setMessage(message);
             vo.setDateTime(dateTime);
-            String msg = JSONObject.toJSONString(vo);
             //异步保存用户聊天信息
             //chatService.syncSaveChatMessage(groupId, msg);
             for (NettyWebSocketServer item : friends) {
-                item.session.sendText(msg);
+                PushResult pushResult = PushResult.succeed(vo, "message", "新消息");
+                item.session.sendText(JSONObject.toJSONString(pushResult));
             }
         }
     }
