@@ -14,17 +14,16 @@ import com.central.game.model.GameRoomList;
 import com.central.game.model.RoomFollowList;
 import com.central.game.model.vo.GameRoomListVo;
 import com.central.game.model.vo.LivePotVo;
-import com.central.game.service.IGameRoomInfoOfflineService;
-import com.central.game.service.IGameRoomListService;
-import com.central.game.service.IPushGameDataToClientService;
-import com.central.game.service.IRoomFollowListService;
+import com.central.game.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
@@ -49,6 +48,9 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     private IPushGameDataToClientService pushGameDataToClientService;
     @Autowired
     private IRoomFollowListService roomFollowListService;
+    @Autowired
+    @Lazy
+    private IGameLotteryResultService gameLotteryResultService;
 
     @Override
     public List<GameRoomList> findGameRoomList(Long gameId) {
@@ -212,11 +214,23 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         //本靴牌开奖结果
         String redisDataKey = RedisKeyConstant.GAME_RECORD_LOTTERY_RESULT_DATA + vo.getGameId() + "-" + vo.getTableNum() + "-" + vo.getBootNum();
         int length = redisRepository.length(redisDataKey).intValue();
+        List<GameLotteryResult> lotteryResultList = new ArrayList<>();
         if (length == 0) {
-            return;
+            //缓存过期时间为2小时，防止换靴后长时间没有新开靴，查不到数据
+            lotteryResultList = gameLotteryResultService.lambdaQuery().eq(GameLotteryResult::getGameId, vo.getGameId()).eq(GameLotteryResult::getTableNum, vo.getTableNum())
+                    .eq(GameLotteryResult::getBootNum, vo.getBootNum()).orderByAsc(GameLotteryResult::getCreateTime).list();
+            if (CollectionUtils.isEmpty(lotteryResultList)) {
+                return;
+            }
+            for (GameLotteryResult result : lotteryResultList) {
+                redisRepository.rightPush(redisDataKey, result);
+            }
+            //有效期2小时
+            redisRepository.setExpire(redisDataKey, 2 * 60 * 60);
+        } else {
+            List<Object> list = redisRepository.getList(redisDataKey, 0, length);
+            lotteryResultList = (List<GameLotteryResult>) (List) list;
         }
-        List<Object> list = redisRepository.getList(redisDataKey, 0, length);
-        List<GameLotteryResult> lotteryResultList = (List<GameLotteryResult>)(List)list;
         setLotteryNum(lotteryResultList, vo);
     }
 
