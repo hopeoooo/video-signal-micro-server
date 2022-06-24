@@ -95,7 +95,7 @@ public class TranslateController {
     }
 
     /**
-     * 查询国际化字典分页
+     * 查询后台国际化字典分页
      *
      * @param param 查询参数
      * @return {@link PageResult} 分页数据
@@ -109,6 +109,19 @@ public class TranslateController {
     }
 
     /**
+     * 查询前台国际化字典分页
+     *
+     * @param param 查询参数
+     * @return {@link PageResult} 分页数据
+     * @author lance
+     * @since 2022 -01-25 14:13:51
+     */
+    @GetMapping("/frontInfos")
+    @ApiOperation(value = "查询前台国际化字典分页")
+    public Result<PageResult<I18nInfoPageVO>> frontInfos(@ModelAttribute QueryI18nInfoPageCo param){
+        return i18nInfosService.infos(param);
+    }
+    /**
      * 获取所有的后台国际化资源
      *
      * @return {@link Result} 出参释义
@@ -121,44 +134,44 @@ public class TranslateController {
         return i18nInfosService.backendFullSource();
     }
 
-    /**
-     * 获取所有的前台PC国际化资源
-     *
-     * @return {@link Result} 出参释义
-     * @author lance
-     * @since 2022 -01-28 13:17:46
-     */
-    @GetMapping("/frontFullSource")
-    @ApiOperation(value = "获取所有的前台PC国际化资源")
-    public Result<I18nSourceDTO> frontFullSource(){
-        return i18nInfosService.frontFullSource();
-    }
-
-    /**
-     * 获取所有的前台App国际化资源
-     *
-     * @return {@link Result} 出参释义
-     * @author lance
-     * @since 2022 -01-28 13:17:46
-     */
-    @GetMapping("/frontAppFullSource")
-    @ApiOperation(value = "获取所有的前台App国际化资源")
-    public Result<I18nSourceDTO> frontAppFullSource(){
-        return i18nInfosService.frontAppFullSource();
-    }
-
-    /**
-     * 获取所有的前台Message国际化资源
-     *
-     * @return {@link Result} 出参释义
-     * @author lance
-     * @since 2022 -01-28 13:17:46
-     */
-    @GetMapping("/frontMessageFullSource")
-    @ApiOperation(value = "获取所有的前台Message国际化资源")
-    public Result<I18nSourceDTO> frontMessageFullSource(){
-        return i18nInfosService.frontMessageFullSource();
-    }
+//    /**
+//     * 获取所有的前台PC国际化资源
+//     *
+//     * @return {@link Result} 出参释义
+//     * @author lance
+//     * @since 2022 -01-28 13:17:46
+//     */
+//    @GetMapping("/frontFullSource")
+//    @ApiOperation(value = "获取所有的前台PC国际化资源")
+//    public Result<I18nSourceDTO> frontFullSource(){
+//        return i18nInfosService.frontFullSource();
+//    }
+//
+//    /**
+//     * 获取所有的前台App国际化资源
+//     *
+//     * @return {@link Result} 出参释义
+//     * @author lance
+//     * @since 2022 -01-28 13:17:46
+//     */
+//    @GetMapping("/frontAppFullSource")
+//    @ApiOperation(value = "获取所有的前台App国际化资源")
+//    public Result<I18nSourceDTO> frontAppFullSource(){
+//        return i18nInfosService.frontAppFullSource();
+//    }
+//
+//    /**
+//     * 获取所有的前台Message国际化资源
+//     *
+//     * @return {@link Result} 出参释义
+//     * @author lance
+//     * @since 2022 -01-28 13:17:46
+//     */
+//    @GetMapping("/frontMessageFullSource")
+//    @ApiOperation(value = "获取所有的前台Message国际化资源")
+//    public Result<I18nSourceDTO> frontMessageFullSource(){
+//        return i18nInfosService.frontMessageFullSource();
+//    }
 
     /**
      * 获取语言标签
