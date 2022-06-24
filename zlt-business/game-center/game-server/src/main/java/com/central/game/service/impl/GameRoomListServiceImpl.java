@@ -55,9 +55,15 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
 
     @Override
     @CacheEvict(key = "#id")
+    public Boolean deleteBy(Long id) {
+        return removeById(id);
+    }
+
+    @Override
+    @CacheEvict(key = "#id")
     public Boolean update(Long id, GameRoomList gameRoomList) {
-        gameRoomListMapper.updateById(gameRoomList);
-        return true;
+        int i = gameRoomListMapper.updateById(gameRoomList);
+        return i > 0;
     }
 
     @Override

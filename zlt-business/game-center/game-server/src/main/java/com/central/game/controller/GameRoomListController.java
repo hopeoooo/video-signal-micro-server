@@ -82,12 +82,17 @@ public class GameRoomListController {
     @ApiOperation(value = "新增/更新")
     @PostMapping("/save")
     public Result save(@RequestBody GameRoomList gameRoomList) {
+        Boolean result = false;
         if (Objects.isNull(gameRoomList.getId())) {
-            iGameRoomListService.saveOrUpdate(gameRoomList);
+            result = iGameRoomListService.saveOrUpdate(gameRoomList);
         } else {
-            iGameRoomListService.update(gameRoomList.getId(), gameRoomList);
+            result = iGameRoomListService.update(gameRoomList.getId(), gameRoomList);
         }
-        return Result.succeed();
+        if (result) {
+            return Result.succeed();
+        } else {
+            return Result.failed("更新房间失败");
+        }
     }
 
     @ApiOperation(value = "根据ID修改房间状态")
@@ -113,8 +118,12 @@ public class GameRoomListController {
     @ApiOperation(value = "根据ID删除")
     @DeleteMapping("/deleteById/{id}")
     public Result roomDeleteById(@PathVariable Long id) {
-        iGameRoomListService.removeById(id);
-        return Result.succeed();
+        Boolean result = iGameRoomListService.deleteBy(id);
+        if (result) {
+            return Result.succeed();
+        } else {
+            return Result.failed("删除房间失败");
+        }
     }
 
     @ApiOperation(value = "根据房间游戏ID和名称查询房间详情")
