@@ -62,8 +62,7 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     @Override
     @CacheEvict(key = "#id")
     public Boolean update(Long id, GameRoomList gameRoomList) {
-        int i = gameRoomListMapper.updateById(gameRoomList);
-        return i > 0;
+        return saveOrUpdate(gameRoomList);
     }
 
     @Override
