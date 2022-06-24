@@ -20,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,13 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     @Autowired
     @Lazy
     private IGameLotteryResultService gameLotteryResultService;
+
+    @Override
+    @CacheEvict(key = "#id")
+    public Boolean update(Long id, GameRoomList gameRoomList) {
+        gameRoomListMapper.updateById(gameRoomList);
+        return true;
+    }
 
     @Override
     public List<GameRoomList> findGameRoomList(Long gameId) {
