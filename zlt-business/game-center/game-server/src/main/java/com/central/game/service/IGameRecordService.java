@@ -65,6 +65,8 @@ public interface IGameRecordService extends ISuperService<GameRecord> {
 
     void calculateWashCode(GameRecord record);
 
+    void calculateFlowCode(GameRecord record);
+
     void syncDeleteGuestRecordBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum);
 
     List<UserReportDto> findUserReportDto(Map<String, Object> params);

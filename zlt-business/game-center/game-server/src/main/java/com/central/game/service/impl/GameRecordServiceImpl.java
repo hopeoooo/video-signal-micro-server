@@ -754,9 +754,19 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Async
     public void calculateWashCode(GameRecord record) {
         if (!ObjectUtils.isEmpty(record.getValidbet()) && record.getValidbet().compareTo(BigDecimal.ZERO) == 1) {
-            log.info("[calculateWashCode][开始发送完成,消息内容={}]", record.toString());
+            log.info("[calculateWashCode][开始发送洗码消息,消息内容={}]", record.toString());
             boolean sendResult = streamBridge.send(BindingNameConstant.WASH_CODE, record);
-            log.info("[calculateWashCode][发送消息完成,消息内容={}, 结果 = {}]", record.toString(), sendResult);
+            log.info("[calculateWashCode][洗码消息发送完成,消息内容={}, 结果 = {}]", record.toString(), sendResult);
+        }
+    }
+
+    @Override
+    @Async
+    public void calculateFlowCode(GameRecord record) {
+        if (!ObjectUtils.isEmpty(record.getValidbet()) && record.getValidbet().compareTo(BigDecimal.ZERO) == 1) {
+            log.info("[calculateFlowCode][开始发送打码消息,消息内容={}]", record.toString());
+            boolean sendResult = streamBridge.send(BindingNameConstant.WASH_CODE, record);
+            log.info("[calculateFlowCode][打码消息发送完成,消息内容={}, 结果 = {}]", record.toString(), sendResult);
         }
     }
 

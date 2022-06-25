@@ -10,6 +10,7 @@ import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.*;
 import com.central.game.model.vo.*;
+import com.central.game.rocketMq.constant.BindingNameConstant;
 import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
 import com.central.user.model.vo.RankingListVo;
@@ -19,6 +20,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +43,9 @@ public class GameRecordController {
 
     @Autowired
     private IGameLotteryResultService gameLotteryResultService;
+
+    @Autowired
+    private StreamBridge streamBridge;
 
 
     /**
@@ -263,6 +268,14 @@ public class GameRecordController {
         GameLotteryResult lotteryResult = gameLotteryResultService.getById(id);
         gameLotteryResultService.calculateBetResult(lotteryResult);
         return Result.succeed();
+    }
+
+    @ApiOperation(value = "打码测试")
+    @GetMapping("/flowCode/{id}")
+    public Result flowCode(@PathVariable Long id) {
+        GameRecord gameRecord = gameRecordService.getById(id);
+        boolean sendResult = streamBridge.send(BindingNameConstant.FLOW_CODE, gameRecord);
+        return Result.succeed(sendResult);
     }
 
 }
