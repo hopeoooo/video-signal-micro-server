@@ -44,4 +44,10 @@ public class SysPlatformConfig {
 
 	@ApiModelProperty("最低在线人数")
 	private String minOnlineUserQuantity;
+
+	@ApiModelProperty("充值打码倍数")
+	private BigDecimal betMultiple;
+
+	@ApiModelProperty("打码清零点")
+	private BigDecimal betZrrorPint;
 }
