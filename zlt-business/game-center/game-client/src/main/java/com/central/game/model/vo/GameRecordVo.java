@@ -22,6 +22,15 @@ public class GameRecordVo {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date setTime;
 
+    @ApiModelProperty(value = "游戏ID")
+    private String gameId;
+
+    @ApiModelProperty(value = "桌台编号")
+    private String tableNum;
+
+    @ApiModelProperty(value = "靴号")
+    private String bootNum;
+
     @ApiModelProperty(value = "局号")
     private String bureauNum;
 

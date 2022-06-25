@@ -44,6 +44,8 @@ public class NettyWebSocketGroupServer {
     public void onOpen(Session session, @PathVariable String groupId, @PathVariable String token) {
         String userName = customReactiveAuthentication.authentication(token);
         if (ObjectUtils.isEmpty(userName)) {
+            PushResult pushResult = PushResult.failed("认证失败");
+            session.sendText(JSONObject.toJSONString(pushResult));
             log.error("/ws/group/onOpen连接失败,获取用户信息失败,token={}", token);
             return;
         }
@@ -165,6 +167,10 @@ public class NettyWebSocketGroupServer {
             return "消息推送失败,没有找到指定用户会话";
         }
         return null;
+    }
+
+    public static Object getAllConnect() {
+        return groups;
     }
 }
 

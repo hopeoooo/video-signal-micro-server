@@ -6,10 +6,7 @@ import com.central.push.config.NettyWebSocketServer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ws/api")
@@ -79,5 +76,12 @@ public class NettyWebSocketController {
             return Result.succeed(groupId + "号群组" + userName + "消息推送成功");
         }
         return Result.failed(msg);
+    }
+
+    @ApiOperation(value = "查询所有连接")
+    @GetMapping(value = "/getAllConnect")
+    public Result getAllConnect() {
+        Object allConnect = NettyWebSocketGroupServer.getAllConnect();
+        return Result.succeed(allConnect);
     }
 }

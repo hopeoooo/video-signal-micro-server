@@ -13,6 +13,7 @@ import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.service.I18nInfosService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 翻译模块
@@ -41,74 +43,78 @@ public class TranslateController {
     /**
      * 更新后台国际化字典
      *
-     * @param param   更新参数
+     * @param param 更新参数
      * @return {@link Result} 操作结果
      * @author lance
      * @since 2022 -01-25 14:13:51
      */
     @PostMapping("/backendUpdate")
     @ApiOperation(value = "更新后台国际化字典")
-    public Result<String> backendUpdate(
-            @ApiIgnore @LoginUser SysUser sysUser,
-            @RequestBody @Validated(SaveI18nInfoCo.Update.class) UpdateI18nInfoCo param){
+    public Result<String> backendUpdate(@ApiIgnore @LoginUser SysUser sysUser,
+        @RequestBody @Validated(SaveI18nInfoCo.Update.class) UpdateI18nInfoCo param) {
         param.setOperator(sysUser.getUsername());
-        i18nInfosService.updateI18nInfo(I18nKeys.BACKEND, param);
+        if (!i18nInfosService.updateI18nInfo(I18nKeys.BACKEND, param)){
+            return Result.failed("数据重复");
+        }
         return Result.succeed("操作成功");
     }
-
 
     /**
      * 更新前台国际化字典
      *
-     * @param param   更新参数
+     * @param param 更新参数
      * @return {@link Result} 操作结果
      * @author lance
      * @since 2022 -01-28 12:46:24
      */
     @PostMapping("/frontUpdate")
     @ApiOperation(value = "更新前台国际化字典")
-    public Result<String> frontUpdate(
-            @ApiIgnore @LoginUser SysUser sysUser,
-            @RequestBody @Validated(SaveI18nInfoCo.Update.class) UpdateI18nInfoCo param){
+    public Result<String> frontUpdate(@ApiIgnore @LoginUser SysUser sysUser,
+        @RequestBody @Validated(SaveI18nInfoCo.Update.class) UpdateI18nInfoCo param) {
         param.setOperator(sysUser.getUsername());
-        i18nInfosService.updateI18nInfo(I18nKeys.FRONT, param);
+        if (Objects.isNull(param.getFromOf())) {
+            return Result.failed("参数必传");
+        }
+        if (!i18nInfosService.updateI18nInfo(param.getFromOf(), param)){
+            return Result.failed("数据重复");
+        }
         return Result.succeed("操作成功");
     }
 
     /**
      * 新增后台国际化字典
      *
-     * @param param   更新参数
+     * @param param 更新参数
      * @return {@link Result} 操作结果
      * @author lance
      * @since 2022 -01-25 14:13:51
      */
     @PostMapping("/backendSave")
     @ApiOperation(value = "更新后台国际化字典")
-    public Result<String> backendSave(
-            @ApiIgnore @LoginUser SysUser sysUser,
-            @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param){
+    public Result<String> backendSave(@ApiIgnore @LoginUser SysUser sysUser,
+        @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param) {
         param.setOperator(sysUser.getUsername());
         i18nInfosService.saveI18nInfo(I18nKeys.BACKEND, param);
         return Result.succeed("操作成功");
     }
 
-
     /**
      * 新增前台国际化字典
      *
-     * @param param   更新参数
+     * @param param 更新参数
      * @return {@link Result} 操作结果
      * @author lance
      * @since 2022 -01-28 12:46:24
      */
     @PostMapping("/frontSave")
     @ApiOperation(value = "更新前台国际化字典")
-    public Result<String> frontSave(
-            @ApiIgnore @LoginUser SysUser sysUser,
-            @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param){
+    public Result<String> frontSave(@ApiIgnore @LoginUser SysUser sysUser,
+        @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param) {
         param.setOperator(sysUser.getUsername());
-        i18nInfosService.saveI18nInfo(I18nKeys.FRONT, param);
+        if (Objects.isNull(param.getFromOf())) {
+            return Result.failed("参数必传");
+        }
+        i18nInfosService.saveI18nInfo(param.getFromOf(), param);
         return Result.succeed("操作成功");
     }
 
@@ -122,7 +128,7 @@ public class TranslateController {
      */
     @GetMapping("/infos")
     @ApiOperation(value = "查询国际化字典分页")
-    public Result<PageResult<I18nInfoPageVO>> infos(@Valid @ModelAttribute QueryI18nInfoPageCo param){
+    public Result<PageResult<I18nInfoPageVO>> infos(@Valid @ModelAttribute QueryI18nInfoPageCo param) {
         return Result.succeed(i18nInfosService.findInfos(param));
     }
 
@@ -140,18 +146,44 @@ public class TranslateController {
     }
 
     /**
-     * 获取所有的前台国际化资源
+     * 获取所有的前台PC国际化资源
      *
      * @return {@link Result} 出参释义
      * @author lance
      * @since 2022 -01-28 13:17:46
      */
     @GetMapping("/frontFullSource")
-    @ApiOperation(value = "获取所有的前台台国际化资源")
-    public Result<I18nSourceDTO> frontFullSource(){
-        return Result.succeed(i18nInfosService.getFrontFullI18nSource());
+    @ApiOperation(value = "获取所前台国际化资源")
+    @ApiImplicitParam(name = "terminal", value = "PC:0，移动端:2", required = true)
+    public Result<I18nSourceDTO> frontFullSource(@RequestParam("terminal") Integer terminal) {
+        return Result.succeed(i18nInfosService.getFrontFullI18nSource(terminal));
     }
 
+    /**
+     * 获取所有的前台APP国际化资源
+     *
+     * @return {@link Result} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:17:46
+     */
+    @GetMapping("/frontAppFullSource")
+    @ApiOperation(value = "获取所有的前台台国际化资源")
+    public Result<I18nSourceDTO> frontAppFullSource() {
+        return Result.succeed(i18nInfosService.getFrontFullI18nSource(I18nKeys.FRONT_APP));
+    }
+
+    /**
+     * 获取所有的前台message国际化资源
+     *
+     * @return {@link Result} 出参释义
+     * @author lance
+     * @since 2022 -01-28 13:17:46
+     */
+    @GetMapping("/frontMessageFullSource")
+    @ApiOperation(value = "获取所有的前台台国际化资源")
+    public Result<I18nSourceDTO> frontMessageFullSource() {
+        return Result.succeed(i18nInfosService.getFrontFullI18nSource(I18nKeys.FRONT_MESSAGE));
+    }
 
     /**
      * 获取语言标签
@@ -162,7 +194,7 @@ public class TranslateController {
      */
     @GetMapping("/languageLabel")
     @ApiOperation(value = "获取语言标签")
-    public List<LanguageLabelVO> languageLabel(){
+    public List<LanguageLabelVO> languageLabel() {
         return i18nInfosService.getLanguageLabel();
     }
 

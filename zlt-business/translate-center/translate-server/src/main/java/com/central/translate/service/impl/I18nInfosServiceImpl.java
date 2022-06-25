@@ -1,6 +1,7 @@
 package com.central.translate.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -11,6 +12,7 @@ import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.I18nInfo;
 import com.central.common.utils.I18nUtil;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.common.utils.StringUtils;
 import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.mapper.I18nInfoMapper;
 import com.central.translate.model.co.I18nInfoPageMapperCo;
@@ -39,13 +41,18 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nInfo> implements I18nInfosService{
+public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nInfo> implements I18nInfosService {
 
     @Autowired
     private I18nInfoMapper mapper;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Override
+    public List<I18nInfo> findListByZhCn(Integer fromOf, String zhCn) {
+        return mapper.findListByZhCn(fromOf,zhCn);
+    }
 
     /**
      * 获取所有的后台国际化资源
@@ -67,8 +74,14 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
      * @since 2022 -01-28 12:44:38
      */
     @Override
-    public I18nSourceDTO getFrontFullI18nSource() {
-        return I18nUtil.getFrontFullSource();
+    public I18nSourceDTO getFrontFullI18nSource(Integer fromOf) {
+        if (fromOf == I18nKeys.FRONT_APP){
+            return I18nUtil.getFrontAppFullSource();
+        }else if (fromOf == I18nKeys.FRONT_MESSAGE){
+            return I18nUtil.getFrontMessageFullSource();
+        }else {
+            return I18nUtil.getFrontFullSource();
+        }
     }
 
     /**
@@ -83,64 +96,98 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         List<I18nInfo> infos = list();
 
         // 批量写入redis
-        redisTemplate.executePipelined((RedisCallback<?>)  c -> {
+        redisTemplate.executePipelined((RedisCallback<?>)c -> {
             for (I18nInfo f : infos) {
                 if (I18nKeys.BACKEND.equals(f.getFromOf())) {
                     // 中文国际化
-                    c.hSet(
-                            I18nKeys.Redis.Backend.ZH_CN_KEY.getBytes(StandardCharsets.UTF_8),
-                            f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                            f.getZhCn().getBytes(StandardCharsets.UTF_8)
-                    );
+                    c.hSet(I18nKeys.Redis.Backend.ZH_CN_KEY.getBytes(StandardCharsets.UTF_8),
+                        f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getZhCn().getBytes(StandardCharsets.UTF_8));
 
                     // 英文国际化
                     if (StrUtil.isNotBlank(f.getEnUs())) {
                         c.hSet(I18nKeys.Redis.Backend.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
-                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                                f.getEnUs().getBytes(StandardCharsets.UTF_8));
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getEnUs().getBytes(StandardCharsets.UTF_8));
                     }
 
                     // 高棉语国际化
                     if (StrUtil.isNotBlank(f.getKhm())) {
                         c.hSet(I18nKeys.Redis.Backend.KHM_KEY.getBytes(StandardCharsets.UTF_8),
-                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                                f.getKhm().getBytes(StandardCharsets.UTF_8));
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getKhm().getBytes(StandardCharsets.UTF_8));
                     }
 
                     // 泰文国际化
                     if (StrUtil.isNotBlank(f.getTh())) {
                         c.hSet(I18nKeys.Redis.Backend.TH_KEY.getBytes(StandardCharsets.UTF_8),
-                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                                f.getTh().getBytes(StandardCharsets.UTF_8));
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getTh().getBytes(StandardCharsets.UTF_8));
                     }
-                } else if(I18nKeys.FRONT.equals(f.getFromOf())) {
+                } else if (I18nKeys.FRONT_PC.equals(f.getFromOf())) {
 
                     // 中文国际化
-                    c.hSet(
-                            I18nKeys.Redis.Front.ZH_CN_KEY.getBytes(StandardCharsets.UTF_8),
-                            f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                            f.getZhCn().getBytes(StandardCharsets.UTF_8)
-                    );
+                    c.hSet(I18nKeys.Redis.FrontPc.ZH_CN_KEY.getBytes(StandardCharsets.UTF_8),
+                        f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getZhCn().getBytes(StandardCharsets.UTF_8));
 
                     // 英文国际化
                     if (StrUtil.isNotBlank(f.getEnUs())) {
-                        c.hSet(I18nKeys.Redis.Front.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
-                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                                f.getEnUs().getBytes(StandardCharsets.UTF_8));
+                        c.hSet(I18nKeys.Redis.FrontPc.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getEnUs().getBytes(StandardCharsets.UTF_8));
                     }
 
                     // 高棉语国际化
                     if (StrUtil.isNotBlank(f.getKhm())) {
-                        c.hSet(I18nKeys.Redis.Front.KHM_KEY.getBytes(StandardCharsets.UTF_8),
-                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                                f.getKhm().getBytes(StandardCharsets.UTF_8));
+                        c.hSet(I18nKeys.Redis.FrontPc.KHM_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getKhm().getBytes(StandardCharsets.UTF_8));
                     }
 
                     // 泰文国际化
                     if (StrUtil.isNotBlank(f.getTh())) {
-                        c.hSet(I18nKeys.Redis.Front.TH_KEY.getBytes(StandardCharsets.UTF_8),
-                                f.getZhCn().getBytes(StandardCharsets.UTF_8),
-                                f.getTh().getBytes(StandardCharsets.UTF_8));
+                        c.hSet(I18nKeys.Redis.FrontPc.TH_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getTh().getBytes(StandardCharsets.UTF_8));
+                    }
+                } else if (I18nKeys.FRONT_APP.equals(f.getFromOf())) {
+
+                    // 中文国际化
+                    c.hSet(I18nKeys.Redis.FrontApp.ZH_CN_KEY.getBytes(StandardCharsets.UTF_8),
+                        f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getZhCn().getBytes(StandardCharsets.UTF_8));
+
+                    // 英文国际化
+                    if (StrUtil.isNotBlank(f.getEnUs())) {
+                        c.hSet(I18nKeys.Redis.FrontApp.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getEnUs().getBytes(StandardCharsets.UTF_8));
+                    }
+
+                    // 高棉语国际化
+                    if (StrUtil.isNotBlank(f.getKhm())) {
+                        c.hSet(I18nKeys.Redis.FrontApp.KHM_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getKhm().getBytes(StandardCharsets.UTF_8));
+                    }
+
+                    // 泰文国际化
+                    if (StrUtil.isNotBlank(f.getTh())) {
+                        c.hSet(I18nKeys.Redis.FrontApp.TH_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getTh().getBytes(StandardCharsets.UTF_8));
+                    }
+                } else if (I18nKeys.FRONT_MESSAGE.equals(f.getFromOf())) {
+
+                    // 中文国际化
+                    c.hSet(I18nKeys.Redis.FrontMessage.ZH_CN_KEY.getBytes(StandardCharsets.UTF_8),
+                        f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getZhCn().getBytes(StandardCharsets.UTF_8));
+
+                    // 英文国际化
+                    if (StrUtil.isNotBlank(f.getEnUs())) {
+                        c.hSet(I18nKeys.Redis.FrontMessage.EN_US_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getEnUs().getBytes(StandardCharsets.UTF_8));
+                    }
+
+                    // 高棉语国际化
+                    if (StrUtil.isNotBlank(f.getKhm())) {
+                        c.hSet(I18nKeys.Redis.FrontMessage.KHM_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getKhm().getBytes(StandardCharsets.UTF_8));
+                    }
+
+                    // 泰文国际化
+                    if (StrUtil.isNotBlank(f.getTh())) {
+                        c.hSet(I18nKeys.Redis.FrontMessage.TH_KEY.getBytes(StandardCharsets.UTF_8),
+                            f.getZhCn().getBytes(StandardCharsets.UTF_8), f.getTh().getBytes(StandardCharsets.UTF_8));
                     }
                 }
             }
@@ -168,24 +215,31 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         if (null == info) {
             return false;
         }
-
-        LambdaUpdateWrapper<I18nInfo> update = Wrappers.lambdaUpdate(I18nInfo.class)
-                .eq(I18nInfo::getId, param.getId())
-                .eq(I18nInfo::getFromOf, from)
-                .set(param.getPageId() != null, I18nInfo::getPageId, param.getPageId())
-                .set(param.getPositionId() != null, I18nInfo::getPositionId, param.getPositionId())
-                .set(zhcnChange, I18nInfo::getZhCn, param.getZhCn())
-                .set(enusChange, I18nInfo::getEnUs, param.getEnUs())
-                .set(khmChange, I18nInfo::getKhm, param.getKhm())
-                .set(thChange, I18nInfo::getTh, param.getTh())
-                .set(StrUtil.isNotBlank(param.getOperator()), I18nInfo::getOperator, param.getOperator())
-                .set(I18nInfo::getUpdateTime, new Date());
+        List<I18nInfo> listByZhCn = findListByZhCn(from, param.getZhCn());
+        if (CollUtil.isNotEmpty(listByZhCn)){
+            for (I18nInfo i18nInfo:listByZhCn){
+                if (i18nInfo.getId().longValue() != param.getId().longValue()){
+                    return false;
+                }
+            }
+        }
+        LambdaUpdateWrapper<I18nInfo> update = Wrappers.lambdaUpdate(I18nInfo.class).eq(I18nInfo::getId, param.getId())
+            .eq(I18nInfo::getFromOf, from).set(param.getPageId() != null, I18nInfo::getPageId, param.getPageId())
+            .set(param.getPositionId() != null, I18nInfo::getPositionId, param.getPositionId())
+            .set(zhcnChange, I18nInfo::getZhCn, param.getZhCn()).set(enusChange, I18nInfo::getEnUs, param.getEnUs())
+            .set(khmChange, I18nInfo::getKhm, param.getKhm()).set(thChange, I18nInfo::getTh, param.getTh())
+            .set(StrUtil.isNotBlank(param.getOperator()), I18nInfo::getOperator, param.getOperator())
+            .set(I18nInfo::getUpdateTime, new Date());
         int count = mapper.update(null, update);
         boolean succeed = count > 0;
 
         if (succeed) {
+            String oldKey = null;
+            if (!info.getZhCn().equals(param.getZhCn())){
+                oldKey = info.getZhCn();
+            }
             // 更新redis
-            updateI18nRedis(from, param, info);
+            updateI18nRedis(from, param, info,oldKey);
         }
 
         return succeed;
@@ -194,7 +248,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
     /**
      * 新增国际化字典
      *
-     * @param from  0前台 1后台
+     * @param from 0前台 1后台
      * @param param 入参释义
      * @return {@link boolean} 出参释义
      * @author lance
@@ -207,12 +261,12 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         info.setFromOf(from);
         boolean succeed = save(info);
         if (succeed) {
-            updateI18nRedis(from, param, info);
+            updateI18nRedis(from, param, info,null);
         }
         return succeed;
     }
 
-    private void updateI18nRedis(Integer from, SaveI18nInfoCo param, I18nInfo info) {
+    private void updateI18nRedis(Integer from, SaveI18nInfoCo param, I18nInfo info,String oldKey) {
         boolean zhcnChange = StrUtil.isNotBlank(param.getZhCn());
         boolean enusChange = StrUtil.isNotBlank(param.getEnUs());
         boolean khmChange = StrUtil.isNotBlank(param.getKhm());
@@ -220,39 +274,72 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
 
         // 更新redis
         String i18nKey = info.getZhCn();
+        String redisKey = "";
         if (zhcnChange) {
             // 更新中文key
             i18nKey = param.getZhCn();
+            if (I18nKeys.FRONT_PC.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontPc.ZH_CN_KEY;
+            } else if (I18nKeys.FRONT_APP.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontApp.ZH_CN_KEY;
+            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontMessage.ZH_CN_KEY;
+            } else {
+                redisKey = I18nKeys.Redis.Backend.ZH_CN_KEY;
+            }
             // 更新中文国际化
-            I18nUtil.resetSource(
-                    I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.ZH_CN_KEY : I18nKeys.Redis.Front.ZH_CN_KEY,
-                    i18nKey,
-                    param.getZhCn()
-            );
+            I18nUtil.resetSource(redisKey, i18nKey, param.getZhCn());
+            if (StringUtils.isNotEmpty(oldKey)){
+                I18nUtil.deleteByKey(redisKey,oldKey);
+            }
         }
         if (enusChange) {
             // 更新英文国际化
-            I18nUtil.resetSource(
-                    I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.EN_US_KEY : I18nKeys.Redis.Front.EN_US_KEY,
-                    i18nKey,
-                    param.getEnUs()
-            );
+            if (I18nKeys.FRONT_PC.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontPc.EN_US_KEY;
+            } else if (I18nKeys.FRONT_APP.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontApp.EN_US_KEY;
+            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontMessage.EN_US_KEY;
+            } else {
+                redisKey = I18nKeys.Redis.Backend.EN_US_KEY;
+            }
+            I18nUtil.resetSource(redisKey, i18nKey, param.getEnUs());
+            if (StringUtils.isNotEmpty(oldKey)){
+                I18nUtil.deleteByKey(redisKey,oldKey);
+            }
         }
         if (khmChange) {
             // 更新高棉语国际化
-            I18nUtil.resetSource(
-                    I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.KHM_KEY : I18nKeys.Redis.Front.KHM_KEY,
-                    i18nKey,
-                    param.getKhm()
-            );
+            if (I18nKeys.FRONT_PC.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontPc.KHM_KEY;
+            } else if (I18nKeys.FRONT_APP.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontApp.KHM_KEY;
+            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontMessage.KHM_KEY;
+            } else {
+                redisKey = I18nKeys.Redis.Backend.KHM_KEY;
+            }
+            I18nUtil.resetSource(redisKey, i18nKey, param.getKhm());
+            if (StringUtils.isNotEmpty(oldKey)){
+                I18nUtil.deleteByKey(redisKey,oldKey);
+            }
         }
         if (thChange) {
             // 更新泰语国际化
-            I18nUtil.resetSource(
-                    I18nKeys.BACKEND.equals(from) ? I18nKeys.Redis.Backend.TH_KEY : I18nKeys.Redis.Front.TH_KEY,
-                    i18nKey,
-                    param.getTh()
-            );
+            if (I18nKeys.FRONT_PC.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontPc.TH_KEY;
+            } else if (I18nKeys.FRONT_APP.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontApp.TH_KEY;
+            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontMessage.TH_KEY;
+            } else {
+                redisKey = I18nKeys.Redis.Backend.TH_KEY;
+            }
+            I18nUtil.resetSource(redisKey, i18nKey, param.getTh());
+            if (StringUtils.isNotEmpty(oldKey)){
+                I18nUtil.deleteByKey(redisKey,oldKey);
+            }
         }
     }
 
@@ -291,7 +378,7 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         params.setFrom(param.getFrom());
 
         List<I18nInfoPageVO> list = mapper.findPage(page, params);
-        for (I18nInfoPageVO vo: list) {
+        for (I18nInfoPageVO vo : list) {
             // 国际化处理
             vo.setPage(I18nUtil.t(vo.getPage()));
             vo.setPosition(I18nUtil.t(vo.getPosition()));
@@ -310,11 +397,9 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
      */
     @Override
     public List<LanguageLabelVO> getLanguageLabel() {
-        return Arrays.asList(
-                new LanguageLabelVO(I18nKeys.LocaleCode.ZH_CN, I18nUtil.t("中文")),
-                new LanguageLabelVO(I18nKeys.LocaleCode.EN_US, I18nUtil.t("英文")),
-                new LanguageLabelVO(I18nKeys.LocaleCode.KHM, I18nUtil.t("柬埔寨语")),
-                new LanguageLabelVO(I18nKeys.LocaleCode.TH, I18nUtil.t("泰语"))
-        );
+        return Arrays.asList(new LanguageLabelVO(I18nKeys.LocaleCode.ZH_CN, I18nUtil.t("中文")),
+            new LanguageLabelVO(I18nKeys.LocaleCode.EN_US, I18nUtil.t("英文")),
+            new LanguageLabelVO(I18nKeys.LocaleCode.KHM, I18nUtil.t("柬埔寨语")),
+            new LanguageLabelVO(I18nKeys.LocaleCode.TH, I18nUtil.t("泰语")));
     }
 }

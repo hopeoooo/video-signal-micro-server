@@ -3,6 +3,7 @@ package com.central.common.utils;
 import cn.hutool.core.util.StrUtil;
 import com.central.common.constant.I18nKeys;
 import com.central.common.dto.I18nSourceDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -33,7 +34,7 @@ public class I18nUtil implements ApplicationContextAware {
      * 翻译
      *
      * @param language 语言
-     * @param key      待翻译文本
+     * @param key 待翻译文本
      * @return {@link String} 出参释义
      * @author lance
      * @since 2022 -01-25 18:18:28
@@ -50,7 +51,7 @@ public class I18nUtil implements ApplicationContextAware {
             return key;
         }
         String value = redisTemplate.<String, String>opsForHash().get(keyOf(language), key);
-        if (null == value) {
+        if (StringUtils.isBlank(value)) {
             return key;
         }
         return value;
@@ -77,19 +78,18 @@ public class I18nUtil implements ApplicationContextAware {
      * 重设国际化资源redis缓存
      *
      * @param redisKey 入参释义
-     * @param key      入参释义
-     * @param value    入参释义
+     * @param key 入参释义
+     * @param value 入参释义
      * @author lance
      * @since 2022 -01-25 18:05:09
      */
     public static void resetSource(String redisKey, String key, String value) {
-        redisTemplate.opsForHash().put(
-                redisKey,
-                key,
-                value
-        );
+        redisTemplate.opsForHash().put(redisKey, key, value);
     }
 
+    public static void deleteByKey(String redisKey, String key) {
+        redisTemplate.opsForHash().delete(redisKey, key);
+    }
     /**
      * 获取对应语言的国际化资源
      *
@@ -126,7 +126,7 @@ public class I18nUtil implements ApplicationContextAware {
      * @author lance
      * @since 2022 -01-25 18:11:01
      */
-    public static I18nSourceDTO getBackendFullSource(){
+    public static I18nSourceDTO getBackendFullSource() {
         I18nSourceDTO dto = new I18nSourceDTO();
         HashOperations<String, String, String> ops = redisTemplate.<String, String>opsForHash();
         dto.setZhCn(ops.entries(I18nKeys.Redis.Backend.ZH_CN_KEY));
@@ -136,22 +136,54 @@ public class I18nUtil implements ApplicationContextAware {
         return dto;
     }
 
-
     /**
-     * 获取前台所有语言的国际化资源
+     * 获取前台PC所有语言的国际化资源
      *
      * @return {@link I18nSourceDTO} 出参释义
      * @author lance
      * @since 2022 -01-28 12:45:22
      */
-    public static I18nSourceDTO getFrontFullSource(){
+    public static I18nSourceDTO getFrontFullSource() {
         I18nSourceDTO dto = new I18nSourceDTO();
         HashOperations<String, String, String> ops = redisTemplate.<String, String>opsForHash();
-        dto.setZhCn(ops.entries(I18nKeys.Redis.Front.ZH_CN_KEY));
-        dto.setEnUs(ops.entries(I18nKeys.Redis.Front.EN_US_KEY));
-        dto.setKhm(ops.entries(I18nKeys.Redis.Front.KHM_KEY));
-        dto.setTh(ops.entries(I18nKeys.Redis.Front.TH_KEY));
+        dto.setZhCn(ops.entries(I18nKeys.Redis.FrontPc.ZH_CN_KEY));
+        dto.setEnUs(ops.entries(I18nKeys.Redis.FrontPc.EN_US_KEY));
+        dto.setKhm(ops.entries(I18nKeys.Redis.FrontPc.KHM_KEY));
+        dto.setTh(ops.entries(I18nKeys.Redis.FrontPc.TH_KEY));
         return dto;
     }
 
+    /**
+     * 获取前台移动端所有语言的国际化资源
+     *
+     * @return {@link I18nSourceDTO} 出参释义
+     * @author lance
+     * @since 2022 -01-28 12:45:22
+     */
+    public static I18nSourceDTO getFrontAppFullSource() {
+        I18nSourceDTO dto = new I18nSourceDTO();
+        HashOperations<String, String, String> ops = redisTemplate.<String, String>opsForHash();
+        dto.setZhCn(ops.entries(I18nKeys.Redis.FrontApp.ZH_CN_KEY));
+        dto.setEnUs(ops.entries(I18nKeys.Redis.FrontApp.EN_US_KEY));
+        dto.setKhm(ops.entries(I18nKeys.Redis.FrontApp.KHM_KEY));
+        dto.setTh(ops.entries(I18nKeys.Redis.FrontApp.TH_KEY));
+        return dto;
+    }
+
+    /**
+     * 获取前台Message所有语言的国际化资源
+     *
+     * @return {@link I18nSourceDTO} 出参释义
+     * @author lance
+     * @since 2022 -01-28 12:45:22
+     */
+    public static I18nSourceDTO getFrontMessageFullSource() {
+        I18nSourceDTO dto = new I18nSourceDTO();
+        HashOperations<String, String, String> ops = redisTemplate.<String, String>opsForHash();
+        dto.setZhCn(ops.entries(I18nKeys.Redis.FrontMessage.ZH_CN_KEY));
+        dto.setEnUs(ops.entries(I18nKeys.Redis.FrontMessage.EN_US_KEY));
+        dto.setKhm(ops.entries(I18nKeys.Redis.FrontMessage.KHM_KEY));
+        dto.setTh(ops.entries(I18nKeys.Redis.FrontMessage.TH_KEY));
+        return dto;
+    }
 }

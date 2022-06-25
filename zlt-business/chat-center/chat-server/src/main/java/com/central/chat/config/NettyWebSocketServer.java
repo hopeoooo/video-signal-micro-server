@@ -4,6 +4,7 @@ package com.central.chat.config;
 import com.alibaba.fastjson.JSONObject;
 import com.central.chat.service.ChatService;
 import com.central.chat.vo.MessageVo;
+import com.central.common.model.PushResult;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,8 @@ public class NettyWebSocketServer {
     public void onOpen(Session session, @PathVariable String groupId, @PathVariable String token) {
         String userName = customReactiveAuthentication.authentication(token);
         if (ObjectUtils.isEmpty(userName)) {
+            PushResult pushResult = PushResult.failed("认证失败");
+            session.sendText(JSONObject.toJSONString(pushResult));
             log.error("/ws/chat/onOpen连接失败,获取用户信息失败,token={}",token);
             return;
         }
@@ -71,7 +74,8 @@ public class NettyWebSocketServer {
         }
         friends.add(this);
         log.info("群组:{},用户:{} 加入连接，当前连接数为：{}", groupId, this.userName, friends.size());
-        onMessage(session,"连接成功");
+        PushResult pushResult = PushResult.succeed("连接成功", "heartbeat", "客户端消息接收成功");
+        session.sendText(JSONObject.toJSONString(pushResult));
     }
 
     @OnClose
@@ -93,11 +97,11 @@ public class NettyWebSocketServer {
             vo.setUserName(this.userName);
             vo.setMessage(message);
             vo.setDateTime(dateTime);
-            String msg = JSONObject.toJSONString(vo);
             //异步保存用户聊天信息
             //chatService.syncSaveChatMessage(groupId, msg);
             for (NettyWebSocketServer item : friends) {
-                item.session.sendText(msg);
+                PushResult pushResult = PushResult.succeed(vo, "message", "新消息");
+                item.session.sendText(JSONObject.toJSONString(pushResult));
             }
         }
     }
@@ -124,6 +128,10 @@ public class NettyWebSocketServer {
             item.session.sendText(message);
         }
         return null;
+    }
+
+    public static Object getAllConnect() {
+        return groups;
     }
 }
 

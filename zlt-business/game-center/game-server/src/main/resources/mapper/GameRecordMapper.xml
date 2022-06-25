@@ -129,7 +129,7 @@
     </select>
 
     <select id="findBetList"  resultType="com.central.game.model.vo.GameRecordVo">
-        SELECT set_time setTime,bureau_num bureauNum,game_name gameName,sum(bet_amount) betAmount,SUM(validbet) validbet,SUM(win_Loss) winLoss
+        SELECT set_time setTime,game_id gameId,table_num tableNum,boot_Num bootNum,bureau_num bureauNum,game_name gameName,sum(bet_amount) betAmount,SUM(validbet) validbet,SUM(win_Loss) winLoss
         from game_record where user_id=#{p.userId} and bet_time between #{p.startTime} and #{p.endTime}
         GROUP BY game_id,bureau_num order by id desc
     </select>

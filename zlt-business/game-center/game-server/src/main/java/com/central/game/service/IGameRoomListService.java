@@ -8,6 +8,10 @@ import java.util.List;
 
 public interface IGameRoomListService  extends ISuperService<GameRoomList> {
 
+    Boolean deleteBy(Long id);
+
+    Boolean update(Long id,GameRoomList gameRoomList);
+
     List<GameRoomList> findGameRoomList(Long gameId);
 
     Boolean updateRoomStatus(Long id, Integer roomStatus,String maintainStart,String maintainEnd);

@@ -44,4 +44,12 @@ public class ChatController {
         }
         return Result.failed(msg);
     }
+
+
+    @ApiOperation(value = "查询所有连接")
+    @GetMapping(value = "/getAllConnect")
+    public Result getAllConnect() {
+        Object allConnect = NettyWebSocketServer.getAllConnect();
+        return Result.succeed(allConnect);
+    }
 }

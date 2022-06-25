@@ -6,12 +6,11 @@ import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.utils.AddrUtil;
 import com.central.game.dto.*;
+import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
-import com.central.game.model.co.GameRecordBetCo;
-import com.central.game.model.co.GameRecordBetPageCo;
-import com.central.game.model.co.GameRecordCo;
-import com.central.game.model.co.GameRecordLivePotCo;
+import com.central.game.model.co.*;
 import com.central.game.model.vo.*;
+import com.central.game.service.IGameLotteryResultService;
 import com.central.game.service.IGameRecordService;
 import com.central.user.model.vo.RankingListVo;
 import io.swagger.annotations.Api;
@@ -40,6 +39,9 @@ public class GameRecordController {
     @Autowired
     private IGameRecordService gameRecordService;
 
+    @Autowired
+    private IGameLotteryResultService gameLotteryResultService;
+
 
     /**
      * 分页查询游戏下注数据
@@ -66,6 +68,14 @@ public class GameRecordController {
         return Result.succeed(list);
     }
 
+    @ApiOperation(value = "查询本局投注明细记录-前台")
+    @GetMapping("/findBureauBetDetail")
+    public Result<List<GameRecord>> findBureauBetDetail(@Valid @ModelAttribute GameRecordDetailCo params, @LoginUser SysUser user) {
+        List<GameRecord> list = gameRecordService.lambdaQuery().eq(GameRecord::getGameId, params.getGameId()).eq(GameRecord::getTableNum, params.getTableNum())
+                .eq(GameRecord::getBootNum, params.getBootNum()).eq(GameRecord::getBureauNum, params.getBureauNum()).eq(GameRecord::getUserId, user.getId())
+                .orderByDesc(GameRecord::getCreateTime).list();
+        return Result.succeed(list);
+    }
 
     @ResponseBody
     @ApiOperation(value = "总投注记录-总计-后台")
@@ -245,6 +255,14 @@ public class GameRecordController {
     public Result<List<RankingBackstageVo>> findWinLossRankingList() {
         List<RankingBackstageVo> validBetRankingList = gameRecordService.findWinLossRankingList();
         return Result.succeed(validBetRankingList);
+    }
+
+    @ApiOperation(value = "计算开奖结果测试")
+    @GetMapping("/gameLotteryResult/{id}")
+    public Result gameLotteryResult(@PathVariable Long id) {
+        GameLotteryResult lotteryResult = gameLotteryResultService.getById(id);
+        gameLotteryResultService.calculateBetResult(lotteryResult);
+        return Result.succeed();
     }
 
 }

@@ -23,6 +23,10 @@ public class PushResult<T> implements Serializable {
         return of(model, CodeEnum.SUCCESS.getCode(),msg, type);
     }
 
+    public static <T> PushResult<T> failed(String msg) {
+        return of(null, CodeEnum.ERROR.getCode(), msg, null);
+    }
+
     public static <T> PushResult<T> of(T datas, Integer code, String msg,String type) {
         return new PushResult<>(datas, code, msg, type);
     }

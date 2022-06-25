@@ -106,7 +106,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         for (GameRecordBetDataCo betDataCo : betResult) {
             PlayEnum playEnum = PlayEnum.getPlayByCode(betDataCo.getBetCode());
             if (playEnum == null) {
-                return Result.failed(betDataCo.getBetName() + "玩法不支持");
+                return Result.failed("玩法不支持");
             }
             //每一靴从31局开始禁止大小玩法投注
             if (Integer.parseInt(bureauNum) >= disableBigSmall && (PlayEnum.BAC_BIG.getCode().equals(betDataCo.getBetCode()) || PlayEnum.BAC_SMALL.getCode().equals(betDataCo.getBetCode()))) {
@@ -127,7 +127,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             }
             TouristDto datas = touristAmount.getDatas();
             if (datas != null && datas.getTouristSingleMaxBet() != null && totalBetAmount.compareTo(datas.getTouristSingleMaxBet()) == 1) {
-                return Result.failed("投注金额超过单笔最大投注额,游客单笔最大投注额为" + datas.getTouristSingleMaxBet().stripTrailingZeros().toPlainString());
+                return Result.failedDynamic("投注金额超过单笔最大投注额,游客单笔最大投注额为", datas.getTouristSingleMaxBet().stripTrailingZeros().toPlainString());
             }
         }
         //校验本次总下注额是否超过本地剩余额度
@@ -142,68 +142,69 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         }
         String livePotLockKey = RedisKeyConstant.GAME_RECORD_LIVE_POT_LOCK + gameId + "-" + tableNum + "-" + bootNum + "-" + bureauNum;
         boolean livePotLock = RedissLockUtil.tryLock(livePotLockKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
+        if (!livePotLock) {
+            return Result.failed("下注失败");
+        }
         //本次下注成功的数据
         List<LivePotVo> newAddBetList = new ArrayList<>();
         //本局新增下注人数(去重)
         NewAddLivePotVo newAddLivePotVo = null;
-        if (livePotLock) {
-            try {
-                //限红校验
-                for (GameRecordBetDataCo betDataCo : betResult) {
-                    Result checkLimitRedResult = checkLimitRed(gameRoomList, betDataCo, gameId, tableNum, bootNum, bureauNum);
-                    if (checkLimitRedResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
-                        return checkLimitRedResult;
-                    }
+        try {
+            //限红校验
+            for (GameRecordBetDataCo betDataCo : betResult) {
+                Result checkLimitRedResult = checkLimitRed(gameRoomList, betDataCo, gameId, tableNum, bootNum, bureauNum);
+                if (checkLimitRedResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+                    return checkLimitRedResult;
                 }
-                //先查询上次用户本局保存的注单数据
-                List<GameRecord> gameRecords = getBeforeBureauNum(user.getId(), gameId, co.getTableNum(), bootNum, bureauNum);
-                //同一种玩法投注额变化时更新
-                for (GameRecordBetDataCo betDataCo : betResult) {
-                    boolean flag = false;
-                    for (GameRecord record : gameRecords) {
-                        BigDecimal newBetAmount = new BigDecimal(betDataCo.getBetAmount());
-                        if (record.getGameId().equals(gameId.toString()) && record.getBetCode().equals(betDataCo.getBetCode())) {
-                            record.setBetAmount(record.getBetAmount().add(newBetAmount));
-                            //设置限红范围
-                            Map<String, BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betDataCo.getBetCode());
-                            if (!CollectionUtils.isEmpty(minMaxLimitRed)) {
-                                record.setMinLimitRed(minMaxLimitRed.get(minLimitRed));
-                                record.setMaxLimitRed(minMaxLimitRed.get(maxLimitRed));
-                            }
-                            //扣减本地余额
-                            Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), newBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId());
-                            //本地余额扣减成功，更新投注记录
-                            if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-                                gameRecordMapper.updateById(record);
-                                //汇总新增的下注额
-                                newAddBetList.add(getLivePotVo(user, betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
-                            } else {
-                                log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
-                            }
-                            flag = true;
-                            break;
+            }
+            //先查询上次用户本局保存的注单数据
+            List<GameRecord> gameRecords = getBeforeBureauNum(user.getId(), gameId, co.getTableNum(), bootNum, bureauNum);
+            //同一种玩法投注额变化时更新
+            for (GameRecordBetDataCo betDataCo : betResult) {
+                boolean flag = false;
+                for (GameRecord record : gameRecords) {
+                    BigDecimal newBetAmount = new BigDecimal(betDataCo.getBetAmount());
+                    if (record.getGameId().equals(gameId.toString()) && record.getBetCode().equals(betDataCo.getBetCode())) {
+                        record.setBetAmount(record.getBetAmount().add(newBetAmount));
+                        //设置限红范围
+                        Map<String, BigDecimal> minMaxLimitRed = getMinMaxLimitRed(gameRoomList, betDataCo.getBetCode());
+                        if (!CollectionUtils.isEmpty(minMaxLimitRed)) {
+                            record.setMinLimitRed(minMaxLimitRed.get(minLimitRed));
+                            record.setMaxLimitRed(minMaxLimitRed.get(maxLimitRed));
                         }
-                    }
-                    //之前没有保存的新增
-                    if (!flag) {
-                        //先扣减本地余额
-                        GameRecord record = getGameRecord(co, gameRoomList, betDataCo, user, gameId, gameList.getName(), bootNum, bureauNum, ip);
-                        Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), record.getBetAmount(), null, CapitalEnum.BET.getType(), null, record.getBetId());
-                        //本地余额扣减成功，保存投注记录
+                        //扣减本地余额
+                        Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), newBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId());
+                        //本地余额扣减成功，更新投注记录
                         if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-                            gameRecordMapper.insert(record);
+                            gameRecordMapper.updateById(record);
                             //汇总新增的下注额
-                            newAddBetList.add(getLivePotVo(user, betDataCo.getBetCode(), betDataCo.getBetName(), record.getBetAmount(), 1));
+                            newAddBetList.add(getLivePotVo(user, betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
                         } else {
                             log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
                         }
+                        flag = true;
+                        break;
                     }
                 }
-                //汇总即时彩池
-                newAddLivePotVo = summaryLivePot(gameId, tableNum, bootNum, bureauNum, newAddBetList);
-            } finally {
-                RedissLockUtil.unlock(livePotLockKey);
+                //之前没有保存的新增
+                if (!flag) {
+                    //先扣减本地余额
+                    GameRecord record = getGameRecord(co, gameRoomList, betDataCo, user, gameId, gameList.getName(), bootNum, bureauNum, ip);
+                    Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), record.getBetAmount(), null, CapitalEnum.BET.getType(), null, record.getBetId());
+                    //本地余额扣减成功，保存投注记录
+                    if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
+                        gameRecordMapper.insert(record);
+                        //汇总新增的下注额
+                        newAddBetList.add(getLivePotVo(user, betDataCo.getBetCode(), betDataCo.getBetName(), record.getBetAmount(), 1));
+                    } else {
+                        log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
+                    }
+                }
             }
+            //汇总即时彩池
+            newAddLivePotVo = summaryLivePot(gameId, tableNum, bootNum, bureauNum, newAddBetList);
+        } finally {
+            RedissLockUtil.unlock(livePotLockKey);
         }
         //异步推送新增 投注记录
         pushGameDataToClientService.syncLivePot(newAddLivePotVo);
