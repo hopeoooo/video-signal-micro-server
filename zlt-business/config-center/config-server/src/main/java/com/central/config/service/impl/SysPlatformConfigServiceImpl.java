@@ -38,4 +38,13 @@ public class SysPlatformConfigServiceImpl extends SuperServiceImpl<SysPlatformMa
         boolean i =platformConfigService.saveOrUpdate(touristAmountInfo);
         return i  ? Result.succeed("更新成功") : Result.failed("更新失败");
     }
+
+    @Override
+    public Result saveBetMultiple(BigDecimal betMultiple, BigDecimal betZrrorPint) {
+        SysPlatformConfig touristAmountInfo = findTouristAmount();
+        touristAmountInfo.setBetMultiple(betMultiple);
+        touristAmountInfo.setBetZrrorPint(betZrrorPint);
+        boolean i =platformConfigService.saveOrUpdate(touristAmountInfo);
+        return i  ? Result.succeed("更新成功") : Result.failed("更新失败");
+    }
 }

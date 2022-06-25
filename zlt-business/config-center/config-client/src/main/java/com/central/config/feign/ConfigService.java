@@ -4,6 +4,7 @@ import com.central.common.constant.ServiceNameConstants;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.co.PageCo;
+import com.central.config.dto.BetMultipleDto;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.callback.ConfigServiceFallbackFactory;
 import com.central.config.model.DownloadStation;
@@ -202,5 +203,16 @@ public interface ConfigService {
      */
     @PostMapping("/system/updateMinOnlineUserQuantity")
     Result updateMinOnlineUserQuantity(@RequestParam("minOnlineUserQuantity") String minOnlineUserQuantity);
+
+    /**
+     * 打码预设量查询
+     *
+     * @return
+     */
+    @GetMapping("/system/findBetMultiple")
+    Result<BetMultipleDto> findBetMultiple();
+
+    @PostMapping("/system/saveBetMultiple")
+    Result saveBetMultiple(@SpringQueryMap BetMultipleCo params);
 
 }

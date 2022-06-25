@@ -15,4 +15,6 @@ public interface ISysPlatformConfigService extends ISuperService<SysPlatformConf
 
 
     Result saveCache(BigDecimal touristAmount, BigDecimal touristSingleMaxBet);
+
+    Result saveBetMultiple(BigDecimal betMultiple, BigDecimal betZrrorPint);
 }

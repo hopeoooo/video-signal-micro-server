@@ -307,6 +307,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("updateWashCode error userId={},washCode={}",userId,washCode);
                 return Result.failed("洗码金额更新失败");
             }
+
+            @Override
+            public PageResult<SysUserAuditVo> findUserAuditList(SysTansterMoneyPageCo params) {
+                log.error("findSysTansterMoneyPageCoList打码量预设录异常:{}", params, throwable);
+                return new PageResult();
+            }
         };
     }
 }

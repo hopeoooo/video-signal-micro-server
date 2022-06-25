@@ -1,8 +1,10 @@
 package com.central.platform.backend.controller;
 
+import com.central.config.dto.BetMultipleDto;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.common.model.Result;
+import com.central.config.model.co.BetMultipleCo;
 import com.central.config.model.co.SaveTouristCo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -170,5 +172,26 @@ public class PlatformBackendController {
         return configService.updateMinOnlineUserQuantity(minOnlineUserQuantity);
     }
 
+
+    /**
+     * 打码量预设查询
+     * @return
+     */
+    @ApiOperation("打码预设量")
+    @GetMapping("/system/findBetMultiple")
+    public Result<BetMultipleDto> findBetMultiple(){
+        return configService.findBetMultiple();
+    }
+
+    /**
+     * 打码量预设编辑
+     * @param params
+     * @return
+     */
+    @ApiOperation(value = "全局参数:游客管理编辑")
+    @PostMapping("/system/saveBetMultiple")
+    public Result saveBetMultiple(@ModelAttribute BetMultipleCo params) {
+        return configService.saveBetMultiple(params);
+    }
 
 }

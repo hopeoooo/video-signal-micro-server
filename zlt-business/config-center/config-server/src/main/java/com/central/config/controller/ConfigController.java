@@ -4,10 +4,12 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.central.common.model.Result;
 import com.central.config.constants.ConfigConstants;
+import com.central.config.dto.BetMultipleDto;
 import com.central.config.dto.TouristDto;
 import com.central.config.dto.logoUrlDto;
 import com.central.config.model.SysAvatarPicture;
 import com.central.config.model.SysPlatformConfig;
+import com.central.config.model.co.BetMultipleCo;
 import com.central.config.model.co.SaveTouristCo;
 import com.central.config.service.ISysAvatarPictureService;
 import com.central.config.service.ISysPlatformConfigService;
@@ -327,6 +329,28 @@ public class ConfigController {
     }
 
 
+    @ApiOperation(value = "打码量预设查询")
+    @GetMapping("/findBetMultiple")
+    public Result<BetMultipleDto> findBetMultiple() {
+        SysPlatformConfig touristAmount = platformConfigService.findTouristAmount();
+        BetMultipleDto betMultipleDto=new BetMultipleDto();
+        betMultipleDto.setBetMultiple(touristAmount.getBetMultiple());
+        betMultipleDto.setBetZrrorPint(touristAmount.getBetZrrorPint());
+        return Result.succeed(betMultipleDto, "查询成功");
+    }
+
+
+    @ApiOperation(value = "修改打量预设查询")
+    @PostMapping("/saveBetMultiple")
+    public Result saveBetMultiple(@Valid @ModelAttribute BetMultipleCo params) {
+
+        BigDecimal betMultiple = params.getBetMultiple();
+        BigDecimal betZrrorPint = params.getBetZrrorPint();
+        if(betMultiple.compareTo(BigDecimal.ZERO)==-1 || betZrrorPint.compareTo(BigDecimal.ZERO)==-1){
+            return Result.failed("金额不能小于0");
+        }
+        return platformConfigService.saveBetMultiple(betMultiple,betZrrorPint);
+    }
 
 
     /**

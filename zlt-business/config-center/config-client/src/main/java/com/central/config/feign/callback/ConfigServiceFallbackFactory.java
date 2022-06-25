@@ -2,6 +2,7 @@ package com.central.config.feign.callback;
 
 import com.central.common.model.*;
 import com.central.common.model.co.PageCo;
+import com.central.config.dto.BetMultipleDto;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.config.model.DownloadStation;
@@ -174,6 +175,18 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
             public Result updateMinOnlineUserQuantity(String minOnlineUserQuantity) {
                 log.error("updateMinOnlineUserQuantity编辑最低在线人数异常:{}", minOnlineUserQuantity, cause);
                 return Result.failed("编辑失败");
+            }
+
+            @Override
+            public Result<BetMultipleDto> findBetMultiple() {
+                log.error("findBetMultiple查询异常" ,cause);
+                return Result.failed("查询失败");
+            }
+
+            @Override
+            public Result saveBetMultiple(BetMultipleCo params) {
+                log.error("saveBetMultiple编辑异常:{}", params, cause);
+                return Result.failed("更新失败");
             }
         };
     }
