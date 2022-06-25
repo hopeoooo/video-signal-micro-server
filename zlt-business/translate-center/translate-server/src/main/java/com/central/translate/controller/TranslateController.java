@@ -13,6 +13,7 @@ import com.central.common.vo.I18nInfoPageVO;
 import com.central.common.vo.LanguageLabelVO;
 import com.central.translate.service.I18nInfosService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,9 +153,10 @@ public class TranslateController {
      * @since 2022 -01-28 13:17:46
      */
     @GetMapping("/frontFullSource")
-    @ApiOperation(value = "获取所有的前台台国际化资源")
-    public Result<I18nSourceDTO> frontFullSource() {
-        return Result.succeed(i18nInfosService.getFrontFullI18nSource(I18nKeys.FRONT_PC));
+    @ApiOperation(value = "获取所前台国际化资源")
+    @ApiImplicitParam(name = "terminal", value = "PC:0，移动端:2", required = true)
+    public Result<I18nSourceDTO> frontFullSource(@RequestParam("terminal") Integer terminal) {
+        return Result.succeed(i18nInfosService.getFrontFullI18nSource(terminal));
     }
 
     /**
