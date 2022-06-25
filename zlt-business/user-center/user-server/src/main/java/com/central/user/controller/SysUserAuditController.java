@@ -33,7 +33,7 @@ public class SysUserAuditController {
 
     @ResponseBody
     @GetMapping("/findUserAuditList")
-    public PageResult<SysUserAuditVo> findUserLoginLogList(@Valid @ModelAttribute SysUserAuditPageCo params) {
+    public PageResult<SysUserAuditVo> findUserAuditList(@Valid @ModelAttribute SysUserAuditPageCo params) {
         return iSysUserAuditService.findSysUserAuditList(params);
     }
 }
