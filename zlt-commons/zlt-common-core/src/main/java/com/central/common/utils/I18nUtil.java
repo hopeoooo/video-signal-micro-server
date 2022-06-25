@@ -39,7 +39,7 @@ public class I18nUtil implements ApplicationContextAware {
      * @author lance
      * @since 2022 -01-25 18:18:28
      */
-    public static String translate(String language, String key) {
+    public static String translate(String language, String key,String requestSource) {
 
         if (I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language)) {
             return key;
@@ -50,7 +50,7 @@ public class I18nUtil implements ApplicationContextAware {
         if (StrUtil.isBlank(key)) {
             return key;
         }
-        String value = redisTemplate.<String, String>opsForHash().get(keyOf(language), key);
+        String value = redisTemplate.<String, String>opsForHash().get(keyOf(language,requestSource), key);
         if (StringUtils.isBlank(value)) {
             return key;
         }
@@ -71,7 +71,8 @@ public class I18nUtil implements ApplicationContextAware {
             return key;
         }
         String language = request.getHeader(I18nKeys.LANGUAGE);
-        return translate(language, key);
+        String requestSource = request.getHeader(I18nKeys.REQUEST_SOURCE);
+        return translate(language, key,requestSource);
     }
 
     /**
@@ -100,13 +101,23 @@ public class I18nUtil implements ApplicationContextAware {
      */
     public static Map<String, String> getSource(String language) {
         HashOperations<String, String, String> ops = redisTemplate.<String, String>opsForHash();
-        return ops.entries(keyOf(language));
+        return ops.entries(keyOf(language,null));
     }
 
     // 找到对应语言的redis key
-    private static String keyOf(String language) {
-        if (StrUtil.isBlank(language)) {
+    private static String keyOf(String language,String requestSource) {
+        if (StrUtil.isBlank(language) || StrUtil.isBlank(requestSource)) {
             return I18nKeys.Redis.Backend.EN_US_KEY;
+        }
+        if (I18nKeys.FRONT.equals(requestSource)){
+            switch (language.toLowerCase()) {
+                case I18nKeys.Locale.EN_US:
+                    return I18nKeys.Redis.FrontMessage.EN_US_KEY;
+                case I18nKeys.Locale.KHM:
+                    return I18nKeys.Redis.FrontMessage.KHM_KEY;
+                case I18nKeys.Locale.TH:
+                    return I18nKeys.Redis.FrontMessage.TH_KEY;
+            }
         }
         switch (language.toLowerCase()) {
             case I18nKeys.Locale.EN_US:

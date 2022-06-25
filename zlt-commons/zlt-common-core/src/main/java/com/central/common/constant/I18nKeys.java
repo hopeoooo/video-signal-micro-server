@@ -14,6 +14,16 @@ public interface I18nKeys {
     String LANGUAGE = "language";
 
     /**
+     * header 请求来源
+     */
+    String REQUEST_SOURCE = "requestSource";
+
+    /**
+     * header 前台请求
+     */
+    String FRONT = "front";
+
+    /**
      * 前台PC
      */
     Integer FRONT_PC = 0;
