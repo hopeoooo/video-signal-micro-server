@@ -105,11 +105,11 @@ public class I18nUtil implements ApplicationContextAware {
     }
 
     // 找到对应语言的redis key
-    private static String keyOf(String language,String requestSource) {
-        if (StrUtil.isBlank(language) || StrUtil.isBlank(requestSource)) {
+    private static String keyOf(String language, String requestSource) {
+        if (StrUtil.isBlank(language)) {
             return I18nKeys.Redis.Backend.EN_US_KEY;
         }
-        if (I18nKeys.FRONT.equals(requestSource)){
+        if (I18nKeys.FRONT.equals(requestSource)) {
             switch (language.toLowerCase()) {
                 case I18nKeys.Locale.EN_US:
                     return I18nKeys.Redis.FrontMessage.EN_US_KEY;
@@ -118,14 +118,15 @@ public class I18nUtil implements ApplicationContextAware {
                 case I18nKeys.Locale.TH:
                     return I18nKeys.Redis.FrontMessage.TH_KEY;
             }
-        }
-        switch (language.toLowerCase()) {
-            case I18nKeys.Locale.EN_US:
-                return I18nKeys.Redis.Backend.EN_US_KEY;
-            case I18nKeys.Locale.KHM:
-                return I18nKeys.Redis.Backend.KHM_KEY;
-            case I18nKeys.Locale.TH:
-                return I18nKeys.Redis.Backend.TH_KEY;
+        } else {
+            switch (language.toLowerCase()) {
+                case I18nKeys.Locale.EN_US:
+                    return I18nKeys.Redis.Backend.EN_US_KEY;
+                case I18nKeys.Locale.KHM:
+                    return I18nKeys.Redis.Backend.KHM_KEY;
+                case I18nKeys.Locale.TH:
+                    return I18nKeys.Redis.Backend.TH_KEY;
+            }
         }
         return I18nKeys.Redis.Backend.EN_US_KEY;
     }
