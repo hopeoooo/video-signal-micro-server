@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 国际化字典服务实现类
@@ -262,6 +263,15 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         List<I18nInfo> listByZhCn = findListByZhCn(from, param.getZhCn());
         if (CollUtil.isNotEmpty(listByZhCn) && listByZhCn.size() >= 1){
             return false;
+        }
+        if (Objects.isNull(info.getEnUs())){
+            info.setEnUs("");
+        }
+        if (Objects.isNull(info.getKhm())){
+            info.setKhm("");
+        }
+        if (Objects.isNull(info.getTh())){
+            info.setTh("");
         }
         boolean succeed = save(info);
         if (succeed) {
