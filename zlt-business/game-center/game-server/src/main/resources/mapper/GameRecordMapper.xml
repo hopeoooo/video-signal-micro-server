@@ -30,7 +30,40 @@
         </where>
     </sql>
 
-
+    <sql id="whereBack">
+        <where>
+            <if test="p.gameId != null and p.gameId != ''">
+                and g.game_id = #{p.gameId}
+            </if>
+            <if test="p.betId != null and p.betId != ''">
+                and g.bet_id = #{p.betId}
+            </if>
+            <if test="p.userName != null and p.userName != ''">
+                and g.user_name = #{p.userName}
+            </if>
+            <if test="p.tableNum != null and p.tableNum != ''">
+                and g.table_num = #{p.tableNum}
+            </if>
+            <if test="p.bureauNum != null and p.bureauNum != ''">
+                and g.bureau_num = #{p.bureauNum}
+            </if>
+            <if test="p.parent != null and p.parent != ''">
+                and g.parent = #{p.parent}
+            </if>
+            <if test="p.startTime != null and p.startTime != ''">
+                and g.bet_time <![CDATA[>=]]> #{p.startTime}
+            </if>
+            <if test="p.endTime != null and p.endTime != ''">
+                and g.bet_time <![CDATA[<=]]> #{p.endTime}
+            </if>
+            <if test="p.setStartTime != null and p.setStartTime != ''">
+                and g.set_time <![CDATA[>=]]> #{p.setStartTime}
+            </if>
+            <if test="p.setEndTime != null and p.setEndTime != ''">
+                and g.set_time <![CDATA[<=]]> #{p.setEndTime}
+            </if>
+        </where>
+    </sql>
     <select id="findGameRecordList"  resultType="com.central.game.model.vo.GameRecordBackstageVo">
         SELECT
         g.*,o.start_time as startTime,o.end_time as endTime
@@ -38,7 +71,7 @@
             game_record g
         LEFT JOIN game_room_info_offline o on g.table_num=o.table_num
         and g.boot_num=o.boot_num and g.bureau_num=o.bureau_num
-        <include refid="where" />
+        <include refid="whereBack" />
         order by g.set_time desc
     </select>
 
