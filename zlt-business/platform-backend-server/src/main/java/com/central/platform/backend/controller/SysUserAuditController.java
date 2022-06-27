@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 @Slf4j
 @RestController
 @Api(tags = "用户账变记录")
-@RequestMapping("/tansterMoney")
+@RequestMapping("/sysUserAudit")
 public class SysUserAuditController {
 
 
