@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 翻译模块
@@ -72,7 +73,7 @@ public class TranslateController {
      * @since 2022 -01-25 14:13:51
      */
     @PostMapping("/backendSave")
-    @ApiOperation(value = "更新后台国际化字典")
+    @ApiOperation(value = "新增后台国际化字典")
     public Result<String> backendSave(
             @Validated(SaveI18nInfoCo.Save.class) @RequestBody SaveI18nInfoCo param){
         return i18nInfosService.backendSave(param);
@@ -88,9 +89,12 @@ public class TranslateController {
      * @since 2022 -01-28 12:46:24
      */
     @PostMapping("/frontSave")
-    @ApiOperation(value = "更新前台国际化字典")
+    @ApiOperation(value = "新增前台国际化字典")
     public Result<String> frontSave(
             @Validated(SaveI18nInfoCo.Save.class) @RequestBody SaveI18nInfoCo param){
+        if (Objects.isNull(param.getFromOf())) {
+            return Result.failed("参数必传");
+        }
         return i18nInfosService.frontSave(param);
     }
 

@@ -90,11 +90,13 @@ public class TranslateController {
      * @since 2022 -01-25 14:13:51
      */
     @PostMapping("/backendSave")
-    @ApiOperation(value = "更新后台国际化字典")
+    @ApiOperation(value = "新增后台国际化字典")
     public Result<String> backendSave(@ApiIgnore @LoginUser SysUser sysUser,
         @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param) {
         param.setOperator(sysUser.getUsername());
-        i18nInfosService.saveI18nInfo(I18nKeys.BACKEND, param);
+        if (!i18nInfosService.saveI18nInfo(I18nKeys.BACKEND, param)){
+            return Result.failed("数据重复");
+        }
         return Result.succeed("操作成功");
     }
 
@@ -107,14 +109,16 @@ public class TranslateController {
      * @since 2022 -01-28 12:46:24
      */
     @PostMapping("/frontSave")
-    @ApiOperation(value = "更新前台国际化字典")
+    @ApiOperation(value = "新增前台国际化字典")
     public Result<String> frontSave(@ApiIgnore @LoginUser SysUser sysUser,
         @RequestBody @Validated(SaveI18nInfoCo.Save.class) SaveI18nInfoCo param) {
         param.setOperator(sysUser.getUsername());
         if (Objects.isNull(param.getFromOf())) {
             return Result.failed("参数必传");
         }
-        i18nInfosService.saveI18nInfo(param.getFromOf(), param);
+        if (!i18nInfosService.saveI18nInfo(param.getFromOf(), param)){
+            return Result.failed("数据重复");
+        }
         return Result.succeed("操作成功");
     }
 
