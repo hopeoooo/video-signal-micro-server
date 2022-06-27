@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @RestController
-@Api(tags = "用户账变记录")
+@Api(tags = "用户稽核记录")
 @RequestMapping("/sysUserAudit")
 public class SysUserAuditController {
 
