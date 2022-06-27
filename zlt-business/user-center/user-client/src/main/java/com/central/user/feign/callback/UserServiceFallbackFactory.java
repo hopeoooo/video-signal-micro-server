@@ -309,6 +309,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
+            public Result updateUnfinishedCode(Long userId, BigDecimal unfinishedCode) {
+                log.error("updateUnfinishedCode error userId={},unfinishedCode={}",userId,unfinishedCode);
+                return Result.failed("未完成流水更新失败");
+            }
+
+            @Override
             public PageResult<SysUserAuditVo> findUserAuditList(SysTansterMoneyPageCo params) {
                 log.error("findSysTansterMoneyPageCoList打码量预设录异常:{}", params, throwable);
                 return new PageResult();

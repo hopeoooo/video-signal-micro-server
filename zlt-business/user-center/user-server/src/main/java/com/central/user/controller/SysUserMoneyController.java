@@ -184,6 +184,30 @@ public class SysUserMoneyController {
         return Result.succeed();
     }
 
+    @ApiOperation(value = "更新未完成打码量")
+    @PostMapping("/updateUnfinishedCode")
+    public Result updateUnfinishedCode(@NotNull(message = "用户ID不允许为空") @RequestParam("userId") Long userId, @NotNull(message = "打码量不允许为空") @RequestParam("unfinishedCode") BigDecimal unfinishedCode) {
+        if (unfinishedCode.compareTo(BigDecimal.ZERO) < 1) {
+            return Result.failed("打码金额必须大于0");
+        }
+        String unfinishedCodeKey = RedisKeyConstant.SYS_USER_MONEY_FLOW_CODE_LOCK + userId;
+        boolean unfinishedCodeLock = RedissLockUtil.tryLock(unfinishedCodeKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
+        if (!unfinishedCodeLock) {
+            log.error("打码锁获取失败,userId={},unfinishedCode={}", userId, unfinishedCode);
+            return Result.failed("更新打码金额失败");
+        }
+        try {
+            SysUserMoney userMoney = userMoneyService.findByUserId(userId);
+            BigDecimal flowCode = userMoney.getUnfinishedCode().subtract(unfinishedCode);
+            BigDecimal unfinishedCodeAfter = flowCode.compareTo(BigDecimal.ZERO) == -1 ? BigDecimal.ZERO : flowCode;
+            userMoney.setUnfinishedCode(unfinishedCodeAfter);
+            SysUserMoney sysUserMoney = userMoneyService.updateCache(userMoney);
+        } finally {
+            RedissLockUtil.unlock(unfinishedCodeKey);
+        }
+        return Result.succeed();
+    }
+
     @ApiOperation("登录用户领取洗码")
     @GetMapping("/receiveWashCode")
     public Result<String> receiveWashCode(@LoginUser SysUser user) {

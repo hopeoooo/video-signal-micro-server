@@ -32,12 +32,12 @@ public class SysUserAudit extends SuperEntity {
     private Integer auditType;
 
     @ApiModelProperty(value = "订单状态，1：未完成，2：已完成")
-    private Integer orderType;
+    private Integer orderStatus;
 
     @ApiModelProperty(value = "稽核金额")
     private BigDecimal auditAmount;
 
-    @ApiModelProperty(value = "未完成有效打码")
+    @ApiModelProperty(value = "所需有效打码")
     private BigDecimal undoneValidBet;
 
     @ApiModelProperty(value = "已完成打码")

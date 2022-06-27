@@ -16,6 +16,10 @@ public interface RedisKeyConstant {
      */
     String SYS_USER_MONEY_WASH_CODE_LOCK = "lock::sys_user_money::wash_code::";
     /**
+     * 打码
+     */
+    String SYS_USER_MONEY_FLOW_CODE_LOCK = "lock::sys_user_money::flow_code::";
+    /**
      * 即时彩池
      */
     String GAME_RECORD_LIVE_POT_LOCK = "lock::game_record::livePot::";

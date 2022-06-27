@@ -230,6 +230,9 @@ public interface UserService {
     @PostMapping("/userMoney/updateWashCode")
     Result updateWashCode(@RequestParam("userId") Long userId, @RequestParam("washCode") BigDecimal washCode);
 
+    @PostMapping("/userMoney/updateUnfinishedCode")
+    Result updateUnfinishedCode(@RequestParam("userId") Long userId, @RequestParam("unfinishedCode") BigDecimal unfinishedCode);
+
     @GetMapping(value = "/userAudit/findUserAuditList", params = "params")
     PageResult<SysUserAuditVo> findUserAuditList(@SpringQueryMap SysTansterMoneyPageCo params);
 
