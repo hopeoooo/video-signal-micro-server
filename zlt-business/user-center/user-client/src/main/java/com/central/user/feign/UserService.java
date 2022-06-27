@@ -7,10 +7,7 @@ import com.central.user.model.co.*;
 import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
-import com.central.user.model.vo.RoomFollowVo;
-import com.central.user.model.vo.SysUserInfoMoneyVo;
-import com.central.user.model.vo.SysUserMoneyVo;
-import com.central.user.model.vo.UserInfoVo;
+import com.central.user.model.vo.*;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -232,4 +229,8 @@ public interface UserService {
 
     @PostMapping("/userMoney/updateWashCode")
     Result updateWashCode(@RequestParam("userId") Long userId, @RequestParam("washCode") BigDecimal washCode);
+
+    @GetMapping(value = "/userAudit/findUserAuditList", params = "params")
+    PageResult<SysUserAuditVo> findUserAuditList(@SpringQueryMap SysTansterMoneyPageCo params);
+
 }
