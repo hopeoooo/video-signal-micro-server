@@ -259,6 +259,10 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         I18nInfo info = new I18nInfo();
         BeanUtil.copyProperties(param, info);
         info.setFromOf(from);
+        List<I18nInfo> listByZhCn = findListByZhCn(from, param.getZhCn());
+        if (CollUtil.isNotEmpty(listByZhCn) && listByZhCn.size() >= 1){
+            return false;
+        }
         boolean succeed = save(info);
         if (succeed) {
             updateI18nRedis(from, param, info,null);
