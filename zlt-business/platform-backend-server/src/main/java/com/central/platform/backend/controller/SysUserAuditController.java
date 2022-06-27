@@ -2,7 +2,6 @@ package com.central.platform.backend.controller;
 
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
-import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.UserService;
 import com.central.user.model.co.SysTansterMoneyPageCo;
 import com.central.user.model.vo.SysUserAuditVo;
@@ -18,8 +17,8 @@ import javax.annotation.Resource;
 
 @Slf4j
 @RestController
-@Api(tags = "用户账变记录")
-@RequestMapping("/tansterMoney")
+@Api(tags = "用户稽核记录")
+@RequestMapping("/sysUserAudit")
 public class SysUserAuditController {
 
 

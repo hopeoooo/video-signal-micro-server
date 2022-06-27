@@ -19,8 +19,8 @@ import java.util.Map;
 @Slf4j
 @RestController
 @Api(tags = "用户账变记录")
-@RequestMapping("/tansterMoney")
-public class SysTansterMoneyLogController {
+@RequestMapping("/tansferMoney")
+public class SysTansferMoneyLogController {
     @Resource
     private UserService userService;
 
