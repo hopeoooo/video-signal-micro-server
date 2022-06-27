@@ -190,6 +190,7 @@ public class SysUserMoneyController {
         if (unfinishedCode.compareTo(BigDecimal.ZERO) < 1) {
             return Result.failed("打码金额必须大于0");
         }
+        SysUser sysUser = iSysUserService.selectById(userId);
         String unfinishedCodeKey = RedisKeyConstant.SYS_USER_MONEY_FLOW_CODE_LOCK + userId;
         boolean unfinishedCodeLock = RedissLockUtil.tryLock(unfinishedCodeKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
         if (!unfinishedCodeLock) {
@@ -202,6 +203,8 @@ public class SysUserMoneyController {
             BigDecimal unfinishedCodeAfter = flowCode.compareTo(BigDecimal.ZERO) == -1 ? BigDecimal.ZERO : flowCode;
             userMoney.setUnfinishedCode(unfinishedCodeAfter);
             SysUserMoney sysUserMoney = userMoneyService.updateCache(userMoney);
+            //推送到首页余额变化
+            userMoneyService.syncPushMoneyToWebApp(userId, sysUser.getUsername());
         } finally {
             RedissLockUtil.unlock(unfinishedCodeKey);
         }
