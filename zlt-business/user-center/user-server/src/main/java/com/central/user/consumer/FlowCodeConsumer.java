@@ -42,7 +42,7 @@ public class FlowCodeConsumer {
     public Function<Flux<Message<GameRecord>>, Mono<Void>> flowCode() {
         return flux -> flux.map(message -> {
             GameRecord record = message.getPayload();
-            log.info("接收到打码消息record={}", record.toString());
+            log.info("接收到打码消息record={}", record);
             calculateFlowCode(record);
             return message;
         }).then();
@@ -52,6 +52,13 @@ public class FlowCodeConsumer {
     public void calculateFlowCode(GameRecord record) {
         if (record == null) {
             log.error("打码record为空");
+            return;
+        }
+        //查询未完成的稽核记录
+        SysUserAudit sysUserAudit = sysUserAuditService.lambdaQuery().eq(SysUserAudit::getOrderStatus, 1)
+                .eq(SysUserAudit::getUserId, record.getUserId()).orderByDesc(SysUserAudit::getCreateTime).last("limit 1").one();
+        if (sysUserAudit == null) {
+            log.info("userId={},userName={}没有未完成的稽核记录", record.getUserId(), record.getUserName());
             return;
         }
         //查询未完成流水
@@ -72,13 +79,6 @@ public class FlowCodeConsumer {
         Integer count = sysUserAuditDetailService.lambdaQuery().eq(SysUserAuditDetail::getGameRecordId, record.getId()).count();
         if (count > 0) {
             log.info("该注单已打码，无需打码，record={}", record);
-            return;
-        }
-        //查询未完成的稽核记录
-        SysUserAudit sysUserAudit = sysUserAuditService.lambdaQuery().eq(SysUserAudit::getOrderStatus, 1)
-                .eq(SysUserAudit::getUserId, record.getUserId()).orderByDesc(SysUserAudit::getCreateTime).last("limit 1").one();
-        if (sysUserAudit == null) {
-            log.info("userId={},userName={}没有未完成的稽核记录", record.getUserId(), record.getUserName());
             return;
         }
         Result<BetMultipleDto> betMultipleResult = configService.findBetMultiple();
