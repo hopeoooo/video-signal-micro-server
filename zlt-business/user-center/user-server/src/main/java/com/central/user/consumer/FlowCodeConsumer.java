@@ -53,7 +53,7 @@ public class FlowCodeConsumer {
 
     public void calculateFlowCode(GameRecord record) {
         if (record == null) {
-            log.error("洗码record为空");
+            log.error("打码record为空");
             return;
         }
         //查询未完成流水
@@ -163,6 +163,10 @@ public class FlowCodeConsumer {
             sysUserAuditDetailService.save(detail);
             //剩余有效打码
             BigDecimal surplusResidueValidBet = validbet.subtract(residueValidBet);
+            //剩余打码等于0
+            if (surplusResidueValidBet.compareTo(BigDecimal.ZERO) == 0) {
+                return;
+            }
             //继续查询未完成稽核记录
             SysUserAudit sysUserAudit = sysUserAuditService.lambdaQuery().eq(SysUserAudit::getOrderStatus, 1)
                     .eq(SysUserAudit::getUserId, userId).orderByDesc(SysUserAudit::getCreateTime).last("limit 1").one();
