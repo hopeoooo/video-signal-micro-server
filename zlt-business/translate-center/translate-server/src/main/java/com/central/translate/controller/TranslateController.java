@@ -157,10 +157,9 @@ public class TranslateController {
      * @since 2022 -01-28 13:17:46
      */
     @GetMapping("/frontFullSource")
-    @ApiOperation(value = "获取所前台国际化资源")
-    @ApiImplicitParam(name = "terminal", value = "PC:0，移动端:2", required = true)
-    public Result<I18nSourceDTO> frontFullSource(@RequestParam("terminal") Integer terminal) {
-        return Result.succeed(i18nInfosService.getFrontFullI18nSource(terminal));
+    @ApiOperation(value = "获取所有前台PC国际化资源")
+    public Result<I18nSourceDTO> frontFullSource() {
+        return Result.succeed(i18nInfosService.getFrontFullI18nSource(I18nKeys.FRONT_PC));
     }
 
     /**
@@ -171,7 +170,7 @@ public class TranslateController {
      * @since 2022 -01-28 13:17:46
      */
     @GetMapping("/frontAppFullSource")
-    @ApiOperation(value = "获取所有的前台台国际化资源")
+    @ApiOperation(value = "获取所有前台APP国际化资源")
     public Result<I18nSourceDTO> frontAppFullSource() {
         return Result.succeed(i18nInfosService.getFrontFullI18nSource(I18nKeys.FRONT_APP));
     }
