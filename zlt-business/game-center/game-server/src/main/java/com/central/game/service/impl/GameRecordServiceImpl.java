@@ -625,7 +625,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     public List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum) {
         GameRoomInfoOffline roomInfoOffline = gameRoomInfoOfflineService.getNewestTableInfo(gameId, tableNum);
-        if (roomInfoOffline == null) {
+        if (roomInfoOffline == null || (roomInfoOffline.getStatus() != 1 && roomInfoOffline.getStatus() != 2)) {
             return new ArrayList<>();
         }
         LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();

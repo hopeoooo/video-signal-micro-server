@@ -1,16 +1,14 @@
 package com.central.user.consumer;
 
-import com.central.common.model.CodeEnum;
-import com.central.common.model.Result;
-import com.central.common.model.SysUserAudit;
-import com.central.common.model.SysUserAuditDetail;
+import com.central.common.model.*;
+import com.central.common.redis.constant.RedisKeyConstant;
+import com.central.common.redis.lock.RedissLockUtil;
 import com.central.config.dto.BetMultipleDto;
 import com.central.config.feign.ConfigService;
 import com.central.game.model.GameRecord;
-import com.central.user.feign.UserService;
-import com.central.user.model.vo.SysUserMoneyVo;
 import com.central.user.service.ISysUserAuditDetailService;
 import com.central.user.service.ISysUserAuditService;
+import com.central.user.service.ISysUserMoneyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +30,7 @@ import java.util.function.Function;
 public class FlowCodeConsumer {
 
     @Autowired
-    private UserService userService;
+    private ISysUserMoneyService userMoneyService;
     @Autowired
     private ISysUserAuditService sysUserAuditService;
     @Autowired
@@ -44,7 +42,7 @@ public class FlowCodeConsumer {
     public Function<Flux<Message<GameRecord>>, Mono<Void>> flowCode() {
         return flux -> flux.map(message -> {
             GameRecord record = message.getPayload();
-            log.info("接收到打码消息record={}", record.toString());
+            log.info("接收到打码消息record={}", record);
             calculateFlowCode(record);
             return message;
         }).then();
@@ -56,14 +54,17 @@ public class FlowCodeConsumer {
             log.error("打码record为空");
             return;
         }
-        //查询未完成流水
-        Result<SysUserMoneyVo> moneyResult = userService.getMoneyByUserName(record.getUserName());
-        if (moneyResult.getResp_code() != CodeEnum.SUCCESS.getCode()) {
-            log.error("打码查询用户钱包失败，moneyResult={}", moneyResult);
+        //查询未完成的稽核记录
+        SysUserAudit sysUserAudit = sysUserAuditService.lambdaQuery().eq(SysUserAudit::getOrderStatus, 1)
+                .eq(SysUserAudit::getUserId, record.getUserId()).orderByDesc(SysUserAudit::getCreateTime).last("limit 1").one();
+        if (sysUserAudit == null) {
+            log.info("userId={},userName={}没有未完成的稽核记录", record.getUserId(), record.getUserName());
             return;
         }
-        BigDecimal money = moneyResult.getDatas().getMoney();
-        BigDecimal unfinishedCode = moneyResult.getDatas().getUnfinishedCode();
+        //查询未完成流水
+        SysUserMoney sysUserMoney = userMoneyService.findByUserId(record.getUserId());
+        BigDecimal money = sysUserMoney.getMoney();
+        BigDecimal unfinishedCode = sysUserMoney.getUnfinishedCode();
         if (unfinishedCode.compareTo(BigDecimal.ZERO) < 1) {
             log.info("用户无未完成流水，无需打码,record={}", record);
             return;
@@ -77,13 +78,7 @@ public class FlowCodeConsumer {
         //判断是否已经处理过，防止重复计算
         Integer count = sysUserAuditDetailService.lambdaQuery().eq(SysUserAuditDetail::getGameRecordId, record.getId()).count();
         if (count > 0) {
-            return;
-        }
-        //查询未完成的稽核记录
-        SysUserAudit sysUserAudit = sysUserAuditService.lambdaQuery().eq(SysUserAudit::getOrderStatus, 1)
-                .eq(SysUserAudit::getUserId, record.getUserId()).orderByDesc(SysUserAudit::getCreateTime).last("limit 1").one();
-        if (sysUserAudit == null) {
-            log.info("userId={},userName={}没有未完成的稽核记录", record.getUserId(), record.getUserName());
+            log.info("该注单已打码，无需打码，record={}", record);
             return;
         }
         Result<BetMultipleDto> betMultipleResult = configService.findBetMultiple();
@@ -99,12 +94,7 @@ public class FlowCodeConsumer {
         subFlowCode(sysUserAudit, record.getUserId(), record.getUserName(), record.getId(), record.getBetId(), record.getValidbet(), betZrrorPint, money, unfinishedCode);
         log.info("打码完成，record={}", record.toString());
         //扣减userMoney未完成流水
-        Result result = userService.updateUnfinishedCode(record.getUserId(), validbet);
-        if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
-            log.error("未完成流水userMoney更新失败,result={},record={}", result, record);
-        } else {
-            log.info("未完成流水userMoney更新成功,record={}", record.toString());
-        }
+        updateUnfinishedCode(record, validbet);
     }
 
     /**
@@ -186,5 +176,29 @@ public class FlowCodeConsumer {
         BigDecimal withdrawAmount = money.subtract(totalAuditAmount);
         withdrawAmount = withdrawAmount.compareTo(BigDecimal.ZERO) == -1 ? BigDecimal.ZERO : withdrawAmount;
         return withdrawAmount;
+    }
+
+    public void updateUnfinishedCode(GameRecord record, BigDecimal unfinishedCode) {
+        String unfinishedCodeKey = RedisKeyConstant.SYS_USER_MONEY_FLOW_CODE_LOCK + record.getUserId();
+        boolean unfinishedCodeLock = RedissLockUtil.tryLock(unfinishedCodeKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
+        if (!unfinishedCodeLock) {
+            log.error("打码锁获取失败,record={},unfinishedCode={}", record, unfinishedCode);
+            return;
+        }
+        try {
+            SysUserMoney userMoney = userMoneyService.findByUserId(record.getUserId());
+            BigDecimal flowCode = userMoney.getUnfinishedCode().subtract(unfinishedCode);
+            BigDecimal unfinishedCodeAfter = flowCode.compareTo(BigDecimal.ZERO) == -1 ? BigDecimal.ZERO : flowCode;
+            userMoney.setUnfinishedCode(unfinishedCodeAfter);
+            SysUserMoney sysUserMoney = userMoneyService.updateCache(userMoney);
+            //推送到首页余额变化
+            userMoneyService.syncPushMoneyToWebApp(record.getUserId(), record.getUserName());
+        } catch (Exception e) {
+            log.error("未完成流水userMoney更新失败,record={}", record);
+            e.printStackTrace();
+        } finally {
+            RedissLockUtil.unlock(unfinishedCodeKey);
+        }
+        log.info("未完成流水userMoney更新成功,record={}", record.toString());
     }
 }
