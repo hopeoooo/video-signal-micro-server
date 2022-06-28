@@ -326,6 +326,12 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
                 log.error("addAudit打码量预设录异常:{}", params, throwable);
                 return;
             }
+
+            @Override
+            public void subtractAudit(AddUserAuditCo params) {
+                log.error("subtractAudit打码量预设录异常:{}", params, throwable);
+                return;
+            }
         };
     }
 }
