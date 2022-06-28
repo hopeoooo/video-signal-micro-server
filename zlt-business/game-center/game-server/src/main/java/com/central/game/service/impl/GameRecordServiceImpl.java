@@ -173,7 +173,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                             record.setMaxLimitRed(minMaxLimitRed.get(maxLimitRed));
                         }
                         //扣减本地余额
-                        Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), newBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId());
+                        Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), newBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId(), null);
                         //本地余额扣减成功，更新投注记录
                         if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
                             gameRecordMapper.updateById(record);
@@ -190,7 +190,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                 if (!flag) {
                     //先扣减本地余额
                     GameRecord record = getGameRecord(co, gameRoomList, betDataCo, user, gameId, gameList.getName(), bootNum, bureauNum, ip);
-                    Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), record.getBetAmount(), null, CapitalEnum.BET.getType(), null, record.getBetId());
+                    Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), record.getBetAmount(), null, CapitalEnum.BET.getType(), null, record.getBetId(), null);
                     //本地余额扣减成功，保存投注记录
                     if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
                         gameRecordMapper.insert(record);

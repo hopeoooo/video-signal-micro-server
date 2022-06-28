@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.model.*;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.BigDecimalUtils;
+import com.central.config.dto.BetMultipleDto;
+import com.central.config.feign.ConfigService;
 import com.central.game.feign.GameService;
 import com.central.game.model.vo.GameRoomGroupUserVo;
 import com.central.push.constant.SocketTypeConstant;
@@ -15,6 +17,7 @@ import com.central.push.feign.PushService;
 import com.central.user.mapper.SysUserMoneyMapper;
 import com.central.user.model.vo.RankingListVo;
 import com.central.user.service.ISysTansterMoneyLogService;
+import com.central.user.service.ISysUserAuditService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.model.vo.SysUserMoneyVo;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +32,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -51,8 +55,15 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
     @Autowired
     private PushService pushService;
     @Autowired
+
     private GameService gameService;
 
+    @Autowired
+    private ISysUserAuditService iSysUserAuditService;
+
+
+    @Resource
+    private ConfigService configService;
 
     /**
      * 列表
@@ -90,11 +101,32 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         return baseMapper.selectById(sysUserMoney.getId());
     }
 
+    /**
+     * 更新金额和打码量
+     *
+     * @param sysUserMoney
+     * @param money
+     * @param transterType
+     * @param remark
+     * @param traceId
+     * @param sysUser
+     * @param betId
+     * @param auditMultiple
+     * @return
+     */
     @Override
     @Transactional
     @CachePut(key="#sysUserMoney.userId")
-    public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Integer transterType, String remark, String traceId, SysUser sysUser, String betId) {
+    public SysUserMoney transterMoney(SysUserMoney sysUserMoney, BigDecimal money, Integer transterType,
+                                      String remark, String traceId, SysUser sysUser, String betId, BigDecimal auditMultiple) {
+        //查询游客打码量
+        BetMultipleDto betMultipleDto = configService.findBetMultiple().getDatas();
+        if(auditMultiple == null){ //默认一倍
+            auditMultiple = betMultipleDto == null? BigDecimal.ONE : betMultipleDto.getBetMultiple();
+        }
+
         BigDecimal userMoery = sysUserMoney.getMoney() == null ? BigDecimal.ZERO : sysUserMoney.getMoney();
+        BigDecimal unFinishCode = sysUserMoney.getUnfinishedCode() == null ? BigDecimal.ZERO : sysUserMoney.getUnfinishedCode();
         CapitalEnum capitalEnum = CapitalEnum.fingCapitalEnumType(transterType);
         if (capitalEnum.getAddOrSub() == 0) {//上分
             sysUserMoney.setMoney(sysUserMoney.getMoney().add(money));
@@ -104,7 +136,15 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
             sysUserMoney.setMoney(sysUserMoney.getMoney().subtract(money));
             money = money.negate();
         }
+
+        if(transterType == CapitalEnum.ARTIFICIALIN.getType() || transterType == CapitalEnum.ARTIFICIALOUT.getType()){
+            //设置洗码量
+            setWashAmount(sysUserMoney, money, auditMultiple, transterType);
+            //设置洗码量
+            iSysUserAuditService.saveAuditDate(sysUserMoney, money, auditMultiple, transterType, sysUserMoney, betMultipleDto, unFinishCode);
+        }
         baseMapper.updateById(sysUserMoney);
+
         //游客不记录数据
         if (!UserType.APP_GUEST.name().equals(sysUser.getType())) {
             SysTansterMoneyLog sysTansterMoneyLog = getSysTansterMoneyLog(userMoery, money, sysUser, remark, traceId, transterType, sysUserMoney.getMoney(), betId);
@@ -112,6 +152,26 @@ public class SysUserMoneyServiceImpl extends SuperServiceImpl<SysUserMoneyMapper
         }
         return sysUserMoney;
     }
+
+    /**
+     * 洗码量加扣减
+     *
+     * @param sysUserMoney
+     * @param money
+     * @param auditMultiple
+     * @param transterType
+     */
+    private void setWashAmount(SysUserMoney sysUserMoney, BigDecimal money, BigDecimal auditMultiple, Integer transterType) {
+        BigDecimal unFinishCode = sysUserMoney.getUnfinishedCode() == null ? BigDecimal.ZERO : sysUserMoney.getUnfinishedCode();
+        if(transterType == CapitalEnum.ARTIFICIALIN.getType()){ //人工上分
+            unFinishCode = unFinishCode.add(money.multiply(auditMultiple));
+        }else{//人工下分
+            unFinishCode = unFinishCode.subtract(money.multiply(auditMultiple));
+            unFinishCode = unFinishCode.compareTo(BigDecimal.ZERO) <= 0? BigDecimal.ZERO : unFinishCode;
+        }
+        sysUserMoney.setUnfinishedCode(unFinishCode);
+    }
+
 
     @Override
     @Async

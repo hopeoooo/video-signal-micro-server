@@ -1,6 +1,8 @@
 package com.central.user.controller;
 
 import com.central.common.model.PageResult;
+import com.central.common.model.Result;
+import com.central.user.model.co.AddUserAuditCo;
 import com.central.user.model.co.SysUserAuditPageCo;
 import com.central.user.model.vo.SysUserAuditVo;
 import com.central.user.service.ISysUserAuditService;
@@ -27,8 +29,33 @@ public class SysUserAuditController {
     private ISysUserAuditService iSysUserAuditService;
 
     @ResponseBody
-    @GetMapping("/findUserAuditList")
-    public PageResult<SysUserAuditVo> findUserAuditList(@Valid @ModelAttribute SysUserAuditPageCo params) {
+    @PostMapping("/findUserAuditList")
+    public PageResult<SysUserAuditVo> findUserAuditList(@Valid @RequestBody SysUserAuditPageCo params) {
         return iSysUserAuditService.findSysUserAuditList(params);
+    }
+
+    /**
+     * 增加打码量
+     * @param params
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/addAudit")
+    public Result addAudit(@Valid @RequestBody AddUserAuditCo params) {
+        return iSysUserAuditService.addAudit(params);
+
+    }
+
+    /**
+     * 解锁打码量
+     *
+     * @param params
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/subtractAudit")
+    public Result subtractAudit(@Valid @RequestBody AddUserAuditCo params) {
+        return iSysUserAuditService.subtractAudit(params);
+
     }
 }

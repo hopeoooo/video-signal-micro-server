@@ -7,10 +7,13 @@ import com.central.common.model.*;
 import com.central.common.redis.constant.RedisKeyConstant;
 import com.central.common.redis.lock.RedissLockUtil;
 import com.central.common.vo.SysMoneyVO;
+import com.central.config.dto.BetMultipleDto;
+import com.central.config.feign.ConfigService;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import com.central.user.model.vo.RankingListVo;
 import com.central.user.service.ISysTansterMoneyLogService;
+import com.central.user.service.ISysUserAuditService;
 import com.central.user.service.ISysUserMoneyService;
 import com.central.user.service.ISysUserService;
 import com.central.user.model.vo.SysUserMoneyVo;
@@ -25,6 +28,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -53,6 +57,8 @@ public class SysUserMoneyController {
     private ISysTansterMoneyLogService iSysTansterMoneyLogService;
     @Autowired
     private PushService pushService;
+
+
 
     @ApiOperation(value = "查询当前登录用户的钱包")
     @GetMapping("/getMoney")
@@ -91,8 +97,10 @@ public class SysUserMoneyController {
             @ApiImplicitParam(name = "remark", value = "备注", dataType = "String"),
             @ApiImplicitParam(name = "traceId", value = "第三方交易编号", dataType = "String"),
             @ApiImplicitParam(name = "betId", value = "注单号", dataType = "String"),
+            @ApiImplicitParam(name = "auditMultiple", value = "打码倍数", dataType = "BigDecimal"),
     })
-    public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType, String traceId, String betId) {
+    public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType,
+                                              String traceId, String betId,BigDecimal auditMultiple) {
         if (money.compareTo(BigDecimal.ZERO) <= 0) {
             return Result.failed("参数错误");
         }
@@ -120,7 +128,11 @@ public class SysUserMoneyController {
             } else if (transterType == CapitalEnum.BET.getType() && money.compareTo(sysUserMoney.getMoney()) == 1) {
                 return Result.failed("下注金额不能大于剩余金额");
             }
-            saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId, sysUser, betId);
+
+
+            saveSysUserMoney = userMoneyService.transterMoney(sysUserMoney, money, transterType, remark, traceId, sysUser, betId, auditMultiple);
+
+
         } catch (Exception e) {
             log.error("用户上下分异常,userId:{},money:{},remark:{},transterType{},traceId{},betId:{}", userId, money, remark, transterType, traceId, betId);
             return Result.failed("操作失败");
@@ -133,6 +145,8 @@ public class SysUserMoneyController {
         userMoneyService.syncPushMoneyToTableNum(userId, sysUser.getUsername());
         return Result.succeed(saveSysUserMoney);
     }
+
+
 
     @ApiOperation(value = "设置玩家金额")
     @PostMapping("/playerMoney")

@@ -179,7 +179,8 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark, Integer transterType,String traceId,String betId) {
+            public Result<SysUserMoney> transterMoney(Long userId, BigDecimal money, String remark,
+                                                      Integer transterType,String traceId,String betId,BigDecimal auditMultiple) {
                 log.error("人工上下分:{},transterType={}",userId,transterType,throwable);
                 return Result.failed("上下分错误");
             }
@@ -315,9 +316,15 @@ public class UserServiceFallbackFactory implements FallbackFactory<UserService> 
             }
 
             @Override
-            public PageResult<SysUserAuditVo> findUserAuditList(SysTansterMoneyPageCo params) {
-                log.error("findSysTansterMoneyPageCoList打码量预设录异常:{}", params, throwable);
+            public PageResult<SysUserAuditVo> findUserAuditList(SysUserAuditPageCo params) {
+                log.error("findUserAuditList打码量预设录异常:{}", params, throwable);
                 return new PageResult();
+            }
+
+            @Override
+            public void addAudit(AddUserAuditCo params) {
+                log.error("addAudit打码量预设录异常:{}", params, throwable);
+                return;
             }
         };
     }

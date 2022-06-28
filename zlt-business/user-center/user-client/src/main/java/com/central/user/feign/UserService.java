@@ -8,14 +8,11 @@ import com.central.common.vo.SysMoneyVO;
 import com.central.common.vo.SysTansterMoneyLogVo;
 import com.central.user.feign.callback.UserServiceFallbackFactory;
 import com.central.user.model.vo.*;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -165,7 +162,9 @@ public interface UserService {
 
     @PostMapping(value = "/userMoney/transterMoney")
     Result<SysUserMoney> transterMoney(@RequestParam("userId") Long userId, @RequestParam("money") BigDecimal money,
-                                       @RequestParam("remark") String remark, @RequestParam("transterType") Integer transterType,@RequestParam("traceId") String traceId,@RequestParam("betId") String betId);
+                                       @RequestParam("remark") String remark, @RequestParam("transterType") Integer transterType,
+                                       @RequestParam("traceId") String traceId,@RequestParam("betId") String betId,
+                                       @RequestParam("auditMultiple") BigDecimal auditMultiple);
 
     @GetMapping(value = "/sysTansterMoney/findList", params = "params")
     PageResult<SysTansterMoneyLogVo> findTransterMoneyList(@SpringQueryMap SysTansterMoneyPageCo params);
@@ -233,7 +232,9 @@ public interface UserService {
     @PostMapping("/userMoney/updateUnfinishedCode")
     Result updateUnfinishedCode(@RequestParam("userId") Long userId, @RequestParam("unfinishedCode") BigDecimal unfinishedCode);
 
-    @GetMapping(value = "/userAudit/findUserAuditList", params = "params")
-    PageResult<SysUserAuditVo> findUserAuditList(@SpringQueryMap SysTansterMoneyPageCo params);
+    @PostMapping(value = "/userAudit/findUserAuditList")
+    PageResult<SysUserAuditVo> findUserAuditList(@RequestBody SysUserAuditPageCo params);
 
+    @PostMapping(value = "/userAudit/addAudit")
+    void addAudit(@RequestBody AddUserAuditCo addUserAuditCo);
 }
