@@ -26,6 +26,12 @@ public class TranslateServiceFallbackFactory implements FallbackFactory<Translat
     public TranslateService create(Throwable cause) {
         return new TranslateService() {
             @Override
+            public Result<String> delete(Long id) {
+                log.error("delete调用失败: {}", id);
+                return null;
+            }
+
+            @Override
             public Result<String> backendUpdate(UpdateI18nInfoCo param) {
                 log.error("调用失败: {}", param);
                 return null;
