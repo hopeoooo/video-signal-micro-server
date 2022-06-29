@@ -177,7 +177,7 @@ public class PlatformBackendController {
      * 打码量预设查询
      * @return
      */
-    @ApiOperation("打码预设量")
+    @ApiOperation("打码预设量查询")
     @GetMapping("/system/findBetMultiple")
     public Result<BetMultipleDto> findBetMultiple(){
         return configService.findBetMultiple();
@@ -188,7 +188,7 @@ public class PlatformBackendController {
      * @param params
      * @return
      */
-    @ApiOperation(value = "全局参数:游客管理编辑")
+    @ApiOperation(value = "编辑打码预设量")
     @PostMapping("/system/saveBetMultiple")
     public Result saveBetMultiple(@ModelAttribute BetMultipleCo params) {
         return configService.saveBetMultiple(params);

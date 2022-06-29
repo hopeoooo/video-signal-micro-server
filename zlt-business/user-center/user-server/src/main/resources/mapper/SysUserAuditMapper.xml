@@ -9,7 +9,7 @@
         ${alias}.user_id,
         ${alias}.order_no,
         ${alias}.audit_type,
-        ${alias}.order_type,
+        ${alias}.order_status,
         ${alias}.audit_amount,
         ${alias}.undone_valid_bet,
         ${alias}.done_valid_bet,
@@ -25,10 +25,7 @@
             <if test="u.userName != null and u.userName != ''">
                 and t.user_name = #{u.userName}
             </if>
-            <if test="u.userId != null and u.userId != ''">
-                and t.user_id  = #{u.userId}
-            </if>
-            <if test="u.orderType != null and u.orderType != ''">
+            <if test="u.auditType != null">
                 and t.audit_type = #{u.auditType}
             </if>
             <if test="u.startTime != null and u.startTime != ''">

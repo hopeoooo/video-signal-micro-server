@@ -46,4 +46,13 @@ public class SysUserAuditController {
 
         return Result.succeed();
     }
+
+    @PostMapping("/audit/subtractAudit")
+    @ApiOperation(value = "解锁打码量")
+    public Result subtractAudit(@ModelAttribute AddUserAuditCo addUserAuditCo) {
+
+        userService.subtractAudit(addUserAuditCo);
+
+        return Result.succeed();
+    }
 }
