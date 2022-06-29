@@ -25,6 +25,8 @@ import java.util.List;
 @FeignClient(name = ServiceNameConstants.TRANSLATE_SERVICE, fallbackFactory = TranslateServiceFallbackFactory.class, decode404 = true)
 public interface TranslateService {
 
+    @DeleteMapping("/translate/delete/{id}")
+    Result<String> delete(@PathVariable Long id);
     /**
      * 更新后台国际化字典
      *
