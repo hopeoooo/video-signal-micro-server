@@ -3,6 +3,7 @@ package com.central.translate.controller;
 import com.central.common.annotation.LoginUser;
 import com.central.common.constant.I18nKeys;
 import com.central.common.dto.I18nSourceDTO;
+import com.central.common.model.I18nInfo;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
@@ -40,6 +41,21 @@ public class TranslateController {
     @Autowired
     private I18nInfosService i18nInfosService;
 
+
+    @PostMapping("/delete/{id}")
+    @ApiOperation(value = "删除")
+    public Result<String> delete(@PathVariable Long id) {
+        I18nInfo i18nInfo = i18nInfosService.selectById(id);
+        if (Objects.isNull(i18nInfo)){
+            return Result.failed("删除失败");
+        }
+        Boolean b = i18nInfosService.deleteById(id, i18nInfo);
+        if (b){
+            return Result.succeed("操作成功");
+        }else {
+            return Result.failed("删除失败");
+        }
+    }
     /**
      * 更新后台国际化字典
      *

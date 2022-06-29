@@ -64,6 +64,19 @@ public class TranslateController {
         return i18nInfosService.frontUpdate(param);
     }
 
+
+    @DeleteMapping("/backendDelete/{id}")
+    @ApiOperation(value = "删除后台国际化字典")
+    public Result<String> backendDelete(@PathVariable Long id){
+        return i18nInfosService.delete(id);
+    }
+
+    @DeleteMapping("/frontDelete/{id}")
+    @ApiOperation(value = "删除前台国际化字典")
+    public Result<String> frontDelete(@PathVariable Long id){
+        return i18nInfosService.delete(id);
+    }
+
     /**
      * 新增后台国际化字典
      *

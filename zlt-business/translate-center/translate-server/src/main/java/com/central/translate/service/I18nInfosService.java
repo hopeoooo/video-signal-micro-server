@@ -21,6 +21,10 @@ import java.util.List;
  */
 public interface I18nInfosService extends ISuperService<I18nInfo> {
 
+    Boolean deleteById(Long id,I18nInfo i18nInfo);
+
+    I18nInfo selectById(Long id) ;
+
     List<I18nInfo> findListByZhCn(Integer fromOf,String zhCn);
     /**
      * 获取所有的后台国际化资源
