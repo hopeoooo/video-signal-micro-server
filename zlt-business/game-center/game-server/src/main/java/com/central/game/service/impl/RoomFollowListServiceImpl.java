@@ -1,6 +1,7 @@
 package com.central.game.service.impl;
 
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.common.utils.DateUtil;
 import com.central.game.mapper.RoomFollowListMapper;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.RoomFollowList;
@@ -12,8 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -37,14 +40,21 @@ public class RoomFollowListServiceImpl extends SuperServiceImpl<RoomFollowListMa
     @Override
     public List<GameRoomListVo> getRoomFollowList(Long userId) {
         List<GameRoomListVo> roomListVos = new ArrayList<>();
-        List<GameRoomList> list = roomFollowListMapper.getRoomFollowList(userId);
-        for (GameRoomList roomList : list) {
-            GameRoomListVo vo = new GameRoomListVo();
-            BeanUtils.copyProperties(roomList, vo);
+        List<GameRoomListVo> list = roomFollowListMapper.getRoomFollowList(userId);
+        for (GameRoomListVo vo : list) {
+            //判断游戏状态
+            if (!ObjectUtils.isEmpty(vo.getGameStatus()) && vo.getGameStatus() == 2) {
+                boolean maintain = DateUtil.isEffectiveDate(new Date(), vo.getGameMaintainStart(), vo.getGameMaintainEnd());
+                //当前时间不在维护时间区间内属于正常状态
+                if (!maintain) {
+                    vo.setGameStatus(1);
+                    vo.setMaintainStart(null);
+                    vo.setMaintainEnd(null);
+                }
+            }
             vo.setFollowStatus(1);
-            vo.setRoomId(roomList.getId());
-            vo.setTableNum(roomList.getGameRoomName());
-            vo.setGameRoomName(roomList.getGameRoomName());
+            vo.setRoomId(vo.getId());
+            vo.setTableNum(vo.getGameRoomName());
             gameRoomListService.setTabelInfo(vo);
             roomListVos.add(vo);
         }

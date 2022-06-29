@@ -3,6 +3,7 @@ package com.central.game.mapper;
 import com.central.db.mapper.SuperMapper;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.RoomFollowList;
+import com.central.game.model.vo.GameRoomListVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,5 +18,5 @@ import java.util.List;
 @Mapper
 public interface RoomFollowListMapper extends SuperMapper<RoomFollowList> {
 
-    List<GameRoomList> getRoomFollowList(@Param("userId") Long userId);
+    List<GameRoomListVo> getRoomFollowList(@Param("userId") Long userId);
 }
