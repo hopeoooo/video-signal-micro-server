@@ -5,6 +5,7 @@ import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.utils.BigDecimalUtils;
+import com.central.game.model.GameList;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.model.GameRoomList;
@@ -155,5 +156,14 @@ public class PushGameDataToClientServiceImpl implements IPushGameDataToClientSer
         PushResult<GameOnlineNumVo> pushResult1 = PushResult.succeed(onlineNumVo, SocketTypeConstant.GAME_ONLINE_NUM, "游戏在线人数推送成功");
         Result<String> onlineNumPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult1));
         log.info("大厅游戏在线人数推送结果,result={}", onlineNumPush);
+    }
+
+    @Override
+    @Async
+    public void syncPushGameStatus(GameList gameList) {
+        //推送大厅
+        PushResult<GameList> pushResult = PushResult.succeed(gameList, SocketTypeConstant.UPDATE_GAME_STATUS, "后台修改游戏状态信息推送成功");
+        Result<String> hallPush = pushService.sendAllMessage(com.alibaba.fastjson.JSONObject.toJSONString(pushResult));
+        log.info("大厅游戏配置信息推送结果,result={}", hallPush);
     }
 }

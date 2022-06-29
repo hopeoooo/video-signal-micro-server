@@ -24,5 +24,7 @@ public interface IGameListService extends ISuperService<GameList> {
     GameList findById(Long gameId);
 
     List<GameList> findAll();
+
+    void syncPushGameStatus(GameList gameList);
 }
 

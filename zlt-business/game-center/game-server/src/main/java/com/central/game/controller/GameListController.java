@@ -51,6 +51,8 @@ public class GameListController {
             return  Result.failed("返水比例设置错误");
         }
         gameListService.saveOrUpdate(gameList);
+        //通知客户端修改桌台状态
+        gameListService.syncPushGameStatus(gameList);
         return Result.succeed();
     }
 
