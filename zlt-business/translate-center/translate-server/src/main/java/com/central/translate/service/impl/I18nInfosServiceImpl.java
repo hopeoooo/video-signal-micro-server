@@ -51,6 +51,22 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
+    public Boolean deleteById(Long id,I18nInfo i18nInfo) {
+        int i = mapper.deleteById(id);
+        boolean b = i > 0;
+        if (b){
+            //删除redis
+            this.deleteI18nRedis(i18nInfo);
+        }
+        return b;
+    }
+
+    @Override
+    public I18nInfo selectById(Long id) {
+        return mapper.selectById(id);
+    }
+
+    @Override
     public List<I18nInfo> findListByZhCn(Integer fromOf, String zhCn) {
         return mapper.findListByZhCn(fromOf,zhCn);
     }
@@ -357,6 +373,70 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         }
     }
 
+    private void deleteI18nRedis(I18nInfo info) {
+        boolean zhcnChange = StrUtil.isNotBlank(info.getZhCn());
+        boolean enusChange = StrUtil.isNotBlank(info.getEnUs());
+        boolean khmChange = StrUtil.isNotBlank(info.getKhm());
+        boolean thChange = StrUtil.isNotBlank(info.getTh());
+        Integer from = info.getFromOf();
+        String oldKey = info.getZhCn();
+        // 更新redis
+        String i18nKey = info.getZhCn();
+        String redisKey = "";
+        if (zhcnChange) {
+            // 更新中文key
+            i18nKey = info.getZhCn();
+            if (I18nKeys.FRONT_PC.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontPc.ZH_CN_KEY;
+            } else if (I18nKeys.FRONT_APP.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontApp.ZH_CN_KEY;
+            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontMessage.ZH_CN_KEY;
+            } else {
+                redisKey = I18nKeys.Redis.Backend.ZH_CN_KEY;
+            }
+            I18nUtil.deleteByKey(redisKey,oldKey);
+        }
+        if (enusChange) {
+            // 更新英文国际化
+            if (I18nKeys.FRONT_PC.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontPc.EN_US_KEY;
+            } else if (I18nKeys.FRONT_APP.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontApp.EN_US_KEY;
+            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontMessage.EN_US_KEY;
+            } else {
+                redisKey = I18nKeys.Redis.Backend.EN_US_KEY;
+            }
+            I18nUtil.deleteByKey(redisKey,oldKey);
+        }
+        if (khmChange) {
+            // 更新高棉语国际化
+            if (I18nKeys.FRONT_PC.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontPc.KHM_KEY;
+            } else if (I18nKeys.FRONT_APP.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontApp.KHM_KEY;
+            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontMessage.KHM_KEY;
+            } else {
+                redisKey = I18nKeys.Redis.Backend.KHM_KEY;
+            }
+            I18nUtil.deleteByKey(redisKey,oldKey);
+        }
+        if (thChange) {
+            // 更新泰语国际化
+            if (I18nKeys.FRONT_PC.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontPc.TH_KEY;
+            } else if (I18nKeys.FRONT_APP.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontApp.TH_KEY;
+            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.FrontMessage.TH_KEY;
+            } else {
+                redisKey = I18nKeys.Redis.Backend.TH_KEY;
+            }
+            I18nUtil.deleteByKey(redisKey,oldKey);
+        }
+    }
     /**
      * 查询国际化字典分页
      *

@@ -3,10 +3,11 @@
 
 <mapper namespace="com.central.game.mapper.RoomFollowListMapper">
 
-    <select id="getRoomFollowList" resultType="com.central.game.model.GameRoomList">
-        SELECT b.*
+    <select id="getRoomFollowList" resultType="com.central.game.model.vo.GameRoomListVo">
+        SELECT b.*,c.game_status gameStatus,c.maintain_start gameMaintainStart,c.maintain_end gameMaintainEnd
         FROM room_follow_list a
-        LEFT JOIN game_room_list b
-        ON a.room_id=b.id where a.user_id=#{userId} and b.room_status !=0
+        LEFT JOIN game_room_list b ON a.room_id=b.id
+        LEFT JOIN game_list c ON b.game_id=c.id
+        where a.user_id=#{userId} and b.room_status !=0
     </select>
 </mapper>
