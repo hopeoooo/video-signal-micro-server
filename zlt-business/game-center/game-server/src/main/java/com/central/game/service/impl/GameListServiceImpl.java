@@ -64,15 +64,24 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
     @Override
     public List<GameList> findAll() {
         List<GameList> gameLists = baseMapper.findEnableAllGame();
-        //查询在线人数
+        //查询最低在线人数
+        Result<String> result = configService.findMinOnlineUserQuantity();
+        if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
+            log.error("查询最低在线人数失败,result={}", result.toString());
+        }
+        String datas = result.getDatas();
         for (GameList game : gameLists) {
-            //查询最低在线人数
-            Result<String> result = configService.findMinOnlineUserQuantity();
-            if (result.getResp_code() != CodeEnum.SUCCESS.getCode()) {
-                log.error("查询最低在线人数失败,result={}", result.toString());
+            //游戏维护状态判断，不在维护时间区间的算正常
+            if (!ObjectUtils.isEmpty(game.getGameStatus()) && game.getGameStatus() == 2) {
+                boolean maintain = DateUtil.isEffectiveDate(new Date(), game.getMaintainStart(), game.getMaintainEnd());
+                //当前时间不在维护时间区间内属于正常状态
+                if (!maintain) {
+                    game.setGameStatus(1);
+                    game.setMaintainStart(null);
+                    game.setMaintainEnd(null);
+                }
             }
             Integer onlineNum = gameRoomGroupUserService.getGameOnlineNum(game.getId());
-            String datas = result.getDatas();
             if (!ObjectUtils.isEmpty(datas)) {
                 onlineNum = onlineNum + Integer.parseInt(datas);
             }
