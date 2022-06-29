@@ -102,6 +102,16 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         gameRoomList.setMaintainStart(maintainStartTemp);
         gameRoomList.setMaintainEnd(maintainEndTemp);
         gameRoomListMapper.updateById(gameRoomList);
+        //判断桌台维护状态
+        if (!ObjectUtils.isEmpty(gameRoomList.getRoomStatus()) && gameRoomList.getRoomStatus() == 2) {
+            boolean maintain = DateUtil.isEffectiveDate(new Date(), gameRoomList.getMaintainStart(), gameRoomList.getMaintainEnd());
+            //当前时间不在维护时间区间内属于正常状态
+            if (!maintain) {
+                gameRoomList.setRoomStatus(1);
+                gameRoomList.setMaintainStart(null);
+                gameRoomList.setMaintainEnd(null);
+            }
+        }
         //异步通知客户端
         pushGameDataToClientService.syncPushGameRoomStatus(gameRoomList);
         return true;

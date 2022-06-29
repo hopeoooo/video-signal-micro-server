@@ -59,6 +59,11 @@ public interface SocketTypeConstant {
     String UPDATE_TABLE_STATUS = "updateTableStatus";
 
     /**
+     * 后台修改游戏状态信息
+     */
+    String UPDATE_GAME_STATUS = "updateGameStatus";
+
+    /**
      * 桌台用户分组信息
      */
     String TABLE_GROUP_USER = "tableGroupUser";

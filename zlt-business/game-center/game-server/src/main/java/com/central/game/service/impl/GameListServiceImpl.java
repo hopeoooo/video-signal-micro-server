@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.utils.DateUtil;
 import com.central.config.feign.ConfigService;
 import com.central.game.mapper.GameListMapper;
 import com.central.game.model.GameList;
 import com.central.game.model.GameRoomList;
 import com.central.game.service.IGameListService;
 import com.central.game.service.IGameRoomGroupUserService;
+import com.central.game.service.IPushGameDataToClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,6 +21,7 @@ import com.central.common.model.SuperPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.service.impl.SuperServiceImpl;
 
+import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
@@ -38,6 +41,8 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
     private IGameRoomGroupUserService gameRoomGroupUserService;
     @Autowired
     private ConfigService configService;
+    @Autowired
+    private IPushGameDataToClientService pushGameDataToClientService;
     /**
      * 列表
      * @param superPage
@@ -74,5 +79,21 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
             game.setOnlineNum(onlineNum);
         }
         return gameLists;
+    }
+
+    @Override
+    public void syncPushGameStatus(GameList gameList) {
+        //判断桌台维护状态
+        if (!ObjectUtils.isEmpty(gameList.getGameStatus()) && gameList.getGameStatus() == 2) {
+            boolean maintain = DateUtil.isEffectiveDate(new Date(), gameList.getMaintainStart(), gameList.getMaintainEnd());
+            //当前时间不在维护时间区间内属于正常状态
+            if (!maintain) {
+                gameList.setGameStatus(1);
+                gameList.setMaintainStart(null);
+                gameList.setMaintainEnd(null);
+            }
+        }
+        //异步通知客户端
+        pushGameDataToClientService.syncPushGameStatus(gameList);
     }
 }
