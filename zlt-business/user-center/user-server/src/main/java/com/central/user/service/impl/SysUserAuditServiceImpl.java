@@ -187,13 +187,14 @@ public class SysUserAuditServiceImpl extends SuperServiceImpl<SysUserAuditMapper
             log.error("打码字段为空,audit={}", audit);
             return;
         }
+        money = money.negate();
         SysUserAuditDetail detail = new SysUserAuditDetail();
         detail.setUserId(sysUser.getId());
         detail.setUserName(sysUser.getUsername());
         detail.setBetId(audit.getOrderNo());
         detail.setAuditId(audit.getId());
         //剩余打码大于有效投注
-        if (audit.getResidueValidBet().compareTo(money) == 1) {
+        if (audit.getResidueValidBet().compareTo(money.negate()) == 1) {
             audit.setDoneValidBet(audit.getDoneValidBet().add(money));
             audit.setResidueValidBet(audit.getUndoneValidBet().subtract(audit.getDoneValidBet()));
             //小于等于请零点
@@ -312,7 +313,6 @@ public class SysUserAuditServiceImpl extends SuperServiceImpl<SysUserAuditMapper
         sysUserAudit.setUndoneValidBet(multiply);
         sysUserAudit.setDoneValidBet(BigDecimal.ZERO);
         sysUserAudit.setResidueValidBet(multiply);
-        sysUserAudit.setUserAmount(sysUserMoney.getMoney());
         sysUserAudit.setWithdrawAmount(BigDecimal.ZERO);
         sysUserAuditMapper.insert(sysUserAudit);
 
