@@ -60,20 +60,19 @@ public class GameRoomInfoOfflineConsumer {
         po.setGameName(GameListEnum.BACCARAT.getGameName());
         GameRoomInfoOffline detailOffline = gameRoomInfoOfflineService.lambdaQuery().eq(GameRoomInfoOffline::getMachineCode, po.getMachineCode()).eq(GameRoomInfoOffline::getTableNum, po.getTableNum())
                 .eq(GameRoomInfoOffline::getBootNum, po.getBootNum()).eq(GameRoomInfoOffline::getBureauNum, po.getBureauNum()).one();
+        if (po.getTimes() != null && po.getStatus() == GameRoomInfoOfflineStatusEnum.START_BETTING.getStatus()) {
+            Date date = new Date(po.getTimes());
+            po.setStartTime(date);
+        }else if (po.getTimes() != null && po.getStatus() == GameRoomInfoOfflineStatusEnum.SETTLEMENT_END.getStatus()) {
+            Date date = new Date(po.getTimes());
+            po.setEndTime(date);
+        }
         if (detailOffline == null) {
-            if (po.getTimes() != null && po.getStatus() == GameRoomInfoOfflineStatusEnum.START_BETTING.getStatus()) {
-                Date date = new Date(po.getTimes());
-                po.setStartTime(date);
-            }
             gameRoomInfoOfflineService.save(po);
         } else {
             po.setId(detailOffline.getId());
             po.setCreateTime(detailOffline.getCreateTime());
             po.setUpdateTime(detailOffline.getUpdateTime());
-            if (po.getTimes() != null && po.getStatus() == GameRoomInfoOfflineStatusEnum.SETTLEMENT_END.getStatus()) {
-                Date date = new Date(po.getTimes());
-                po.setEndTime(date);
-            }
             BeanUtils.copyProperties(po, detailOffline);
             gameRoomInfoOfflineService.updateById(detailOffline);
         }
