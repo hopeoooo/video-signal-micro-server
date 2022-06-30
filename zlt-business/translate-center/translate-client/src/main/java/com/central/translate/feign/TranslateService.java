@@ -26,7 +26,7 @@ import java.util.List;
 public interface TranslateService {
 
     @DeleteMapping("/translate/delete/{id}")
-    Result<String> delete(@PathVariable Long id);
+    Result<String> delete(@PathVariable("id") Long id);
     /**
      * 更新后台国际化字典
      *
