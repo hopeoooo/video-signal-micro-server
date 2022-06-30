@@ -12,6 +12,7 @@ import com.central.common.utils.DateUtil;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.game.constants.GameListEnum;
+import com.central.game.constants.GameRoomInfoOfflineStatusEnum;
 import com.central.game.constants.PlayEnum;
 import com.central.game.dto.*;
 import com.central.game.mapper.GameRecordMapper;
@@ -96,7 +97,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         }
         GameRoomList gameRoomList = (GameRoomList) checkTableResult.getDatas();
         GameRoomInfoOffline infoOffline = gameRoomInfoOfflineService.getNewestTableInfo(gameId, tableNum);
-        if (infoOffline == null || infoOffline.getStatus() != 1) {
+        if (infoOffline == null || infoOffline.getStatus() != GameRoomInfoOfflineStatusEnum.START_BETTING.getStatus()) {
             return Result.failed("已停止下注");
         }
         String bootNum = infoOffline.getBootNum();
@@ -625,7 +626,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     public List<GameRecord> getGameRecordByBureauNum(Long gameId, String tableNum) {
         GameRoomInfoOffline roomInfoOffline = gameRoomInfoOfflineService.getNewestTableInfo(gameId, tableNum);
-        if (roomInfoOffline == null || (roomInfoOffline.getStatus() != 1 && roomInfoOffline.getStatus() != 2)) {
+        if (roomInfoOffline == null || (roomInfoOffline.getStatus() != GameRoomInfoOfflineStatusEnum.START_BETTING.getStatus() && roomInfoOffline.getStatus() != GameRoomInfoOfflineStatusEnum.END_BETTING.getStatus())) {
             return new ArrayList<>();
         }
         LambdaQueryWrapper<GameRecord> lqw = Wrappers.lambdaQuery();

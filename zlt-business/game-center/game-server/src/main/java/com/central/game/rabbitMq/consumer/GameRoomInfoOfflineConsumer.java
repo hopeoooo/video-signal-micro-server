@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.game.constants.GameListEnum;
+import com.central.game.constants.GameRoomInfoOfflineStatusEnum;
 import com.central.game.model.GameRoomInfoOffline;
 import com.central.game.service.IGameRoomInfoOfflineService;
 import com.central.game.service.IPushGameDataToClientService;
@@ -60,7 +61,7 @@ public class GameRoomInfoOfflineConsumer {
         GameRoomInfoOffline detailOffline = gameRoomInfoOfflineService.lambdaQuery().eq(GameRoomInfoOffline::getMachineCode, po.getMachineCode()).eq(GameRoomInfoOffline::getTableNum, po.getTableNum())
                 .eq(GameRoomInfoOffline::getBootNum, po.getBootNum()).eq(GameRoomInfoOffline::getBureauNum, po.getBureauNum()).one();
         if (detailOffline == null) {
-            if (po.getTimes() != null && po.getStatus() == 1) {
+            if (po.getTimes() != null && po.getStatus() == GameRoomInfoOfflineStatusEnum.START_BETTING.getStatus()) {
                 Date date = new Date(po.getTimes());
                 po.setStartTime(date);
             }
@@ -69,7 +70,7 @@ public class GameRoomInfoOfflineConsumer {
             po.setId(detailOffline.getId());
             po.setCreateTime(detailOffline.getCreateTime());
             po.setUpdateTime(detailOffline.getUpdateTime());
-            if (po.getTimes() != null && po.getStatus() == 4) {
+            if (po.getTimes() != null && po.getStatus() == GameRoomInfoOfflineStatusEnum.SETTLEMENT_END.getStatus()) {
                 Date date = new Date(po.getTimes());
                 po.setEndTime(date);
             }
