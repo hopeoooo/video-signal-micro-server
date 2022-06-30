@@ -187,7 +187,9 @@ public class SysUserAuditServiceImpl extends SuperServiceImpl<SysUserAuditMapper
             log.error("打码字段为空,audit={}", audit);
             return;
         }
-        money = money.negate();
+        if(money.compareTo(BigDecimal.ZERO) < 1){
+            money = money.negate();
+        }
         SysUserAuditDetail detail = new SysUserAuditDetail();
         detail.setUserId(sysUser.getId());
         detail.setUserName(sysUser.getUsername());
