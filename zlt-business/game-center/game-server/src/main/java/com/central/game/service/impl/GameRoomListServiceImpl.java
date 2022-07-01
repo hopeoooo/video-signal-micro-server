@@ -55,10 +55,10 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     @Lazy
     private IGameLotteryResultService gameLotteryResultService;
 
-    @Override
-    public void updateRoomStatus(Map<String, Object> params) {
-        this.baseMapper.updateRoomStatus(params);
-    }
+//    @Override
+//    public void updateRoomStatus(Map<String, Object> params) {
+//        this.baseMapper.updateRoomStatus(params);
+//    }
 
     @Override
     @CacheEvict(key = "#id")

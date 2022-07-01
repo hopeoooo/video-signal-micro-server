@@ -73,17 +73,17 @@ public class GameServiceFallbackFactory implements FallbackFactory<GameService> 
                 return Result.failed("查询失败");
             }
 
-            @Override
-            public Result updateGameStatus(Map<String, Object> params) {
-                log.error("修改游戏状态失败", throwable);
-                return Result.failed("修改游戏状态失败");
-            }
-
-            @Override
-            public Result updateRoomStatus(Map<String, Object> params) {
-                log.error("修改房间状态失败", throwable);
-                return Result.failed("修改房间状态失败");
-            }
+//            @Override
+//            public Result updateGameStatus(Map<String, Object> params) {
+//                log.error("修改游戏状态失败", throwable);
+//                return Result.failed("修改游戏状态失败");
+//            }
+//
+//            @Override
+//            public Result updateRoomStatus(Map<String, Object> params) {
+//                log.error("修改房间状态失败", throwable);
+//                return Result.failed("修改房间状态失败");
+//            }
 
             @Override
             public Result<List<GameRoomList>> findList(Long gameId) {

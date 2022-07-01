@@ -51,7 +51,7 @@ public class GameListController {
                 Map<String, Object> params = new HashMap<>();
                 params.put("time", DateUtil.getTimeString(new Date()));
                 params.put("gameStatus",2);
-                gameService.updateGameStatus(params);
+//                gameService.updateGameStatus(params);
                 gameList.setGameStatus(1);
             }
             return Result.succeed(gameList);

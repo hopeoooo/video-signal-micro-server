@@ -47,10 +47,10 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
     @Autowired
     private IPushGameDataToClientService pushGameDataToClientService;
 
-    @Override
-    public void updateGameStatus(Map<String, Object> params) {
-        baseMapper.updateGameStatus(params);
-    }
+//    @Override
+//    public void updateGameStatus(Map<String, Object> params) {
+//        baseMapper.updateGameStatus(params);
+//    }
 
     /**
      * 列表

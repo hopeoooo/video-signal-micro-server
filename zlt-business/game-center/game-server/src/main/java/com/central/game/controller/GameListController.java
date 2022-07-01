@@ -33,17 +33,16 @@ public class GameListController {
     @Autowired
     private IGameListService gameListService;
 
-    @ResponseBody
-    @ApiOperation(value = "修改状态")
-    @GetMapping("/updateGameStatus")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "time", value = "时间", required = false),
-        @ApiImplicitParam(name = "gameStatus", value = "状态", required = false),
-    })
-    public Result updateGameStatus(@RequestParam Map<String, Object> params) {
-        gameListService.updateGameStatus(params);
-        return Result.succeed();
-    }
+//    @ApiOperation(value = "修改状态")
+//    @GetMapping("/updateGameStatus")
+//    @ApiImplicitParams({
+//        @ApiImplicitParam(name = "time", value = "时间", required = false),
+//        @ApiImplicitParam(name = "gameStatus", value = "状态", required = false),
+//    })
+//    public Result updateGameStatus(@RequestParam Map<String, Object> params) {
+//        gameListService.updateGameStatus(params);
+//        return Result.succeed();
+//    }
 
     @ApiOperation(value = "分页查询列表")
     @GetMapping("/list")
