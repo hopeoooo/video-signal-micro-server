@@ -48,8 +48,8 @@ public class RoomFollowListServiceImpl extends SuperServiceImpl<RoomFollowListMa
                 //当前时间不在维护时间区间内属于正常状态
                 if (!maintain) {
                     vo.setGameStatus(1);
-                    vo.setMaintainStart(null);
-                    vo.setMaintainEnd(null);
+                    vo.setGameMaintainStart(null);
+                    vo.setGameMaintainEnd(null);
                 }
             }
             vo.setFollowStatus(1);
