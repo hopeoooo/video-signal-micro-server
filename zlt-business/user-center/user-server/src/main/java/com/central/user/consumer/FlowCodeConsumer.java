@@ -56,9 +56,15 @@ public class FlowCodeConsumer {
         }
         //查询未完成的稽核记录
         SysUserAudit sysUserAudit = sysUserAuditService.lambdaQuery().eq(SysUserAudit::getOrderStatus, 1)
-                .eq(SysUserAudit::getUserId, record.getUserId()).orderByDesc(SysUserAudit::getCreateTime).last("limit 1").one();
+                .eq(SysUserAudit::getUserId, record.getUserId()).orderByAsc(SysUserAudit::getCreateTime).last("limit 1").one();
         if (sysUserAudit == null) {
             log.info("userId={},userName={}没有未完成的稽核记录", record.getUserId(), record.getUserName());
+            return;
+        }
+        //判断是否已经处理过，防止重复计算
+        Integer count = sysUserAuditDetailService.lambdaQuery().eq(SysUserAuditDetail::getGameRecordId, record.getId()).count();
+        if (count > 0) {
+            log.info("该注单已打码，无需打码，record={}", record);
             return;
         }
         //查询未完成流水
@@ -73,12 +79,6 @@ public class FlowCodeConsumer {
         //有效投注额大于0才计算
         if (ObjectUtils.isEmpty(validbet) || validbet.compareTo(BigDecimal.ZERO) < 1) {
             log.info("打码有效投注额为空，或小于0不计算,record={}", record.toString());
-            return;
-        }
-        //判断是否已经处理过，防止重复计算
-        Integer count = sysUserAuditDetailService.lambdaQuery().eq(SysUserAuditDetail::getGameRecordId, record.getId()).count();
-        if (count > 0) {
-            log.info("该注单已打码，无需打码，record={}", record);
             return;
         }
         Result<BetMultipleDto> betMultipleResult = configService.findBetMultiple();
@@ -159,7 +159,7 @@ public class FlowCodeConsumer {
             }
             //继续查询未完成稽核记录
             SysUserAudit sysUserAudit = sysUserAuditService.lambdaQuery().eq(SysUserAudit::getOrderStatus, 1)
-                    .eq(SysUserAudit::getUserId, userId).orderByDesc(SysUserAudit::getCreateTime).last("limit 1").one();
+                    .eq(SysUserAudit::getUserId, userId).orderByAsc(SysUserAudit::getCreateTime).last("limit 1").one();
             subFlowCode(sysUserAudit, userId, userName, gameRecordId, betId, surplusResidueValidBet, betZrrorPint, money, detail.getAmountAfter());
         }
     }
