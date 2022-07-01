@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface IGameRoomListService  extends ISuperService<GameRoomList> {
 
-//    void updateRoomStatus(Map<String, Object> params);
+    void updateRoomStatus(Map<String, Object> params);
 
     Boolean deleteBy(Long id);
 

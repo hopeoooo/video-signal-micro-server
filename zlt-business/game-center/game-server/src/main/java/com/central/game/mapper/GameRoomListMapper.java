@@ -10,5 +10,5 @@ import java.util.Map;
 @Mapper
 public interface GameRoomListMapper extends SuperMapper<GameRoomList> {
 
-//    void updateRoomStatus(@Param("p") Map<String, Object> params);
+    void updateRoomStatus(@Param("p") Map<String, Object> params);
 }

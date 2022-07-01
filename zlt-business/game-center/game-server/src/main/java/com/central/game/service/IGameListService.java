@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface IGameListService extends ISuperService<GameList> {
 
-//    void updateGameStatus(Map<String, Object> params);
+    void updateGameStatus(Map<String, Object> params);
     /**
      * 列表
      * @param superPage

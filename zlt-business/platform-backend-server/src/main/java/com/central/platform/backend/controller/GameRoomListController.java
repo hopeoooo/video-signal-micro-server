@@ -36,7 +36,7 @@ public class GameRoomListController {
                 Map<String, Object> params = new HashMap<>();
                 params.put("time", DateUtil.getTimeString(new Date()));
                 params.put("roomStatus",2);
-//                gameService.updateRoomStatus(params);
+                gameService.updateRoomStatus(params);
                 gameRoomList.setRoomStatus(1);
             }
             return Result.succeed(gameRoomList);

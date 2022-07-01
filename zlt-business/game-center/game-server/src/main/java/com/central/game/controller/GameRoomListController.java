@@ -37,17 +37,17 @@ public class GameRoomListController {
     @Autowired
     private IGameRoomInfoOfflineService gameRoomInfoOfflineService;
 
-//    @ResponseBody
-//    @ApiOperation(value = "修改状态")
-//    @GetMapping("/updateRoomStatus")
-//    @ApiImplicitParams({
-//        @ApiImplicitParam(name = "time", value = "时间", required = false),
-//        @ApiImplicitParam(name = "roomStatus", value = "状态", required = false),
-//    })
-//    public Result updateRoomStatus(@RequestParam Map<String, Object> params) {
-//        iGameRoomListService.updateRoomStatus(params);
-//        return Result.succeed();
-//    }
+    @ResponseBody
+    @ApiOperation(value = "修改状态")
+    @GetMapping("/updateRoomStatus")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "time", value = "时间", required = false),
+        @ApiImplicitParam(name = "roomStatus", value = "状态", required = false),
+    })
+    public Result updateRoomStatus(@RequestParam Map<String, Object> params) {
+        iGameRoomListService.updateRoomStatus(params);
+        return Result.succeed();
+    }
 
     /**
      * 分页查询房间数据

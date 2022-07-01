@@ -3,17 +3,17 @@
 
 <mapper namespace="com.central.game.mapper.GameRoomListMapper">
 
-<!--    <update id="updateRoomStatus">-->
-<!--        update game_room_list g-->
-<!--        set g.room_status = 1-->
-<!--        <where>-->
-<!--            <if test="p.time != null and p.time != ''">-->
-<!--                and g.maintain_end <![CDATA[<=]]> #{p.time}-->
-<!--            </if>-->
-<!--            <if test="p.roomStatus != null">-->
-<!--                and g.room_status = #{p.roomStatus};-->
-<!--            </if>-->
-<!--        </where>-->
-<!--    </update>-->
+    <update id="updateRoomStatus">
+        update game_room_list g
+        set g.room_status = 1
+        <where>
+            <if test="p.time != null and p.time != ''">
+                and g.maintain_end <![CDATA[<=]]> #{p.time}
+            </if>
+            <if test="p.roomStatus != null">
+                and g.room_status = #{p.roomStatus};
+            </if>
+        </where>
+    </update>
 
 </mapper>

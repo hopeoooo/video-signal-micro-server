@@ -19,7 +19,7 @@ import java.util.Map;
 @Mapper
 public interface GameListMapper extends SuperMapper<GameList> {
 
-//    void updateGameStatus(@Param("p") Map<String, Object> params);
+    void updateGameStatus(@Param("p") Map<String, Object> params);
     /**
      * 分页查询用户列表
      * @param page

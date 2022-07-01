@@ -70,17 +70,17 @@ public interface GameService {
     Result<List<GameList>> findEnableGameListByGameId(@RequestParam("gameId") Long gameId,
         @RequestParam("state") Integer state);
 
-//    /**
-//     * 修改游戏状态
-//     */
-//    @PostMapping("/gamelist/updateGameStatus")
-//    Result updateGameStatus(@RequestParam Map<String, Object> params);
-//
-//    /**
-//     * 修改房间状态
-//     */
-//    @PostMapping("/gameRoomList/updateRoomStatus")
-//    Result updateRoomStatus(@RequestParam Map<String, Object> params);
+    /**
+     * 修改游戏状态
+     */
+    @GetMapping("/gamelist/updateGameStatus")
+    Result updateGameStatus(@RequestParam Map<String, Object> params);
+
+    /**
+     * 修改房间状态
+     */
+    @GetMapping("/gameRoomList/updateRoomStatus")
+    Result updateRoomStatus(@RequestParam Map<String, Object> params);
 
     /**
      * 房间列表
