@@ -3,6 +3,7 @@ package com.central.game.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.central.common.constant.CommonConstant;
 import com.central.common.model.*;
 import com.central.common.redis.constant.RedisKeyConstant;
 import com.central.common.redis.lock.RedissLockUtil;
@@ -268,11 +269,19 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         if (gameList == null) {
             return Result.failed("当前游戏不存在");
         }
-        if (gameList.getGameStatus() == 0) {
+        if (gameList.getGameStatus() == CommonConstant.DISABLE) {
             return Result.failed("当前游戏已被禁用");
         }
-        if (gameList.getGameStatus() == 2) {
-            return Result.failed("当前游戏正在维护");
+        //游戏维护状态判断，不在维护时间区间的算正常
+        if (gameList.getGameStatus() == CommonConstant.MAINTAIN) {
+            boolean maintain = DateUtil.isEffectiveDate(new Date(), gameList.getMaintainStart(), gameList.getMaintainEnd());
+            //当前时间不在维护时间区间内属于正常状态
+            if (maintain){
+                return Result.failed("当前游戏正在维护");
+            }
+            gameList.setGameStatus(CommonConstant.NORMAL);
+            gameList.setMaintainStart(null);
+            gameList.setMaintainEnd(null);
         }
         return Result.succeed(gameList);
     }
@@ -282,11 +291,19 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         if (gameRoomList == null) {
             return Result.failed("当前桌台不存在");
         }
-        if (gameRoomList.getRoomStatus() == 0) {
+        if (gameRoomList.getRoomStatus() == CommonConstant.DISABLE) {
             return Result.failed("当前桌台已被禁用");
         }
-        if (gameRoomList.getRoomStatus() == 2) {
-            return Result.failed("当前桌台正在维护");
+        //桌台维护状态判断，不在维护时间区间的算正常
+        if (gameRoomList.getRoomStatus() == CommonConstant.MAINTAIN) {
+            boolean maintain = DateUtil.isEffectiveDate(new Date(), gameRoomList.getMaintainStart(), gameRoomList.getMaintainEnd());
+            //当前时间不在维护时间区间内属于正常状态
+            if (maintain){
+                return Result.failed("当前桌台正在维护");
+            }
+            gameRoomList.setRoomStatus(CommonConstant.NORMAL);
+            gameRoomList.setMaintainStart(null);
+            gameRoomList.setMaintainEnd(null);
         }
         return Result.succeed(gameRoomList);
     }
