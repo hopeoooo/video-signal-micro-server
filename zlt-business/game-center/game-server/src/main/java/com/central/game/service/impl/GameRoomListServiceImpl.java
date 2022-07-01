@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -53,6 +54,11 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     @Autowired
     @Lazy
     private IGameLotteryResultService gameLotteryResultService;
+
+    @Override
+    public void updateRoomStatus(Map<String, Object> params) {
+        this.baseMapper.updateRoomStatus(params);
+    }
 
     @Override
     @CacheEvict(key = "#id")

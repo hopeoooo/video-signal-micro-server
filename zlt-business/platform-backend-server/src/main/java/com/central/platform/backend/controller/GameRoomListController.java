@@ -4,6 +4,7 @@ import com.central.common.model.Result;
 import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameRoomList;
+import com.central.platform.backend.util.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -24,6 +25,24 @@ public class GameRoomListController {
 
     @Autowired
     private GameService gameService;
+
+    @ApiOperation(value = "根据ID查询")
+    @GetMapping("/gameRoomList/findById/{id}")
+    public Result findById(@PathVariable Long id) {
+        Result<GameRoomList> byId = gameService.findRoomDetailById(id);
+        if (byId.getResp_code() == 0 && Objects.nonNull(byId.getDatas())){
+            GameRoomList gameRoomList = byId.getDatas();
+            if (gameRoomList.getRoomStatus() == 2 && Objects.nonNull(gameRoomList.getMaintainEnd()) && new Date().compareTo(gameRoomList.getMaintainEnd()) > 0){
+                Map<String, Object> params = new HashMap<>();
+                params.put("time", DateUtil.getTimeString(new Date()));
+                params.put("roomStatus",2);
+                gameService.updateRoomStatus(params);
+                gameRoomList.setRoomStatus(1);
+            }
+            return Result.succeed(gameRoomList);
+        }
+        return byId;
+    }
 
     /**
      * 分页查询房间数据

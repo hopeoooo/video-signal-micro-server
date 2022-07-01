@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.central.common.model.PageResult;
 import com.central.game.model.GameList;
 import com.central.game.service.IGameListService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
@@ -15,6 +17,7 @@ import com.central.common.model.SuperPage;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -29,6 +32,18 @@ import java.util.List;
 public class GameListController {
     @Autowired
     private IGameListService gameListService;
+
+    @ResponseBody
+    @ApiOperation(value = "修改状态")
+    @GetMapping("/updateGameStatus")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "time", value = "时间", required = false),
+        @ApiImplicitParam(name = "gameStatus", value = "状态", required = false),
+    })
+    public Result updateGameStatus(@RequestParam Map<String, Object> params) {
+        gameListService.updateGameStatus(params);
+        return Result.succeed();
+    }
 
     @ApiOperation(value = "分页查询列表")
     @GetMapping("/list")

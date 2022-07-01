@@ -4,6 +4,7 @@ import com.central.common.model.Result;
 import com.central.game.model.co.GameListCo;
 import com.central.game.feign.GameService;
 import com.central.game.model.GameList;
+import com.central.platform.backend.util.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.*;
 
 /**
  * 
@@ -40,10 +41,28 @@ public class GameListController {
         return gameService.deleteById(id);
     }
 
+    @ApiOperation(value = "根据ID查询")
+    @GetMapping("/findById/{id}")
+    public Result findById(@PathVariable Long id) {
+        Result<GameList> byId = gameService.findById(id);
+        if (byId.getResp_code() == 0 && Objects.nonNull(byId.getDatas())){
+            GameList gameList = byId.getDatas();
+            if (gameList.getGameStatus() == 2 && Objects.nonNull(gameList.getMaintainEnd()) && new Date().compareTo(gameList.getMaintainEnd()) > 0){
+                Map<String, Object> params = new HashMap<>();
+                params.put("time", DateUtil.getTimeString(new Date()));
+                params.put("gameStatus",2);
+                gameService.updateGameStatus(params);
+                gameList.setGameStatus(1);
+            }
+            return Result.succeed(gameList);
+        }
+        return byId;
+    }
+
     @ApiOperation(value = "查询全部游戏")
     @GetMapping("/gamelist/findGameList")
     public Result<List<GameList>> findGameList( @RequestParam(value = "state", required = false) Integer state) {
-        return  gameService.findGameList(state);
+        return gameService.findGameList(state);
     }
 
 

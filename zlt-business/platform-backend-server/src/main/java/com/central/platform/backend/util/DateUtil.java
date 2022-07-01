@@ -14,6 +14,13 @@ public class DateUtil {
 
     public final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+    public final static SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public static String getTimeString(Date date){
+        String format = simpleDateFormat1.format(date);
+        return format;
+    }
+
     public static Map<String, Object> getToday(){
         Calendar nowTime = Calendar.getInstance();
         String today = simpleDateFormat.format(nowTime.getTime());
