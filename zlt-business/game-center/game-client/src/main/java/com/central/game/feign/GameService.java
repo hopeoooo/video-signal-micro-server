@@ -73,13 +73,13 @@ public interface GameService {
     /**
      * 修改游戏状态
      */
-    @PostMapping("/gamelist/updateGameStatus")
+    @GetMapping("/gamelist/updateGameStatus")
     Result updateGameStatus(@RequestParam Map<String, Object> params);
 
     /**
      * 修改房间状态
      */
-    @PostMapping("/gameRoomList/updateRoomStatus")
+    @GetMapping("/gameRoomList/updateRoomStatus")
     Result updateRoomStatus(@RequestParam Map<String, Object> params);
 
     /**
