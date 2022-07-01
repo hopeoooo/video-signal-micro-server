@@ -1,5 +1,6 @@
 package com.central.platform.backend.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.central.common.model.Result;
 import com.central.game.model.co.GameListCo;
 import com.central.game.feign.GameService;
@@ -45,12 +46,13 @@ public class GameListController {
     @GetMapping("/findById/{id}")
     public Result findById(@PathVariable Long id) {
         Result<GameList> byId = gameService.findById(id);
-        if (byId.getResp_code() == 0 && Objects.nonNull(byId.getDatas())){
+        if (byId.getResp_code() == 0 && Objects.nonNull(byId.getDatas())) {
             GameList gameList = byId.getDatas();
-            if (gameList.getGameStatus() == 2 && Objects.nonNull(gameList.getMaintainEnd()) && new Date().compareTo(gameList.getMaintainEnd()) > 0){
+            if (gameList.getGameStatus() == 2 && Objects.nonNull(gameList.getMaintainEnd())
+                && new Date().compareTo(gameList.getMaintainEnd()) > 0) {
                 Map<String, Object> params = new HashMap<>();
                 params.put("time", DateUtil.getTimeString(new Date()));
-                params.put("gameStatus",2);
+                params.put("gameStatus", 2);
                 gameService.updateGameStatus(params);
                 gameList.setGameStatus(1);
             }
@@ -61,9 +63,27 @@ public class GameListController {
 
     @ApiOperation(value = "查询全部游戏")
     @GetMapping("/gamelist/findGameList")
-    public Result<List<GameList>> findGameList( @RequestParam(value = "state", required = false) Integer state) {
-        return gameService.findGameList(state);
+    public Result<List<GameList>> findGameList(@RequestParam(value = "state", required = false) Integer state) {
+        Result<List<GameList>> result = gameService.findGameList(state);
+        if (result.getResp_code() == 0 && CollUtil.isNotEmpty(result.getDatas())) {
+            Boolean tag = false;
+            List<GameList> datas = result.getDatas();
+            for (GameList gameList:datas){
+                if (gameList.getGameStatus() == 2 && Objects.nonNull(gameList.getMaintainEnd())
+                    && new Date().compareTo(gameList.getMaintainEnd()) > 0) {
+                    tag = true;
+                    gameList.setGameStatus(1);
+                }
+            }
+            if (tag) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("time", DateUtil.getTimeString(new Date()));
+                params.put("gameStatus", 2);
+                gameService.updateGameStatus(params);
+            }
+            return Result.succeed(datas);
+        }
+        return result;
     }
-
 
 }

@@ -1,5 +1,6 @@
 package com.central.platform.backend.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.central.common.model.Result;
 import com.central.game.model.co.GameRoomListCo;
 import com.central.game.feign.GameService;
@@ -30,12 +31,13 @@ public class GameRoomListController {
     @GetMapping("/gameRoomList/findById/{id}")
     public Result findById(@PathVariable Long id) {
         Result<GameRoomList> byId = gameService.findRoomDetailById(id);
-        if (byId.getResp_code() == 0 && Objects.nonNull(byId.getDatas())){
+        if (byId.getResp_code() == 0 && Objects.nonNull(byId.getDatas())) {
             GameRoomList gameRoomList = byId.getDatas();
-            if (gameRoomList.getRoomStatus() == 2 && Objects.nonNull(gameRoomList.getMaintainEnd()) && new Date().compareTo(gameRoomList.getMaintainEnd()) > 0){
+            if (gameRoomList.getRoomStatus() == 2 && Objects.nonNull(gameRoomList.getMaintainEnd())
+                && new Date().compareTo(gameRoomList.getMaintainEnd()) > 0) {
                 Map<String, Object> params = new HashMap<>();
                 params.put("time", DateUtil.getTimeString(new Date()));
-                params.put("roomStatus",2);
+                params.put("roomStatus", 2);
                 gameService.updateRoomStatus(params);
                 gameRoomList.setRoomStatus(1);
             }
@@ -53,11 +55,28 @@ public class GameRoomListController {
     @ResponseBody
     @ApiOperation(value = "查询房间列表数据")
     @GetMapping("/gameRoomList/findList")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "gameId", value = "游戏Id", required = false, dataType = "Long")
-    })
-    public Result<List<GameRoomList>> findList(@RequestParam(value = "gameId", required = false)  Long gameId) {
-        return gameService.findList(gameId);
+    @ApiImplicitParams({@ApiImplicitParam(name = "gameId", value = "游戏Id", required = false, dataType = "Long")})
+    public Result<List<GameRoomList>> findList(@RequestParam(value = "gameId", required = false) Long gameId) {
+        Result<List<GameRoomList>> result = gameService.findList(gameId);
+        if (result.getResp_code() == 0 && CollUtil.isNotEmpty(result.getDatas())) {
+            Boolean tag = false;
+            List<GameRoomList> datas = result.getDatas();
+            for (GameRoomList gameRoomList : datas) {
+                if (gameRoomList.getRoomStatus() == 2 && Objects.nonNull(gameRoomList.getMaintainEnd())
+                    && new Date().compareTo(gameRoomList.getMaintainEnd()) > 0) {
+                    tag = true;
+                    gameRoomList.setRoomStatus(1);
+                }
+            }
+            if (tag) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("time", DateUtil.getTimeString(new Date()));
+                params.put("roomStatus", 2);
+                gameService.updateRoomStatus(params);
+            }
+            return Result.succeed(datas);
+        }
+        return result;
     }
 
     @ApiOperation(value = "新增/更新")
@@ -70,14 +89,13 @@ public class GameRoomListController {
     @ApiOperation(value = "根据ID修改房间状态")
     @PostMapping("/gameRoomList/roomStatus/{id}")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roomStatus", value = "游戏房间状态 0禁用，1：正常，2：维护", required = false, dataType = "Integer"),
-            @ApiImplicitParam(name = "maintainStart", value = "维护开始时间", required = false),
-            @ApiImplicitParam(name = "maintainEnd", value = "维护结束时间", required = false),
-    })
+        @ApiImplicitParam(name = "roomStatus", value = "游戏房间状态 0禁用，1：正常，2：维护", required = false, dataType = "Integer"),
+        @ApiImplicitParam(name = "maintainStart", value = "维护开始时间", required = false),
+        @ApiImplicitParam(name = "maintainEnd", value = "维护结束时间", required = false),})
     public Result updateRoomStatus(@PathVariable Long id, @RequestParam("roomStatus") Integer roomStatus,
-                                   @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") String maintainStart,
-                                   @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") String maintainEnd) {
-        return gameService.updateRoomStatus(id, roomStatus,maintainStart,maintainEnd);
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") String maintainStart,
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") String maintainEnd) {
+        return gameService.updateRoomStatus(id, roomStatus, maintainStart, maintainEnd);
     }
 
     @ApiOperation(value = "根据ID删除")
