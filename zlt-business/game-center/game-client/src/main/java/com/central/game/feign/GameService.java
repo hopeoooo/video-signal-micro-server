@@ -25,7 +25,8 @@ import java.util.Map;
 
 /**
  */
-@FeignClient(name = ServiceNameConstants.GAME_SERVICE, fallbackFactory = GameServiceFallbackFactory.class, decode404 = true)
+@FeignClient(name = ServiceNameConstants.GAME_SERVICE, fallbackFactory = GameServiceFallbackFactory.class,
+    decode404 = true)
 public interface GameService {
     /**
      * 新增、更新
@@ -35,6 +36,7 @@ public interface GameService {
 
     /**
      * 查询全部游戏
+     * 
      * @return
      */
     @GetMapping("/gamelist/findAll")
@@ -42,6 +44,7 @@ public interface GameService {
 
     /**
      * 根据ID查询
+     * 
      * @param id
      * @return
      */
@@ -50,6 +53,7 @@ public interface GameService {
 
     /**
      * 根据ID删除
+     * 
      * @param id
      * @return
      */
@@ -60,10 +64,23 @@ public interface GameService {
     Result<List<GameList>> findAllOpenRate();
 
     @GetMapping("/gamelist/findGameList")
-     Result<List<GameList>> findGameList(@RequestParam("state") Integer state) ;
+    Result<List<GameList>> findGameList(@RequestParam("state") Integer state);
 
     @GetMapping("/gamelist/findEnableGameListByGameId")
-     Result<List<GameList>> findEnableGameListByGameId(@RequestParam("gameId") Long gameId,@RequestParam("state") Integer state) ;
+    Result<List<GameList>> findEnableGameListByGameId(@RequestParam("gameId") Long gameId,
+        @RequestParam("state") Integer state);
+
+    /**
+     * 修改游戏状态
+     */
+    @PostMapping("/gamelist/updateGameStatus")
+    Result updateGameStatus(@RequestParam Map<String, Object> params);
+
+    /**
+     * 修改房间状态
+     */
+    @PostMapping("/gameRoomList/updateRoomStatus")
+    Result updateRoomStatus(@RequestParam Map<String, Object> params);
 
     /**
      * 房间列表
@@ -72,7 +89,7 @@ public interface GameService {
      * @return
      */
     @GetMapping("/gameRoomList/findList")
-    Result<List<GameRoomList>> findList(@RequestParam("gameId") Long gameId) ;
+    Result<List<GameRoomList>> findList(@RequestParam("gameId") Long gameId);
 
     /**
      * 新增或者修改房间
@@ -81,7 +98,7 @@ public interface GameService {
      * @return
      */
     @PostMapping("/gameRoomList/save")
-    Result save(@RequestBody GameRoomListCo gameRoomList) ;
+    Result save(@RequestBody GameRoomListCo gameRoomList);
 
     /**
      * 修改房间状态
@@ -91,11 +108,12 @@ public interface GameService {
      * @return
      */
     @PostMapping("/gameRoomList/roomStatus/{id}")
-    Result updateRoomStatus(@PathVariable("id") Long id, @RequestParam("roomStatus") Integer roomStatus
-            ,@RequestParam("maintainStart") String maintainStart,@RequestParam("maintainEnd")String maintainEnd) ;
+    Result updateRoomStatus(@PathVariable("id") Long id, @RequestParam("roomStatus") Integer roomStatus,
+        @RequestParam("maintainStart") String maintainStart, @RequestParam("maintainEnd") String maintainEnd);
 
     /**
      * 根据ID删除房间
+     * 
      * @param id
      * @return
      */
@@ -104,6 +122,7 @@ public interface GameService {
 
     /**
      * 根据房间ID查询房间详情
+     * 
      * @param id
      * @return
      */
@@ -112,55 +131,55 @@ public interface GameService {
 
     /**
      * 根据房间IDs查询房间详情
+     * 
      * @param ids
      * @return
      */
     @GetMapping("/gameRoomList/findRoomDetailByIds/{ids}")
     Result<List<GameRoomList>> findRoomDetailByIds(@PathVariable("ids") String ids);
 
-
     /**
      * 查询下注数据
+     * 
      * @param params
      * @return
      */
     @GetMapping("/gameRecord/findList")
-    Result<PageResult<GameRecordBackstageVo>> findList(@SpringQueryMap GameRecordBetCo params ) ;
+    Result<PageResult<GameRecordBackstageVo>> findList(@SpringQueryMap GameRecordBetCo params);
 
     @GetMapping("/gameRecord/getGameRecordByParent")
-    Result<List<GameRecord>> getGameRecordByParent(@SpringQueryMap GameRecordBetCo params ) ;
+    Result<List<GameRecord>> getGameRecordByParent(@SpringQueryMap GameRecordBetCo params);
 
     @GetMapping("/gameLotteryResult/getLotteryResultList")
-    Result<List<GameLotteryResult>> getLotteryResultList(@SpringQueryMap GameLotteryResultCo params ) ;
-
+    Result<List<GameLotteryResult>> getLotteryResultList(@SpringQueryMap GameLotteryResultCo params);
 
     @GetMapping("/gameLotteryResult/findList")
-    Result<PageResult<GameLotteryResult>> findList(@SpringQueryMap GameLotteryResultBackstageCo params ) ;
-
+    Result<PageResult<GameLotteryResult>> findList(@SpringQueryMap GameLotteryResultBackstageCo params);
 
     @GetMapping("/gameRecord/findGameRecordTotal")
-    Result<GameRecordDto> findGameRecordTotal(@SpringQueryMap GameRecordBetCo params) ;
+    Result<GameRecordDto> findGameRecordTotal(@SpringQueryMap GameRecordBetCo params);
 
     @GetMapping("/gameRecord/findBetAmountTotal")
-    Result<GameRecordReportDto> findBetAmountTotal(@RequestParam Map<String, Object> params) ;
+    Result<GameRecordReportDto> findBetAmountTotal(@RequestParam Map<String, Object> params);
 
     @GetMapping("/gameRecord/findValidbetTotal")
-    Result<GameRecordReportDto> findValidbetTotal(@RequestParam Map<String, Object> params) ;
+    Result<GameRecordReportDto> findValidbetTotal(@RequestParam Map<String, Object> params);
 
     @GetMapping("/gameRecord/findWinningAmountTotal")
-    Result<GameRecordReportDto> findWinningAmountTotal(@RequestParam Map<String, Object> params) ;
+    Result<GameRecordReportDto> findWinningAmountTotal(@RequestParam Map<String, Object> params);
 
     @GetMapping("/gameRecord/findHomePageDto")
-    Result<HomePageDto> findHomePageDto(@RequestParam(value = "parent", required = false) String parent) ;
+    Result<HomePageDto> findHomePageDto(@RequestParam(value = "parent", required = false) String parent);
 
     @GetMapping("/gameRecord/findHomeHistogramDto")
-    Result<HomeHistogramDto> findHomeHistogramDto(@RequestParam Map<String, Object> params) ;
+    Result<HomeHistogramDto> findHomeHistogramDto(@RequestParam Map<String, Object> params);
 
     @GetMapping("/gameRecord/findUserReportDto")
-    Result<List<UserReportDto>> findUserReportDto(@RequestParam Map<String, Object> params) ;
+    Result<List<UserReportDto>> findUserReportDto(@RequestParam Map<String, Object> params);
 
     @GetMapping("/gameRecord/findValidBetRankingList")
-    Result<List<RankingBackstageVo>> findValidBetRankingList(@RequestParam(value ="listId", required = false) List<Long> listId);
+    Result<List<RankingBackstageVo>>
+        findValidBetRankingList(@RequestParam(value = "listId", required = false) List<Long> listId);
 
     @GetMapping("/gameRecord/findWinLossRankingList")
     Result<List<RankingBackstageVo>> findWinLossRankingList();
@@ -169,7 +188,7 @@ public interface GameService {
     Result clearGuestFollowList(@PathVariable("userId") Long userId);
 
     @GetMapping("/gameRecord/findUserGameReportDto")
-    Result<List<UserGameReportDto>> findUserGameReportDto(@RequestParam(value = "userId")Long userId);
+    Result<List<UserGameReportDto>> findUserGameReportDto(@RequestParam(value = "userId") Long userId);
 
     @GetMapping("/gameRoomGroupUser/removeAllGroup/{userName}")
     Result removeTableNumGroup(@PathVariable("userName") String userName);
@@ -181,5 +200,6 @@ public interface GameService {
     Result clearGuestGameRecord(@PathVariable("userId") Long userId);
 
     @GetMapping("/gameRoomList/findByGameIdAndGameRoomName")
-    Result<GameRoomList> findByGameIdAndGameRoomName(@RequestParam("gameId") Long gameId,@RequestParam("gameRoomName") String gameRoomName);
+    Result<GameRoomList> findByGameIdAndGameRoomName(@RequestParam("gameId") Long gameId,
+        @RequestParam("gameRoomName") String gameRoomName);
 }

@@ -5,8 +5,11 @@ import com.central.game.model.GameRoomList;
 import com.central.game.model.vo.GameRoomListVo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IGameRoomListService  extends ISuperService<GameRoomList> {
+
+    void updateRoomStatus(Map<String, Object> params);
 
     Boolean deleteBy(Long id);
 

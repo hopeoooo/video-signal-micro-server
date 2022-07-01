@@ -6,6 +6,7 @@ import com.central.common.service.ISuperService;
 import com.central.game.model.GameList;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -14,6 +15,8 @@ import java.util.List;
  * @date 2022-01-04 14:14:35
  */
 public interface IGameListService extends ISuperService<GameList> {
+
+    void updateGameStatus(Map<String, Object> params);
     /**
      * 列表
      * @param superPage

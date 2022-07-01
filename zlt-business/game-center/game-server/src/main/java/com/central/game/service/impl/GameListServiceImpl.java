@@ -24,6 +24,8 @@ import com.central.common.service.impl.SuperServiceImpl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 
@@ -44,6 +46,12 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
     private ConfigService configService;
     @Autowired
     private IPushGameDataToClientService pushGameDataToClientService;
+
+    @Override
+    public void updateGameStatus(Map<String, Object> params) {
+        baseMapper.updateGameStatus(params);
+    }
+
     /**
      * 列表
      * @param superPage
