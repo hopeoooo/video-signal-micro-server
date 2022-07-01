@@ -2,6 +2,7 @@ package com.central.game.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.central.common.constant.CommonConstant;
 import com.central.common.redis.constant.RedisKeyConstant;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -103,11 +104,11 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         gameRoomList.setMaintainEnd(maintainEndTemp);
         gameRoomListMapper.updateById(gameRoomList);
         //判断桌台维护状态
-        if (!ObjectUtils.isEmpty(gameRoomList.getRoomStatus()) && gameRoomList.getRoomStatus() == 2) {
+        if (!ObjectUtils.isEmpty(gameRoomList.getRoomStatus()) && gameRoomList.getRoomStatus() == CommonConstant.MAINTAIN) {
             boolean maintain = DateUtil.isEffectiveDate(new Date(), gameRoomList.getMaintainStart(), gameRoomList.getMaintainEnd());
             //当前时间不在维护时间区间内属于正常状态
             if (!maintain) {
-                gameRoomList.setRoomStatus(1);
+                gameRoomList.setRoomStatus(CommonConstant.NORMAL);
                 gameRoomList.setMaintainStart(null);
                 gameRoomList.setMaintainEnd(null);
             }
@@ -181,11 +182,11 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
     @Override
     public void setRoomStatus(GameRoomListVo vo) {
         //判断桌台维护状态
-        if (!ObjectUtils.isEmpty(vo.getRoomStatus()) && vo.getRoomStatus() == 2) {
+        if (!ObjectUtils.isEmpty(vo.getRoomStatus()) && vo.getRoomStatus() == CommonConstant.MAINTAIN) {
             boolean maintain = DateUtil.isEffectiveDate(new Date(), vo.getMaintainStart(), vo.getMaintainEnd());
             //当前时间不在维护时间区间内属于正常状态
             if (!maintain) {
-                vo.setRoomStatus(1);
+                vo.setRoomStatus(CommonConstant.NORMAL);
                 vo.setMaintainStart(null);
                 vo.setMaintainEnd(null);
             }

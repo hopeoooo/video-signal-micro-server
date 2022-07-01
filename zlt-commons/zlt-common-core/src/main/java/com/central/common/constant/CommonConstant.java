@@ -160,4 +160,11 @@ public interface CommonConstant {
     Integer OPEN = 1;
 
     Integer CLOSE = 0;
+
+    //禁用
+    Integer DISABLE = 0;
+    //正常
+    Integer NORMAL = 1;
+    //维护
+    Integer MAINTAIN = 2;
 }
