@@ -43,7 +43,7 @@ public class GameLotteryResult extends SuperEntity {
     @ApiModelProperty(value = "开奖结果ID")
     private Long lotteryId;
 
-    @ApiModelProperty(value = "开奖结果编号,闲:1,庄:4,和:7,庄闲对:2,闲对:5,庄对:8,大:9,小:6")
+    @ApiModelProperty(value = "开奖结果编号,闲:1,庄:4,和:7,庄闲对:2,闲对:5,庄对:8,大:9,小:3")
     private String result;
 
     @ApiModelProperty(value = "开奖结果名称")

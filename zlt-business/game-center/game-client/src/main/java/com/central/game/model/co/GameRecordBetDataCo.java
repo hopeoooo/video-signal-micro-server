@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 @ApiModel("下注结果集")
 public class GameRecordBetDataCo {
 
-    @ApiModelProperty(value = "玩法代码:庄.4、闲.1、大.9、小.6、和.7、庄对.8、闲对.5", required = true)
+    @ApiModelProperty(value = "玩法代码:庄.4、闲.1、大.9、小.3、和.7、庄对.8、闲对.5", required = true)
     @NotBlank(message = "玩法代码不能为空")
     private String betCode;
 
