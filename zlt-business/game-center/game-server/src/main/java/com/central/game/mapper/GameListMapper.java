@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -17,6 +18,8 @@ import java.util.List;
  */
 @Mapper
 public interface GameListMapper extends SuperMapper<GameList> {
+
+    void updateGameStatus(@Param("p") Map<String, Object> params);
     /**
      * 分页查询用户列表
      * @param page

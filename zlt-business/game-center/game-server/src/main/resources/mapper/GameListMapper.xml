@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.central.game.mapper.GameListMapper">
+
+    <update id="updateGameStatus">
+        update game_list g
+        set g.game_status = 1
+        <where>
+            <if test="p.time != null and p.time != ''">
+                and g.maintain_end <![CDATA[<=]]> #{p.time}
+            </if>
+            <if test="p.gameStatus != null">
+                and g.game_status = #{p.gameStatus};
+            </if>
+        </where>
+    </update>
+
     <select id="findList" resultType="com.central.game.model.GameList">
         select * from game_list t
     </select>
