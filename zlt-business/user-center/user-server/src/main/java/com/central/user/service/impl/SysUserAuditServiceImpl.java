@@ -170,6 +170,7 @@ public class SysUserAuditServiceImpl extends SuperServiceImpl<SysUserAuditMapper
                 sysUserAudit.setWithdrawAmount(money);
             }
         }
+        sysUserAudit.setResidueValidBet(BigDecimal.ZERO);
         super.updateById(sysUserAudit);
 
         //记录打码量变化日志
