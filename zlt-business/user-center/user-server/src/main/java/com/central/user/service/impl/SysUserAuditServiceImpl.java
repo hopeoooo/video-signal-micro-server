@@ -134,6 +134,7 @@ public class SysUserAuditServiceImpl extends SuperServiceImpl<SysUserAuditMapper
      * @return
      */
     @Override
+    @Transactional
     public Result subtractAudit(AddUserAuditCo params) {
         SysUserAudit sysUserAudit = super.lambdaQuery().eq(SysUserAudit::getOrderStatus, 1)
                 .eq(SysUserAudit::getUserName, params.getUserName())
@@ -147,9 +148,10 @@ public class SysUserAuditServiceImpl extends SuperServiceImpl<SysUserAuditMapper
         SysUserMoney sysUserMoney = userMoneyService.findByUserId(sysUserAudit.getUserId());
         BigDecimal unfinishedCode = sysUserMoney.getUnfinishedCode();
         BigDecimal residueValidBet = sysUserAudit.getResidueValidBet();
-        BigDecimal balance = (unfinishedCode.subtract(residueValidBet)).compareTo(BigDecimal.ZERO) <= 0 ? BigDecimal.ZERO : unfinishedCode.subtract(residueValidBet);
+        BigDecimal userBalanceCode = unfinishedCode.subtract(residueValidBet);
+        BigDecimal balance = userBalanceCode.compareTo(BigDecimal.ZERO) <= 0 ? BigDecimal.ZERO : userBalanceCode;
         sysUserMoney.setUnfinishedCode(balance);
-        userMoneyService.updateById(sysUserMoney);
+        userMoneyService.updateCache(sysUserMoney);
 
         sysUserAudit.setOrderStatus(2);
         sysUserAudit.setResidueValidBet(BigDecimal.ZERO);
