@@ -59,6 +59,7 @@ public class SysUserAuditServiceImpl extends SuperServiceImpl<SysUserAuditMapper
             BeanUtils.copyProperties(sysUserAudit, userAuditVo);
             String orderTypeName = CapitalEnum.fingCapitalEnumType(sysUserAudit.getAuditType()).getName();
             userAuditVo.setOrderTypeName(orderTypeName);
+            userAuditVo.setOrderType(sysUserAudit.getOrderStatus());
             sysUserAuditVoList.add(userAuditVo);
         }
         long total = page.getTotal();
