@@ -42,7 +42,7 @@ public class TranslateController {
     private I18nInfosService i18nInfosService;
 
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @ApiOperation(value = "删除")
     public Result<String> delete(@PathVariable Long id) {
         I18nInfo i18nInfo = i18nInfosService.selectById(id);
