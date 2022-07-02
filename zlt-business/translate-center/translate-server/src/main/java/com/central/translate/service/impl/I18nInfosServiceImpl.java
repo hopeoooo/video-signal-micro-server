@@ -224,10 +224,14 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
      */
     @Override
     public boolean updateI18nInfo(Integer from, UpdateI18nInfoCo param) {
-        boolean zhcnChange = StrUtil.isNotBlank(param.getZhCn());
-        boolean enusChange = StrUtil.isNotBlank(param.getEnUs());
-        boolean khmChange = StrUtil.isNotBlank(param.getKhm());
-        boolean thChange = StrUtil.isNotBlank(param.getTh());
+//        boolean zhcnChange = StrUtil.isNotBlank(param.getZhCn());
+//        boolean enusChange = StrUtil.isNotBlank(param.getEnUs());
+//        boolean khmChange = StrUtil.isNotBlank(param.getKhm());
+//        boolean thChange = StrUtil.isNotBlank(param.getTh());
+        boolean zhcnChange = Objects.nonNull(param.getZhCn());
+        boolean enusChange = Objects.nonNull(param.getEnUs());
+        boolean khmChange = Objects.nonNull(param.getKhm());
+        boolean thChange = Objects.nonNull(param.getTh());
         I18nInfo info = getById(param.getId());
         if (null == info) {
             return false;
@@ -305,71 +309,82 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
         // 更新redis
         String i18nKey = info.getZhCn();
         String redisKey = "";
+        // 更新中文key
+        i18nKey = param.getZhCn();
+        if (I18nKeys.FRONT_PC.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontPc.ZH_CN_KEY;
+        } else if (I18nKeys.FRONT_APP.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontApp.ZH_CN_KEY;
+        } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontMessage.ZH_CN_KEY;
+        } else {
+            redisKey = I18nKeys.Redis.Backend.ZH_CN_KEY;
+        }
         if (zhcnChange) {
-            // 更新中文key
-            i18nKey = param.getZhCn();
-            if (I18nKeys.FRONT_PC.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontPc.ZH_CN_KEY;
-            } else if (I18nKeys.FRONT_APP.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontApp.ZH_CN_KEY;
-            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontMessage.ZH_CN_KEY;
-            } else {
-                redisKey = I18nKeys.Redis.Backend.ZH_CN_KEY;
-            }
             // 更新中文国际化
             I18nUtil.resetSource(redisKey, i18nKey, param.getZhCn());
-            if (StringUtils.isNotEmpty(oldKey)){
-                I18nUtil.deleteByKey(redisKey,oldKey);
-            }
+        }else {
+            I18nUtil.deleteByKey(redisKey,i18nKey);
+        }
+        if (StringUtils.isNotEmpty(oldKey)){
+            I18nUtil.deleteByKey(redisKey,oldKey);
+        }
+
+        // 更新英文国际化
+        if (I18nKeys.FRONT_PC.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontPc.EN_US_KEY;
+        } else if (I18nKeys.FRONT_APP.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontApp.EN_US_KEY;
+        } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontMessage.EN_US_KEY;
+        } else {
+            redisKey = I18nKeys.Redis.Backend.EN_US_KEY;
         }
         if (enusChange) {
-            // 更新英文国际化
-            if (I18nKeys.FRONT_PC.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontPc.EN_US_KEY;
-            } else if (I18nKeys.FRONT_APP.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontApp.EN_US_KEY;
-            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontMessage.EN_US_KEY;
-            } else {
-                redisKey = I18nKeys.Redis.Backend.EN_US_KEY;
-            }
             I18nUtil.resetSource(redisKey, i18nKey, param.getEnUs());
-            if (StringUtils.isNotEmpty(oldKey)){
-                I18nUtil.deleteByKey(redisKey,oldKey);
-            }
+        }else {
+            I18nUtil.deleteByKey(redisKey,i18nKey);
+        }
+        if (StringUtils.isNotEmpty(oldKey)){
+            I18nUtil.deleteByKey(redisKey,oldKey);
+        }
+
+        // 更新高棉语国际化
+        if (I18nKeys.FRONT_PC.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontPc.KHM_KEY;
+        } else if (I18nKeys.FRONT_APP.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontApp.KHM_KEY;
+        } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontMessage.KHM_KEY;
+        } else {
+            redisKey = I18nKeys.Redis.Backend.KHM_KEY;
         }
         if (khmChange) {
-            // 更新高棉语国际化
-            if (I18nKeys.FRONT_PC.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontPc.KHM_KEY;
-            } else if (I18nKeys.FRONT_APP.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontApp.KHM_KEY;
-            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontMessage.KHM_KEY;
-            } else {
-                redisKey = I18nKeys.Redis.Backend.KHM_KEY;
-            }
             I18nUtil.resetSource(redisKey, i18nKey, param.getKhm());
-            if (StringUtils.isNotEmpty(oldKey)){
-                I18nUtil.deleteByKey(redisKey,oldKey);
-            }
+        }else {
+            I18nUtil.deleteByKey(redisKey,i18nKey);
+        }
+        if (StringUtils.isNotEmpty(oldKey)){
+            I18nUtil.deleteByKey(redisKey,oldKey);
+        }
+
+        // 更新泰语国际化
+        if (I18nKeys.FRONT_PC.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontPc.TH_KEY;
+        } else if (I18nKeys.FRONT_APP.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontApp.TH_KEY;
+        } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
+            redisKey = I18nKeys.Redis.FrontMessage.TH_KEY;
+        } else {
+            redisKey = I18nKeys.Redis.Backend.TH_KEY;
         }
         if (thChange) {
-            // 更新泰语国际化
-            if (I18nKeys.FRONT_PC.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontPc.TH_KEY;
-            } else if (I18nKeys.FRONT_APP.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontApp.TH_KEY;
-            } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
-                redisKey = I18nKeys.Redis.FrontMessage.TH_KEY;
-            } else {
-                redisKey = I18nKeys.Redis.Backend.TH_KEY;
-            }
             I18nUtil.resetSource(redisKey, i18nKey, param.getTh());
-            if (StringUtils.isNotEmpty(oldKey)){
-                I18nUtil.deleteByKey(redisKey,oldKey);
-            }
+        }else {
+            I18nUtil.deleteByKey(redisKey,i18nKey);
+        }
+        if (StringUtils.isNotEmpty(oldKey)){
+            I18nUtil.deleteByKey(redisKey,oldKey);
         }
     }
 
