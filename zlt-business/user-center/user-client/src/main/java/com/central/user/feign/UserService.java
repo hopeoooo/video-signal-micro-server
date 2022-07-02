@@ -238,7 +238,7 @@ public interface UserService {
     @PostMapping(value = "/userAudit/addAudit")
     void addAudit(@RequestBody AddUserAuditCo addUserAuditCo);
 
-    @PostMapping(value = "/userAudit/addAudit")
+    @PostMapping(value = "/userAudit/subtractAudit")
     void subtractAudit(@RequestBody AddUserAuditCo addUserAuditCo);
 
 }
