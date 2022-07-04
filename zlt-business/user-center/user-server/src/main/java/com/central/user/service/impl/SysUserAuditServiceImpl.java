@@ -124,6 +124,8 @@ public class SysUserAuditServiceImpl extends SuperServiceImpl<SysUserAuditMapper
         userAuditDetail.setAmountBefore(unfinishedCode);
         userAuditDetail.setAmountAfter(sysUserMoney.getUnfinishedCode());
         iSysUserAuditDetailService.save(userAuditDetail);
+
+        userMoneyService.syncPushMoneyToWebApp(sysUserAudit.getUserId(), sysUserAudit.getUserName());
         return Result.succeed();
     }
 
@@ -181,8 +183,10 @@ public class SysUserAuditServiceImpl extends SuperServiceImpl<SysUserAuditMapper
         userAuditDetail.setBetId(sysUserAudit.getOrderNo());
         userAuditDetail.setAmount(residueValidBet);
         userAuditDetail.setAmountBefore(unfinishedCode);
-        userAuditDetail.setAmountAfter(BigDecimal.ZERO);
+        userAuditDetail.setAmountAfter(userBalanceCode);
         iSysUserAuditDetailService.save(userAuditDetail);
+
+        userMoneyService.syncPushMoneyToWebApp(sysUserAudit.getUserId(), sysUserAudit.getUserName());
         return Result.succeed();
     }
 
