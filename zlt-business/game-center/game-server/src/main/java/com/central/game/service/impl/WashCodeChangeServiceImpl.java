@@ -1,9 +1,11 @@
 package com.central.game.service.impl;
 
+import com.central.common.constant.I18nKeys;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.UserWashCodeConfig;
+import com.central.common.utils.ServletUtil;
 import com.central.game.mapper.WashCodeChangeMapper;
 import com.central.game.model.WashCodeChange;
 import com.central.common.service.impl.SuperServiceImpl;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +47,13 @@ public class WashCodeChangeServiceImpl extends SuperServiceImpl<WashCodeChangeMa
         for (UserWashCodeConfig washCodeConfig : washCodeConfigList) {
             WashCodeChangeVo vo = new WashCodeChangeVo();
             vo.setGameId(washCodeConfig.getGameId());
+            //多语言,其他语言统一取英文
+            HttpServletRequest request = ServletUtil.getHttpServletRequest();
+            String language = request.getHeader(I18nKeys.LANGUAGE);
             vo.setGameName(washCodeConfig.getGameName());
+            if(!I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language)){
+                vo.setGameName(washCodeConfig.getGameEnName());
+            }
             BigDecimal rate = washCodeConfig.getGameRate();
             BigDecimal gameRate = rate == null ? BigDecimal.ZERO.setScale(2) : rate.setScale(2, BigDecimal.ROUND_HALF_UP);
             vo.setRate(gameRate + "%");

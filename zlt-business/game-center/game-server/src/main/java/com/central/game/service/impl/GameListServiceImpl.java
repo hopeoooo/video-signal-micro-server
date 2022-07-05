@@ -3,10 +3,12 @@ package com.central.game.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.constant.CommonConstant;
+import com.central.common.constant.I18nKeys;
 import com.central.common.model.CodeEnum;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.utils.DateUtil;
+import com.central.common.utils.ServletUtil;
 import com.central.config.feign.ConfigService;
 import com.central.game.mapper.GameListMapper;
 import com.central.game.model.GameList;
@@ -28,6 +30,8 @@ import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 
@@ -80,6 +84,12 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
         }
         String datas = result.getDatas();
         for (GameList game : gameLists) {
+            //多语言,其他语言统一取英文
+            HttpServletRequest request = ServletUtil.getHttpServletRequest();
+            String language = request.getHeader(I18nKeys.LANGUAGE);
+            if(!I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language)){
+                game.setName(game.getEnName());
+            }
             //游戏维护状态判断，不在维护时间区间的算正常
             if (!ObjectUtils.isEmpty(game.getGameStatus()) && game.getGameStatus() == CommonConstant.MAINTAIN) {
                 boolean maintain = DateUtil.isEffectiveDate(new Date(), game.getMaintainStart(), game.getMaintainEnd());
