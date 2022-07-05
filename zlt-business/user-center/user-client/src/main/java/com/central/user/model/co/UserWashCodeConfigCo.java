@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 @ApiModel
 public class UserWashCodeConfigCo {
 
+    @ApiModelProperty(value = "表id")
+    private Long id;
     @ApiModelProperty(value = "用户ID")
     private Long userId;
     @ApiModelProperty(value = "游戏ID")
