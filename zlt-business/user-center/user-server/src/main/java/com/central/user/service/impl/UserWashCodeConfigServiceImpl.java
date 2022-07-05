@@ -63,6 +63,7 @@ public class UserWashCodeConfigServiceImpl extends SuperServiceImpl<UserWashCode
             userWashCodeConfig.setUserId(userId);
             userWashCodeConfig.setGameId(game.getId());
             userWashCodeConfig.setGameName(game.getName());
+            userWashCodeConfig.setGameEnName(game.getEnName());
             userWashCodeConfig.setGameRate(game.getGameRate());
             washCodeConfigList.add(userWashCodeConfig);
         }
@@ -95,6 +96,7 @@ public class UserWashCodeConfigServiceImpl extends SuperServiceImpl<UserWashCode
                 UserWashCodeConfig cfg = new UserWashCodeConfig();
                 cfg.setGameId(info.getId());
                 cfg.setGameName(info.getName());
+                cfg.setGameEnName(info.getEnName());
                 cfg.setGameRate(info.getGameRate());
                 userWashCodeConfigs.add(cfg);
             });
