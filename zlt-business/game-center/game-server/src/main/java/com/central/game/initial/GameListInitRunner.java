@@ -1,5 +1,6 @@
 package com.central.game.initial;
 
+import com.central.common.constant.CommonConstant;
 import com.central.game.constants.GameListEnum;
 import com.central.game.model.GameList;
 import com.central.game.service.IGameListService;
@@ -30,25 +31,24 @@ public class GameListInitRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("启动项目游戏列表");
-        BigDecimal gameRate = BigDecimal.ZERO;
-        saveGameList(GameListEnum.BACCARAT.getGameId(), GameListEnum.BACCARAT.getGameName(), gameRate);
-        saveGameList(GameListEnum.DRAGON_TIGER.getGameId(), GameListEnum.DRAGON_TIGER.getGameName(), gameRate);
-        saveGameList(GameListEnum.SE_DIE.getGameId(), GameListEnum.SE_DIE.getGameName(), gameRate);
-        saveGameList(GameListEnum.ROULETTE.getGameId(), GameListEnum.ROULETTE.getGameName(), gameRate);
+        for (GameListEnum game : GameListEnum.values()) {
+            saveGameList(game);
+        }
         log.info("游戏列表初始化完成");
     }
 
-    public void saveGameList(Long id, String gameName, BigDecimal gameRate) {
-        GameList gameList = gameListService.getById(id);
+    public void saveGameList(GameListEnum gameListEnum) {
+        GameList gameList = gameListService.getById(gameListEnum.getGameId());
         if (gameList != null) {
             return;
         }
         gameList = new GameList();
-        gameList.setId(id);
-        gameList.setName(gameName);
-        gameList.setGameRate(gameRate);
-        gameList.setGameStatus(1);
-        gameList.setRateStatus(1);
+        gameList.setId(gameListEnum.getGameId());
+        gameList.setName(gameListEnum.getGameName());
+        gameList.setEnName(gameListEnum.getGameEnName());
+        gameList.setGameRate(BigDecimal.ZERO);
+        gameList.setGameStatus(CommonConstant.OPEN);
+        gameList.setRateStatus(CommonConstant.OPEN);
         gameListService.save(gameList);
     }
 }
