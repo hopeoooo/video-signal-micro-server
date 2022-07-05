@@ -124,7 +124,7 @@ public class FlowCodeConsumer {
                 detail.setBetZrrorPint(betZrrorPint);
                 //更新稽核记录表
                 audit.setOrderStatus(2);
-                audit.setUserAmount(money);
+//                audit.setUserAmount(money);
                 //计算可提现金额
                 BigDecimal withdrawAmount = getWithdrawAmount(userId, money, audit.getId());
                 audit.setWithdrawAmount(withdrawAmount);
@@ -138,7 +138,7 @@ public class FlowCodeConsumer {
             BigDecimal residueValidBet = audit.getResidueValidBet();
             audit.setResidueValidBet(BigDecimal.ZERO);
             audit.setDoneValidBet(audit.getUndoneValidBet());
-            audit.setUserAmount(money);
+//            audit.setUserAmount(money);
             //计算可提现金额
             BigDecimal withdrawAmount = getWithdrawAmount(userId, money, audit.getId());
             audit.setWithdrawAmount(withdrawAmount);
