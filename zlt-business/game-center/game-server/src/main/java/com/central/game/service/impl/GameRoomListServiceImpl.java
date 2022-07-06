@@ -3,7 +3,9 @@ package com.central.game.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.constant.CommonConstant;
+import com.central.common.model.Result;
 import com.central.common.redis.constant.RedisKeyConstant;
+import com.central.common.redis.lock.RedissLockUtil;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
@@ -246,17 +248,31 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
         int length = redisRepository.length(redisDataKey).intValue();
         List<GameLotteryResult> lotteryResultList = new ArrayList<>();
         if (length == 0) {
-            //缓存过期时间为2小时，防止换靴后长时间没有新开靴，查不到数据
+            //缓存过期时间为2小时，防止换靴后长时间没有新开靴，查不到数据,重新把数据缓存一次
             lotteryResultList = gameLotteryResultService.lambdaQuery().eq(GameLotteryResult::getGameId, vo.getGameId()).eq(GameLotteryResult::getTableNum, vo.getTableNum())
                     .eq(GameLotteryResult::getBootNum, vo.getBootNum()).orderByAsc(GameLotteryResult::getCreateTime).list();
             if (CollectionUtils.isEmpty(lotteryResultList)) {
                 return;
             }
-            for (GameLotteryResult result : lotteryResultList) {
-                redisRepository.rightPush(redisDataKey, result);
+            //因为这个是list会一直追加数据，防止多个请求同时去缓存会导致重复数据
+            String bootLockKey = RedisKeyConstant.GAME_RECORD_LOTTERY_RESULT_LOCK + vo.getGameId() + "-" + vo.getTableNum() + "-" + vo.getBootNum();
+            boolean bootLock = RedissLockUtil.tryLock(bootLockKey, RedisKeyConstant.WAIT_TIME, RedisKeyConstant.LEASE_TIME);
+            if (!bootLock) {
+                log.error("缓存本靴开奖结果时获取锁失败，vo={}", vo);
+                return;
             }
-            //有效期2小时
-            redisRepository.setExpire(redisDataKey, 2 * 60 * 60);
+            try {
+                boolean exists = redisRepository.exists(redisDataKey);
+                if (!exists) {
+                    for (GameLotteryResult result : lotteryResultList) {
+                        redisRepository.rightPush(redisDataKey, result);
+                    }
+                    //有效期2小时
+                    redisRepository.setExpire(redisDataKey, 2 * 60 * 60);
+                }
+            } finally {
+                RedissLockUtil.unlock(bootLockKey);
+            }
         } else {
             List<Object> list = redisRepository.getList(redisDataKey, 0, length);
             lotteryResultList = (List<GameLotteryResult>) (List) list;
