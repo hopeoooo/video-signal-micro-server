@@ -58,8 +58,8 @@ public class GameRoomInfoOfflineConsumer {
         }
         po.setGameId(GameListEnum.BACCARAT.getGameId());
         po.setGameName(GameListEnum.BACCARAT.getGameName());
-        GameRoomInfoOffline detailOffline = gameRoomInfoOfflineService.lambdaQuery().eq(GameRoomInfoOffline::getMachineCode, po.getMachineCode()).eq(GameRoomInfoOffline::getTableNum, po.getTableNum())
-                .eq(GameRoomInfoOffline::getBootNum, po.getBootNum()).eq(GameRoomInfoOffline::getBureauNum, po.getBureauNum()).one();
+        GameRoomInfoOffline detailOffline = gameRoomInfoOfflineService.lambdaQuery().eq(GameRoomInfoOffline::getMachineCode, po.getMachineCode()).eq(GameRoomInfoOffline::getGameId,po.getGameId())
+                .eq(GameRoomInfoOffline::getTableNum, po.getTableNum()).eq(GameRoomInfoOffline::getBootNum, po.getBootNum()).eq(GameRoomInfoOffline::getBureauNum, po.getBureauNum()).one();
         if (po.getTimes() != null && po.getStatus() == GameRoomInfoOfflineStatusEnum.START_BETTING.getStatus()) {
             Date date = new Date(po.getTimes());
             po.setStartTime(date);
