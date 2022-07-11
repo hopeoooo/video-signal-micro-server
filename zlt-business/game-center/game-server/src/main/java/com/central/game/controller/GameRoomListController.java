@@ -76,6 +76,8 @@ public class GameRoomListController {
     @GetMapping("/findRoomDetailById/{id}")
     public Result<GameRoomList> findRoomDetailById(@PathVariable("id") String id) {
         GameRoomList room = iGameRoomListService.findById(id);
+        String i18nTableNum = iGameRoomListService.getI18nTableNum(room);
+        room.setI18nTableNum(i18nTableNum);
         return Result.succeed(room);
     }
 

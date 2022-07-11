@@ -58,6 +58,9 @@ public class GameRoomListVo{
     @ApiModelProperty(value = "游戏维护结束时间")
     private Date gameMaintainEnd;
 
+    @ApiModelProperty(value = "国际化桌台编号")
+    private String i18nTableNum;
+
     @ApiModelProperty(value = "桌台编号")
     private String tableNum;
 
