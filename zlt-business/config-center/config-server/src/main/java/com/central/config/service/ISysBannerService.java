@@ -2,6 +2,7 @@ package com.central.config.service;
 
 import com.central.common.service.ISuperService;
 import com.central.config.model.SysBanner;
+import com.central.config.model.co.BannerCo;
 import com.central.config.model.co.BannerUpdateStateCo;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface ISysBannerService extends ISuperService<SysBanner> {
      * 查询轮播图列表
      * @return
      */
-    List<SysBanner> findBannerList() ;
+    List<SysBanner> findBannerList(BannerCo params) ;
 
     /**
      * 删除公告
@@ -45,7 +46,7 @@ public interface ISysBannerService extends ISuperService<SysBanner> {
      */
     boolean saveOrUpdateUser(SysBanner sysBanner) throws Exception;
 
-    Integer queryTotal(Integer sort);
+    Integer queryTotal(Integer sort, Integer languageType);
 
     List<SysBanner> getBannerList();
 

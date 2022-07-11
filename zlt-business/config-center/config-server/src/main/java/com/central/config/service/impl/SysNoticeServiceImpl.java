@@ -39,11 +39,15 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
         LambdaQueryWrapper<SysNotice> wrapper=new LambdaQueryWrapper<>();
         Integer type = params.getType();
         Integer state = params.getState();
+        Integer languageType = params.getLanguageType();
         if (type!=null){
             wrapper.eq(SysNotice::getType, type);
         }
         if (state!=null) {
             wrapper.eq(SysNotice::getState, state);
+        }
+        if (languageType!=null) {
+            wrapper.eq(SysNotice::getLanguageType, languageType);
         }
         return  baseMapper.selectList(wrapper);
     }
