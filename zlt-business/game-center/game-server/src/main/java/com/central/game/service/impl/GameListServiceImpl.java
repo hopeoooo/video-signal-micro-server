@@ -88,7 +88,7 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
             HttpServletRequest request = ServletUtil.getHttpServletRequest();
             String language = request.getHeader(I18nKeys.LANGUAGE);
             if (I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language)) {
-                game.setName(game.getEnName());
+                game.setName(game.getName());
             } else if (I18nKeys.Locale.KHM.equalsIgnoreCase(language)) {
                 game.setName(game.getKhmName());
             } else if (I18nKeys.Locale.TH.equalsIgnoreCase(language)) {
