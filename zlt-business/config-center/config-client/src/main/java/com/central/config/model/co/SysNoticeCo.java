@@ -19,6 +19,8 @@ public class SysNoticeCo {
     private Integer type;
     @ApiModelProperty(value = "状态(0:停用,1:启用)")
     private Boolean state;
+    @ApiModelProperty(value = "语言，zh_cn：中文，en_us：英文,khm：柬埔寨语，th：泰语")
+    private String languageType;
     @ApiModelProperty(value = "id")
     private Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

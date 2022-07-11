@@ -29,4 +29,7 @@ public class SysNotice extends SuperEntity {
 	private Integer type;
 	@ApiModelProperty(value = "状态(0:停用,1:启用)")
 	private Boolean state;
+
+	@ApiModelProperty(value = "语言，zh_cn：中文，en_us：英文,khm：柬埔寨语，th：泰语")
+	private String languageType;
 }

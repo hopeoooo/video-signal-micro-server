@@ -34,6 +34,10 @@ public class GameList extends SuperEntity {
     private String name;
     @ApiModelProperty(value = "游戏英文名称")
     private String enName;
+    @ApiModelProperty(value = "游戏高棉语名称")
+    private String khmName;
+    @ApiModelProperty(value = "游戏泰语名称")
+    private String thName;
     @ApiModelProperty(value = "游戏状态 0：禁用，1：正常，2：维护")
     private Integer gameStatus;
     @ApiModelProperty(value = "返水比例(%)")

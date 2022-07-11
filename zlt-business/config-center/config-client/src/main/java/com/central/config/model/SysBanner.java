@@ -2,13 +2,11 @@ package com.central.config.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.central.common.model.SuperEntity;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.Date;
 
 /**
  * 轮播图实体
@@ -42,4 +40,6 @@ public class SysBanner extends SuperEntity {
 	@ApiModelProperty(value = "链接url")
 	private String linkUrl;
 
+	@ApiModelProperty(value = "语言，zh_cn：中文，en_us：英文,khm：柬埔寨语，th：泰语")
+	private String languageType;
 }

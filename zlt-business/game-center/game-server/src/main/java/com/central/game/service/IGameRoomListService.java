@@ -28,4 +28,6 @@ public interface IGameRoomListService  extends ISuperService<GameRoomList> {
     void setRoomStatus(GameRoomListVo vo);
 
     GameRoomListVo setTabelInfo(GameRoomListVo vo);
+
+    String getI18nTableNum(GameRoomList roomList);
 }

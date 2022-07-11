@@ -84,10 +84,16 @@ public class GameListServiceImpl extends SuperServiceImpl<GameListMapper, GameLi
         }
         String datas = result.getDatas();
         for (GameList game : gameLists) {
-            //多语言,其他语言统一取英文
+            //多语言转化
             HttpServletRequest request = ServletUtil.getHttpServletRequest();
             String language = request.getHeader(I18nKeys.LANGUAGE);
-            if(!I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language)){
+            if (I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language)) {
+                game.setName(game.getEnName());
+            } else if (I18nKeys.Locale.KHM.equalsIgnoreCase(language)) {
+                game.setName(game.getKhmName());
+            } else if (I18nKeys.Locale.TH.equalsIgnoreCase(language)) {
+                game.setName(game.getThName());
+            } else {
                 game.setName(game.getEnName());
             }
             //游戏维护状态判断，不在维护时间区间的算正常

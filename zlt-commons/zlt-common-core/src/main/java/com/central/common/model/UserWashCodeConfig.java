@@ -23,8 +23,6 @@ public class UserWashCodeConfig extends SuperEntity {
     private Long gameId;
     @ApiModelProperty(value = "游戏名称")
     private String gameName;
-    @ApiModelProperty(value = "游戏英文名称")
-    private String gameEnName;
     @ApiModelProperty(value = "返水比例")
     private BigDecimal gameRate = BigDecimal.ZERO;
 }

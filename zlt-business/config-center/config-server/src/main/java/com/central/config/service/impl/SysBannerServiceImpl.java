@@ -11,12 +11,14 @@ import com.central.config.mapper.SysBannerMapper;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
+import com.central.config.model.co.BannerCo;
 import com.central.config.model.co.BannerUpdateStateCo;
 import com.central.config.service.ISysBannerService;
 import com.central.push.constant.SocketTypeConstant;
 import com.central.push.feign.PushService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.scheduling.annotation.Async;
@@ -35,8 +37,12 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     private PushService pushService;
 
     @Override
-    public List<SysBanner> findBannerList() {
+    public List<SysBanner> findBannerList(BannerCo params) {
         LambdaQueryWrapper<SysBanner> wrapper = new LambdaQueryWrapper<>();
+        String languageType = params.getLanguageType();
+        if (StringUtils.isNotBlank(languageType)) {
+            wrapper.eq(SysBanner::getLanguageType, languageType);
+        }
         wrapper.orderByAsc(SysBanner::getSort);
         return baseMapper.selectList(wrapper);
     }
@@ -79,8 +85,15 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     }
 
     @Override
-    public Integer queryTotal(Integer sort) {
-        return baseMapper.queryTotal(sort);
+    public Integer queryTotal(Integer sort, String languageType) {
+        LambdaQueryWrapper<SysBanner> wrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotBlank(languageType)) {
+            wrapper.eq(SysBanner::getLanguageType, languageType);
+        }
+        if (sort!=null) {
+            wrapper.eq(SysBanner::getSort, sort);
+        }
+        return baseMapper.selectCount(wrapper);
     }
 
     @Override
@@ -95,7 +108,11 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     @Override
     @Async
     public void syncPushBannerToWebApp() {
-        List<SysBanner> bannerList = getBannerList();
+        LambdaQueryWrapper<SysBanner> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysBanner::getState, Boolean.TRUE);
+        lqw.orderByAsc(SysBanner::getSort);
+        lqw.orderByAsc(SysBanner::getLanguageType);
+        List<SysBanner> bannerList = baseMapper.selectList(lqw);
         PushResult<List<SysBanner>> pushResult = PushResult.succeed(bannerList, SocketTypeConstant.BANNER,"轮播图推送成功");
         Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
         log.info("轮播图推送结果:{}",push);

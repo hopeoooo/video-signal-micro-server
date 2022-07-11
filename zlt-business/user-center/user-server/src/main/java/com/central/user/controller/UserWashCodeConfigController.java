@@ -43,7 +43,6 @@ public class UserWashCodeConfigController {
                 UserWashCodeConfig cfg = new UserWashCodeConfig();
                 cfg.setGameId(info.getId());
                 cfg.setGameName(info.getName());
-                cfg.setGameEnName(info.getEnName());
                 cfg.setGameRate(info.getGameRate());
                 userWashCodeConfig.add(cfg);
             });

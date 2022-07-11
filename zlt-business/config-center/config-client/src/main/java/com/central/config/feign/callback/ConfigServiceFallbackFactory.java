@@ -85,8 +85,8 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                 return Result.failed("更新失败");
             }
             @Override
-            public Result<List<SysBanner>> findBannerList() {
-                log.error("findBannerList查询banner异常" ,cause);
+            public Result<List<SysBanner>> findBannerList(BannerCo params) {
+                log.error("findBannerList查询banner异常：{}，参数：{}" ,cause, params);
                 return Result.failed("查询失败");
             }
 
@@ -108,7 +108,8 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                                        MultipartFile fileWeb,
                                        Integer sort,
                                        String linkUrl,
-                                       Long id) {
+                                       Long id,
+                                       String languageType) {
                 log.error("saveOrUpdate更新banner异常", cause);
                 return Result.failed("更新失败");
             }

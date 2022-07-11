@@ -3,12 +3,14 @@ package com.central.game.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.constant.CommonConstant;
+import com.central.common.constant.I18nKeys;
 import com.central.common.model.Result;
 import com.central.common.redis.constant.RedisKeyConstant;
 import com.central.common.redis.lock.RedissLockUtil;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
+import com.central.common.utils.ServletUtil;
 import com.central.game.constants.PlayEnum;
 import com.central.game.mapper.GameRoomListMapper;
 import com.central.game.model.GameLotteryResult;
@@ -30,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -154,14 +157,41 @@ public class GameRoomListServiceImpl extends SuperServiceImpl<GameRoomListMapper
                     break;
                 }
             }
+            //桌台名称国际化处理
+            String i18nTableNum = getI18nTableNum(roomList);
+            vo.setI18nTableNum(i18nTableNum);
+            //核心数据加载
             setTabelInfo(vo);
             list.add(vo);
         }
         return list;
     }
 
+    /**
+     * 桌台名称国际化处理
+     * @param roomList
+     */
+    @Override
+    public String getI18nTableNum(GameRoomList roomList) {
+        if (roomList == null) {
+            return null;
+        }
+        //多语言转化
+        HttpServletRequest request = ServletUtil.getHttpServletRequest();
+        String language = request.getHeader(I18nKeys.LANGUAGE);
+        if (I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language)) {
+            return roomList.getGameRoomName();
+        } else if (I18nKeys.Locale.KHM.equalsIgnoreCase(language)) {
+            return roomList.getKhmName();
+        } else if (I18nKeys.Locale.TH.equalsIgnoreCase(language)) {
+            return roomList.getThName();
+        }
+        return roomList.getEnName();
+    }
+
     @Override
     public GameRoomListVo setTabelInfo(GameRoomListVo vo){
+        //桌台名称国际化处理
         //桌台状态
         setRoomStatus(vo);
         //桌台中心信息

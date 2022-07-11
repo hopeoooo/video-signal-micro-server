@@ -85,7 +85,7 @@ public interface ConfigService {
      * @return
      */
     @GetMapping("/banner/findBannerList")
-    Result<List<SysBanner>> findBannerList() ;
+    Result<List<SysBanner>> findBannerList(@SpringQueryMap BannerCo params) ;
 
     /**
      * 删除banner
@@ -115,7 +115,8 @@ public interface ConfigService {
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,
             @RequestParam(value = "sort",required = true) Integer sort,
             @RequestParam(value ="linkUrl",required = false) String linkUrl,
-            @RequestParam(value = "id",required = false) Long id
+            @RequestParam(value = "id",required = false) Long id,
+            @RequestParam(value = "languageType",required = false) String languageType
     ) throws Exception ;
 
 

@@ -24,8 +24,14 @@ public class GameRoomList extends SuperEntity {
     @ApiModelProperty(value = "游戏表id")
     private Long gameId;
 
-    @ApiModelProperty(value = "游戏桌号名称")
+    @ApiModelProperty(value = "游戏桌台名称")
     private String gameRoomName;
+    @ApiModelProperty(value = "桌台英文名称")
+    private String enName;
+    @ApiModelProperty(value = "桌台高棉语名称")
+    private String khmName;
+    @ApiModelProperty(value = "桌台泰语名称")
+    private String thName;
 
     @ApiModelProperty(value = "游戏桌号状态 0禁用，1：正常，2：维护")
     private Integer roomStatus;
@@ -66,6 +72,10 @@ public class GameRoomList extends SuperEntity {
     @ApiModelProperty(value = "维护结束时间")
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Date maintainEnd;
+
+    @ApiModelProperty(value = "国际化桌台编号")
+    @TableField(exist = false)
+    private String i18nTableNum;
 /*
     @ApiModelProperty(value = "牌局状态 0洗牌中 1开始下注 2停止下注 3结算中 4结算完成")
     @TableField(exist = false)
