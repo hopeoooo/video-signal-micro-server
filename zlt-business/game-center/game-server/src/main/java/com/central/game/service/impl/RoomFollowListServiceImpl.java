@@ -1,7 +1,9 @@
 package com.central.game.service.impl;
 
+import com.central.common.constant.I18nKeys;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
+import com.central.common.utils.ServletUtil;
 import com.central.game.mapper.RoomFollowListMapper;
 import com.central.game.model.GameRoomList;
 import com.central.game.model.RoomFollowList;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,9 +58,28 @@ public class RoomFollowListServiceImpl extends SuperServiceImpl<RoomFollowListMa
             vo.setFollowStatus(1);
             vo.setRoomId(vo.getId());
             vo.setTableNum(vo.getGameRoomName());
+            String i18nTableNum = getI18nTableNum(vo);
+            vo.setI18nTableNum(i18nTableNum);
             gameRoomListService.setTabelInfo(vo);
             roomListVos.add(vo);
         }
         return roomListVos;
+    }
+
+    public String getI18nTableNum(GameRoomListVo roomList) {
+        if (roomList == null) {
+            return null;
+        }
+        //多语言转化
+        HttpServletRequest request = ServletUtil.getHttpServletRequest();
+        String language = request.getHeader(I18nKeys.LANGUAGE);
+        if (I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language)) {
+            return roomList.getGameRoomName();
+        } else if (I18nKeys.Locale.KHM.equalsIgnoreCase(language)) {
+            return roomList.getKhmName();
+        } else if (I18nKeys.Locale.TH.equalsIgnoreCase(language)) {
+            return roomList.getThName();
+        }
+        return roomList.getEnName();
     }
 }
