@@ -40,9 +40,14 @@ public interface I18nKeys {
 
 
     /**
-     * 前台PC
+     * 前台MESSAGE
      */
     Integer FRONT_MESSAGE = 3;
+
+    /**
+     * 后台MESSAGE
+     */
+    Integer BACKEND_MESSAGE = 4;
     /**
      * 语种
      */
@@ -165,6 +170,27 @@ public interface I18nKeys {
             String TH_KEY = "i18n:source:th:hash:" + I18nKeys.BACKEND;
         }
 
+        // 后台Message
+        interface BackendMessage {
+            /**
+             * 中文国际化 key
+             */
+            String ZH_CN_KEY = "i18n:source:zh_cn:hash:" + I18nKeys.BACKEND_MESSAGE;
+            /**
+             * 英文国际化 key
+             */
+            String EN_US_KEY = "i18n:source:en_us:hash:" + I18nKeys.BACKEND_MESSAGE;
+
+            /**
+             * 高棉语国际化 key
+             */
+            String KHM_KEY = "i18n:source:khm:hash:" + I18nKeys.BACKEND_MESSAGE;
+
+            /**
+             * 泰语国际化 key
+             */
+            String TH_KEY = "i18n:source:th:hash:" + I18nKeys.BACKEND_MESSAGE;
+        }
     }
 
 }
