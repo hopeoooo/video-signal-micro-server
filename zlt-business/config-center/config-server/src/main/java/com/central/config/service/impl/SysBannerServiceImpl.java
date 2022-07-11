@@ -11,6 +11,7 @@ import com.central.config.mapper.SysBannerMapper;
 import com.central.config.model.DownloadStation;
 import com.central.config.model.SysBanner;
 import com.central.config.model.SysNotice;
+import com.central.config.model.co.BannerCo;
 import com.central.config.model.co.BannerUpdateStateCo;
 import com.central.config.service.ISysBannerService;
 import com.central.push.constant.SocketTypeConstant;
@@ -35,8 +36,12 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     private PushService pushService;
 
     @Override
-    public List<SysBanner> findBannerList() {
+    public List<SysBanner> findBannerList(BannerCo params) {
         LambdaQueryWrapper<SysBanner> wrapper = new LambdaQueryWrapper<>();
+        Integer languageType = params.getLanguageType();
+        if (languageType!=null) {
+            wrapper.eq(SysBanner::getLanguageType, languageType);
+        }
         wrapper.orderByAsc(SysBanner::getSort);
         return baseMapper.selectList(wrapper);
     }
@@ -79,8 +84,15 @@ public class SysBannerServiceImpl extends SuperServiceImpl<SysBannerMapper, SysB
     }
 
     @Override
-    public Integer queryTotal(Integer sort) {
-        return baseMapper.queryTotal(sort);
+    public Integer queryTotal(Integer sort, Integer languageType) {
+        LambdaQueryWrapper<SysBanner> wrapper = new LambdaQueryWrapper<>();
+        if (languageType!=null) {
+            wrapper.eq(SysBanner::getLanguageType, languageType);
+        }
+        if (sort!=null) {
+            wrapper.eq(SysBanner::getSort, sort);
+        }
+        return baseMapper.selectCount(wrapper);
     }
 
     @Override
