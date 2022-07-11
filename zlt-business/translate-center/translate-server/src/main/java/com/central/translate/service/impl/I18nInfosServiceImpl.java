@@ -317,7 +317,9 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             redisKey = I18nKeys.Redis.FrontApp.ZH_CN_KEY;
         } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
             redisKey = I18nKeys.Redis.FrontMessage.ZH_CN_KEY;
-        } else {
+        } else if (I18nKeys.BACKEND_MESSAGE.equals(from)) {
+            redisKey = I18nKeys.Redis.BackendMessage.ZH_CN_KEY;
+        }else {
             redisKey = I18nKeys.Redis.Backend.ZH_CN_KEY;
         }
         if (zhcnChange) {
@@ -337,7 +339,9 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             redisKey = I18nKeys.Redis.FrontApp.EN_US_KEY;
         } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
             redisKey = I18nKeys.Redis.FrontMessage.EN_US_KEY;
-        } else {
+        } else if (I18nKeys.BACKEND_MESSAGE.equals(from)) {
+            redisKey = I18nKeys.Redis.BackendMessage.EN_US_KEY;
+        }else {
             redisKey = I18nKeys.Redis.Backend.EN_US_KEY;
         }
         if (enusChange) {
@@ -356,6 +360,8 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             redisKey = I18nKeys.Redis.FrontApp.KHM_KEY;
         } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
             redisKey = I18nKeys.Redis.FrontMessage.KHM_KEY;
+        } else if (I18nKeys.BACKEND_MESSAGE.equals(from)) {
+            redisKey = I18nKeys.Redis.BackendMessage.KHM_KEY;
         } else {
             redisKey = I18nKeys.Redis.Backend.KHM_KEY;
         }
@@ -375,7 +381,9 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
             redisKey = I18nKeys.Redis.FrontApp.TH_KEY;
         } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
             redisKey = I18nKeys.Redis.FrontMessage.TH_KEY;
-        } else {
+        } else if (I18nKeys.BACKEND_MESSAGE.equals(from)) {
+            redisKey = I18nKeys.Redis.BackendMessage.TH_KEY;
+        }  else {
             redisKey = I18nKeys.Redis.Backend.TH_KEY;
         }
         if (thChange) {
@@ -407,6 +415,8 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                 redisKey = I18nKeys.Redis.FrontApp.ZH_CN_KEY;
             } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
                 redisKey = I18nKeys.Redis.FrontMessage.ZH_CN_KEY;
+            } else if (I18nKeys.BACKEND_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.BackendMessage.ZH_CN_KEY;
             } else {
                 redisKey = I18nKeys.Redis.Backend.ZH_CN_KEY;
             }
@@ -420,6 +430,8 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                 redisKey = I18nKeys.Redis.FrontApp.EN_US_KEY;
             } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
                 redisKey = I18nKeys.Redis.FrontMessage.EN_US_KEY;
+            } else if (I18nKeys.BACKEND_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.BackendMessage.EN_US_KEY;
             } else {
                 redisKey = I18nKeys.Redis.Backend.EN_US_KEY;
             }
@@ -433,6 +445,8 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                 redisKey = I18nKeys.Redis.FrontApp.KHM_KEY;
             } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
                 redisKey = I18nKeys.Redis.FrontMessage.KHM_KEY;
+            } else if (I18nKeys.BACKEND_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.BackendMessage.KHM_KEY;
             } else {
                 redisKey = I18nKeys.Redis.Backend.KHM_KEY;
             }
@@ -446,6 +460,8 @@ public class I18nInfosServiceImpl extends SuperServiceImpl<I18nInfoMapper, I18nI
                 redisKey = I18nKeys.Redis.FrontApp.TH_KEY;
             } else if (I18nKeys.FRONT_MESSAGE.equals(from)) {
                 redisKey = I18nKeys.Redis.FrontMessage.TH_KEY;
+            } else if (I18nKeys.BACKEND_MESSAGE.equals(from)) {
+                redisKey = I18nKeys.Redis.BackendMessage.TH_KEY;
             } else {
                 redisKey = I18nKeys.Redis.Backend.TH_KEY;
             }

@@ -107,7 +107,7 @@ public class I18nUtil implements ApplicationContextAware {
     // 找到对应语言的redis key
     private static String keyOf(String language, String requestSource) {
         if (StrUtil.isBlank(language)) {
-            return I18nKeys.Redis.Backend.EN_US_KEY;
+            return I18nKeys.Redis.BackendMessage.EN_US_KEY;
         }
         if (I18nKeys.FRONT.equals(requestSource)) {
             switch (language.toLowerCase()) {
@@ -121,14 +121,14 @@ public class I18nUtil implements ApplicationContextAware {
         } else {
             switch (language.toLowerCase()) {
                 case I18nKeys.Locale.EN_US:
-                    return I18nKeys.Redis.Backend.EN_US_KEY;
+                    return I18nKeys.Redis.BackendMessage.EN_US_KEY;
                 case I18nKeys.Locale.KHM:
-                    return I18nKeys.Redis.Backend.KHM_KEY;
+                    return I18nKeys.Redis.BackendMessage.KHM_KEY;
                 case I18nKeys.Locale.TH:
-                    return I18nKeys.Redis.Backend.TH_KEY;
+                    return I18nKeys.Redis.BackendMessage.TH_KEY;
             }
         }
-        return I18nKeys.Redis.Backend.EN_US_KEY;
+        return I18nKeys.Redis.BackendMessage.EN_US_KEY;
     }
 
     /**

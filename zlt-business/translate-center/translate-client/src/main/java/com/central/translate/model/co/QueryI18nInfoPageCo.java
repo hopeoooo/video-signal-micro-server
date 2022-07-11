@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class QueryI18nInfoPageCo extends PageCo {
 
-    @ApiModelProperty(required = true, value = "所属 0=前台PC，1=后台 2=前台移动端 3=前台错误消息")
+    @ApiModelProperty(required = true, value = "所属 0=前台PC，1=后台 2=前台移动端 3=前台错误消息 4=后台错误消息")
     private Integer from = I18nKeys.BACKEND;
 
     @ApiModelProperty(value = "页面id")

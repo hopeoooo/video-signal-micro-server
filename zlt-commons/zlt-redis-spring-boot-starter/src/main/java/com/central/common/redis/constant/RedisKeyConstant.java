@@ -32,6 +32,10 @@ public interface RedisKeyConstant {
      */
     String GAME_RECORD_LOTTERY_RESULT_DATA = "cache::lotteryResult::";
     /**
+     * 每靴开奖结果汇总锁
+     */
+    String GAME_RECORD_LOTTERY_RESULT_LOCK = "lock::lotteryResult::";
+    /**
      * 即时彩池下注总人数
      */
     String GAME_RECORD_LIVE_POT_BET_NUM_DATA = "cache::livePotBetNum::";
