@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.central.common.model.SuperEntity;
 import com.central.game.model.GameLotteryResult;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
@@ -32,6 +33,18 @@ public class GameRoomListVo{
 
     @ApiModelProperty(value = "游戏桌号名称")
     private String gameRoomName;
+
+    @ApiModelProperty(value = "桌台英文名称",hidden = true)
+    @JsonIgnore
+    private String enName;
+
+    @ApiModelProperty(value = "桌台高棉语名称",hidden = true)
+    @JsonIgnore
+    private String khmName;
+
+    @ApiModelProperty(value = "桌台泰语名称",hidden = true)
+    @JsonIgnore
+    private String thName;
 
     @ApiModelProperty(value = "游戏桌台状态 0禁用，1：正常，2：维护")
     private Integer roomStatus;
