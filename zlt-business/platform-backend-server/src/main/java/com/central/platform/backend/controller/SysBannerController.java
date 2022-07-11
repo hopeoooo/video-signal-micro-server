@@ -76,13 +76,13 @@ public class SysBannerController {
             @ApiImplicitParam(name = "linkUrl", value = "链接url", required = false),
             @ApiImplicitParam(name = "sort", value = "排序", required = true),
             @ApiImplicitParam(name = "id", value = "id", required = false),
-            @ApiImplicitParam(name = "languageType", value = "语言，0：中文，1：英文,2：柬埔寨语，3：泰语", required = false),
+            @ApiImplicitParam(name = "languageType", value = "语言，zh_cn：中文，en_us：英文,khm：柬埔寨语，th：泰语", required = false),
     })
     public Result saveOrUpdate(
             @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
             @RequestPart(value = "fileH5Horizontal", required = false) MultipartFile fileH5Horizontal,
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,Integer sort,String linkUrl,
-            Long id,Integer languageType
+            Long id,String languageType
     ) throws Exception {
         return configService.saveOrUpdate(fileH5,fileH5Horizontal,fileWeb,sort,linkUrl,id, languageType);
     }

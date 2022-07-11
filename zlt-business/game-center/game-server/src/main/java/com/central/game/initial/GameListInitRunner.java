@@ -45,7 +45,7 @@ public class GameListInitRunner implements CommandLineRunner {
         gameList = new GameList();
         gameList.setId(gameListEnum.getGameId());
         gameList.setName(gameListEnum.getGameName());
-        gameList.setEnName(gameListEnum.getGameEnName());
+//        gameList.setEnName(gameListEnum.getGameEnName());
         gameList.setGameRate(BigDecimal.ZERO);
         gameList.setGameStatus(CommonConstant.OPEN);
         gameList.setRateStatus(CommonConstant.OPEN);

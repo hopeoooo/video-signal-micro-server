@@ -4,10 +4,12 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.central.common.constant.I18nKeys;
 import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.config.constants.ConfigConstants;
 import com.central.config.model.SysBanner;
+import com.central.config.model.SysNotice;
 import com.central.config.model.co.BannerCo;
 import com.central.config.model.co.BannerUpdateStateCo;
 import com.central.config.service.ISysBannerService;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -62,8 +65,10 @@ public class SysBannerController {
     @ApiOperation("查询banner列表(前台用)")
     @ResponseBody
     @GetMapping("/getBannerList")
-    public Result<List<SysBanner>> getBannerList() {
-        List<SysBanner> bannerList = bannerService.getBannerList();
+    public Result<List<SysBanner>> getBannerList(HttpServletRequest request) {
+        String language = request.getHeader(I18nKeys.LANGUAGE);
+        List<SysBanner> bannerList = bannerService.lambdaQuery().eq(SysBanner::getState, Boolean.TRUE)
+                .eq(SysBanner::getLanguageType, language).orderByDesc(SysBanner::getCreateTime).list();
         return Result.succeed(bannerList);
     }
 
@@ -124,13 +129,13 @@ public class SysBannerController {
             @ApiImplicitParam(name = "linkUrl", value = "链接url", required = false),
             @ApiImplicitParam(name = "sort", value = "排序", required = true),
             @ApiImplicitParam(name = "id", value = "id", required = false),
-            @ApiImplicitParam(name = "languageType", value = "语言，0：中文，1：英文,2：柬埔寨语，3：泰语", required = false),
+            @ApiImplicitParam(name = "languageType", value = "语言，zh_cn：中文，en_us：英文,khm：柬埔寨语，th：泰语", required = false),
     })
     public Result saveOrUpdate(
             @RequestPart(value = "fileH5", required = false) MultipartFile fileH5,
             @RequestPart(value = "fileH5Horizontal", required = false) MultipartFile fileH5Horizontal,
             @RequestPart(value = "fileWeb", required = false) MultipartFile fileWeb,Integer sort,
-            String linkUrl, Long id,Integer languageType
+            String linkUrl, Long id,String languageType
     ) throws Exception {
         SysBanner sysBanner=new SysBanner();
         if (id!=null){
@@ -174,7 +179,7 @@ public class SysBannerController {
 
 
     public boolean fileCheck(SysBanner sysBanner,MultipartFile fileH5,MultipartFile fileWeb,
-                             MultipartFile fileH5Horizontal, Integer languageType){
+                             MultipartFile fileH5Horizontal, String languageType){
         //图片
         if (fileH5!=null && fileH5.getSize()>0){
             //校验格式

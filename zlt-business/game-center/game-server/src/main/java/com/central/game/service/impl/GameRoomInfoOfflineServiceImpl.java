@@ -42,7 +42,7 @@ public class GameRoomInfoOfflineServiceImpl extends SuperServiceImpl<GameRoomInf
         LambdaQueryWrapper<GameRoomInfoOffline> qw = Wrappers.lambdaQuery();
         qw.eq(GameRoomInfoOffline::getGameId, gameId)
                 .eq(GameRoomInfoOffline::getTableNum, tableNum)
-                .orderByDesc(GameRoomInfoOffline::getCreateTime)
+                .orderByDesc(GameRoomInfoOffline::getUpdateTime)
                 .last("limit 1");
         GameRoomInfoOffline infoOffline = gameRoomInfoOfflineMapper.selectOne(qw);
         //计算实时倒计时

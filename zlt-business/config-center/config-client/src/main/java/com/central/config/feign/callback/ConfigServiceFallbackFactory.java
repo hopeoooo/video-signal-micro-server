@@ -109,7 +109,7 @@ public class ConfigServiceFallbackFactory implements FallbackFactory<ConfigServi
                                        Integer sort,
                                        String linkUrl,
                                        Long id,
-                                       Integer languageType) {
+                                       String languageType) {
                 log.error("saveOrUpdate更新banner异常", cause);
                 return Result.failed("更新失败");
             }

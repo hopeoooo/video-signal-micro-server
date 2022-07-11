@@ -1,5 +1,6 @@
 package com.central.config.controller;
 
+import com.central.common.constant.I18nKeys;
 import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.config.model.SysBanner;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +51,10 @@ public class SysNoticeConfigController {
     @ApiOperation("查询公告列表(前台用)")
     @ResponseBody
     @GetMapping("/getNoticeList")
-    public Result<List<SysNotice>> getNoticeList() {
-        List<SysNotice> noticeList = noticeService.getNoticeList();
+    public Result<List<SysNotice>> getNoticeList(HttpServletRequest request) {
+        String language = request.getHeader(I18nKeys.LANGUAGE);
+        List<SysNotice> noticeList = noticeService.lambdaQuery().eq(SysNotice::getState, Boolean.TRUE)
+                .eq(SysNotice::getLanguageType, language).orderByDesc(SysNotice::getCreateTime).list();
         return Result.succeed(noticeList);
     }
     /**

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.central.common.model.PushResult;
 import com.central.common.model.Result;
 import com.central.common.service.impl.SuperServiceImpl;
+import com.central.common.utils.StringUtils;
 import com.central.config.mapper.SysNoticeMapper;
 import com.central.config.model.SysNotice;
 import com.central.config.model.co.FindNoticeCo;
@@ -39,14 +40,14 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
         LambdaQueryWrapper<SysNotice> wrapper=new LambdaQueryWrapper<>();
         Integer type = params.getType();
         Integer state = params.getState();
-        Integer languageType = params.getLanguageType();
+        String languageType = params.getLanguageType();
         if (type!=null){
             wrapper.eq(SysNotice::getType, type);
         }
         if (state!=null) {
             wrapper.eq(SysNotice::getState, state);
         }
-        if (languageType!=null) {
+        if (StringUtils.isNotBlank(languageType)) {
             wrapper.eq(SysNotice::getLanguageType, languageType);
         }
         return  baseMapper.selectList(wrapper);
@@ -122,7 +123,11 @@ public class SysNoticeServiceImpl extends SuperServiceImpl<SysNoticeMapper, SysN
     @Override
     @Async
     public void syncPushNoticeToWebApp() {
-        List<SysNotice> noticeList = getNoticeList();
+        LambdaQueryWrapper<SysNotice> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysNotice::getState, Boolean.TRUE);
+        lqw.orderByDesc(SysNotice::getCreateTime);
+        lqw.orderByDesc(SysNotice::getLanguageType);
+        List<SysNotice> noticeList = baseMapper.selectList(lqw);
         PushResult<List<SysNotice>> pushResult = PushResult.succeed(noticeList, SocketTypeConstant.NOTICE,"公告推送成功");
         Result<String> push = pushService.sendAllMessage(JSONObject.toJSONString(pushResult));
         log.info("公告消息推送结果:{}",push);

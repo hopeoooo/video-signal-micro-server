@@ -116,7 +116,7 @@ public interface ConfigService {
             @RequestParam(value = "sort",required = true) Integer sort,
             @RequestParam(value ="linkUrl",required = false) String linkUrl,
             @RequestParam(value = "id",required = false) Long id,
-            @RequestParam(value = "languageType",required = false) Integer languageType
+            @RequestParam(value = "languageType",required = false) String languageType
     ) throws Exception ;
 
 

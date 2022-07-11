@@ -46,7 +46,7 @@ public interface ISysBannerService extends ISuperService<SysBanner> {
      */
     boolean saveOrUpdateUser(SysBanner sysBanner) throws Exception;
 
-    Integer queryTotal(Integer sort, Integer languageType);
+    Integer queryTotal(Integer sort, String languageType);
 
     List<SysBanner> getBannerList();
 

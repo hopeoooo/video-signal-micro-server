@@ -8,7 +8,7 @@ import lombok.Data;
 @ApiModel
 public class BannerCo {
 
-    @ApiModelProperty(value = "语言，0：中文，1：英文,2：柬埔寨语，3：泰语")
-    private Integer languageType;
+    @ApiModelProperty(value = "语言，zh_cn：中文，en_us：英文,khm：柬埔寨语，th：泰语")
+    private String languageType;
 
 }

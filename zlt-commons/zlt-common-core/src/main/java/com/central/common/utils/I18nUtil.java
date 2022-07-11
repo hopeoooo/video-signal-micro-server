@@ -126,6 +126,8 @@ public class I18nUtil implements ApplicationContextAware {
                     return I18nKeys.Redis.BackendMessage.KHM_KEY;
                 case I18nKeys.Locale.TH:
                     return I18nKeys.Redis.BackendMessage.TH_KEY;
+                default:
+                    return I18nKeys.Redis.BackendMessage.EN_US_KEY;
             }
         }
         return I18nKeys.Redis.BackendMessage.EN_US_KEY;
