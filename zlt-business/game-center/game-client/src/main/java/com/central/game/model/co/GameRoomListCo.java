@@ -16,8 +16,15 @@ public class GameRoomListCo {
     @ApiModelProperty(value = "游戏表id")
     private Long gameId;
 
-    @ApiModelProperty(value = "游戏房间名称")
+    @ApiModelProperty(value = "游戏桌台名称")
     private String gameRoomName;
+
+    @ApiModelProperty(value = "桌台英文名称")
+    private String enName;
+    @ApiModelProperty(value = "桌台高棉语名称")
+    private String khmName;
+    @ApiModelProperty(value = "桌台泰语名称")
+    private String thName;
 
     @ApiModelProperty(value = "游戏房间状态 0禁用，1：正常，2：维护")
     private Integer roomStatus;
