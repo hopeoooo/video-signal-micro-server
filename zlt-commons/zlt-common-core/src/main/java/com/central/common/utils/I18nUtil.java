@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 国际化工具
@@ -199,5 +200,35 @@ public class I18nUtil implements ApplicationContextAware {
         dto.setKhm(ops.entries(I18nKeys.Redis.FrontMessage.KHM_KEY));
         dto.setTh(ops.entries(I18nKeys.Redis.FrontMessage.TH_KEY));
         return dto;
+    }
+
+    public static String getBackendValue(String key) {
+        HttpServletRequest request = ServletUtil.getHttpServletRequest();
+        if (Objects.isNull(request)) {
+            return key;
+        }
+        String language = request.getHeader(I18nKeys.LANGUAGE);
+
+        if (StrUtil.isBlank(language) || I18nKeys.Locale.ZH_CN.equalsIgnoreCase(language) || Objects.isNull(redisTemplate) || StrUtil.isBlank(key)) {
+            return key;
+        }
+        String value = redisTemplate.<String, String>opsForHash().get(getRedisKey(language), key);
+        if (StringUtils.isBlank(value)) {
+            return key;
+        }
+        return value;
+    }
+
+    // 找到对应语言的redis key
+    private static String getRedisKey(String language) {
+        switch (language.toLowerCase()) {
+            case I18nKeys.Locale.EN_US:
+                return I18nKeys.Redis.Backend.EN_US_KEY;
+            case I18nKeys.Locale.KHM:
+                return I18nKeys.Redis.Backend.KHM_KEY;
+            case I18nKeys.Locale.TH:
+                return I18nKeys.Redis.Backend.TH_KEY;
+        }
+        return I18nKeys.Redis.Backend.EN_US_KEY;
     }
 }

@@ -1,10 +1,12 @@
 package com.central.platform.backend.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.central.common.annotation.LoginUser;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysMenu;
 import com.central.common.model.SysUser;
+import com.central.common.utils.I18nUtil;
 import com.central.user.feign.MenuService;
 import com.central.user.model.co.SysMenuCo;
 import com.central.user.model.co.SysMenuDistributionCo;
@@ -17,7 +19,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Objects;
 
 @RestController
 @Api(tags = "菜单管理")
@@ -36,7 +38,14 @@ public class SysMenuController {
     @ApiOperation(value = "根据roleId获取对应的菜单")
     @GetMapping("/menus/{roleId}/menus")
     public Result<List<SysMenu>> findMenusByRoleId(@PathVariable Long roleId) {
-        return Result.succeed(menuService.findMenusByRoleId(roleId));
+        List<SysMenu> listResult = menuService.findMenusByRoleId(roleId);
+        if ( CollUtil.isNotEmpty(listResult)){
+            listResult.forEach(sysMenu -> {
+                sysMenu.setName(I18nUtil.getBackendValue(sysMenu.getName()));
+            });
+            return Result.succeed(listResult);
+        }
+        return Result.succeed(listResult);
     }
 
 
@@ -44,7 +53,14 @@ public class SysMenuController {
     @ApiOperation(value = "获取菜单以及顶级菜单")
     @GetMapping("/menus/findOnes")
     public Result<PageResult<SysMenu>> findOnes() {
-        return Result.succeed( menuService.findOnes());
+        PageResult<SysMenu> result = menuService.findOnes();
+        if (Objects.nonNull(result) && CollUtil.isNotEmpty(result.getData())){
+            result.getData().forEach(sysMenu -> {
+                sysMenu.setName(I18nUtil.getBackendValue(sysMenu.getName()));
+            });
+            return Result.succeed(result);
+        }
+        return Result.succeed(result);
     }
 
 
@@ -77,7 +93,14 @@ public class SysMenuController {
     @ApiOperation(value = "查询所有菜单")
     @GetMapping("/menus/findAlls")
     public Result<PageResult<SysMenu>> findAlls() {
-        return Result.succeed(menuService.findAlls());
+        PageResult<SysMenu> result = menuService.findAlls();
+        if (Objects.nonNull(result) && CollUtil.isNotEmpty(result.getData())){
+            result.getData().forEach(sysMenu -> {
+                sysMenu.setName(I18nUtil.getBackendValue(sysMenu.getName()));
+            });
+            return Result.succeed(result);
+        }
+        return Result.succeed(result);
     }
 
 
@@ -103,6 +126,14 @@ public class SysMenuController {
     @PostMapping("/menus/current")
     @ApiOperation(value = "查询当前用户菜单")
     public Result<List<SysMenu> >findMyMenu(@LoginUser SysUser user) {
-        return menuService.findMyMenu(user);
+        Result<List<SysMenu>> myMenu = menuService.findMyMenu(user);
+        if (myMenu.getResp_code() == 0 && CollUtil.isNotEmpty(myMenu.getDatas())){
+            List<SysMenu> datas = myMenu.getDatas();
+            datas.forEach(sysMenu -> {
+                sysMenu.setName(I18nUtil.getBackendValue(sysMenu.getName()));
+            });
+            return Result.succeed(datas);
+        }
+        return myMenu;
     }
 }
