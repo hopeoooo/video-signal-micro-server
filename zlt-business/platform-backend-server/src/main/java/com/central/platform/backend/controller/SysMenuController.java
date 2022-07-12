@@ -131,6 +131,9 @@ public class SysMenuController {
             List<SysMenu> datas = myMenu.getDatas();
             datas.forEach(sysMenu -> {
                 sysMenu.setName(I18nUtil.getBackendValue(sysMenu.getName()));
+                for (SysMenu subMenu : sysMenu.getSubMenus()) {
+                    subMenu.setName(I18nUtil.getBackendValue(subMenu.getName()));
+                }
             });
             return Result.succeed(datas);
         }
