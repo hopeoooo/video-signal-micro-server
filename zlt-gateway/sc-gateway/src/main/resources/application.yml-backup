@@ -137,6 +137,7 @@ zlt:
       httpUrls: >
         /api-uaa/oauth/**,
         /platform-backend/googleCode/**,
+        /platform-backend/translate/backendFullSource,
         /api-uaa/validata/**,
         /api-uaa/css/**,
         /api-uaa/images/**,
