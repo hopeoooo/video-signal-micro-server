@@ -10,6 +10,7 @@ import com.central.common.redis.lock.RedissLockUtil;
 import com.central.common.redis.template.RedisRepository;
 import com.central.common.service.impl.SuperServiceImpl;
 import com.central.common.utils.DateUtil;
+import com.central.common.utils.I18nUtil;
 import com.central.config.dto.TouristDto;
 import com.central.config.feign.ConfigService;
 import com.central.game.constants.GameListEnum;
@@ -625,7 +626,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                 }
             }
             GameRecordVo subtotal = new GameRecordVo();
-            subtotal.setGameName("小计");
+            subtotal.setGameName(I18nUtil.t("小计"));
             subtotal.setBetAmount(subtotalBetAmount);
             subtotal.setValidbet(subtotalValidbet);
             subtotal.setWinLoss(subtotalWinLoss);
@@ -633,7 +634,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             //总计
             GameRecordVo totalBetList = gameRecordMapper.findTotalBetList(params);
             if (totalBetList != null) {
-                totalBetList.setGameName("总计");
+                totalBetList.setGameName(I18nUtil.t("总计"));
                 list.add(totalBetList);
             }
         }
