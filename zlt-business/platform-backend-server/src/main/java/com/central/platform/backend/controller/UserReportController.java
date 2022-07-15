@@ -1,5 +1,6 @@
 package com.central.platform.backend.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
 import com.central.common.model.SysUser;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -90,14 +92,17 @@ public class UserReportController {
     @GetMapping("/findUserGameReportDto")
     public Result<List<UserGameReportDto>> findUserGameReportDto(@RequestParam("userId") Long userId){
         Result<List<UserGameReportDto>> userGameReportDto = gameService.findUserGameReportDto(userId);
-        List<UserGameReportDto> userGameReportDtos = userGameReportDto.getDatas();
-        if (userGameReportDtos != null && !userGameReportDtos.isEmpty()){
-            Integer sum = userGameReportDtos.stream().mapToInt(UserGameReportDto::getBetNum).sum();
-            userGameReportDtos.forEach(userGameReportDto1 -> {
-                userGameReportDto1.setBetNumRatio(new BigDecimal(userGameReportDto1.getBetNum()/sum));
-                userGameReportDto1.setProfitRatio(userGameReportDto1.getWinLoss().divide(userGameReportDto1.getValidAmount()));
-            });
+        if (userGameReportDto.getResp_code() == 0 && CollUtil.isNotEmpty(userGameReportDto.getDatas())){
+            List<UserGameReportDto> userGameReportDtos = userGameReportDto.getDatas();
+            if (userGameReportDtos != null && !userGameReportDtos.isEmpty()){
+                Integer sum = userGameReportDtos.stream().mapToInt(UserGameReportDto::getBetNum).sum();
+                userGameReportDtos.forEach(userGameReportDto1 -> {
+                    userGameReportDto1.setBetNumRatio(new BigDecimal(userGameReportDto1.getBetNum()/sum));
+                    userGameReportDto1.setProfitRatio(userGameReportDto1.getWinLoss().divide(userGameReportDto1.getValidAmount(),4, RoundingMode.HALF_UP));
+                });
+            }
+            return Result.succeed(userGameReportDtos);
         }
-        return Result.succeed(userGameReportDtos);
+        return Result.succeed(new ArrayList<>());
     }
 }
