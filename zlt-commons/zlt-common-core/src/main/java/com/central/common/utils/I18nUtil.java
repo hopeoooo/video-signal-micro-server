@@ -118,6 +118,8 @@ public class I18nUtil implements ApplicationContextAware {
                     return I18nKeys.Redis.FrontMessage.KHM_KEY;
                 case I18nKeys.Locale.TH:
                     return I18nKeys.Redis.FrontMessage.TH_KEY;
+                default:
+                    return I18nKeys.Redis.FrontMessage.EN_US_KEY;
             }
         } else {
             switch (language.toLowerCase()) {
@@ -131,7 +133,6 @@ public class I18nUtil implements ApplicationContextAware {
                     return I18nKeys.Redis.BackendMessage.EN_US_KEY;
             }
         }
-        return I18nKeys.Redis.BackendMessage.EN_US_KEY;
     }
 
     /**
