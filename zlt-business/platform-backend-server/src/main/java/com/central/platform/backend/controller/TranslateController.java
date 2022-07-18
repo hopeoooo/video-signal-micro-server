@@ -1,8 +1,10 @@
 package com.central.platform.backend.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.central.common.dto.I18nSourceDTO;
 import com.central.common.model.PageResult;
 import com.central.common.model.Result;
+import com.central.common.utils.I18nUtil;
 import com.central.translate.model.co.QueryI18nInfoPageCo;
 import com.central.translate.model.co.SaveI18nInfoCo;
 import com.central.translate.model.co.UpdateI18nInfoCo;
@@ -200,7 +202,14 @@ public class TranslateController {
     @GetMapping("/languageLabel")
     @ApiOperation(value = "获取语言标签")
     public Result<List<LanguageLabelVO>> languageLabel(){
-        return Result.succeed(i18nInfosService.languageLabel());
+        List<LanguageLabelVO> languageLabelVOS = i18nInfosService.languageLabel();
+        if (CollUtil.isNotEmpty(languageLabelVOS)){
+            languageLabelVOS.forEach(languageLabelVO -> {
+                languageLabelVO.setValue(I18nUtil.getBackendValue(languageLabelVO.getValue()));
+            });
+            return Result.succeed(languageLabelVOS);
+        }
+        return Result.succeed(languageLabelVOS);
     }
 
 }
