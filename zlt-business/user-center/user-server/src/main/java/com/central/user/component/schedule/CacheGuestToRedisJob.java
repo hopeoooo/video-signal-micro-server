@@ -7,9 +7,10 @@ import com.central.common.model.UserType;
 import com.central.user.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.shardingsphere.elasticjob.api.ShardingContext;
+import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class CacheGuestToRedisJob {
+public class CacheGuestToRedisJob implements SimpleJob {
 
     @Autowired
     private ISysUserService appUserService;
@@ -28,8 +29,8 @@ public class CacheGuestToRedisJob {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Scheduled(cron = "0 0/5 * * * ?")
-    public void cacheGuestToRedis() {
+    @Override
+    public void execute(ShardingContext shardingContext) {
         List<SysUser> sysUserList = appUserService.lambdaQuery().eq(SysUser::getType, UserType.APP_GUEST.name()).eq(SysUser::getEnabled, 1).list();
         List<String> userNameList = sysUserList.stream().map(t -> t.getUsername()).collect(Collectors.toList());
         log.info("check player account");
