@@ -7,9 +7,11 @@ import com.central.file.mapper.FileMapper;
 import com.central.file.model.FileInfo;
 import com.central.file.service.IFileService;
 import com.central.file.utils.FileUtil;
+import com.central.oss.config.FileServerProperties;
 import com.central.oss.model.ObjectInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -23,6 +25,10 @@ import java.util.Map;
 public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileInfo> implements IFileService {
     private static final String FILE_SPLIT = ".";
 
+    @Autowired
+    private FileServerProperties fileProperties;
+
+
     @Override
     public FileInfo upload(MultipartFile file) {
         FileInfo fileInfo = FileUtil.getFileInfo(file);
@@ -31,7 +37,8 @@ public abstract class AbstractIFileService extends ServiceImpl<FileMapper, FileI
         }
         ObjectInfo objectInfo = uploadFile(file);
         fileInfo.setPath(objectInfo.getObjectPath());
-        fileInfo.setUrl(objectInfo.getObjectUrl());
+
+        fileInfo.setUrl(objectInfo.getObjectUrl().replace(fileProperties.getMinio().getEndpoint(), fileProperties.getMinio().getExternalEndpoint()));
         // 设置文件来源
         fileInfo.setSource(fileType());
         // 将文件信息保存到数据库

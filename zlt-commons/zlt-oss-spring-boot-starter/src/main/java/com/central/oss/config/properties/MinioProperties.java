@@ -25,4 +25,6 @@ public class MinioProperties {
      * bucket名称
      */
     private String bucketName;
+
+    private String externalEndpoint;
 }
