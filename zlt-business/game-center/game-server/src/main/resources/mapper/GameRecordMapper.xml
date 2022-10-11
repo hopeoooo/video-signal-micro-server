@@ -215,8 +215,7 @@
     </delete>
 
     <delete id="clearGuestGameRecord">
-        DELETE a,b FROM game_record a
-        LEFT JOIN game_record_son b on a.id=b.game_record_id
+        DELETE FROM game_record a
         where a.user_id =#{userId}
     </delete>
 
