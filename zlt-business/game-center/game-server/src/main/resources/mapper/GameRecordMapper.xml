@@ -215,8 +215,8 @@
     </delete>
 
     <delete id="clearGuestGameRecord">
-        DELETE FROM game_record a
-        where a.user_id =#{userId}
+        DELETE FROM game_record
+        where user_id =#{userId}  and user_type = 'APP_GUEST'
     </delete>
 
     <select id="findUserReportDto"  resultType="com.central.game.dto.UserReportDto">
