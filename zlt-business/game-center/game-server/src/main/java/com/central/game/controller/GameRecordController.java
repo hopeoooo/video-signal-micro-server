@@ -6,6 +6,7 @@ import com.central.common.model.Result;
 import com.central.common.model.SysUser;
 import com.central.common.utils.AddrUtil;
 import com.central.game.dto.*;
+import com.central.game.mapper.GameRecordMapper;
 import com.central.game.model.GameLotteryResult;
 import com.central.game.model.GameRecord;
 import com.central.game.model.co.*;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +48,9 @@ public class GameRecordController {
 
     @Autowired
     private StreamBridge streamBridge;
+
+    @Autowired
+    private GameRecordMapper gameRecordMapper;
 
 
     /**
@@ -276,6 +281,22 @@ public class GameRecordController {
         GameRecord gameRecord = gameRecordService.getById(id);
         boolean sendResult = streamBridge.send(BindingNameConstant.FLOW_CODE, gameRecord);
         return Result.succeed(sendResult);
+    }
+
+
+    @ApiOperation(value = "打码测试")
+    @GetMapping("/updateBatch")
+    public Result updateBatch() {
+        GameRecord gameRecord = new GameRecord();
+        gameRecord.setGameName("11");
+
+        GameRecord gameRecord2 = new GameRecord();
+        gameRecord2.setGameName("22");
+
+        List<GameRecord> gameRecordList = new LinkedList<>();
+        gameRecordList.add(gameRecord);
+        gameRecordList.add(gameRecord2);
+        return Result.succeed(gameRecordMapper.insertBatch(gameRecordList));
     }
 
 }

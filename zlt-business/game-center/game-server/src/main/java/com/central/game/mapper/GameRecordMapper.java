@@ -70,4 +70,5 @@ public interface GameRecordMapper extends SuperMapper<GameRecord> {
     List<UserGameReportDto> findUserGameReportDto(@Param("userId") Long userId);
 
     void clearGuestGameRecord(@Param("userId") Long userId);
+
 }

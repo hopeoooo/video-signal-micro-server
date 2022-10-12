@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantHandler;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantSqlParser;
 import com.central.common.properties.TenantProperties;
+import com.central.db.mapper.CustomizedSqlInjector;
 import com.central.db.properties.MybatisPlusAutoFillProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,6 +37,12 @@ public class MybatisPlusAutoConfigure {
 
     @Autowired
     private MybatisPlusAutoFillProperties autoFillProperties;
+
+
+    @Bean
+    public CustomizedSqlInjector customizedSqlInjector() {
+        return new CustomizedSqlInjector();
+    }
 
     /**
      * 分页插件，自动识别数据库类型

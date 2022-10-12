@@ -1,5 +1,7 @@
 package com.central.game.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -165,6 +167,8 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             //同一种玩法投注额变化时更新
             for (GameRecordBetDataCo betDataCo : betResult) {
                 boolean flag = false;
+                List<GameRecord> gameRecordList = new LinkedList<>();
+                List<GameRecord> failGameRecordList = new LinkedList<>();
                 for (GameRecord record : gameRecords) {
                     BigDecimal newBetAmount = new BigDecimal(betDataCo.getBetAmount());
                     if (record.getGameId().equals(gameId.toString()) && record.getBetCode().equals(betDataCo.getBetCode())) {
@@ -179,15 +183,20 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
                         Result<SysUserMoney> moneyResult = userService.transterMoney(user.getId(), newBetAmount, null, CapitalEnum.BET.getType(), null, record.getBetId(), null);
                         //本地余额扣减成功，更新投注记录
                         if (moneyResult.getResp_code() == CodeEnum.SUCCESS.getCode()) {
-                            gameRecordMapper.updateById(record);
+                            gameRecordList.add(record);
                             //汇总新增的下注额
                             newAddBetList.add(getLivePotVo(user, betDataCo.getBetCode(), betDataCo.getBetName(), newBetAmount, 0));
                         } else {
-                            log.error("投注时本地余额扣减失败，moneyResult={},record={}", moneyResult.toString(), record.toString());
+                            failGameRecordList.add(record);
                         }
-                        flag = true;
-                        break;
                     }
+                }
+                if(CollUtil.isNotEmpty(gameRecordList)){
+                    gameRecordMapper.updateBatch(gameRecordList);
+                    flag = true;
+                }
+                if(CollUtil.isNotEmpty(failGameRecordList)){
+                    log.error("投注时本地余额扣减失败，gameRecordList={}", JSONUtil.toJsonStr(failGameRecordList));
                 }
                 //之前没有保存的新增
                 if (!flag) {
@@ -277,7 +286,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         if (gameList.getGameStatus() == CommonConstant.MAINTAIN) {
             boolean maintain = DateUtil.isEffectiveDate(new Date(), gameList.getMaintainStart(), gameList.getMaintainEnd());
             //当前时间不在维护时间区间内属于正常状态
-            if (maintain){
+            if (maintain) {
                 return Result.failed("当前游戏正在维护");
             }
             gameList.setGameStatus(CommonConstant.NORMAL);
@@ -288,7 +297,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     public Result checkTable(Long gameId, String tableNum) {
-        GameRoomList gameRoomList =gameRoomListService.findByGameIdAndGameRoomName(gameId,tableNum);
+        GameRoomList gameRoomList = gameRoomListService.findByGameIdAndGameRoomName(gameId, tableNum);
         if (gameRoomList == null) {
             return Result.failed("当前桌台不存在");
         }
@@ -299,7 +308,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         if (gameRoomList.getRoomStatus() == CommonConstant.MAINTAIN) {
             boolean maintain = DateUtil.isEffectiveDate(new Date(), gameRoomList.getMaintainStart(), gameRoomList.getMaintainEnd());
             //当前时间不在维护时间区间内属于正常状态
-            if (maintain){
+            if (maintain) {
                 return Result.failed("当前桌台正在维护");
             }
             gameRoomList.setRoomStatus(CommonConstant.NORMAL);
@@ -609,19 +618,19 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
         params.setEndTime(endTime);
         Page<GameRecordVo> page = new Page<>(params.getPage(), params.getLimit());
         List<GameRecordVo> list = gameRecordMapper.findBetList(page, params);
-        if (!CollectionUtils.isEmpty(list)){
+        if (!CollectionUtils.isEmpty(list)) {
             //小计
             BigDecimal subtotalBetAmount = BigDecimal.ZERO;
             BigDecimal subtotalValidbet = BigDecimal.ZERO;
             BigDecimal subtotalWinLoss = BigDecimal.ZERO;
             for (GameRecordVo vo : list) {
-                if (!ObjectUtils.isEmpty(vo.getBetAmount())){
+                if (!ObjectUtils.isEmpty(vo.getBetAmount())) {
                     subtotalBetAmount = subtotalBetAmount.add(vo.getBetAmount());
                 }
-                if (!ObjectUtils.isEmpty(vo.getValidbet())){
+                if (!ObjectUtils.isEmpty(vo.getValidbet())) {
                     subtotalValidbet = subtotalValidbet.add(vo.getValidbet());
                 }
-                if (!ObjectUtils.isEmpty(vo.getWinLoss())){
+                if (!ObjectUtils.isEmpty(vo.getWinLoss())) {
                     subtotalWinLoss = subtotalWinLoss.add(vo.getWinLoss());
                 }
             }
@@ -727,7 +736,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
             List<BigDecimal> winList = totalList.stream().filter(t -> !ObjectUtils.isEmpty(t) && t.compareTo(BigDecimal.ZERO) == 1).collect(Collectors.toList());
             int winNum = winList.size();
             //胜率
-            BigDecimal rate = new BigDecimal(winNum).divide(new BigDecimal(totalNum),4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+            BigDecimal rate = new BigDecimal(winNum).divide(new BigDecimal(totalNum), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
             vo.setRete(keepDecimal1(rate).toString());
         }
         return list;
@@ -792,7 +801,7 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     @Override
     @Async
     public void syncDeleteGuestRecordBureauNum(Long gameId, String tableNum, String bootNum, String bureauNum) {
-        gameRecordMapper.deleteGuestRecordBureauNum(UserType.APP_GUEST.name(),gameId, tableNum, bootNum, bureauNum);
+        gameRecordMapper.deleteGuestRecordBureauNum(UserType.APP_GUEST.name(), gameId, tableNum, bootNum, bureauNum);
     }
 
     @Override
@@ -809,11 +818,12 @@ public class GameRecordServiceImpl extends SuperServiceImpl<GameRecordMapper, Ga
     }
 
     @Override
-    public List<RankingBackstageVo>  findValidBetRankingList(List<Long> listId){
-       return gameRecordMapper.findValidBetRankingList(listId);
+    public List<RankingBackstageVo> findValidBetRankingList(List<Long> listId) {
+        return gameRecordMapper.findValidBetRankingList(listId);
     }
+
     @Override
-    public List<RankingBackstageVo>  findWinLossRankingList(){
+    public List<RankingBackstageVo> findWinLossRankingList() {
         return gameRecordMapper.findWinLossRankingList();
     }
 
