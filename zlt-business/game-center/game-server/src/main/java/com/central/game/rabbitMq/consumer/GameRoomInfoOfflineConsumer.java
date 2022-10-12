@@ -83,6 +83,9 @@ public class GameRoomInfoOfflineConsumer {
             long second = (System.currentTimeMillis() - po.getTimes()) / 1000;
             long differ = po.getSecond() - second;
             Long currentSecond = differ > 0 ? differ : 0;
+            if(currentSecond>po.getSecond()){
+                currentSecond= Long.valueOf(po.getSecond());
+            }
             po.setCurrentSecond(currentSecond.intValue());
         }
         pushGameDataToClientService.syncPushGameRoomInfo(po);
