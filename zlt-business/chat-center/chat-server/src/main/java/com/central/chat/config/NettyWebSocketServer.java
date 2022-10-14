@@ -7,6 +7,7 @@ import com.central.chat.vo.MessageVo;
 import com.central.common.model.PushResult;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -121,6 +122,10 @@ public class NettyWebSocketServer {
      * @throws IOException
      */
     public static String sendMessageByGroupId(String groupId, String message) {
+        message = filterStr(message);
+        if(StringUtils.isBlank(message)){
+            return "消息不合法";
+        }
         CopyOnWriteArraySet<NettyWebSocketServer> friends = groups.get(groupId);
         if (friends == null) {
             return "消息推送失败,没有找到指定会话";
@@ -133,6 +138,36 @@ public class NettyWebSocketServer {
 
     public static Object getAllConnect() {
         return groups;
+    }
+
+    /**
+     * 消息过滤
+     * @param message
+     * @return
+     */
+    private static String filterStr(String message){
+        if("@HeartBeat@".equals(message)){
+            return message;
+        }
+        StringBuilder buf = null;
+        int len = message.length();
+        for (int i = 0; i < len; i++) {
+            char codePoint = message.charAt(i);
+            if (!((codePoint == 0x0) || (codePoint == 0x9) || (codePoint == 0xA)
+                    || (codePoint == 0xD)
+                    || ((codePoint >= 0x20) && (codePoint <= 0xD7FF))
+                    || ((codePoint >= 0xE000) && (codePoint <= 0xFFFD))
+                    || ((codePoint >= 0x10000) && (codePoint <= 0x10FFFF)))) {
+                if (buf == null) {
+                    buf = new StringBuilder(message.length());
+                }
+                buf.append(codePoint);
+            }
+        }
+        if (buf == null) {
+            return "";
+        }
+        return buf.toString();
     }
 }
 
