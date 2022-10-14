@@ -91,6 +91,10 @@ public class NettyWebSocketServer {
 
     @OnMessage
     public void onMessage(Session session, String message) {
+        message = filterStr(message);
+        if(StringUtils.isBlank(message)){
+            return;
+        }
         CopyOnWriteArraySet<NettyWebSocketServer> friends = groups.get(groupId);
         if (friends != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
