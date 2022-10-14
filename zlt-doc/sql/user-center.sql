@@ -21,11 +21,13 @@ CREATE TABLE `sys_user`  (
   `open_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  KEY `idx_username` (`username`),
   KEY `idx_mobile` (`mobile`),
   KEY `idx_open_id` (`open_id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
+ALTER TABLE `user-center`.`sys_user`
+DROP INDEX `idex_usernametype`,
+ADD INDEX `idex_usernametype`(`username`, `type`);
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
