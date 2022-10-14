@@ -1,7 +1,9 @@
 package com.central.user.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.central.common.constant.CommonConstant;
 import com.central.common.lock.DistributedLock;
@@ -21,7 +23,6 @@ import com.central.user.service.ISysUserService;
 import com.central.user.util.PasswordUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -345,9 +346,15 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
             sysUser.setEnabled(Boolean.TRUE);
         }
         String username = sysUser.getUsername();
+        LambdaQueryWrapper<SysUser> lqw = Wrappers.lambdaQuery();
+        lqw.eq(SysUser::getUsername, username);
+        lqw.eq(SysUser::getType, sysUser.getType());
         boolean result = super.saveOrUpdateIdempotency(sysUser, lock
-                , LOCK_KEY_USERNAME+username, new QueryWrapper<SysUser>().eq("username", username).eq("type",sysUser.getType())
-                , username+"已存在");
+            , LOCK_KEY_USERNAME+username, lqw
+            , username+"已存在");
+//        boolean result = super.saveOrUpdateIdempotency(sysUser, lock
+//                , LOCK_KEY_USERNAME+username, new QueryWrapper<SysUser>().eq("username", username).eq("type",sysUser.getType())
+//                , username+"已存在");
         //更新角色
         if (result && StrUtil.isNotEmpty(sysUser.getRoleId())) {
             roleUserService.deleteUserRole(sysUser.getId(), null);
