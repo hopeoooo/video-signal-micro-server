@@ -346,7 +346,7 @@ public class SysUserServiceImpl extends SuperServiceImpl<SysUserMapper, SysUser>
         }
         String username = sysUser.getUsername();
         boolean result = super.saveOrUpdateIdempotency(sysUser, lock
-                , LOCK_KEY_USERNAME+username, new QueryWrapper<SysUser>().eq("username", username)
+                , LOCK_KEY_USERNAME+username, new QueryWrapper<SysUser>().eq("username", username).eq("type",sysUser.getType())
                 , username+"已存在");
         //更新角色
         if (result && StrUtil.isNotEmpty(sysUser.getRoleId())) {
